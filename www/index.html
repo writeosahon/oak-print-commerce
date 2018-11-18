@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Print Service</title>
+
+    <!-- style library to incorporate bootstrap grid layout,helper classes & responsiveness -->
+    <link rel="stylesheet" href="css/bootstrap-3.3.7.min.css">
+
+    <!-- style libraries for the app (onsen ui) -->
+    <link rel="stylesheet" href="css/onsenui.min.css">
+    <link rel="stylesheet" href="css/onsen-css-components.min.css">
+    <!--<link rel="stylesheet" href="css/onsen-css-custom-components.min.css">-->
+
+    <!-- style libraries for font icons -->
+    <link rel="stylesheet" href="css/font_awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/ionicons/css/ionicons.min.css">
+    <link rel="stylesheet" href="css/material-design-iconic-font/css/material-design-iconic-font.min.css">
+
+    <!-- style library for hint.css tooltip -->
+    <link rel="stylesheet" href="css/hint.min.css">
+
+    <!--- style library used for ej2 -->
+    <!--<link rel="stylesheet" href="css/ej2-material-16.2.48.css">-->
+
+    <!--- kendo effects/animation style -->
+    <link rel="stylesheet" href="css/kendo.custom.common.css">
+
+    <!--- ViewerJS style library -->
+    <!--<link rel="stylesheet" href="css/viewer.min.css">-->
+
+    <!-- app custom font icons -->
+    <link rel="stylesheet" href="css/app-custom-font-icons/css/app-custom-font-style.css">
+
+    <!--- custom style for app -->
+    <link rel="stylesheet" href="css/app-custom-styles.css">
+
+
+    <!-- polyfil for ecma script 2015 -->
+    <script src="js/polyfill.min.js"></script>
+
+    <!-- script library for onsen ui -->
+    <script src="js/onsenui.2.10.5.min.js"></script>
+
+
+    <!-- jquery library -->
+    <script src="js/jquery-2.1.4.min.js"></script>
+
+    <!-- parsley library -->
+    <script src="js/parsley-2.8.1.min.js"></script>
+
+    <!-- kendo libraries -->
+    <script src="js/kendo.2018.2.530/kendo.core.min.js"></script>
+    <script src="js/kendo.2018.2.530/kendo.fx.min.js"></script>
+
+
+    <!-- EJ2 Components Library -->
+    <!--<script src="js/ej2-slider-16.2.48.min.js"></script>-->
+
+    <!-- ViewerJS Library -->
+    <!--<script src="js/viewer.min.js"></script>-->
+
+    <!-- PouchDB libraries -->
+    <!--<script src="js/pouchdb.7.0.0.min.js"></script>
+    <script src="js/pouchdb.find.min.js"></script>
+    <script src="js/pouchdb.cordova-sqlite.min.js"></script>
+    <script src="js/crypto-pouch.js"></script>-->
+
+    <!-- Random-Js library -->
+    <script src="js/random.1.0.8.min.js"></script>
+
+    <!-- hybrid script libraries for cordova -->
+    <script src="cordova.js"></script>
+
+     <!--library file for SystemJS module loader-->
+    <!--<script src="js/system-0.21.0.js"></script>-->
+
+    <!-- app script -->
+    <script src="js/compiled-js/base-compiled.js"></script>
+    <script src="js/compiled-js/controller-compiled.js"></script>
+    <script src="js/compiled-js/model-compiled.js"></script>
+
+
+    <!-- Content-Security-Policy tag -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' wss: ws: data: http: https: blob: edpms: file: gap 'unsafe-inline' 'unsafe-eval'">
+</head>
+<body>
+
+<!-- splitter container housing the app -->
+<ons-splitter>
+    <!--<ons-splitter-side id="side-menu" side="right" page="puzzle-menu-page.html" collapse width="100%">
+    </ons-splitter-side>-->
+    <ons-splitter-content id="splitter-content"></ons-splitter-content>
+</ons-splitter>
+
+
+<!-- login template -->
+<ons-template id="login-template">
+    <!-- login navigator -->
+    <ons-navigator id="login-navigator" page="login-page.html"></ons-navigator>
+</ons-template>
+
+<!-- app-main navigator template page -->
+<ons-template id="app-main-template">
+    <!-- app-main navigator -->
+    <ons-navigator id="app-main-navigator" page="app-main-page.html"></ons-navigator>
+</ons-template>
+
+<!-- loader modal -->
+<ons-modal id="loader-modal" direction="up" style="background-color: rgba(0,0,0,0.9);">
+    <div style="text-align: center">
+        <ons-icon icon="md-utopiasoftware-icon-spinner" size="100px" spin></ons-icon>
+    </div>
+    <div id="loader-modal-message" style="text-align: center; margin-top: 0.5em; font-size: 1.2em;
+    color: #F4C724; text-shadow: -1px -1px 2px #000000;"></div>
+</ons-modal>
+
+
+</body>
+</html>

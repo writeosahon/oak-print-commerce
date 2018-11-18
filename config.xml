@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<widget xmlns ="http://www.w3.org/ns/widgets"  xmlns:gap="http://phonegap.com/ns/1.0" xmlns:cdv="http://cordova.apache.org/ns/1.0"  xmlns:android="http://schemas.android.com/apk/res/android" android-versionCode="1" version="0.0.1" id = "utopiasoftware.oak.printing.ecommerce"  >
+
+    <name>OAK Exclusive Designs</name>
+    <description>get exclusive designs printed on your merchandise</description>
+    <author>Utopia Software</author>
+    <content src="index.html"/>
+
+    <preference name="android-build-tool" value="gradle" />
+    <!--<preference name="SplashScreen" value="splash" />-->
+
+    <allow-intent href="http://*/*"/>
+    <allow-intent href="https://*/*"/>
+    <allow-intent href="tel:*"/>
+    <allow-intent href="sms:*"/>
+    <allow-intent href="mailto:*"/>
+    <allow-intent href="market:*"/>
+    <allow-intent href="data:*"/>
+    <allow-intent href="twitter:*"/>
+    <allow-intent href="fb:*"/>
+
+    <access origin="*"/>
+    <preference name="phonegap-version" value="cli-8.0.0" />
+
+
+    <plugin name="cordova-plugin-statusbar" spec="2.4.2"/>
+    <plugin name="cordova-plugin-splashscreen" spec="5.0.2"/>
+    <plugin name="cordova-plugin-screen-orientation" spec="3.0.1"/>
+    <plugin name="cordova-plugin-network-information" spec="2.0.1"/>
+    <plugin name="cordova-plugin-x-toast" spec="2.6.2"/>
+    <plugin name="cordova-plugin-inappbrowser" spec="3.0.0"/>
+    <plugin name="cordova-plugin-file" spec="6.0.1"/>
+    <!--<plugin name="cordova-plugin-customurlscheme" spec="4.3.0">
+        <variable name="URL_SCHEME" value="edpms"/>
+        <variable name="ANDROID_SCHEME" value=" "/>
+        <variable name="ANDROID_HOST" value=" "/>
+        <variable name="ANDROID_PATHPREFIX" value="/"/>
+    </plugin>-->
+    <plugin name="cordova-plugin-app-version" spec="0.1.9"/>
+    <plugin name="cordova.plugins.diagnostic" spec="4.0.10"/>
+    <!--<plugin name="com.lampa.startapp" spec="6.1.6"/>-->
+    <plugin name="cordova-plugin-softinputmode" spec="https://github.com/gnans/cordova-plugin-android-softinputmode.git#1.0.4"/>
+    <plugin name="cordova-plugin-headercolor" spec="1.0.0"/>
+    <plugin name="cordova-plugin-ionic-keyboard" spec="2.1.2"/>
+    <plugin name="cordova-sqlite-evcore-extbuild-free" spec="0.9.7"/>
+    <!--<plugin name="cordova-plugin-sqlite-2" spec="1.0.5"/>-->
+    <plugin name="cordova-plugin-android-window-background" spec="https://github.com/writeosahon/android-window-background.git#oak-printing-ecommerce-background">
+        <variable name="WINDOW_BACKGROUND_COLOR" value="#3f51b5"/>
+    </plugin>
+
+    <plugin name="cordova-plugin-whitelist" spec="1.3.3"/>
+
+    <config-file platform="android" target="AndroidManifest.xml" parent="/manifest">
+        <uses-permission android:name="android.permission.INTERNET" />
+    </config-file>
+
+
+    <preference name="AndroidPersistentFileLocation" value="Internal" />
+
+    <edit-config file="AndroidManifest.xml" target="/manifest/uses-permission" mode="merge">
+        <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    </edit-config>
+
+    <edit-config file="AndroidManifest.xml" target="/manifest/uses-permission/[@android:name='android.permission.WRITE_EXTERNAL_STORAGE']" mode="overwrite">
+        <uses-permission xmlns:tools="http://schemas.android.com/tools" android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:node="replace" />
+    </edit-config>
+
+    <preference  name="AutoHideSplashScreen" value="true"/>
+    <preference  name="SplashShowOnlyFirstTime" value="false"/>
+    <preference name="FadeSplashScreen" value="false"/>
+    <preference name="ShowSplashScreenSpinner" value="true"/>
+    <preference  name="SplashScreenDelay" value="30000"/>
+
+    <platform  name="android">
+        <!-- below requires the splash screen plugin -->
+        <!-- docs: https://github.com/apache/cordova-plugin-splashscreen -->
+        <preference name="SplashMaintainAspectRatio" value="true"/>
+        <preference name="SplashScreenSpinnerColor" value="#00D5C3" />
+        <!-- set the color of the app header using the added headerColor plugin -->
+        <preference name="HeaderColor" value="#00B2A0" />
+        <!-- set the load url timeout for the app -->
+        <preference name="loadUrlTimeoutValue" value="240000" />
+    </platform>
+
+    <preference name="cordova.plugins.diagnostic.modules" value="CAMERA EXTERNAL_STORAGE LOCATION" />
+
+
+    <platform name="android" >
+        <preference name="android-minSdkVersion" value="21"/>
+        <preference name="android-targetSdkVersion" value="27"/>
+        <preference name="android-installLocation" value="auto"/>
+        <preference name="android-signed" value="true"/>
+        <preference name="Orientation" value="portrait"/>
+        <preference name="AndroidLaunchMode" value="singleTop"/>
+    </platform>
+
+    <!--<icon platform="android" src="package-assets/ldpi_icon.png" width="36" height="36" density="ldpi"/>
+    <icon platform="android" src="package-assets/mdpi_icon.png" width="48" height="48" density="mdpi"/>
+    <icon platform="android" src="package-assets/hdpi_icon.png" width="72" height="72" density="hdpi"/>
+    <icon platform="android" src="package-assets/xhdpi_icon.png" width="96" height="96" density="xhdpi" />
+    <icon platform="android" src="package-assets/xxhdpi_icon.png" width="144" height="144" density="xxhdpi" />
+    <icon platform="android" src="package-assets/xxxhdpi_icon.png" width="192" height="192" density="xxxhdpi" />
+
+    <platform name="android">
+        <splash src="package-assets/ldpi_portrait.png" width="200" height="320" orientation="portrait" density="port-ldpi" />
+        <splash src="package-assets/mdpi_portrait.png" width="320" height="480" orientation="portrait" density="port-mdpi" />
+        <splash src="package-assets/hdpi_portrait.png" width="480" height="800" orientation="portrait" density="port-hdpi" />
+        <splash src="package-assets/xhdpi_portrait.png" width="720" height="1280" orientation="portrait" density="port-xhdpi"/>
+        <splash src="package-assets/xxhdpi_portrait.png" width="960" height="1600" orientation="portrait" density="port-xxhdpi"/>
+        <splash src="package-assets/xxxhdpi_portrait.png" width="1280" height="1920" orientation="portrait" density="port-xxxhdpi"/>
+        <splash src="package-assets/ldpi_landscape.png" width="320" height="200" orientation="landscape" density="land-ldpi"/>
+        <splash src="package-assets/mdpi_landscape.png" width="480" height="320" orientation="landscape" density="land-mdpi"/>
+        <splash src="package-assets/hdpi_landscape.png" width="800" height="480" orientation="landscape" density="land-hdpi"/>
+        <splash src="package-assets/xhdpi_landscape.png" width="1280" height="720" orientation="landscape" density="land-xhdpi"/>
+        <splash src="package-assets/xxhdpi_landscape.png" width="1600" height="960" orientation="landscape" density="land-xxhdpi"/>
+        <splash src="package-assets/xxxhdpi_landscape.png" width="1920" height="1280" orientation="landscape" density="land-xxxhdpi"/>
+    </platform>-->
+
+    <edit-config file="AndroidManifest.xml" target="/manifest/application/activity[@android:launchMode='singleTop']" mode="merge">
+        <activity android:launchMode="singleTop" />
+    </edit-config>
+    <!-- used to change the background color of the small icon in ONE-SIGNAL push notification -->
+    <config-file platform="android" target="AndroidManifest.xml" parent="/manifest/application">
+        <meta-data android:name="com.onesignal.NotificationAccentColor.DEFAULT" android:value="FF30A401" />
+    </config-file>
+
+</widget>
