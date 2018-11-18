@@ -16,7 +16,12 @@ utopiasoftware[utopiasoftware_app_namespace].model = {
     /**
      * holds the pouchDB database used by the app
      */
-    appDatabase: null
+    appDatabase: null,
+
+    /**
+     * holds the encrypted pouchDB database used by the app
+     */
+    encryptedAppDatabase: null
 
 
 };

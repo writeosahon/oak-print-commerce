@@ -26,7 +26,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             });
 
             // displaying prepping message
-            $('#loader-modal-message').html("Loading Puzzle...");
+            $('#loader-modal-message').html("Loading App...");
             $('#loader-modal').get(0).show(); // show loader
 
             if(true){ // there is a previous logged in user
@@ -57,6 +57,35 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 });
                 // ensure encryption is disabled for this database
                 utopiasoftware[utopiasoftware_app_namespace].model.appDatabase.removeCrypto();
+
+                // create the encrypted pouchdb app database
+                utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase =
+                    new PouchDB('PrintServiceEcommerceEncrypted.db', {
+                    adapter: 'cordova-sqlite',
+                    location: 'default',
+                    androidDatabaseImplementation: 2
+                });
+
+                // generate a password for encrypting the app database (if it does NOT already exist)
+                if(!window.localStorage.getItem("utopiasoftware-oak-print-service-rid") ||
+                    window.localStorage.getItem("utopiasoftware-oak-print-service-rid") === "") {
+                    window.localStorage.setItem("utopiasoftware-oak-print-service-rid",
+                        Random.uuid4(utopiasoftware[utopiasoftware_app_namespace].randomisationEngine));
+                }
+                // enable the db encryption using the generated password
+                await new Promise(function(resolve, reject){
+                    utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase.
+                    crypto(window.localStorage.getItem("utopiasoftware-oak-print-service-rid"), {
+                        ignore: ['_attachments', '_deleted'],
+                        cb: function(err, key){
+                            if(err){ // there is an error
+                                reject(err); // reject Promise
+                            }
+                            else{ // no error
+                                resolve(key); // resolve Promise
+                            }
+                        }});
+                });
 
             }
             catch(err){

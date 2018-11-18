@@ -75,7 +75,7 @@
         <!-- below requires the splash screen plugin -->
         <!-- docs: https://github.com/apache/cordova-plugin-splashscreen -->
         <preference name="SplashMaintainAspectRatio" value="true"/>
-        <preference name="SplashScreenSpinnerColor" value="#00D5C3" />
+        <preference name="SplashScreenSpinnerColor" value="#3f51b5" />
         <!-- set the color of the app header using the added headerColor plugin -->
         <preference name="HeaderColor" value="#00B2A0" />
         <!-- set the load url timeout for the app -->

@@ -1,0 +1,25 @@
+
+/** STYLE FOR PARSLEY VALIDATION LIBRARY **/
+.parsley-errors-list {
+    display: none !important;
+}
+/** STYLE FOR VALIDATION TOOLTIP (HINT.CSS) **/
+[data-hint]:after {
+    font-size: 0.75em !important;
+}
+
+
+/** STYLE FOR THE APP ALERT DIALOG BEGINS **/
+.alert-dialog--utopiasoftware-alert-dialog {
+    width: 90vw;
+    min-width: 90vw;
+}
+/** STYLE FOR THE APP ALERT DIALOG ENDS **/
+
+/** STYLE FOR LOADER MODAL BEGINS **/
+#loader-modal ons-icon[spin] {
+    -webkit-animation: ons-icon-spin 0.6s infinite linear;
+    -moz-animation: ons-icon-spin 0.6s infinite linear;
+    animation: ons-icon-spin 0.6s infinite linear;
+}
+/** STYLE FOR LOADER MODAL ENDS **/
