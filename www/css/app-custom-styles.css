@@ -27,7 +27,7 @@
 /** STYLE FOR APP MAIN PAGE BEGINS **/
 #app-main-tab-home {
     background-position: center;
-    background-size: 32% auto;
+    background-size: 27% auto;
     background-origin: content-box;
     background-repeat: no-repeat;
     background-image: url("app-images/home-icon-img.png");
@@ -41,8 +41,15 @@
 }
 #app-main-tab-search {
     background-position: center;
-    background-size: 32% auto;
+    background-size: 26% auto;
     background-origin: content-box;
     background-repeat: no-repeat;
     background-image: url("app-images/search-icon-img.png");
+}
+#app-main-tab-my-account {
+    background-position: center;
+    background-size: 26% auto;
+    background-origin: content-box;
+    background-repeat: no-repeat;
+    background-image: url("app-images/my-account-icon-img.png");
 }
