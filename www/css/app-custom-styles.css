@@ -32,10 +32,17 @@
     background-repeat: no-repeat;
     background-image: url("app-images/home-icon-img.png");
 }
-#app-main-tab-search {
+#app-main-tab-categories {
     background-position: center;
     background-size: 20% auto;
     background-origin: content-box;
     background-repeat: no-repeat;
     background-image: url("app-images/category-icon-img.png");
+}
+#app-main-tab-search {
+    background-position: center;
+    background-size: 32% auto;
+    background-origin: content-box;
+    background-repeat: no-repeat;
+    background-image: url("app-images/search-icon-img.png");
 }
