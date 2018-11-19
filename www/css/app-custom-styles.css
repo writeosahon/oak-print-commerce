@@ -23,3 +23,12 @@
     animation: ons-icon-spin 0.6s infinite linear;
 }
 /** STYLE FOR LOADER MODAL ENDS **/
+
+/** STYLE FOR APP MAIN PAGE **/
+#app-main-tab-home {
+    background-position: center;
+    background-size: contain;
+    background-origin: content-box;
+    background-repeat: no-repeat;
+    background-image: url("app-images/home-icon-img.png");
+}
