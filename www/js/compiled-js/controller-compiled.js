@@ -109,14 +109,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             StatusBar.backgroundColorByHexString("#363E7C");
                             navigator.splashscreen.hide(); // hide the splashscreen
                             utopiasoftware[utopiasoftware_app_namespace].model.isAppReady = true; // flag that app is fully loaded and ready
+                            $('#loader-modal').get(0).show(); // show loader
                             return _context.finish(17);
 
-                        case 22:
+                        case 23:
                         case 'end':
                             return _context.stop();
                     }
                 }
-            }, _callee, this, [[5, 14, 17, 22]]);
+            }, _callee, this, [[5, 14, 17, 23]]);
         }))); // end of ons.ready()
     }
 };
