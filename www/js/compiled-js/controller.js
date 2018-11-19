@@ -55,8 +55,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     location: 'default',
                     androidDatabaseImplementation: 2
                 });
-                // ensure encryption is disabled for this database
-                utopiasoftware[utopiasoftware_app_namespace].model.appDatabase.removeCrypto();
 
                 // create the encrypted pouchdb app database
                 utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase =
@@ -96,7 +94,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 StatusBar.backgroundColorByHexString("#363E7C");
                 navigator.splashscreen.hide(); // hide the splashscreen
                 utopiasoftware[utopiasoftware_app_namespace].model.isAppReady = true; // flag that app is fully loaded and ready
-                $('#loader-modal').get(0).show(); // show loader
+                $('#loader-modal').get(0).hide(); // show loader
             }
 
         }); // end of ons.ready()

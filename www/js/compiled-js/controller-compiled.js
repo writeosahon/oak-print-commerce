@@ -62,8 +62,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 location: 'default',
                                 androidDatabaseImplementation: 2
                             });
-                            // ensure encryption is disabled for this database
-                            utopiasoftware[utopiasoftware_app_namespace].model.appDatabase.removeCrypto();
 
                             // create the encrypted pouchdb app database
                             utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase = new PouchDB('PrintServiceEcommerceEncrypted.db', {
@@ -77,7 +75,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 window.localStorage.setItem("utopiasoftware-oak-print-service-rid", Random.uuid4(utopiasoftware[utopiasoftware_app_namespace].randomisationEngine));
                             }
                             // enable the db encryption using the generated password
-                            _context.next = 12;
+                            _context.next = 11;
                             return new Promise(function (resolve, reject) {
                                 utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase.crypto(window.localStorage.getItem("utopiasoftware-oak-print-service-rid"), {
                                     ignore: ['_attachments', '_deleted'],
@@ -92,32 +90,32 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     } });
                             });
 
-                        case 12:
-                            _context.next = 17;
+                        case 11:
+                            _context.next = 16;
                             break;
 
-                        case 14:
-                            _context.prev = 14;
+                        case 13:
+                            _context.prev = 13;
                             _context.t0 = _context['catch'](5);
 
                             console.log("APP LOADING ERROR", _context.t0);
 
-                        case 17:
-                            _context.prev = 17;
+                        case 16:
+                            _context.prev = 16;
 
                             // set status bar color
                             StatusBar.backgroundColorByHexString("#363E7C");
                             navigator.splashscreen.hide(); // hide the splashscreen
                             utopiasoftware[utopiasoftware_app_namespace].model.isAppReady = true; // flag that app is fully loaded and ready
-                            $('#loader-modal').get(0).show(); // show loader
-                            return _context.finish(17);
+                            $('#loader-modal').get(0).hide(); // show loader
+                            return _context.finish(16);
 
-                        case 23:
+                        case 22:
                         case 'end':
                             return _context.stop();
                     }
                 }
-            }, _callee, this, [[5, 14, 17, 23]]);
+            }, _callee, this, [[5, 13, 16, 22]]);
         }))); // end of ons.ready()
     }
 };
