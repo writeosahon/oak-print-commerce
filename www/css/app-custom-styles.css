@@ -24,11 +24,18 @@
 }
 /** STYLE FOR LOADER MODAL ENDS **/
 
-/** STYLE FOR APP MAIN PAGE **/
+/** STYLE FOR APP MAIN PAGE BEGINS **/
 #app-main-tab-home {
     background-position: center;
     background-size: contain;
     background-origin: content-box;
     background-repeat: no-repeat;
     background-image: url("app-images/home-icon-img.png");
+}
+#app-main-tab-categories {
+    background-position: center;
+    background-size: contain;
+    background-origin: content-box;
+    background-repeat: no-repeat;
+    background-image: url("app-images/category-icon-img.png");
 }
