@@ -27,14 +27,14 @@
 /** STYLE FOR APP MAIN PAGE BEGINS **/
 #app-main-tab-home {
     background-position: center;
-    background-size: 32% 32%;
+    background-size: 32% auto;
     background-origin: content-box;
     background-repeat: no-repeat;
     background-image: url("app-images/home-icon-img.png");
 }
-#app-main-tab-categories {
+#app-main-tab-search {
     background-position: center;
-    background-size: 32% 32%;
+    background-size: 20% auto;
     background-origin: content-box;
     background-repeat: no-repeat;
     background-image: url("app-images/category-icon-img.png");
