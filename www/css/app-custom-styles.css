@@ -53,3 +53,15 @@
     background-repeat: no-repeat;
     background-image: url("app-images/my-account-icon-img.png");
 }
+/** STYLE FOR APP MAIN PAGE ENDS **/
+
+/** STYLE FOR HOME PAGE BEGINS **/
+#home-latest-design-block {
+    background-image: linear-gradient(45deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%),
+    url('app-images/abstract-background-1.jpg');
+    background-repeat: no-repeat;
+    background-size: cover, cover;
+    background-position: center;
+}
+/** STYLE FOR HOME PAGE ENDS **/
+
