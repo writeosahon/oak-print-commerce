@@ -1,6 +1,18 @@
 <!-- app main page -->
 <ons-page id="app-main-page">
 
+    <ons-toolbar style="background-color: #3f51b5 !important; color: #ffffff !important;" static modifier="noshadow">
+
+        <div class="center">
+            <img src="css/app-images/oak-design-logo.png" style="height: 100%; display: inline-block; margin-right: 0.5em;">
+            OAK Exclusive
+        </div>
+
+        <div class="right">
+            <ons-toolbar-button icon="md-shopping-cart"></ons-toolbar-button>
+        </div>
+    </ons-toolbar>
+
     <ons-tabbar id="app-main-tabbar" swipeable position="bottom" modifier="autogrow" disable-auto-styling>
         <ons-tab id="app-main-tab-home" page="home-page.html" label="Home" icon="md-no-icon" active disable-auto-styling></ons-tab>
         <ons-tab id="app-main-tab-categories" label="Categories" icon="md-no-icon" page="home-page.html" disable-auto-styling></ons-tab>
