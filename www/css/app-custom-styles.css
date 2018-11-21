@@ -63,5 +63,10 @@
     background-size: cover, cover;
     background-position: center;
 }
+#home-latest-design-block .e-card-image {
+    background-image: url('app-images/1-11.jpg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
 /** STYLE FOR HOME PAGE ENDS **/
-
