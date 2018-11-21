@@ -134,7 +134,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     //slide: ".col-xs-5",
                     slidesToScroll: 1,
                     slidesToShow: 1,
-                    //variableWidth: true
+                    variableWidth: true
                 });
             }
 
