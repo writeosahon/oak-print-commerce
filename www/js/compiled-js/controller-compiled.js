@@ -149,15 +149,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     try {
                                         try {
                                             $('#home-page #home-latest-design-block .row').slick({
-                                                //adaptiveHeight: true,
                                                 arrows: false,
-                                                autoplay: true,
+                                                autoplay: false,
                                                 dots: true,
                                                 infinite: true,
-                                                //slide: ".col-xs-5",
+                                                pauseOnDotsHover: false,
+                                                pauseOnFocus: false,
+                                                pauseOnHover: false,
                                                 slidesToScroll: 1,
                                                 slidesToShow: 2
-                                                //variableWidth: true
                                             });
                                         } catch (err2) {}
                                     } catch (err) {}
