@@ -28,3 +28,15 @@ utopiasoftware[utopiasoftware_app_namespace].model = {
 
 // call the method to startup the app
 utopiasoftware[utopiasoftware_app_namespace].controller.startup();
+
+// listen for the initialisation of the HOME page
+$(document).on("init", "#home-page", utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.pageInit);
+
+// listen for when the HOME page is shown
+$(document).on("show", "#home-page", utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.pageShow);
+
+// listen for when the HOME page is hidden
+$(document).on("hide", "#home-page", utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.pageHide);
+
+// listen for when the HOME page is destroyed
+$(document).on("destroy", "#home-page", utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.pageDestroy);
