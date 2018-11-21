@@ -63,6 +63,17 @@
     background-size: cover, cover;
     background-position: center;
 }
+
+#home-page #home-latest-design-block .slick-dots {
+    bottom: -30px;
+}
+#home-page #home-latest-design-block .slick-dots > li {
+    transform: scale(4);
+}
+#home-page #home-latest-design-block .slick-dots > li > button:before {
+    color: red !important;
+}
+
 #home-page #home-latest-design-block .e-card-image.one {
     background-image: url('app-images/1-11.jpg');
     background-repeat: no-repeat;
@@ -93,6 +104,7 @@
     background-size: contain;
     background-position: center;
 }
+
 #home-page #home-latest-design-block .e-card {
     background-color: rgba(211, 211, 211, 0.7);
 }
