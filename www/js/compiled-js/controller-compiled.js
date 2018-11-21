@@ -154,8 +154,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         infinite: true,
                                         //slide: ".col-xs-5",
                                         slidesToScroll: 1,
-                                        slidesToShow: 1,
-                                        variableWidth: true
+                                        slidesToShow: 2
+                                        //variableWidth: true
                                     });
 
                                 case 4:
