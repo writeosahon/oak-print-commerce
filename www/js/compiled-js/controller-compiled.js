@@ -146,17 +146,21 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 case 3:
 
-                                    $('#home-page #home-latest-design-block .row').slick({
-                                        //adaptiveHeight: true,
-                                        arrows: false,
-                                        autoplay: true,
-                                        dots: false,
-                                        infinite: true,
-                                        //slide: ".col-xs-5",
-                                        slidesToScroll: 1,
-                                        slidesToShow: 2
-                                        //variableWidth: true
-                                    });
+                                    try {
+                                        try {
+                                            $('#home-page #home-latest-design-block .row').slick({
+                                                //adaptiveHeight: true,
+                                                arrows: false,
+                                                autoplay: true,
+                                                dots: true,
+                                                infinite: true,
+                                                //slide: ".col-xs-5",
+                                                slidesToScroll: 1,
+                                                slidesToShow: 2
+                                                //variableWidth: true
+                                            });
+                                        } catch (err2) {}
+                                    } catch (err) {}
 
                                 case 4:
                                 case 'end':

@@ -56,32 +56,47 @@
 /** STYLE FOR APP MAIN PAGE ENDS **/
 
 /** STYLE FOR HOME PAGE BEGINS **/
-#home-latest-design-block {
+#home-page #home-latest-design-block {
     background-image: linear-gradient(45deg, rgba(0, 0, 255, 0.4) 0%, rgba(255, 255, 255, 0.6) 100%),
     url('app-images/abstract-background-1.jpg');
     background-repeat: no-repeat;
     background-size: cover, cover;
     background-position: center;
 }
-#home-latest-design-block .e-card-image.one {
+#home-page #home-latest-design-block .e-card-image.one {
     background-image: url('app-images/1-11.jpg');
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
 }
-#home-latest-design-block .e-card-image.two {
+#home-page #home-latest-design-block .e-card-image.two {
     background-image: url('app-images/1-12.jpg');
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
 }
-#home-latest-design-block .e-card-image.three {
+#home-page #home-latest-design-block .e-card-image.three {
     background-image: url('app-images/1-13.jpg');
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
 }
-#home-latest-design-block e-card {
-    background-color: rgba(255, 255, 255, 0.8);
+#home-page #home-latest-design-block .e-card-image.four {
+    background-image: url('app-images/1-33.jpg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+#home-page #home-latest-design-block .e-card-image.five {
+    background-image: url('app-images/1-12.jpg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+#home-page #home-latest-design-block .e-card {
+    background-color: rgba(211, 211, 211, 0.7);
+}
+#home-page #home-latest-design-block .e-card.e-card-separator {
+    border-bottom: 1px solid rgba(0, 0, 255, 0.12);
 }
 /** STYLE FOR HOME PAGE ENDS **/
