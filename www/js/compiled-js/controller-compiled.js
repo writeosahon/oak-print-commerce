@@ -147,15 +147,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 case 3:
 
                                     $('#home-page #home-latest-design-block .row').slick({
-                                        adaptiveHeight: true,
+                                        //adaptiveHeight: true,
                                         arrows: false,
                                         autoplay: true,
                                         dots: false,
                                         infinite: true,
-                                        slide: ".col-xs-5",
+                                        //slide: ".col-xs-5",
                                         slidesToScroll: 1,
-                                        slidesToShow: 1,
-                                        variableWidth: true
+                                        slidesToShow: 1
+                                        //variableWidth: true
                                     });
 
                                 case 4:
