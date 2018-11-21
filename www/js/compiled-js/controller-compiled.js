@@ -150,7 +150,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         try {
                                             $('#home-page #home-latest-design-block .row').slick({
                                                 arrows: false,
-                                                autoplay: false,
+                                                autoplay: true,
                                                 dots: true,
                                                 infinite: true,
                                                 pauseOnDotsHover: false,
