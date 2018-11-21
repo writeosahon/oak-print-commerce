@@ -96,7 +96,7 @@
 #home-page #home-latest-design-block .e-card {
     background-color: rgba(211, 211, 211, 0.7);
 }
-#home-page #home-latest-design-block .e-card.e-card-separator {
+#home-page #home-latest-design-block .e-card .e-card-separator {
     border-bottom: 1px solid rgba(0, 0, 255, 0.12);
 }
 /** STYLE FOR HOME PAGE ENDS **/
