@@ -127,7 +127,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 try{
                     try {
-                        $('#home-page #home-latest-design-block .row').slick({
+                        $('#home-page #home-latest-design-block .row, #home-page #home-featured-design-block .row').slick({
                             arrows: false,
                             autoplay: true,
                             dots: true,
