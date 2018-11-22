@@ -127,7 +127,37 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 try{
                     try {
-                        $('#home-page #home-latest-design-block .row, #home-page #home-featured-design-block .row, #home-page #home-sales-design-block .row').slick({
+                        $('#home-page #home-latest-design-block .row').slick({
+                            arrows: false,
+                            autoplay: true,
+                            dots: true,
+                            infinite: true,
+                            pauseOnDotsHover: false,
+                            pauseOnFocus: false,
+                            pauseOnHover: false,
+                            slidesToScroll: 1,
+                            slidesToShow: 2
+                        });
+                    }
+                    catch(err2){}
+
+                    try {
+                        $('#home-page #home-featured-design-block .row').slick({
+                            arrows: false,
+                            autoplay: true,
+                            dots: true,
+                            infinite: true,
+                            pauseOnDotsHover: false,
+                            pauseOnFocus: false,
+                            pauseOnHover: false,
+                            slidesToScroll: 1,
+                            slidesToShow: 2
+                        });
+                    }
+                    catch(err2){}
+
+                    try {
+                        $('#home-page #home-sales-design-block .row').slick({
                             arrows: false,
                             autoplay: true,
                             dots: true,
