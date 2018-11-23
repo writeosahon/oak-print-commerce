@@ -126,7 +126,20 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 }
 
                 try{
-                    try {
+                    new Flickity($('#home-page #home-latest-design-block .row').get(0), {
+                        // options
+                        wrapAround: true,
+                        groupCells: 1,
+                        autoplay: 3000,
+                        dragThreshold: 10,
+                        initialIndex: 0,
+                        cellAlign: 'left',
+                        contain: false,
+                        prevNextButtons: false,
+                        pageDots: false
+                    });
+
+                    /*try {
                         $('#home-page #home-latest-design-block .row, #home-page #home-sales-design-block .row').slick({
                             arrows: false,
                             autoplay: true,
@@ -139,7 +152,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             slidesToShow: 2
                         });
                     }
-                    catch(err2){}
+                    catch(err2){}*/
 
                     /*try {
                         $('#home-page #home-featured-design-block .row').slick({
