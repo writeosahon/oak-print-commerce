@@ -64,14 +64,8 @@
     background-position: center;
 }
 
-#home-page #home-latest-design-block .slick-dots {
-    bottom: -30px;
-}
-#home-page #home-latest-design-block .slick-dots > li {
-    transform: scale(4);
-}
-#home-page #home-latest-design-block .slick-dots > li > button:before {
-    color: red !important;
+#home-page #home-latest-design-block .flickity-page-dots .dot {
+    background: red !important;
 }
 
 #home-page #home-latest-design-block .e-card {
@@ -90,14 +84,8 @@
     background-position: center;
 }
 
-#home-page #home-featured-design-block .slick-dots {
-    bottom: -30px;
-}
-#home-page #home-featured-design-block .slick-dots > li {
-    transform: scale(4);
-}
-#home-page #home-featured-design-block .slick-dots > li > button:before {
-    color: red !important;
+#home-page #home-featured-design-block .flickity-page-dots .dot {
+    background: red !important;
 }
 
 #home-page #home-featured-design-block .e-card {
@@ -117,14 +105,8 @@
     background-position: center;
 }
 
-#home-page #home-sales-design-block .slick-dots {
-    bottom: -30px;
-}
-#home-page #home-sales-design-block .slick-dots > li {
-    transform: scale(4);
-}
-#home-page #home-sales-design-block .slick-dots > li > button:before {
-    color: red !important;
+#home-page #home-sales-design-block .flickity-page-dots .dot {
+    background: red !important;
 }
 
 #home-page #home-sales-design-block .e-card {
