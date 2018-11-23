@@ -156,7 +156,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     }
                     catch(err2){}*/
 
-                    try {
+                    /*try {
                         $('#home-page #home-sales-design-block .row').slick({
                             arrows: false,
                             autoplay: true,
@@ -169,7 +169,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             slidesToShow: 2
                         });
                     }
-                    catch(err2){}
+                    catch(err2){}*/
                 }
                 catch(err){}
             }
