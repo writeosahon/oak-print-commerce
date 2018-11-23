@@ -130,13 +130,39 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         // options
                         wrapAround: true,
                         groupCells: 1,
-                        autoplay: 3000,
+                        autoPlay: 3000,
                         dragThreshold: 10,
                         initialIndex: 0,
                         cellAlign: 'left',
                         contain: false,
                         prevNextButtons: false,
-                        pageDots: false
+                        pageDots: true
+                    });
+
+                    new Flickity($('#home-page #home-featured-design-block .row').get(0), {
+                        // options
+                        wrapAround: true,
+                        groupCells: 1,
+                        autoPlay: 3000,
+                        dragThreshold: 10,
+                        initialIndex: 0,
+                        cellAlign: 'left',
+                        contain: false,
+                        prevNextButtons: false,
+                        pageDots: true
+                    });
+
+                    new Flickity($('#home-page #home-sales-design-block .row').get(0), {
+                        // options
+                        wrapAround: true,
+                        groupCells: 1,
+                        autoPlay: 3000,
+                        dragThreshold: 10,
+                        initialIndex: 0,
+                        cellAlign: 'left',
+                        contain: false,
+                        prevNextButtons: false,
+                        pageDots: true
                     });
 
                     /*try {
