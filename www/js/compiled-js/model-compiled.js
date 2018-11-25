@@ -42,4 +42,16 @@ $(document).on("hide", "#home-page", utopiasoftware[utopiasoftware_app_namespace
 // listen for when the HOME page is destroyed
 $(document).on("destroy", "#home-page", utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.pageDestroy);
 
+// listen for the initialisation of the ACCOUNT page
+$(document).on("init", "#account-page", utopiasoftware[utopiasoftware_app_namespace].controller.accountPageViewModel.pageInit);
+
+// listen for when the ACCOUNT page is shown
+$(document).on("show", "#account-page", utopiasoftware[utopiasoftware_app_namespace].controller.accountPageViewModel.pageShow);
+
+// listen for when the ACCOUNT page is hidden
+$(document).on("hide", "#account-page", utopiasoftware[utopiasoftware_app_namespace].controller.accountPageViewModel.pageHide);
+
+// listen for when the ACCOUNT page is destroyed
+$(document).on("destroy", "#account-page", utopiasoftware[utopiasoftware_app_namespace].controller.accountPageViewModel.pageDestroy);
+
 //# sourceMappingURL=model-compiled.js.map
