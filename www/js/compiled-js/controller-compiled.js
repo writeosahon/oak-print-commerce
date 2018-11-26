@@ -271,7 +271,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 case 3:
 
                                     try {
-                                        new ej.navigations.Accordion({}).appendTo('#account-personal-accordion');
+                                        new ej.navigations.Accordion({
+                                            expandMode: 'Single',
+                                            items: [{ expanded: true }]
+                                        }).appendTo('#account-personal-accordion');
                                     } catch (err) {}
 
                                 case 4:

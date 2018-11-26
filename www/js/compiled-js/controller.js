@@ -219,7 +219,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 }
 
                 try{
-                    new ej.navigations.Accordion({}).appendTo('#account-personal-accordion');
+                    new ej.navigations.Accordion({
+                        expandMode: 'Single',
+                        items: [{expanded: true}]
+                    }).appendTo('#account-personal-accordion');
                 }
                 catch(err){}
             }
