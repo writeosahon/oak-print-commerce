@@ -95,7 +95,7 @@
         <preference name="AndroidLaunchMode" value="singleTop"/>
     </platform>
 
-    <!--<icon platform="android" src="package-assets/ldpi_icon.png" width="36" height="36" density="ldpi"/>
+    <icon platform="android" src="package-assets/ldpi_icon.png" width="36" height="36" density="ldpi"/>
     <icon platform="android" src="package-assets/mdpi_icon.png" width="48" height="48" density="mdpi"/>
     <icon platform="android" src="package-assets/hdpi_icon.png" width="72" height="72" density="hdpi"/>
     <icon platform="android" src="package-assets/xhdpi_icon.png" width="96" height="96" density="xhdpi" />
@@ -115,7 +115,7 @@
         <splash src="package-assets/xhdpi_landscape.png" width="1280" height="720" orientation="landscape" density="land-xhdpi"/>
         <splash src="package-assets/xxhdpi_landscape.png" width="1600" height="960" orientation="landscape" density="land-xxhdpi"/>
         <splash src="package-assets/xxxhdpi_landscape.png" width="1920" height="1280" orientation="landscape" density="land-xxxhdpi"/>
-    </platform>-->
+    </platform>
 
     <edit-config file="AndroidManifest.xml" target="/manifest/application/activity[@android:launchMode='singleTop']" mode="merge">
         <activity android:launchMode="singleTop" />
