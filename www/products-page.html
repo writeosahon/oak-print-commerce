@@ -1,0 +1,48 @@
+<!-- products page -->
+<ons-page id="products-page">
+
+    <ons-toolbar style="" static >
+        <div class="center" style="text-align: center">
+            <ons-segment id="products-layout-segment" active-index="-1" style="width: auto" disable-auto-styling>
+                <button><ons-icon icon="md-view-stream" fixed-width></ons-icon></button>
+                <button><ons-icon icon="fa-th-grid" fixed-width></ons-icon></button>
+            </ons-segment>
+        </div>
+    </ons-toolbar>
+
+    <ons-list id="search-list" style="display: block;">
+
+        <ons-list-title>Recent Searches</ons-list-title>
+
+        <ons-list-item modifier="longdivider" tappable lock-on-drag="true"
+                       onclick="">
+            <div class="center">
+                <span class="list-item__subtitle">white shirt</span>
+            </div>
+            <div class="right">
+                <ons-icon icon="md-close-circle" style="color: lavender; font-size: 16px;"></ons-icon>
+            </div>
+        </ons-list-item>
+
+        <ons-list-item modifier="longdivider" tappable lock-on-drag="true"
+                       onclick="">
+            <div class="center">
+                <span class="list-item__subtitle">colourful mugs</span>
+            </div>
+            <div class="right">
+                <ons-icon icon="md-close-circle" style="color: lavender; font-size: 16px;"></ons-icon>
+            </div>
+        </ons-list-item>
+
+        <ons-list-item modifier="longdivider" tappable lock-on-drag="true"
+                       onclick="">
+            <div class="center">
+                <span class="list-item__subtitle">Red top</span>
+            </div>
+            <div class="right">
+                <ons-icon icon="md-close-circle" style="color: lavender; font-size: 16px;"></ons-icon>
+            </div>
+        </ons-list-item>
+
+    </ons-list>
+</ons-page>
