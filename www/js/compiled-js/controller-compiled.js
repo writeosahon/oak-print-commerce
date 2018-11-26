@@ -256,6 +256,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             //function is used to initialise the page if the app is fully ready for execution
             var loadPageOnAppReady = function () {
                 var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4() {
+                    var accordion;
                     return regeneratorRuntime.wrap(function _callee4$(_context4) {
                         while (1) {
                             switch (_context4.prev = _context4.next) {
@@ -271,10 +272,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 case 3:
 
                                     try {
-                                        new ej.navigations.Accordion({
-                                            expandMode: 'Single',
-                                            items: [{ expanded: true }]
-                                        }).appendTo('#account-personal-accordion');
+                                        accordion = new ej.navigations.Accordion({
+                                            expandMode: 'Single'
+                                        });
+
+                                        accordion.appendTo('#account-personal-accordion');
+                                        accordion.expandItem(true, 0);
                                     } catch (err) {}
 
                                 case 4:
