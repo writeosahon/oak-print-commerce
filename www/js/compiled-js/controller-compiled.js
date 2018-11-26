@@ -165,7 +165,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             // options
                                             wrapAround: true,
                                             groupCells: 1,
-                                            autoPlay: 3100,
+                                            autoPlay: 4000,
                                             pauseAutoPlayOnHover: false,
                                             dragThreshold: 10,
                                             initialIndex: 0,
@@ -179,7 +179,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             // options
                                             wrapAround: true,
                                             groupCells: 1,
-                                            autoPlay: 3150,
+                                            autoPlay: 5000,
                                             pauseAutoPlayOnHover: false,
                                             dragThreshold: 10,
                                             initialIndex: 0,
