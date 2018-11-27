@@ -150,3 +150,13 @@
 
 
 /** STYLE FOR HOME PAGE ENDS **/
+
+
+/** STYLE FOR PRODUCTS PAGE BEGINS **/
+#products-page .e-card-image{
+    background-image: url('app-images/1-12.jpg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+/** STYLE FOR PRODUCTS PAGE ENDS **/

@@ -1,45 +1,28 @@
 <!-- products page -->
 <ons-page id="products-page">
 
-    <ons-segment id="products-layout-segment" active-index="-1"
-                 style="position: fixed; top: 5px; width: 90px; margin-left: calc(100vh - 85px);">
+    <ons-segment id="products-layout-segment" active-index="0"
+                 style="position: fixed; top: 5px; width: 90px; margin-left: calc(100vw - 85px); box-shadow: none; z-index: 2;">
         <button><ons-icon icon="md-view-stream" fixed-width></ons-icon></button>
         <button><ons-icon icon="fa-th-large" fixed-width></ons-icon></button>
     </ons-segment>
 
-    <ons-list id="search-list" style="display: block;">
+    <ons-list-title>Products</ons-list-title>
 
-        <ons-list-title>Recent Searches</ons-list-title>
+    <div class="row">
+        <div class="col-xs-6">
+            <div class="e-card e-card-horizontal" style="min-height: 34vh;">
+                <div class="e-card-image one" style="height: 100%; width: 49%; background-image: url('css/app-images/1-12.jpg');"></div>
+                <div class="e-card-stacked"></div>
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <div class="e-card e-card-horizontal" style="min-height: 34vh;">
+                <div class="e-card-image one" style="height: 100%; width: 49%; background-image: url('css/app-images/1-13.jpg');"></div>
+                <div class="e-card-stacked"></div>
+            </div>
+        </div>
+        <div class="clearfix visible-xs-block"></div>
+    </div>
 
-        <ons-list-item modifier="longdivider" tappable lock-on-drag="true"
-                       onclick="">
-            <div class="center">
-                <span class="list-item__subtitle">white shirt</span>
-            </div>
-            <div class="right">
-                <ons-icon icon="md-close-circle" style="color: lavender; font-size: 16px;"></ons-icon>
-            </div>
-        </ons-list-item>
-
-        <ons-list-item modifier="longdivider" tappable lock-on-drag="true"
-                       onclick="">
-            <div class="center">
-                <span class="list-item__subtitle">colourful mugs</span>
-            </div>
-            <div class="right">
-                <ons-icon icon="md-close-circle" style="color: lavender; font-size: 16px;"></ons-icon>
-            </div>
-        </ons-list-item>
-
-        <ons-list-item modifier="longdivider" tappable lock-on-drag="true"
-                       onclick="">
-            <div class="center">
-                <span class="list-item__subtitle">Red top</span>
-            </div>
-            <div class="right">
-                <ons-icon icon="md-close-circle" style="color: lavender; font-size: 16px;"></ons-icon>
-            </div>
-        </ons-list-item>
-
-    </ons-list>
 </ons-page>
