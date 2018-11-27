@@ -332,6 +332,100 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is destroyed
          */
         pageDestroy: function pageDestroy() {}
+    },
+
+    /**
+     * this is the view-model/controller for the Products page
+     */
+    productsPageViewModel: {
+
+        /**
+         * event is triggered when page is initialised
+         */
+        pageInit: function pageInit(event) {
+
+            //function is used to initialise the page if the app is fully ready for execution
+            var loadPageOnAppReady = function () {
+                var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6() {
+                    return regeneratorRuntime.wrap(function _callee6$(_context6) {
+                        while (1) {
+                            switch (_context6.prev = _context6.next) {
+                                case 0:
+                                    if (!(!ons.isReady() || utopiasoftware[utopiasoftware_app_namespace].model.isAppReady === false)) {
+                                        _context6.next = 3;
+                                        break;
+                                    }
+
+                                    setTimeout(loadPageOnAppReady, 500); // call this function again after half a second
+                                    return _context6.abrupt('return');
+
+                                case 3:
+
+                                    // listen for when the "product-layout" segment is clicked
+                                    $('#products-page #products-layout-segment').on("postchange", function (postChangeEvent) {
+
+                                        // check which tab was clicked and act accordingly
+                                        switch (postChangeEvent.originalEvent.index) {
+                                            case 0:
+                                                // user selected to display items in 1-column
+
+                                                break;
+                                        }
+                                    });
+
+                                    try {} catch (err) {}
+
+                                case 5:
+                                case 'end':
+                                    return _context6.stop();
+                            }
+                        }
+                    }, _callee6, this);
+                }));
+
+                return function loadPageOnAppReady() {
+                    return _ref6.apply(this, arguments);
+                };
+            }();
+
+            var $thisPage = $(event.target); // get the current page shown
+
+            // call the function used to initialise the app page if the app is fully loaded
+            loadPageOnAppReady();
+        },
+
+        /**
+         * method is triggered when page is shown
+         */
+        pageShow: function pageShow() {},
+
+        /**
+         * method is triggered when page is hidden
+         */
+        pageHide: function () {
+            var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7() {
+                return regeneratorRuntime.wrap(function _callee7$(_context7) {
+                    while (1) {
+                        switch (_context7.prev = _context7.next) {
+                            case 0:
+                            case 'end':
+                                return _context7.stop();
+                        }
+                    }
+                }, _callee7, this);
+            }));
+
+            function pageHide() {
+                return _ref7.apply(this, arguments);
+            }
+
+            return pageHide;
+        }(),
+
+        /**
+         * method is triggered when page is destroyed
+         */
+        pageDestroy: function pageDestroy() {}
     }
 };
 

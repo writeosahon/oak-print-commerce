@@ -251,5 +251,70 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         pageDestroy: function(){
 
         }
+    },
+
+    /**
+     * this is the view-model/controller for the Products page
+     */
+    productsPageViewModel: {
+
+
+        /**
+         * event is triggered when page is initialised
+         */
+        pageInit: function(event){
+
+            var $thisPage = $(event.target); // get the current page shown
+
+            // call the function used to initialise the app page if the app is fully loaded
+            loadPageOnAppReady();
+
+            //function is used to initialise the page if the app is fully ready for execution
+            async function loadPageOnAppReady() {
+                // check to see if onsen is ready and if all app loading has been completed
+                if (!ons.isReady() || utopiasoftware[utopiasoftware_app_namespace].model.isAppReady === false) {
+                    setTimeout(loadPageOnAppReady, 500); // call this function again after half a second
+                    return;
+                }
+
+                // listen for when the "product-layout" segment is clicked
+                $('#products-page #products-layout-segment').on("postchange", function(postChangeEvent){
+                    
+                    // check which tab was clicked and act accordingly
+                    switch (postChangeEvent.originalEvent.index) {
+                        case 0:
+                            // user selected to display items in 1-column
+
+                            break;
+                    }
+                });
+
+                try{
+
+                }
+                catch(err){}
+            }
+
+        },
+
+        /**
+         * method is triggered when page is shown
+         */
+        pageShow: function(){
+        },
+
+
+        /**
+         * method is triggered when page is hidden
+         */
+        pageHide: async function(){
+        },
+
+        /**
+         * method is triggered when page is destroyed
+         */
+        pageDestroy: function(){
+
+        }
     }
 };
