@@ -162,7 +162,7 @@
     border-bottom: 1px solid rgba(0, 0, 255, 0.12);
 }
 #products-page .e-card .e-card-actions .e-card-btn:focus,
-#products-page .e-card .e-card-actions .e-card-btn:active {
+#products-page .e-card .e-card-actions .e-card-btn:hover{
     background-color: transparent;
 }
 /** STYLE FOR PRODUCTS PAGE ENDS **/
