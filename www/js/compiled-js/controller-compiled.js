@@ -131,6 +131,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             //function is used to initialise the page if the app is fully ready for execution
             var loadPageOnAppReady = function () {
                 var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
+                    var newProductsCarousel;
                     return regeneratorRuntime.wrap(function _callee2$(_context2) {
                         while (1) {
                             switch (_context2.prev = _context2.next) {
@@ -146,7 +147,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 case 3:
 
                                     try {
-                                        new Flickity($('#home-page #home-latest-design-block .row').get(0), {
+                                        newProductsCarousel = new Flickity($('#home-page #home-latest-design-block .row').get(0), {
                                             // options
                                             wrapAround: true,
                                             groupCells: 1,
@@ -158,6 +159,21 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             contain: false,
                                             prevNextButtons: false,
                                             pageDots: true
+                                        });
+
+                                        newProductsCarousel.on("scroll", function () {
+                                            // check if the carousel object has a timer attached
+                                            if (newProductsCarousel._utopiasoftware_scrollTimer) {
+                                                // there is a timer
+                                                // clear the timer
+                                                window.clearTimeout(newProductsCarousel._utopiasoftware_scrollTimer);
+                                                newProductsCarousel._utopiasoftware_scrollTimer = null;
+                                            }
+
+                                            // automatically start the the carousel autoplay
+                                            newProductsCarousel._utopiasoftware_scrollTimer = window.setTimeout(function () {
+                                                newProductsCarousel.playPlayer(); // start carousel autoplay
+                                            }, 0);
                                         });
 
                                         new Flickity($('#home-page #home-featured-design-block .row').get(0), {

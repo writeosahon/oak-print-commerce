@@ -125,7 +125,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 }
 
                 try{
-                    new Flickity($('#home-page #home-latest-design-block .row').get(0), {
+                    let newProductsCarousel = new Flickity($('#home-page #home-latest-design-block .row').get(0), {
                         // options
                         wrapAround: true,
                         groupCells: 1,
@@ -137,6 +137,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         contain: false,
                         prevNextButtons: false,
                         pageDots: true
+                    });
+                    newProductsCarousel.on("scroll", function(){
+                        // check if the carousel object has a timer attached
+                        if(newProductsCarousel._utopiasoftware_scrollTimer){ // there is a timer
+                            // clear the timer
+                            window.clearTimeout(newProductsCarousel._utopiasoftware_scrollTimer);
+                            newProductsCarousel._utopiasoftware_scrollTimer = null;
+                        }
+
+                        // automatically start the the carousel autoplay
+                        newProductsCarousel._utopiasoftware_scrollTimer = window.setTimeout(function(){
+                            newProductsCarousel.playPlayer(); // start carousel autoplay
+                        }, 0);
                     });
 
                     new Flickity($('#home-page #home-featured-design-block .row').get(0), {
