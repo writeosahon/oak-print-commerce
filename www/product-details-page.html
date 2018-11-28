@@ -1,0 +1,34 @@
+<!-- product-details page -->
+<ons-page id="product-details-page">
+
+    <ons-toolbar style="background-color: #3f51b5 !important; color: #ffffff !important;"
+                 static modifier="noshadow">
+
+        <div class="center" style="background-color: #3f51b5 !important; color: #ffffff !important;">
+            <img src="css/app-images/oak-design-logo.png" style="height: 90%; display: inline-block; margin-right: 0.5em;">
+            OAK Exclusive
+        </div>
+
+        <div class="right" style="background-color: #3f51b5 !important; color: #ffffff !important;">
+            <ons-toolbar-button style="background-color: #3f51b5 !important; color: #d70000 !important;"
+                                icon="md-favorite"></ons-toolbar-button>
+
+            <ons-toolbar-button style="background-color: #3f51b5 !important; color: #ffffff !important;">
+                <ons-icon style="position: relative;" icon="md-shopping-cart">
+                    <span class="e-badge e-badge-overlap
+                            e-badge-notification e-badge-circle e-badge-danger"
+                          style="font-size: 0.5em;">0</span>
+                </ons-icon>
+            </ons-toolbar-button>
+        </div>
+    </ons-toolbar>
+
+    <ons-tabbar id="app-main-tabbar" position="bottom" modifier="autogrow" disable-auto-styling>
+        <ons-tab id="app-main-tab-home" page="home-page.html" label="Home" icon="md-no-icon" active disable-auto-styling></ons-tab>
+        <ons-tab id="app-main-tab-categories" label="Categories" icon="md-no-icon" page="categories-page.html" disable-auto-styling></ons-tab>
+        <ons-tab id="app-main-tab-search" label="Search" icon="md-no-icon" page="search-page.html" disable-auto-styling></ons-tab>
+        <ons-tab id="app-main-tab-my-account" label="Account" icon="md-no-icon" page="account-page.html" disable-auto-styling></ons-tab>
+        <ons-tab id="app-main-tab-products" label="" page="products-page.html" disable-auto-styling style="display: none"></ons-tab>
+    </ons-tabbar>
+
+</ons-page>
