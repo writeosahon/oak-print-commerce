@@ -367,8 +367,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         // check which tab was clicked and act accordingly
                                         switch (postChangeEvent.originalEvent.index) {
                                             case 0:
-                                                // user selected to display items in 1-column
+                                                // user selected to display items in 2-column
+                                                $('#products-page .col-xs-12').removeClass('col-xs-12').addClass('col-xs-6');
+                                                break;
 
+                                            case 1:
+                                                // user selected to display items in 1-column
+                                                $('#products-page .col-xs-6').removeClass('col-xs-6').addClass('col-xs-12');
                                                 break;
                                         }
                                     });

@@ -52,3 +52,15 @@ $(document).on("hide", "#account-page", utopiasoftware[utopiasoftware_app_namesp
 
 // listen for when the ACCOUNT page is destroyed
 $(document).on("destroy", "#account-page", utopiasoftware[utopiasoftware_app_namespace].controller.accountPageViewModel.pageDestroy);
+
+// listen for the initialisation of the PRODUCTS page
+$(document).on("init", "#products-page", utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.pageInit);
+
+// listen for when the PRODUCTS page is shown
+$(document).on("show", "#products-page", utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.pageShow);
+
+// listen for when the PRODUCTS page is hidden
+$(document).on("hide", "#products-page", utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.pageHide);
+
+// listen for when the PRODUCTS page is destroyed
+$(document).on("destroy", "#products-page", utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.pageDestroy);
