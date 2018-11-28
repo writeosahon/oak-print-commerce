@@ -158,7 +158,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             return;
                         }
                         // a cell was clicked, so load the product-details page
-                        $('£app-main-navigator').get(0).pushPage("product-details-page.html", {animation: "lift"});
+                        $('#app-main-navigator').get(0).pushPage("product-details-page.html", {animation: "lift"});
                     });
 
                     let featuredProductsCarousel = new Flickity($('#home-page #home-featured-design-block .row').get(0), {
@@ -194,7 +194,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             return;
                         }
                         // a cell was clicked, so load the product-details page
-                        $('£app-main-navigator').get(0).pushPage("product-details-page.html", {animation: "lift"});
+                        $('#app-main-navigator').get(0).pushPage("product-details-page.html", {animation: "lift"});
                     });
 
                     let salesProductsCarousel = new Flickity($('#home-page #home-sales-design-block .row').get(0), {
@@ -230,7 +230,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             return;
                         }
                         // a cell was clicked, so load the product-details page
-                        $('£app-main-navigator').get(0).pushPage("product-details-page.html", {animation: "lift"});
+                        $('#app-main-navigator').get(0).pushPage("product-details-page.html", {animation: "lift"});
                     });
                 }
                 catch(err){}
