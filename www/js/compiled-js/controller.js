@@ -292,6 +292,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             $('#products-page .col-xs-6').removeClass('col-xs-6').addClass('col-xs-12');
                             break;
                     }
+
+                    // scroll to the top of the page
+                    $('#products-page .page__content').scrollTop(0);
                 });
 
                 try{
