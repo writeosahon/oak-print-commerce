@@ -7,6 +7,10 @@
 [data-hint]:after {
     font-size: 0.75em !important;
 }
+/** STYLE TO PREVENT ALL EJ2 BUTTONS FROM HAVING A BACKGROUND COLOR WHEN FOCUSED **/
+.e-btn:focus {
+    background-color: transparent;
+}
 
 
 /** STYLE FOR THE APP ALERT DIALOG BEGINS **/

@@ -418,6 +418,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 try{
                     let wishListButton = new ej.buttons.Button({
+                        cssClass: 'e-outline e-small',
                         iconCss: "zmdi zmdi-favorite-outline",
                         iconPosition: "Left"
                     });
