@@ -76,17 +76,27 @@
         <ons-list-item modifier="longdivider" lock-on-drag="true"
                        onclick="">
             <div class="center" style="text-align: center">
-                <button id="product-details-wish-list" type="button" style="color: red;
-                border-color: red; box-shadow: none; margin-right: 1em;">Wish List</button>
+                <div style="width: 100%; display: block;">
+                    <button id="product-details-wish-list" type="button" style="color: red;
+                border-color: red; box-shadow: none; margin-right: 1em; margin-bottom:0.5em">
+                        <ons-ripple></ons-ripple>
+                        Wish List</button>
 
-                <button id="product-details-compare" type="button" style="color: #3F51B5;
-                border-color: #3F51B5; box-shadow: none; margin-right: 1em;">Compare</button>
+                    <button id="product-details-compare" type="button" style="color: #3F51B5;
+                border-color: #3F51B5; box-shadow: none; margin-right: 1em; margin-bottom:0.5em">
+                        <ons-ripple></ons-ripple>
+                        Compare</button>
 
-                <button id="product-details-review" type="button" style="color: gold;
-                border-color: gold; box-shadow: none; margin-right: 1em;">Review</button>
+                    <button id="product-details-review" type="button" style="color: gold;
+                border-color: gold; box-shadow: none; margin-right: 1em; margin-bottom:0.5em">
+                        <ons-ripple></ons-ripple>
+                        Review</button>
 
-                <button id="product-details-share" type="button" style="color: blue;
-                border-color: blue; box-shadow: none; margin-right: 1em;">Share</button>
+                    <button id="product-details-share" type="button" style="color: blue;
+                border-color: blue; box-shadow: none; margin-right: 1em; margin-bottom:0.5em">
+                        <ons-ripple></ons-ripple>
+                        Share</button>
+                </div>
             </div>
         </ons-list-item>
 
@@ -97,6 +107,7 @@
 
         <div style="text-align: center; width: 100%">
             <button id="product-details-add-to-cart" type="button" style="background-color: #363E7C; color: #ffffff">
+                <ons-ripple></ons-ripple>
                 Add To Cart
             </button>
         </div>
