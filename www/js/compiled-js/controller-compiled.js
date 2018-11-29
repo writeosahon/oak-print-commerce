@@ -525,7 +525,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             //function is used to initialise the page if the app is fully ready for execution
             var loadPageOnAppReady = function () {
                 var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8() {
-                    var wishListButton;
+                    var wishListButton, compareButton, reviewButton, shareButton;
                     return regeneratorRuntime.wrap(function _callee8$(_context8) {
                         while (1) {
                             switch (_context8.prev = _context8.next) {
@@ -548,7 +548,30 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         });
 
                                         wishListButton.appendTo('#product-details-wish-list');
-                                        console.log("BUTTON INSTANCE", $('#product-details-wish-list').get(0).ej2_instances[0]);
+
+                                        compareButton = new ej.buttons.Button({
+                                            cssClass: 'e-outline e-small',
+                                            iconCss: "zmdi zmdi-utopiasoftware-icon-scale-balance",
+                                            iconPosition: "Left"
+                                        });
+
+                                        compareButton.appendTo('#product-details-compare');
+
+                                        reviewButton = new ej.buttons.Button({
+                                            cssClass: 'e-outline e-small',
+                                            iconCss: "zmdi zmdi-star-outline",
+                                            iconPosition: "Left"
+                                        });
+
+                                        reviewButton.appendTo('#product-details-review');
+
+                                        shareButton = new ej.buttons.Button({
+                                            cssClass: 'e-outline e-small',
+                                            iconCss: "zmdi zmdi-share",
+                                            iconPosition: "Left"
+                                        });
+
+                                        shareButton.appendTo('#product-details-share');
                                     } catch (err) {}
 
                                 case 4:

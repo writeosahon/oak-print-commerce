@@ -8,7 +8,7 @@
     font-size: 0.75em !important;
 }
 /** STYLE TO PREVENT ALL EJ2 BUTTONS FROM HAVING A BACKGROUND COLOR WHEN FOCUSED **/
-.e-btn:focus {
+.e-btn:focus, .e-btn:hover, .e-btn.e-outline:focus, .e-btn.e-outline:hover {
     background-color: transparent;
 }
 

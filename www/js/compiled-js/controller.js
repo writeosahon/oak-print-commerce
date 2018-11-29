@@ -423,7 +423,27 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         iconPosition: "Left"
                     });
                     wishListButton.appendTo('#product-details-wish-list');
-                    console.log("BUTTON INSTANCE", $('#product-details-wish-list').get(0).ej2_instances[0]);
+
+                    let compareButton = new ej.buttons.Button({
+                        cssClass: 'e-outline e-small',
+                        iconCss: "zmdi zmdi-utopiasoftware-icon-scale-balance",
+                        iconPosition: "Left"
+                    });
+                    compareButton.appendTo('#product-details-compare');
+
+                    let reviewButton = new ej.buttons.Button({
+                        cssClass: 'e-outline e-small',
+                        iconCss: "zmdi zmdi-star-outline",
+                        iconPosition: "Left"
+                    });
+                    reviewButton.appendTo('#product-details-review');
+
+                    let shareButton = new ej.buttons.Button({
+                        cssClass: 'e-outline e-small',
+                        iconCss: "zmdi zmdi-share",
+                        iconPosition: "Left"
+                    });
+                    shareButton.appendTo('#product-details-share');
                 }
                 catch(err){}
             }
