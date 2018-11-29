@@ -525,7 +525,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             //function is used to initialise the page if the app is fully ready for execution
             var loadPageOnAppReady = function () {
                 var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8() {
-                    var addToCartButton, wishListButton, compareButton, reviewButton, shareButton;
+                    var addToCartButton, customiseProductButton, wishListButton, compareButton, reviewButton, shareButton;
                     return regeneratorRuntime.wrap(function _callee8$(_context8) {
                         while (1) {
                             switch (_context8.prev = _context8.next) {
@@ -547,6 +547,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         });
 
                                         addToCartButton.appendTo('#product-details-add-to-cart');
+
+                                        customiseProductButton = new ej.buttons.Button({
+                                            iconCss: "zmdi zmdi-shopping-cart-add zmdi-hc-3x",
+                                            iconPosition: "Left"
+                                        });
+
+                                        customiseProductButton.appendTo('#product-details-customise-product');
 
                                         wishListButton = new ej.buttons.Button({
                                             cssClass: 'e-outline e-small',
