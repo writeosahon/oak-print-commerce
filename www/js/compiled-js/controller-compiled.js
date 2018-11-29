@@ -510,6 +510,97 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is destroyed
          */
         pageDestroy: function pageDestroy() {}
+    },
+
+    /**
+     * this is the view-model/controller for the Product Details page
+     */
+    productDetailsPageViewModel: {
+
+        /**
+         * event is triggered when page is initialised
+         */
+        pageInit: function pageInit(event) {
+
+            //function is used to initialise the page if the app is fully ready for execution
+            var loadPageOnAppReady = function () {
+                var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8() {
+                    var wishListButton;
+                    return regeneratorRuntime.wrap(function _callee8$(_context8) {
+                        while (1) {
+                            switch (_context8.prev = _context8.next) {
+                                case 0:
+                                    if (!(!ons.isReady() || utopiasoftware[utopiasoftware_app_namespace].model.isAppReady === false)) {
+                                        _context8.next = 3;
+                                        break;
+                                    }
+
+                                    setTimeout(loadPageOnAppReady, 500); // call this function again after half a second
+                                    return _context8.abrupt('return');
+
+                                case 3:
+
+                                    try {
+                                        wishListButton = new ej.buttons.Button({
+                                            iconCss: "zmdi zmdi-favorite-outline",
+                                            iconPosition: "Left"
+                                        });
+
+                                        wishListButton.appendTo('#product-details-wish-list');
+                                        console.log("BUTTON INSTANCE", $('#product-details-wish-list').get(0).ej2_instances[0]);
+                                    } catch (err) {}
+
+                                case 4:
+                                case 'end':
+                                    return _context8.stop();
+                            }
+                        }
+                    }, _callee8, this);
+                }));
+
+                return function loadPageOnAppReady() {
+                    return _ref8.apply(this, arguments);
+                };
+            }();
+
+            var $thisPage = $(event.target); // get the current page shown
+
+            // call the function used to initialise the app page if the app is fully loaded
+            loadPageOnAppReady();
+        },
+
+        /**
+         * method is triggered when page is shown
+         */
+        pageShow: function pageShow() {},
+
+        /**
+         * method is triggered when page is hidden
+         */
+        pageHide: function () {
+            var _ref9 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9() {
+                return regeneratorRuntime.wrap(function _callee9$(_context9) {
+                    while (1) {
+                        switch (_context9.prev = _context9.next) {
+                            case 0:
+                            case 'end':
+                                return _context9.stop();
+                        }
+                    }
+                }, _callee9, this);
+            }));
+
+            function pageHide() {
+                return _ref9.apply(this, arguments);
+            }
+
+            return pageHide;
+        }(),
+
+        /**
+         * method is triggered when page is destroyed
+         */
+        pageDestroy: function pageDestroy() {}
     }
 };
 

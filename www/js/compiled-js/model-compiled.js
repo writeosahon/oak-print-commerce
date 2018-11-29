@@ -66,4 +66,16 @@ $(document).on("hide", "#products-page", utopiasoftware[utopiasoftware_app_names
 // listen for when the PRODUCTS page is destroyed
 $(document).on("destroy", "#products-page", utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.pageDestroy);
 
+// listen for the initialisation of the PRODUCT DETAILS page
+$(document).on("init", "#product-details-page", utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.pageInit);
+
+// listen for when the PRODUCT DETAILS page is shown
+$(document).on("show", "#product-details-page", utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.pageShow);
+
+// listen for when the PRODUCT DETAILS page is hidden
+$(document).on("hide", "#product-details-page", utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.pageHide);
+
+// listen for when the PRODUCT DETAILS page is destroyed
+$(document).on("destroy", "#product-details-page", utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.pageDestroy);
+
 //# sourceMappingURL=model-compiled.js.map
