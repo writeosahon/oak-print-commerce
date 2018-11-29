@@ -169,6 +169,10 @@
 #products-page .e-card .e-card-actions .e-card-btn:hover{
     background-color: transparent;
 }
+#products-page .e-card .e-card-actions .e-card-btn:first-child,
+#products-page .e-card .e-card-actions a:first-child {
+    margin-left: 6px;
+}
 /** STYLE FOR PRODUCTS PAGE ENDS **/
 
 /** STYLE FOR PRODUCT DETAILS PAGE BEGINS **/
