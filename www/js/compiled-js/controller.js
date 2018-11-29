@@ -417,6 +417,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 }
 
                 try{
+                    let addToCartButton = new ej.buttons.Button({
+                        iconCss: "zmdi zmdi-shopping-cart-add zmdi-hc-2x",
+                        iconPosition: "Left"
+                    });
+                    addToCartButton.appendTo('#product-details-add-to-cart');
+
                     let wishListButton = new ej.buttons.Button({
                         cssClass: 'e-outline e-small',
                         iconCss: "zmdi zmdi-favorite-outline",
