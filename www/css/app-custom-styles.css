@@ -166,3 +166,11 @@
     background-color: transparent;
 }
 /** STYLE FOR PRODUCTS PAGE ENDS **/
+
+/** STYLE FOR PRODUCT DETAILS PAGE BEGINS **/
+#product-detail-page .e-card-image{
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+/** STYLE FOR PRODUCT DETAILS PAGE ENDS **/
