@@ -327,7 +327,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         backButtonClicked: function backButtonClicked() {
 
-            ons.notification.confirm('Do you want to close the app?', { title: '<img src="css/app-images/oak-design-logo.png" style="height: 1em; width: auto; margin-right: 1em">Exit App',
+            ons.notification.confirm('Do you want to close the app?', { title: '<img src="css/app-images/oak-design-logo.png" style="height: 1.5em; width: auto; margin-right: 0.5em">Exit App',
                 buttonLabels: ['No', 'Yes'], modifier: 'utopiasoftware-alert-dialog utopiasoftware-oak-alert-dialog' }) // Ask for confirmation
             .then(function (index) {
                 if (index === 1) {
