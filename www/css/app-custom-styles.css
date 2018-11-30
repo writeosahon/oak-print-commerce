@@ -22,6 +22,12 @@
     width: 90vw;
     min-width: 90vw;
 }
+.alert-dialog-title--utopiasoftware-oak-alert-dialog {
+    color: #3F51B5;
+}
+.alert-dialog-button--utopiasoftware-oak-alert-dialog {
+    color: #3F51B5;
+}
 /** STYLE FOR THE APP ALERT DIALOG ENDS **/
 
 /** STYLE FOR LOADER MODAL BEGINS **/
