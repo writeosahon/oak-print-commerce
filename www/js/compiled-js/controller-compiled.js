@@ -146,6 +146,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 case 3:
 
+                                    // listen for the back button event
+                                    event.target.onDeviceBackButton = utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.backButtonClicked;
+
                                     try {
                                         newProductsCarousel = new Flickity($('#home-page #home-latest-design-block .row').get(0), {
                                             // options
@@ -267,7 +270,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         $('#loader-modal').get(0).hide(); // show loader
                                     }
 
-                                case 4:
+                                case 5:
                                 case 'end':
                                     return _context2.stop();
                             }
@@ -317,7 +320,22 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         /**
          * method is triggered when page is destroyed
          */
-        pageDestroy: function pageDestroy() {}
+        pageDestroy: function pageDestroy() {},
+
+        /**
+         * method is triggered when the device back button is clicked OR a similar action is triggered
+         */
+        backButtonClicked: function backButtonClicked() {
+
+            ons.notification.confirm('Do you want to close the app?', { title: '<img src="css/app-images/oak-design-logo.png" style="height: 1em; width: auto; margin-right: 1em">Exit App',
+                buttonLabels: ['No', 'Yes'], modifier: 'utopiasoftware-alert-dialog utopiasoftware-oak-alert-dialog' }) // Ask for confirmation
+            .then(function (index) {
+                if (index === 1) {
+                    // OK button
+                    navigator.app.exitApp(); // Close the app
+                }
+            });
+        }
     },
 
     /**
@@ -457,9 +475,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         $('#products-page .page__content').scrollTop(0);
                                     });
 
+                                    // listen for when a product card is clicked
+                                    $thisPage.on("click", ".e-card > *:not(.e-card-actions)", function () {
+                                        // load the product-details page
+                                        $('#app-main-navigator').get(0).pushPage("product-details-page.html", { animation: "lift" });
+                                    });
+
                                     try {} catch (err) {}
 
-                                case 5:
+                                case 6:
                                 case 'end':
                                     return _context6.stop();
                             }
@@ -540,6 +564,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 case 3:
 
+                                    // listen for the back button event
+                                    event.target.onDeviceBackButton = utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.backButtonClicked;
+
                                     try {
                                         addToCartButton = new ej.buttons.Button({
                                             iconCss: "zmdi zmdi-shopping-cart-add utopiasoftware-icon-zoom-one-point-two",
@@ -588,7 +615,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         shareButton.appendTo('#product-details-share');
                                     } catch (err) {}
 
-                                case 4:
+                                case 5:
                                 case 'end':
                                     return _context8.stop();
                             }
@@ -638,7 +665,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         /**
          * method is triggered when page is destroyed
          */
-        pageDestroy: function pageDestroy() {}
+        pageDestroy: function pageDestroy() {},
+
+        /**
+         * method is triggered when the device back button is clicked OR a similar action is triggered
+         */
+        backButtonClicked: function backButtonClicked() {
+
+            // get back to the previous page on the app-main navigator stack
+            $('#app-main-navigator').get(0).popPage();
+        }
     }
 };
 

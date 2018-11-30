@@ -124,6 +124,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     return;
                 }
 
+                // listen for the back button event
+                event.target.onDeviceBackButton =
+                    utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.backButtonClicked;
+
                 try{
                     let newProductsCarousel = new Flickity($('#home-page #home-latest-design-block .row').get(0), {
                         // options
@@ -259,7 +263,24 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         pageDestroy: function(){
 
+        },
+
+        /**
+         * method is triggered when the device back button is clicked OR a similar action is triggered
+         */
+        backButtonClicked(){
+
+
+            ons.notification.confirm('Do you want to close the app?',
+                {title: '<img src="css/app-images/oak-design-logo.png" style="height: 1em; width: auto; margin-right: 1em">Exit App',
+                buttonLabels: ['No', 'Yes'], modifier: 'utopiasoftware-alert-dialog utopiasoftware-oak-alert-dialog'}) // Ask for confirmation
+                .then(function(index) {
+                    if (index === 1) { // OK button
+                        navigator.app.exitApp(); // Close the app
+                    }
+                });
         }
+
     },
 
     /**
@@ -363,6 +384,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     $('#products-page .page__content').scrollTop(0);
                 });
 
+
+                // listen for when a product card is clicked
+                $thisPage.on("click", ".e-card > *:not(.e-card-actions)", function(){
+                    // load the product-details page
+                    $('#app-main-navigator').get(0).pushPage("product-details-page.html", {animation: "lift"});
+                });
+
                 try{
 
                 }
@@ -415,6 +443,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     setTimeout(loadPageOnAppReady, 500); // call this function again after half a second
                     return;
                 }
+
+                // listen for the back button event
+                event.target.onDeviceBackButton =
+                    utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.backButtonClicked;
 
                 try{
                     let addToCartButton = new ej.buttons.Button({
@@ -480,6 +512,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         pageDestroy: function(){
 
+        },
+
+        /**
+         * method is triggered when the device back button is clicked OR a similar action is triggered
+         */
+        backButtonClicked(){
+
+            // get back to the previous page on the app-main navigator stack
+            $('#app-main-navigator').get(0).popPage();
         }
     }
 };
