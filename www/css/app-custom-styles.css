@@ -200,7 +200,7 @@
     url('app-images/abstract-background-3.jpg'),
     linear-gradient(45deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 100%);
     background-repeat: no-repeat;
-    background-size: cover, contain, cover;
+    background-size: cover, cover, cover;
     background-position: 0% 0%, center, 0% 0%;
 }
 #login-page ons-carousel-item { /* style for carousel items background */
