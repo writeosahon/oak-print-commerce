@@ -192,3 +192,45 @@
     background-position: center;
 }
 /** STYLE FOR PRODUCT DETAILS PAGE ENDS **/
+
+/** STYLE FOR LOGIN PAGE BEGINS **/
+/** configure the style for the segment buttons on the login page **/
+#login-page .segment--material {
+    border-radius: 2px;
+    overflow: hidden;
+    box-shadow: 0 0 2px 0 rgba(0, 0, 0, .12), 0 2px 2px 0 rgba(0, 0, 0, .24);
+}
+#login-page .segment--material__button {
+    font-family: 'Roboto', 'Noto', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-weight: 400;
+    font-size: 14px;
+    height: 32px;
+    line-height: 32px;
+    border-width: 0;
+    color: #000000;
+    color: rgba(0, 0, 0, 1);
+    border-radius: 0;
+    background-color: #FFFFFF;
+}
+#login-page :active + .segment--material__button {
+    background-color: #FFFFFF;
+    border-radius: 0;
+    border-width: 0;
+    font-size: 14px;
+    transition: none;
+    color: #000000;
+    color: rgba(0, 0, 0, 1);
+}
+#login-page :checked + .segment--material__button {
+    background-color: #363E7C;
+    color: #FFFFFF;
+    border-radius: 0;
+    border-width: 0;
+}
+#login-page .segment--material__item:first-child > .segment--material__button,
+#login-page .segment--material__item:last-child > .segment--material__button {
+    border-radius: 0;
+    border-width: 0;
+}
+/** STYLE FOR LOGIN PAGE ENDS **/

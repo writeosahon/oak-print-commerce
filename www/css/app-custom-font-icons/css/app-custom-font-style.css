@@ -179,3 +179,13 @@
 
   content: '\e900';
 }
+.zmdi-utopiasoftware-icon-lock:before {
+  display: inline-block;
+  font: normal normal normal 14px/1 'utopiasoftware-font-icons';
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  content: '\e901';
+}
