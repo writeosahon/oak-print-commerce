@@ -194,15 +194,13 @@
 /** STYLE FOR PRODUCT DETAILS PAGE ENDS **/
 
 /** STYLE FOR LOGIN PAGE BEGINS **/
-#login-page .page--material__background,
-#login-page .page__background { /* style for login page background */
+#login-page ons-carousel-item { /* style for carousel items background */
     background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255,0.7) 100%),
     url('app-images/oak-design-logo.png'),
     linear-gradient(45deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 100%);
     background-repeat: no-repeat;
     background-size: cover, contain, cover;
     background-position: 0% 0%, center, 0% 0%;
-
     position: relative;
 }
 #login-page ons-input input {
