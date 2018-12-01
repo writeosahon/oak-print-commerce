@@ -24,6 +24,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
         // initialise the app libraries and plugins
         ons.ready(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+            var secureKey;
             return regeneratorRuntime.wrap(function _callee$(_context) {
                 while (1) {
                     switch (_context.prev = _context.next) {
@@ -71,13 +72,33 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             });
 
                             // generate a password for encrypting the app database (if it does NOT already exist)
-                            if (!window.localStorage.getItem("utopiasoftware-oak-print-service-rid") || window.localStorage.getItem("utopiasoftware-oak-print-service-rid") === "") {
-                                window.localStorage.setItem("utopiasoftware-oak-print-service-rid", Random.uuid4(utopiasoftware[utopiasoftware_app_namespace].randomisationEngine));
-                            }
-                            // enable the db encryption using the generated password
-                            _context.next = 11;
+                            secureKey = null;
+                            _context.prev = 9;
+                            _context.next = 12;
                             return new Promise(function (resolve, reject) {
-                                utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase.crypto(window.localStorage.getItem("utopiasoftware-oak-print-service-rid"), {
+                                NativeStorage.getItem("utopiasoftware-oak-print-service-secure-key", resolve, reject);
+                            });
+
+                        case 12:
+                            secureKey = _context.sent;
+                            _context.next = 20;
+                            break;
+
+                        case 15:
+                            _context.prev = 15;
+                            _context.t0 = _context['catch'](9);
+                            _context.next = 19;
+                            return new Promise(function (resolve, reject) {
+                                NativeStorage.setItem("utopiasoftware-oak-print-service-secure-key", { password: Random.uuid4(utopiasoftware[utopiasoftware_app_namespace].randomisationEngine) }, resolve, reject);
+                            });
+
+                        case 19:
+                            secureKey = _context.sent;
+
+                        case 20:
+                            _context.next = 22;
+                            return new Promise(function (resolve, reject) {
+                                utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase.crypto(secureKey.password, {
                                     ignore: ['_attachments', '_deleted'],
                                     cb: function cb(err, key) {
                                         if (err) {
@@ -90,31 +111,31 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     } });
                             });
 
-                        case 11:
-                            _context.next = 16;
+                        case 22:
+                            _context.next = 27;
                             break;
 
-                        case 13:
-                            _context.prev = 13;
-                            _context.t0 = _context['catch'](5);
+                        case 24:
+                            _context.prev = 24;
+                            _context.t1 = _context['catch'](5);
 
-                            console.log("APP LOADING ERROR", _context.t0);
+                            console.log("APP LOADING ERROR", _context.t1);
 
-                        case 16:
-                            _context.prev = 16;
+                        case 27:
+                            _context.prev = 27;
 
                             // set status bar color
                             StatusBar.backgroundColorByHexString("#363E7C");
                             navigator.splashscreen.hide(); // hide the splashscreen
                             utopiasoftware[utopiasoftware_app_namespace].model.isAppReady = true; // flag that app is fully loaded and ready
-                            return _context.finish(16);
+                            return _context.finish(27);
 
-                        case 21:
+                        case 32:
                         case 'end':
                             return _context.stop();
                     }
                 }
-            }, _callee, this, [[5, 13, 16, 21]]);
+            }, _callee, this, [[5, 24, 27, 32], [9, 15]]);
         }))); // end of ons.ready()
     },
 

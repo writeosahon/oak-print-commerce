@@ -49,6 +49,8 @@
         <variable name="WINDOW_NAVIGATION_BAR_COLOR" value="#363E7C"/>
     </plugin>
 
+    <plugin name="cordova-plugin-nativestorage" spec="2.3.2"/>
+
     <plugin name="cordova-plugin-whitelist" spec="1.3.3"/>
 
     <config-file platform="android" target="AndroidManifest.xml" parent="/manifest">

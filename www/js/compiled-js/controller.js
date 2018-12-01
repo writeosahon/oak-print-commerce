@@ -65,15 +65,25 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 });
 
                 // generate a password for encrypting the app database (if it does NOT already exist)
-                if(!window.localStorage.getItem("utopiasoftware-oak-print-service-rid") ||
-                    window.localStorage.getItem("utopiasoftware-oak-print-service-rid") === "") {
-                    window.localStorage.setItem("utopiasoftware-oak-print-service-rid",
-                        Random.uuid4(utopiasoftware[utopiasoftware_app_namespace].randomisationEngine));
+                let secureKey = null;
+                try {
+                    // get secure key, if it exists
+                    secureKey = await new Promise(function(resolve, reject){
+                        NativeStorage.getItem("utopiasoftware-oak-print-service-secure-key",resolve, reject);
+                    });
+                }
+                catch(err){ // secure key does not exist
+                    // create the secure key
+                    secureKey = await new Promise(function(resolve, reject){
+                        NativeStorage.setItem("utopiasoftware-oak-print-service-secure-key",
+                            {password: Random.uuid4(utopiasoftware[utopiasoftware_app_namespace].randomisationEngine)},
+                            resolve, reject);
+                    });
                 }
                 // enable the db encryption using the generated password
                 await new Promise(function(resolve, reject){
                     utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase.
-                    crypto(window.localStorage.getItem("utopiasoftware-oak-print-service-rid"), {
+                    crypto(secureKey.password, {
                         ignore: ['_attachments', '_deleted'],
                         cb: function(err, key){
                             if(err){ // there is an error
