@@ -194,6 +194,7 @@
 /** STYLE FOR PRODUCT DETAILS PAGE ENDS **/
 
 /** STYLE FOR LOGIN PAGE BEGINS **/
+#login-page .page--material__background,
 #login-page .page__background { /* style for login page background */
     background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255,0.7) 100%),
     url('app-images/oak-design-logo.png'),
