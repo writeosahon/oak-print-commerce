@@ -259,6 +259,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is shown
          */
         pageShow: function(){
+            window.SoftInputMode.set('adjustPan');
         },
 
 
@@ -333,6 +334,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is shown
          */
         pageShow: function(){
+            window.SoftInputMode.set('adjustPan');
         },
 
 
@@ -347,6 +349,153 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         pageDestroy: function(){
 
+        }
+    },
+
+    /**
+     * this is the view-model/controller for the Login page
+     */
+    loginPageViewModel: {
+
+        /**
+         * event is triggered when page is initialised
+         */
+        pageInit: function(event){
+
+            var $thisPage = $(event.target); // get the current page shown
+
+            // call the function used to initialise the app page if the app is fully loaded
+            loadPageOnAppReady();
+
+            //function is used to initialise the page if the app is fully ready for execution
+            async function loadPageOnAppReady() {
+                // check to see if onsen is ready and if all app loading has been completed
+                if (!ons.isReady() || utopiasoftware[utopiasoftware_app_namespace].model.isAppReady === false) {
+                    setTimeout(loadPageOnAppReady, 500); // call this function again after half a second
+                    return;
+                }
+
+                // listen for the back button event
+                $('#app-main-navigator').get(0).topPage.onDeviceBackButton =
+                    utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.backButtonClicked;
+
+                // listen for when the login-carousel has changed/slide
+                $thisPage.on("postchange", "#login-carousel",
+                    utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.carouselPostChange);
+
+                try{
+                    new ej.buttons.Button({
+                        isToggle: true,
+                        cssClass: 'e-flat e-round',
+                        iconCss: "zmdi zmdi-eye",
+                        iconPosition: "Left"
+                    }).appendTo($('#signup-password-view-button', $thisPage).get(0));
+                }
+                catch(err){}
+            }
+
+        },
+
+        /**
+         * method is triggered when page is shown
+         */
+        pageShow: function(){
+            window.SoftInputMode.set('adjustPan');
+        },
+
+
+        /**
+         * method is triggered when page is hidden
+         */
+        pageHide: async function(){
+        },
+
+        /**
+         * method is triggered when page is destroyed
+         */
+        pageDestroy: function(){
+
+        },
+
+        /**
+         * method is triggered when the device back button is clicked OR a similar action is triggered
+         */
+        backButtonClicked(){
+
+            // get back to the previous page on the app-main navigator stack
+            $('#app-main-navigator').get(0).popPage();
+        },
+
+        /**
+         * method is triggered when the Sign In / Sign Up segment buttons are clicked
+         *
+         * @param itemIndex {Integer} zero-based index representing the carousel item to
+         * display ewhen the button is clicked
+         */
+        segmentButtonClicked(itemIndex){
+            // move to the slide item specify by the provided parameter
+            $('#login-page #login-carousel').get(0).setActiveIndex(itemIndex);
+        },
+
+        /**
+         * method is triggered when the Password Visibility button is clicked
+         *
+         * @param buttonElement {HTMLElement} button element being clicked
+         *
+         * @param inputId {String} the id for the input whose content visibility is being changed
+         */
+        passwordVisibilityButtonClicked(buttonElement, inputId){
+
+            // check the state of the button is it 'active' or not
+            if($(buttonElement).hasClass('e-active')){ // button is active
+                // change the type for the input field
+                $(document.getElementById(inputId)).attr("type", "text");
+                // change the icon on the button to indicate the change in visibility
+                let ej2Button = buttonElement.ej2_instances[0];
+                ej2Button.iconCss = 'zmdi zmdi-eye-off';
+                ej2Button.dataBind();
+            }
+            else{ // button is NOT active
+                // change the type for the input field
+                $(document.getElementById(inputId)).attr("type", "password");
+                // change the icon on the button to indicate the change in visibility
+                let ej2Button = buttonElement.ej2_instances[0];
+                ej2Button.iconCss = 'zmdi zmdi-eye';
+                ej2Button.dataBind();
+            }
+        },
+
+        /**
+         * method is used to track changes on the carousel slides
+         * @param event
+         */
+        carouselPostChange(event){
+
+            // use the switch case to determine what carousel is being shown
+            switch(event.originalEvent.activeIndex){ // get the index of the active carousel item
+                case 0:
+
+                    // reset the the segment button contained in the other carousel items to their initial state
+                    $("#login-page ons-carousel-item.second .login-segment button:nth-of-type(2) input").prop("checked", true);
+                    $("#login-page ons-carousel-item.second .login-segment button:nth-of-type(1) input").prop("checked", false);
+                    $("#login-page ons-carousel-item.third .login-segment button input").prop("checked", false);
+                    break;
+
+                case 1:
+                    // reset the the segment button contained in the other carousel items to their initial state
+                    $("#login-page ons-carousel-item.first .login-segment button:nth-of-type(1) input").prop("checked", true);
+                    $("#login-page ons-carousel-item.first .login-segment button:nth-of-type(2) input").prop("checked", false);
+                    $("#login-page ons-carousel-item.third .login-segment button input").prop("checked", false);
+                    break;
+
+                case 2:
+                    // reset the the segment button contained in the other carousel items to their initial state
+                    $("#login-page ons-carousel-item.first .login-segment button:nth-of-type(1) input").prop("checked", true);
+                    $("#login-page ons-carousel-item.first .login-segment button:nth-of-type(2) input").prop("checked", false);
+                    $("#login-page ons-carousel-item.second .login-segment button:nth-of-type(2) input").prop("checked", true);
+                    $("#login-page ons-carousel-item.second .login-segment button:nth-of-type(1) input").prop("checked", false);
+                    break;
+            }
         }
     },
 
@@ -413,6 +562,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is shown
          */
         pageShow: function(){
+
+            window.SoftInputMode.set('adjustPan');
         },
 
 
@@ -435,7 +586,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
      */
     productDetailsPageViewModel: {
 
-
         /**
          * event is triggered when page is initialised
          */
@@ -455,7 +605,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 }
 
                 // listen for the back button event
-                event.target.onDeviceBackButton =
+                $('#app-main-navigator').get(0).topPage.onDeviceBackButton =
                     utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.backButtonClicked;
 
                 try{
@@ -508,6 +658,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is shown
          */
         pageShow: function(){
+            window.SoftInputMode.set('adjustPan');
         },
 
 

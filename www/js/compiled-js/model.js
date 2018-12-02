@@ -53,6 +53,18 @@ $(document).on("hide", "#account-page", utopiasoftware[utopiasoftware_app_namesp
 // listen for when the ACCOUNT page is destroyed
 $(document).on("destroy", "#account-page", utopiasoftware[utopiasoftware_app_namespace].controller.accountPageViewModel.pageDestroy);
 
+// listen for the initialisation of the LOGIN page
+$(document).on("init", "#login-page", utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.pageInit);
+
+// listen for when the LOGIN page is shown
+$(document).on("show", "#login-page", utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.pageShow);
+
+// listen for when the LOGIN page is hidden
+$(document).on("hide", "#login-page", utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.pageHide);
+
+// listen for when the LOGIN page is destroyed
+$(document).on("destroy", "#login-page", utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.pageDestroy);
+
 // listen for the initialisation of the PRODUCTS page
 $(document).on("init", "#products-page", utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.pageInit);
 

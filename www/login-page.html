@@ -64,6 +64,7 @@
                             <div style="width: 100%; text-align: center">
                                 <span style="font-weight: bold; color: #000000; font-size: 0.8em">OR USE </span>
                                 <img src="css/app-images/google-signin-img.png" style="height: 2em;">
+                                <img src="css/app-images/facebook-signin-img.png" style="height: 2em;">
                                 <img src="css/app-images/twitter-signin-img.png" style="height: 2em;">
                             </div>
                         </ons-col>
@@ -124,11 +125,16 @@
                         <ons-col width="100%" style="border: 2px solid red; border-radius: 6px; background-color: #363E7C; color: #ffffff;
                     font-size: 1.3em; padding-top:0.5em;">
                             <ons-icon icon="md-utopiasoftware-icon-lock" size="28px" fixed-width style="color: #ffffff; margin-right: 0.5em;"></ons-icon>
-                            <ons-input id="signup-password" type="password" style="width: 75%;
+                            <ons-input id="signup-password" type="password" style="width: 65%;
                         caret-color: #ffffff !important; color: #ffffff !important;" required
                                        placeholder="Password" disable-auto-styling
-                                       data-parsley-required-message="password is required"
+                                       data-parsley-required-message="new password is required"
                                        class="hint--top"></ons-input>
+                            <button id="signup-password-view-button" type="button"
+                                    style="background-color: transparent; color: #ffffff; float: right; clear: both"
+                            onclick="utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.
+                            passwordVisibilityButtonClicked(this, 'signup-password');">
+                            </button>
                         </ons-col>
                     </ons-row>
                     <ons-row style="margin-bottom: 1.5em;">
@@ -136,7 +142,7 @@
                         <ons-col width="60%" style="text-align: center">
                             <ons-button style="border-color: #363E7C; background-color: #ffffff; color: #363E7C"
                                         disable-auto-styling modifier="large"
-                                        onclick="utopiasoftware[utopiasoftware_app_namespace].controller.onboardingPageViewModel.laterButtonClicked();">
+                                        onclick="">
                                 Sign Up
                             </ons-button>
                         </ons-col>
@@ -147,6 +153,7 @@
                             <div style="width: 100%; text-align: center">
                                 <span style="font-weight: bold; color: #000000; font-size: 0.8em">OR USE </span>
                                 <img src="css/app-images/google-signin-img.png" style="height: 2em;">
+                                <img src="css/app-images/facebook-signin-img.png" style="height: 2em;">
                                 <img src="css/app-images/twitter-signin-img.png" style="height: 2em;">
                             </div>
                         </ons-col>

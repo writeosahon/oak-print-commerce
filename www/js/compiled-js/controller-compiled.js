@@ -313,7 +313,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         /**
          * method is triggered when page is shown
          */
-        pageShow: function pageShow() {},
+        pageShow: function pageShow() {
+            window.SoftInputMode.set('adjustPan');
+        },
 
         /**
          * method is triggered when page is hidden
@@ -418,7 +420,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         /**
          * method is triggered when page is shown
          */
-        pageShow: function pageShow() {},
+        pageShow: function pageShow() {
+            window.SoftInputMode.set('adjustPan');
+        },
 
         /**
          * method is triggered when page is hidden
@@ -450,9 +454,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
     },
 
     /**
-     * this is the view-model/controller for the Products page
+     * this is the view-model/controller for the Login page
      */
-    productsPageViewModel: {
+    loginPageViewModel: {
 
         /**
          * event is triggered when page is initialised
@@ -473,6 +477,188 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                     setTimeout(loadPageOnAppReady, 500); // call this function again after half a second
                                     return _context6.abrupt('return');
+
+                                case 3:
+
+                                    // listen for the back button event
+                                    $('#app-main-navigator').get(0).topPage.onDeviceBackButton = utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.backButtonClicked;
+
+                                    // listen for when the login-carousel has changed/slide
+                                    $thisPage.on("postchange", "#login-carousel", utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.carouselPostChange);
+
+                                    try {
+                                        new ej.buttons.Button({
+                                            isToggle: true,
+                                            cssClass: 'e-flat e-round',
+                                            iconCss: "zmdi zmdi-eye",
+                                            iconPosition: "Left"
+                                        }).appendTo($('#signup-password-view-button', $thisPage).get(0));
+                                    } catch (err) {}
+
+                                case 6:
+                                case 'end':
+                                    return _context6.stop();
+                            }
+                        }
+                    }, _callee6, this);
+                }));
+
+                return function loadPageOnAppReady() {
+                    return _ref6.apply(this, arguments);
+                };
+            }();
+
+            var $thisPage = $(event.target); // get the current page shown
+
+            // call the function used to initialise the app page if the app is fully loaded
+            loadPageOnAppReady();
+        },
+
+        /**
+         * method is triggered when page is shown
+         */
+        pageShow: function pageShow() {
+            window.SoftInputMode.set('adjustPan');
+        },
+
+        /**
+         * method is triggered when page is hidden
+         */
+        pageHide: function () {
+            var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7() {
+                return regeneratorRuntime.wrap(function _callee7$(_context7) {
+                    while (1) {
+                        switch (_context7.prev = _context7.next) {
+                            case 0:
+                            case 'end':
+                                return _context7.stop();
+                        }
+                    }
+                }, _callee7, this);
+            }));
+
+            function pageHide() {
+                return _ref7.apply(this, arguments);
+            }
+
+            return pageHide;
+        }(),
+
+        /**
+         * method is triggered when page is destroyed
+         */
+        pageDestroy: function pageDestroy() {},
+
+        /**
+         * method is triggered when the device back button is clicked OR a similar action is triggered
+         */
+        backButtonClicked: function backButtonClicked() {
+
+            // get back to the previous page on the app-main navigator stack
+            $('#app-main-navigator').get(0).popPage();
+        },
+
+
+        /**
+         * method is triggered when the Sign In / Sign Up segment buttons are clicked
+         *
+         * @param itemIndex {Integer} zero-based index representing the carousel item to
+         * display ewhen the button is clicked
+         */
+        segmentButtonClicked: function segmentButtonClicked(itemIndex) {
+            // move to the slide item specify by the provided parameter
+            $('#login-page #login-carousel').get(0).setActiveIndex(itemIndex);
+        },
+
+
+        /**
+         * method is triggered when the Password Visibility button is clicked
+         *
+         * @param buttonElement {HTMLElement} button element being clicked
+         *
+         * @param inputId {String} the id for the input whose content visibility is being changed
+         */
+        passwordVisibilityButtonClicked: function passwordVisibilityButtonClicked(buttonElement, inputId) {
+
+            // check the state of the button is it 'active' or not
+            if ($(buttonElement).hasClass('e-active')) {
+                // button is active
+                // change the type for the input field
+                $(document.getElementById(inputId)).attr("type", "text");
+                // change the icon on the button to indicate the change in visibility
+                var ej2Button = buttonElement.ej2_instances[0];
+                ej2Button.iconCss = 'zmdi zmdi-eye-off';
+                ej2Button.dataBind();
+            } else {
+                // button is NOT active
+                // change the type for the input field
+                $(document.getElementById(inputId)).attr("type", "password");
+                // change the icon on the button to indicate the change in visibility
+                var _ej2Button = buttonElement.ej2_instances[0];
+                _ej2Button.iconCss = 'zmdi zmdi-eye';
+                _ej2Button.dataBind();
+            }
+        },
+
+
+        /**
+         * method is used to track changes on the carousel slides
+         * @param event
+         */
+        carouselPostChange: function carouselPostChange(event) {
+
+            // use the switch case to determine what carousel is being shown
+            switch (event.originalEvent.activeIndex) {// get the index of the active carousel item
+                case 0:
+
+                    // reset the the segment button contained in the other carousel items to their initial state
+                    $("#login-page ons-carousel-item.second .login-segment button:nth-of-type(2) input").prop("checked", true);
+                    $("#login-page ons-carousel-item.second .login-segment button:nth-of-type(1) input").prop("checked", false);
+                    $("#login-page ons-carousel-item.third .login-segment button input").prop("checked", false);
+                    break;
+
+                case 1:
+                    // reset the the segment button contained in the other carousel items to their initial state
+                    $("#login-page ons-carousel-item.first .login-segment button:nth-of-type(1) input").prop("checked", true);
+                    $("#login-page ons-carousel-item.first .login-segment button:nth-of-type(2) input").prop("checked", false);
+                    $("#login-page ons-carousel-item.third .login-segment button input").prop("checked", false);
+                    break;
+
+                case 2:
+                    // reset the the segment button contained in the other carousel items to their initial state
+                    $("#login-page ons-carousel-item.first .login-segment button:nth-of-type(1) input").prop("checked", true);
+                    $("#login-page ons-carousel-item.first .login-segment button:nth-of-type(2) input").prop("checked", false);
+                    $("#login-page ons-carousel-item.second .login-segment button:nth-of-type(2) input").prop("checked", true);
+                    $("#login-page ons-carousel-item.second .login-segment button:nth-of-type(1) input").prop("checked", false);
+                    break;
+            }
+        }
+    },
+
+    /**
+     * this is the view-model/controller for the Products page
+     */
+    productsPageViewModel: {
+
+        /**
+         * event is triggered when page is initialised
+         */
+        pageInit: function pageInit(event) {
+
+            //function is used to initialise the page if the app is fully ready for execution
+            var loadPageOnAppReady = function () {
+                var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8() {
+                    return regeneratorRuntime.wrap(function _callee8$(_context8) {
+                        while (1) {
+                            switch (_context8.prev = _context8.next) {
+                                case 0:
+                                    if (!(!ons.isReady() || utopiasoftware[utopiasoftware_app_namespace].model.isAppReady === false)) {
+                                        _context8.next = 3;
+                                        break;
+                                    }
+
+                                    setTimeout(loadPageOnAppReady, 500); // call this function again after half a second
+                                    return _context8.abrupt('return');
 
                                 case 3:
 
@@ -506,14 +692,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 case 6:
                                 case 'end':
-                                    return _context6.stop();
+                                    return _context8.stop();
                             }
                         }
-                    }, _callee6, this);
+                    }, _callee8, this);
                 }));
 
                 return function loadPageOnAppReady() {
-                    return _ref6.apply(this, arguments);
+                    return _ref8.apply(this, arguments);
                 };
             }();
 
@@ -526,26 +712,29 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         /**
          * method is triggered when page is shown
          */
-        pageShow: function pageShow() {},
+        pageShow: function pageShow() {
+
+            window.SoftInputMode.set('adjustPan');
+        },
 
         /**
          * method is triggered when page is hidden
          */
         pageHide: function () {
-            var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7() {
-                return regeneratorRuntime.wrap(function _callee7$(_context7) {
+            var _ref9 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9() {
+                return regeneratorRuntime.wrap(function _callee9$(_context9) {
                     while (1) {
-                        switch (_context7.prev = _context7.next) {
+                        switch (_context9.prev = _context9.next) {
                             case 0:
                             case 'end':
-                                return _context7.stop();
+                                return _context9.stop();
                         }
                     }
-                }, _callee7, this);
+                }, _callee9, this);
             }));
 
             function pageHide() {
-                return _ref7.apply(this, arguments);
+                return _ref9.apply(this, arguments);
             }
 
             return pageHide;
@@ -569,24 +758,24 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             //function is used to initialise the page if the app is fully ready for execution
             var loadPageOnAppReady = function () {
-                var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8() {
+                var _ref10 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10() {
                     var addToCartButton, customiseProductButton, wishListButton, compareButton, reviewButton, shareButton;
-                    return regeneratorRuntime.wrap(function _callee8$(_context8) {
+                    return regeneratorRuntime.wrap(function _callee10$(_context10) {
                         while (1) {
-                            switch (_context8.prev = _context8.next) {
+                            switch (_context10.prev = _context10.next) {
                                 case 0:
                                     if (!(!ons.isReady() || utopiasoftware[utopiasoftware_app_namespace].model.isAppReady === false)) {
-                                        _context8.next = 3;
+                                        _context10.next = 3;
                                         break;
                                     }
 
                                     setTimeout(loadPageOnAppReady, 500); // call this function again after half a second
-                                    return _context8.abrupt('return');
+                                    return _context10.abrupt('return');
 
                                 case 3:
 
                                     // listen for the back button event
-                                    event.target.onDeviceBackButton = utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.backButtonClicked;
+                                    $('#app-main-navigator').get(0).topPage.onDeviceBackButton = utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.backButtonClicked;
 
                                     try {
                                         addToCartButton = new ej.buttons.Button({
@@ -638,14 +827,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 case 5:
                                 case 'end':
-                                    return _context8.stop();
+                                    return _context10.stop();
                             }
                         }
-                    }, _callee8, this);
+                    }, _callee10, this);
                 }));
 
                 return function loadPageOnAppReady() {
-                    return _ref8.apply(this, arguments);
+                    return _ref10.apply(this, arguments);
                 };
             }();
 
@@ -658,26 +847,28 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         /**
          * method is triggered when page is shown
          */
-        pageShow: function pageShow() {},
+        pageShow: function pageShow() {
+            window.SoftInputMode.set('adjustPan');
+        },
 
         /**
          * method is triggered when page is hidden
          */
         pageHide: function () {
-            var _ref9 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9() {
-                return regeneratorRuntime.wrap(function _callee9$(_context9) {
+            var _ref11 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee11() {
+                return regeneratorRuntime.wrap(function _callee11$(_context11) {
                     while (1) {
-                        switch (_context9.prev = _context9.next) {
+                        switch (_context11.prev = _context11.next) {
                             case 0:
                             case 'end':
-                                return _context9.stop();
+                                return _context11.stop();
                         }
                     }
-                }, _callee9, this);
+                }, _callee11, this);
             }));
 
             function pageHide() {
-                return _ref9.apply(this, arguments);
+                return _ref11.apply(this, arguments);
             }
 
             return pageHide;
