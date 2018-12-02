@@ -581,8 +581,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         passwordVisibilityButtonClicked: function passwordVisibilityButtonClicked(buttonElement, inputId) {
 
             // check the state of the button is it 'active' or not
-            if ($(buttonElement).hasClass('e-active')) {
-                // button is active
+            if (!$(buttonElement).hasClass('e-active')) {
+                // button is not active
                 // change the type for the input field
                 $(document.getElementById(inputId)).attr("type", "text");
                 // change the icon on the button to indicate the change in visibility
@@ -590,7 +590,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 ej2Button.iconCss = 'zmdi zmdi-eye-off';
                 ej2Button.dataBind();
             } else {
-                // button is NOT active
+                // button is active
                 // change the type for the input field
                 $(document.getElementById(inputId)).attr("type", "password");
                 // change the icon on the button to indicate the change in visibility
