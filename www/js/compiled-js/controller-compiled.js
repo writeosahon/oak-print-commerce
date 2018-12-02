@@ -519,6 +519,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         pageShow: function pageShow() {
             window.SoftInputMode.set('adjustPan');
+
+            // listen for when the device keyboard is shown
+            window.addEventListener('keyboardDidShow', utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.keyboardShownAdjustView);
+            // listen for when the device keyboard is hidden
+            window.addEventListener('keyboardDidHide', utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.keyboardHiddenAdjustView);
         },
 
         /**
@@ -530,6 +535,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     while (1) {
                         switch (_context7.prev = _context7.next) {
                             case 0:
+
+                                // remove listener for when the device keyboard is shown
+                                window.removeEventListener('keyboardDidShow', utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.keyboardShownAdjustView);
+                                // remove listener for when the device keyboard is hidden
+                                window.removeEventListener('keyboardDidHide', utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.keyboardHiddenAdjustView);
+
+                            case 2:
                             case 'end':
                                 return _context7.stop();
                         }
@@ -632,6 +644,26 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     $("#login-page ons-carousel-item.second .login-segment").get(0).setActiveButton(1);
                     // scroll to the top of the active carousel item
                     $('#login-page ons-carousel-item.third').scrollTop(0);
+                    break;
+            }
+        },
+
+
+        /**
+         * method is triggered when the keyboard is shown.
+         * It is used to adjust the display height
+         *
+         * @param event
+         */
+        keyboardShownAdjustView: function keyboardShownAdjustView(event) {
+            // get the height of the keyboard and add 100px to it
+            var adjustedKeyboardHeight = Math.ceil(event.keyboardHeight) + 100;
+
+            switch ($('#login-page #login-carousel').get(0).getActiveIndex()) {// get the active carousel item
+                case 0:
+                    $("#login-page ons-carousel-item.first").css({ "padding-bottom": adjustedKeyboardHeight + "px" });
+                    // scroll to the currently focused input element
+                    $("#login-page ons-carousel-item.first").scrollTop(Math.floor($("#login-page ons-carousel-item.first ons-input:focus").position().top));
                     break;
             }
         }
