@@ -384,7 +384,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.carouselPostChange);
 
                 try{
-                    new ej.buttons.Button({
+                    new ej.buttons.Button({ // create the button for showing password visibility on the signup page
                         isToggle: true,
                         cssClass: 'e-flat e-round',
                         iconCss: "zmdi zmdi-eye",
