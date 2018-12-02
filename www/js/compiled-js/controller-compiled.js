@@ -489,7 +489,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     try {
                                         new ej.buttons.Button({ // create the button for showing password visibility on the signup page
                                             isToggle: true,
-                                            cssClass: 'e-flat e-round',
+                                            cssClass: 'e-flat e-small e-round',
                                             iconCss: "zmdi zmdi-eye",
                                             iconPosition: "Left"
                                         }).appendTo($('#signup-password-view-button', $thisPage).get(0));
