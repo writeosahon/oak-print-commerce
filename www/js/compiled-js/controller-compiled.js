@@ -614,18 +614,24 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     // reset the the segment button contained in the other carousel items to their initial state
                     $("#login-page ons-carousel-item.second .login-segment").get(0).setActiveButton(1);
                     $("#login-page ons-carousel-item.third .login-segment").get(0).setActiveButton(-1);
+                    // scroll to the top of the active carousel item
+                    $('#login-page ons-carousel-item.first').scrollTop(0);
                     break;
 
                 case 1:
                     // reset the the segment button contained in the other carousel items to their initial state
                     $("#login-page ons-carousel-item.first .login-segment").get(0).setActiveButton(0);
                     $("#login-page ons-carousel-item.third .login-segment").get(0).setActiveButton(-1);
+                    // scroll to the top of the active carousel item
+                    $('#login-page ons-carousel-item.second').scrollTop(0);
                     break;
 
                 case 2:
                     // reset the the segment button contained in the other carousel items to their initial state
                     $("#login-page ons-carousel-item.first .login-segment").get(0).setActiveButton(0);
                     $("#login-page ons-carousel-item.second .login-segment").get(0).setActiveButton(1);
+                    // scroll to the top of the active carousel item
+                    $('#login-page ons-carousel-item.third').scrollTop(0);
                     break;
             }
         }
