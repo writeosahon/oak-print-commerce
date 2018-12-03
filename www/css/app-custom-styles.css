@@ -4,11 +4,11 @@
     display: none !important;
 }
 /** STYLE FOR VALIDATION TOOLTIP (HINT.CSS) **/
-.utopiasoftware-ej2-validation-tooltip,  .utopiasoftware-ej2-validation-tooltip *{
+.utopiasoftware-ej2-validation-tooltip {
     font-size: 0.75em !important;
     background-color: #000000 !important;
 }
-.utopiasoftware-ej2-validation-tooltip *{
+.utopiasoftware-ej2-validation-tooltip * {
     border: #000000 !important;
 }
 

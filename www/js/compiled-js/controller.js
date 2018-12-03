@@ -417,7 +417,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.loginFormValidated);
 
                 // listen for scroll event on the page
-                $thisPage.on("scroll", function(){
+                $('#login-page ons-carousel-item',).on("scroll", function(){
 
                     // place function execution in the event queue to be executed ASAP
                     window.setTimeout(function(){
