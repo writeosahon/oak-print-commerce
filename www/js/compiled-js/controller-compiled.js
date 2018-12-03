@@ -664,7 +664,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     $("#login-page ons-carousel-item.first").css({ "padding-bottom": adjustedKeyboardHeight + "px" });
                     // scroll to the currently focused input element
                     $("#login-page ons-carousel-item.first").scrollTop(Math.floor($(document.activeElement).position().top));
-                    console.log("POSITION", $(document.activeElement).position());
+                    console.log("POSITION", $(document.activeElement).closest("ons-input").position());
                     break;
             }
         }
