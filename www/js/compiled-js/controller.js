@@ -358,6 +358,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
     loginPageViewModel: {
 
         /**
+         * used to hold the parsley form validation object for the login page
+         */
+        loginFormValidator: null,
+
+
+        /**
          * event is triggered when page is initialised
          */
         pageInit: function(event){
@@ -383,13 +389,46 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $thisPage.on("postchange", "#login-carousel",
                     utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.carouselPostChange);
 
+                // initialise the login form validation
+                utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.loginFormValidator =
+                    $('#login-page #login-form').parsley();
+
+                // listen for log in form field validation failure event
+                utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.loginFormValidator.on('field:error', function(fieldInstance) {
+                    // get the element that triggered the field validation error and use it to display tooltip
+                    // display tooltip
+                    let tooltip = $('#login-page #login-form').get(0).ej2_instances[0];
+                    tooltip.content = fieldInstance.getErrorsMessages()[0];
+                    tooltip.dataBind();
+                    tooltip.open(fieldInstance.$element.get(0));
+                });
+
+                // listen for log in form field validation success event
+                utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.loginFormValidator.on('field:success', function(fieldInstance) {
+                    // remove tooltip from element
+                    $(fieldInstance.$element).removeClass("hint--always hint--success hint--medium hint--rounded hint--no-animate");
+                    $(fieldInstance.$element).removeAttr("data-hint");
+                });
+
+                // listen for log in form validation success
+                utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.loginFormValidator.on('form:success',
+                    utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.loginFormValidated);
+
                 try{
-                    new ej.buttons.Button({ // create the button for showing password visibility on the signup page
+                    // create the tooltip object for the signin form
+                    new ej.popups.Tooltip({
+                        position: 'TopCenter',
+                        opensOn: 'Custom'
+                    }).appendTo($('#login-form', $thisPage).get(0));
+
+                    // create the button for showing password visibility on the signup page
+                    new ej.buttons.Button({
                         isToggle: true,
                         cssClass: 'e-flat e-small e-round',
                         iconCss: "zmdi zmdi-eye",
                         iconPosition: "Left"
                     }).appendTo($('#signup-password-view-button', $thisPage).get(0));
+
                 }
                 catch(err){}
             }
@@ -540,6 +579,26 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     scrollTop(Math.floor($(document.activeElement).closest("ons-input").position().top));
                     break;
             }
+        },
+
+        /**
+         * method is triggered when the "Sign In" button is clicked
+         *
+         * @returns {Promise<void>}
+         */
+        async signinButtonClicked() {
+
+            // run the validation method for the sign-in form
+            utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.loginFormValidator.whenValidate();
+        },
+
+        /**
+         * method is triggered when the login form is successfully validated
+         *
+         * @returns {Promise<void>}
+         */
+        async loginFormValidated(){
+
         }
     },
 
