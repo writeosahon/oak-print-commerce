@@ -658,6 +658,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         keyboardShownAdjustView: function keyboardShownAdjustView(event) {
             // get the height of the keyboard and add 100px to it
             var adjustedKeyboardHeight = Math.ceil(event.keyboardHeight) + 6000;
+            console.log("KEYBOARD HEIGHT", event.keyboardHeight);
 
             switch ($('#login-page #login-carousel').get(0).getActiveIndex()) {// get the active carousel item
                 case 0:
