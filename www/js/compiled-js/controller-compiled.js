@@ -522,8 +522,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             // listen for when the device keyboard is shown
             window.addEventListener('keyboardDidShow', utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.keyboardShownAdjustView);
-            // listen for when the device keyboard is hidden
-            window.addEventListener('keyboardDidHide', utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.keyboardHiddenAdjustView);
         },
 
         /**
@@ -538,10 +536,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 // remove listener for when the device keyboard is shown
                                 window.removeEventListener('keyboardDidShow', utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.keyboardShownAdjustView);
-                                // remove listener for when the device keyboard is hidden
-                                window.removeEventListener('keyboardDidHide', utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.keyboardHiddenAdjustView);
 
-                            case 2:
+                            case 1:
                             case 'end':
                                 return _context7.stop();
                         }
@@ -656,15 +652,26 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @param event
          */
         keyboardShownAdjustView: function keyboardShownAdjustView(event) {
-            // get the height of the keyboard and add 100px to it
+            // get the height of the keyboard and add 6000px to it
             var adjustedKeyboardHeight = Math.ceil(event.keyboardHeight) + 6000;
-            console.log("KEYBOARD HEIGHT", event.keyboardHeight);
 
             switch ($('#login-page #login-carousel').get(0).getActiveIndex()) {// get the active carousel item
                 case 0:
                     $("#login-page ons-carousel-item.first").css({ "padding-bottom": adjustedKeyboardHeight + "px" });
                     // scroll to the currently focused input element
                     $("#login-page ons-carousel-item.first").scrollTop(Math.floor($(document.activeElement).closest("ons-input").position().top));
+                    break;
+
+                case 1:
+                    $("#login-page ons-carousel-item.second").css({ "padding-bottom": adjustedKeyboardHeight + "px" });
+                    // scroll to the currently focused input element
+                    $("#login-page ons-carousel-item.second").scrollTop(Math.floor($(document.activeElement).closest("ons-input").position().top));
+                    break;
+
+                case 2:
+                    $("#login-page ons-carousel-item.third").css({ "padding-bottom": adjustedKeyboardHeight + "px" });
+                    // scroll to the currently focused input element
+                    $("#login-page ons-carousel-item.third").scrollTop(Math.floor($(document.activeElement).closest("ons-input").position().top));
                     break;
             }
         }
