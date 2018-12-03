@@ -691,7 +691,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // use the switch case to determine what carousel is being shown
             switch (event.originalEvent.activeIndex) {// get the index of the active carousel item
                 case 0:
-
                     // reset the the segment button contained in the other carousel items to their initial state
                     $("#login-page ons-carousel-item.second .login-segment").get(0).setActiveButton(1);
                     $("#login-page ons-carousel-item.third .login-segment").get(0).setActiveButton(-1);
@@ -701,11 +700,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     break;
 
                 case 1:
+                    console.log("CHECK 1");
                     // reset the the segment button contained in the other carousel items to their initial state
                     $("#login-page ons-carousel-item.first .login-segment").get(0).setActiveButton(0);
+                    console.log("CHECK 2");
                     $("#login-page ons-carousel-item.third .login-segment").get(0).setActiveButton(-1);
+                    console.log("CHECK 3");
                     // scroll to the top of the active carousel item
                     $('#login-page ons-carousel-item.second').scrollTop(0);
+                    console.log("CHECK 4");
                     break;
 
                 case 2:
