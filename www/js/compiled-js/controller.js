@@ -397,17 +397,17 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.loginFormValidator.on('field:error', function(fieldInstance) {
                     // get the element that triggered the field validation error and use it to display tooltip
                     // display tooltip
-                    let tooltip = $('#login-page #login-form').get(0).ej2_instances[0];
+                    let tooltip = fieldInstance.$element.get(0).ej2_instances[0];
                     tooltip.content = fieldInstance.getErrorsMessages()[0];
                     tooltip.dataBind();
-                    tooltip.open(fieldInstance.$element.get(0));
+                    tooltip.open();
                 });
 
                 // listen for log in form field validation success event
                 utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.loginFormValidator.on('field:success', function(fieldInstance) {
                     // remove tooltip from element
-                    $(fieldInstance.$element).removeClass("hint--always hint--success hint--medium hint--rounded hint--no-animate");
-                    $(fieldInstance.$element).removeAttr("data-hint");
+                    let tooltip = fieldInstance.$element.get(0).ej2_instances[0];
+                    tooltip.close();
                 });
 
                 // listen for log in form validation success
@@ -416,10 +416,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 try{
                     // create the tooltip object for the signin form
-                    new ej.popups.Tooltip({
-                        position: 'TopCenter',
-                        opensOn: 'Custom'
-                    }).appendTo($('#login-form', $thisPage).get(0));
+                    $('#login-form ons-input', $thisPage).each(function(index, element){
+                        new ej.popups.Tooltip({
+                            cssClass: 'utopiasoftware-ej2-validation-tooltip',
+                            position: 'TopCenter',
+                            opensOn: 'Custom'
+                        }).appendTo(element);
+                    });
 
                     // create the button for showing password visibility on the signup page
                     new ej.buttons.Button({
