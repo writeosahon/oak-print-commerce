@@ -657,14 +657,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         keyboardShownAdjustView: function keyboardShownAdjustView(event) {
             // get the height of the keyboard and add 100px to it
-            var adjustedKeyboardHeight = Math.ceil(event.keyboardHeight) + 3000;
+            var adjustedKeyboardHeight = Math.ceil(event.keyboardHeight) + 6000;
 
             switch ($('#login-page #login-carousel').get(0).getActiveIndex()) {// get the active carousel item
                 case 0:
                     $("#login-page ons-carousel-item.first").css({ "padding-bottom": adjustedKeyboardHeight + "px" });
                     // scroll to the currently focused input element
                     $("#login-page ons-carousel-item.first").scrollTop(Math.floor($(document.activeElement).position().top));
-                    console.log("POSITION", Math.floor($(document.activeElement).position()));
+                    console.log("POSITION", Math.floor($(document.activeElement).closest("ons-input").position()));
                     break;
             }
         }
