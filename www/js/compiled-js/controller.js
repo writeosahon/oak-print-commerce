@@ -561,30 +561,29 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             switch(event.originalEvent.activeIndex){ // get the index of the active carousel item
                 case 0:
                     // reset the the segment button contained in the other carousel items to their initial state
-                    $("#login-page ons-carousel-item.second .login-segment").get(0).setActiveButton(1);
-                    $("#login-page ons-carousel-item.third .login-segment").get(0).setActiveButton(-1);
+                    $("#login-page ons-carousel-item.second .login-segment button:nth-of-type(2) input").prop("checked", true);
+                    $("#login-page ons-carousel-item.second .login-segment button:nth-of-type(1) input").prop("checked", false);
+                    $("#login-page ons-carousel-item.third .login-segment button input").prop("checked", false);
                     // scroll to the top of the active carousel item
                     $('#login-page ons-carousel-item.first').scrollTop(0);
 
                     break;
 
                 case 1:
-                    console.log("CHECK 1");
                     // reset the the segment button contained in the other carousel items to their initial state
-                    $("#login-page ons-carousel-item.first .login-segment").get(0).setActiveButton(0);
-                    console.log("CHECK 2");
-                    $("#login-page ons-carousel-item.third .login-segment").get(0).setActiveButton(-1);
-                    console.log("CHECK 3");
+                    $("#login-page ons-carousel-item.first .login-segment button:nth-of-type(1) input").prop("checked", true);
+                    $("#login-page ons-carousel-item.first .login-segment button:nth-of-type(2) input").prop("checked", false);
+                    $("#login-page ons-carousel-item.third .login-segment button input").prop("checked", false);
                     // scroll to the top of the active carousel item
                     $('#login-page ons-carousel-item.second').scrollTop(0);
-                    console.log("CHECK 4");
                     break;
 
                 case 2:
                     // reset the the segment button contained in the other carousel items to their initial state
-                    $("#login-page ons-carousel-item.first .login-segment").get(0).setActiveButton(0);
-                    $("#login-page ons-carousel-item.second .login-segment").get(0).setActiveButton(1);
-                    // scroll to the top of the active carousel item
+                    $("#login-page ons-carousel-item.first .login-segment button:nth-of-type(1) input").prop("checked", true);
+                    $("#login-page ons-carousel-item.first .login-segment button:nth-of-type(2) input").prop("checked", false);
+                    $("#login-page ons-carousel-item.second .login-segment button:nth-of-type(2) input").prop("checked", true);
+                    $("#login-page ons-carousel-item.second .login-segment button:nth-of-type(1) input").prop("checked", false);
                     $('#login-page ons-carousel-item.third').scrollTop(0);
                     break;
             }
