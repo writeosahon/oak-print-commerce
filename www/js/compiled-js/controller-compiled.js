@@ -741,11 +741,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     break;
 
                 case 1:
-                    // hide the tooltips on the signup form
-                    $('#login-page #signup-form').get(0).ej2_instances.forEach(function (tooltipArrayElem) {
-                        // hide the tooltip
-                        tooltipArrayElem.close();
-                    });
+
                     break;
 
                 case 2:
