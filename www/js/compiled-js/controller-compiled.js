@@ -519,7 +519,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                         // place function execution in the event queue to be executed ASAP
                                         window.setTimeout(function () {
-
+                                            console.log("CAROUSEL SCROLL");
                                             switch ($('#login-page #login-carousel').get(0).getActiveIndex()) {// get the active carousel item
                                                 case 0:
                                                     $("#login-page #login-form ons-input").each(function (index, element) {

@@ -7,8 +7,11 @@
 .utopiasoftware-ej2-validation-tooltip,  .utopiasoftware-ej2-validation-tooltip *{
     font-size: 0.75em !important;
     background-color: #000000 !important;
+}
+.utopiasoftware-ej2-validation-tooltip *{
     border: #000000 !important;
 }
+
 /** STYLE TO PREVENT ALL EJ2 BUTTONS FROM HAVING A BACKGROUND COLOR WHEN FOCUSED **/
 .e-btn:focus, .e-btn:hover, .e-btn.e-outline:focus, .e-btn.e-outline:hover {
     background-color: transparent;
