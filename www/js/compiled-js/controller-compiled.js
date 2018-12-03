@@ -514,8 +514,36 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // listen for log in form validation success
                                     utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.loginFormValidator.on('form:success', utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.loginFormValidated);
 
+                                    // listen for scroll event on the page
+                                    $thisPage.on("scroll", function () {
+
+                                        // place function execution in the event queue to be executed ASAP
+                                        window.setTimeout(function () {
+
+                                            switch ($('#login-page #login-carousel').get(0).getActiveIndex()) {// get the active carousel item
+                                                case 0:
+                                                    $("#login-page #login-form ons-input").each(function (index, element) {
+                                                        document.getElementById('login-form').ej2_instances[index].refresh(element);
+                                                    });
+                                                    break;
+
+                                                case 1:
+                                                    $("#login-page ons-carousel-item.second").css({ "padding-bottom": adjustedKeyboardHeight + "px" });
+                                                    // scroll to the currently focused input element
+                                                    $("#login-page ons-carousel-item.second").scrollTop(Math.floor($(document.activeElement).closest("ons-input").position().top));
+                                                    break;
+
+                                                case 2:
+                                                    $("#login-page ons-carousel-item.third").css({ "padding-bottom": adjustedKeyboardHeight + "px" });
+                                                    // scroll to the currently focused input element
+                                                    $("#login-page ons-carousel-item.third").scrollTop(Math.floor($(document.activeElement).closest("ons-input").position().top));
+                                                    break;
+                                            }
+                                        }, 0);
+                                    });
+
                                     try {
-                                        // create the tooltip object for the signin form
+                                        // create the tooltip objects for the signin form
                                         $('#login-form ons-input', $thisPage).each(function (index, element) {
                                             element._utopiasoftware_validator_index = index;
 
@@ -535,7 +563,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         }).appendTo($('#signup-password-view-button', $thisPage).get(0));
                                     } catch (err) {}
 
-                                case 10:
+                                case 11:
                                 case 'end':
                                     return _context6.stop();
                             }
