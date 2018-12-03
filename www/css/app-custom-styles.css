@@ -8,8 +8,26 @@
     font-size: 0.75em !important;
     background-color: #000000 !important;
 }
-.utopiasoftware-ej2-validation-tooltip * {
-    border: #000000 !important;
+.utopiasoftware-ej2-validation-tooltip.e-tooltip-wrap.e-popup {
+    border-color: #000000;
+}
+.utopiasoftware-ej2-validation-tooltip.e-tooltip-wrap.e-popup .e-arrow-tip-outer.e-tip-bottom {
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid #000000;
+}
+.utopiasoftware-ej2-validation-tooltip.e-tooltip-wrap.e-popup .e-arrow-tip-inner.e-tip-right,
+.utopiasoftware-ej2-validation-tooltip.e-tooltip-wrap.e-popup .e-arrow-tip-inner.e-tip-left,
+.utopiasoftware-ej2-validation-tooltip.e-tooltip-wrap.e-popup .e-arrow-tip-inner.e-tip-bottom,
+.utopiasoftware-ej2-validation-tooltip.e-tooltip-wrap.e-popup .e-arrow-tip-inner.e-tip-top {
+    color: #000000;
+    font-family: 'e-icons';
+    font-size: 16px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    line-height: 1;
+    text-transform: none;
 }
 
 /** STYLE TO PREVENT ALL EJ2 BUTTONS FROM HAVING A BACKGROUND COLOR WHEN FOCUSED **/

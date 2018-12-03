@@ -385,9 +385,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $('#app-main-navigator').get(0).topPage.onDeviceBackButton =
                     utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.backButtonClicked;
 
-                // listen for when the login-carousel has changed/slide
+                // listen for when the login-carousel has changed/slide used to change screen from login to signup etc
                 $thisPage.on("postchange", "#login-carousel",
-                    utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.carouselPostChange);
+                    utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.changeScreenCarouselPostChange);
+
+                // listen for when the login-carousel has changed/slide used to hide the tooltips for the previous displayed screen
+                $thisPage.on("postchange", "#login-carousel",
+                    utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.hideTooltipsCarouselPostChange);
 
                 // initialise the login form validation
                 utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.loginFormValidator =
@@ -406,7 +410,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 // listen for log in form field validation success event
                 utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.loginFormValidator.on('field:success', function(fieldInstance) {
-                    // remove tooltip from element
+                    // hide tooltip from element
                     let tooltip = $('#login-page #login-form').get(0).
                         ej2_instances[fieldInstance.$element.get(0)._utopiasoftware_validator_index];
                     tooltip.close();
@@ -416,41 +420,37 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.loginFormValidator.on('form:success',
                     utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.loginFormValidated);
 
-                // listen for scroll event on the page
+                // listen for scroll event on the page to adjust the tooltips when page scrolls
                 $('#login-page ons-carousel-item',).on("scroll", function(){
 
                     // place function execution in the event queue to be executed ASAP
                     window.setTimeout(function(){
                         console.log("CAROUSEL SCROLL");
                             switch ($('#login-page #login-carousel').get(0).getActiveIndex()) { // get the active carousel item
-                                case 0:
+                                case 0: // first carousel item is active, so adjust the input elements on the login form
                                     $("#login-page #login-form ons-input").each(function(index, element){
                                         document.getElementById('login-form').ej2_instances[index].refresh(element);
                                     });
                                     break;
 
-                                case 1:
-                                    $("#login-page ons-carousel-item.second").css({"padding-bottom": adjustedKeyboardHeight + "px"});
-                                    // scroll to the currently focused input element
-                                    $("#login-page ons-carousel-item.second").
-                                    scrollTop(Math.floor($(document.activeElement).closest("ons-input").position().top));
+                                case 1: // second carousel item is active, so adjust the input elements on the login form
+                                    $("#login-page #signup-form ons-input").each(function(index, element){
+                                        document.getElementById('signup-form').ej2_instances[index].refresh(element);
+                                    });
                                     break;
 
                                 case 2:
-                                    $("#login-page ons-carousel-item.third").css({"padding-bottom": adjustedKeyboardHeight + "px"});
-                                    // scroll to the currently focused input element
-                                    $("#login-page ons-carousel-item.third").
-                                    scrollTop(Math.floor($(document.activeElement).closest("ons-input").position().top));
+
                                     break;
                             }
-                        }, 0)
+                        }, 0);
                 });
 
                 try{
                     // create the tooltip objects for the signin form
                     $('#login-form ons-input', $thisPage).each(function(index, element){
                         element._utopiasoftware_validator_index = index;
-
+                        // create the tool tips for every element being validated, but attach it to the html form object
                         new ej.popups.Tooltip({
                             cssClass: 'utopiasoftware-ej2-validation-tooltip',
                             position: 'TopCenter',
@@ -550,10 +550,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         },
 
         /**
-         * method is used to track changes on the carousel slides
+         * method is used to track changes on the carousel slides for
+         * displaying the various screens i.e. login or signup etc
+         *
          * @param event
          */
-        carouselPostChange(event){
+        changeScreenCarouselPostChange(event){
 
             // use the switch case to determine what carousel is being shown
             switch(event.originalEvent.activeIndex){ // get the index of the active carousel item
@@ -564,6 +566,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     $("#login-page ons-carousel-item.third .login-segment").get(0).setActiveButton(-1);
                     // scroll to the top of the active carousel item
                     $('#login-page ons-carousel-item.first').scrollTop(0);
+
                     break;
 
                 case 1:
@@ -585,6 +588,38 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         },
 
         /**
+         * method is used to track changes on the carousel slides for
+         * hiding the tooltips on the previously displayed slide
+         *
+         * @param event
+         */
+        hideTooltipsCarouselPostChange(event){
+
+            // use the switch case to determine what carousel item was PREVIOUSLY shown
+            switch(event.originalEvent.lastActiveIndex){ // get the index of the LAST active carousel item
+                case 0:
+
+                    // hide the tooltips on the login form
+                    $('#login-page #login-form').get(0).ej2_instances.forEach(function(tooltipArrayElem){
+                        // hide the tooltip
+                        tooltipArrayElem.close();
+                    });
+                    break;
+
+                case 1:
+                    // hide the tooltips on the signup form
+                    $('#login-page #signup-form').get(0).ej2_instances.forEach(function(tooltipArrayElem){
+                        // hide the tooltip
+                        tooltipArrayElem.close();
+                    });
+                    break;
+
+                case 2:
+
+                    break;
+            }
+        },
+        /**
          * method is triggered when the keyboard is shown.
          * It is used to adjust the display height
          *
@@ -596,6 +631,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             switch ($('#login-page #login-carousel').get(0).getActiveIndex()) { // get the active carousel item
                 case 0:
+                    // add padding to the bottom, to allow elements to scroll into view
                     $("#login-page ons-carousel-item.first").css({"padding-bottom": adjustedKeyboardHeight + "px"});
                     // scroll to the currently focused input element
                     $("#login-page ons-carousel-item.first").
@@ -603,6 +639,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     break;
 
                 case 1:
+                    // add padding to the bottom, to allow elements to scroll into view
                     $("#login-page ons-carousel-item.second").css({"padding-bottom": adjustedKeyboardHeight + "px"});
                     // scroll to the currently focused input element
                     $("#login-page ons-carousel-item.second").
@@ -610,6 +647,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     break;
 
                 case 2:
+                    // add padding to the bottom, to allow elements to scroll into view
                     $("#login-page ons-carousel-item.third").css({"padding-bottom": adjustedKeyboardHeight + "px"});
                     // scroll to the currently focused input element
                     $("#login-page ons-carousel-item.third").
