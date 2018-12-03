@@ -498,16 +498,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.loginFormValidator.on('field:error', function (fieldInstance) {
                                         // get the element that triggered the field validation error and use it to display tooltip
                                         // display tooltip
-                                        var tooltip = fieldInstance.$element.get(0).ej2_instances[0];
+                                        var tooltip = $('#login-page #login-form').get(0).ej2_instances[fieldInstance.$element.get(0)._utopiasoftware_validator_index];
                                         tooltip.content = fieldInstance.getErrorsMessages()[0];
                                         tooltip.dataBind();
-                                        tooltip.open();
+                                        tooltip.open(fieldInstance.$element.get(0));
                                     });
 
                                     // listen for log in form field validation success event
                                     utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.loginFormValidator.on('field:success', function (fieldInstance) {
                                         // remove tooltip from element
-                                        var tooltip = fieldInstance.$element.get(0).ej2_instances[0];
+                                        var tooltip = $('#login-page #login-form').get(0).ej2_instances[fieldInstance.$element.get(0)._utopiasoftware_validator_index];
                                         tooltip.close();
                                     });
 
@@ -517,11 +517,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     try {
                                         // create the tooltip object for the signin form
                                         $('#login-form ons-input', $thisPage).each(function (index, element) {
+                                            element._utopiasoftware_validator_index = index;
+
                                             new ej.popups.Tooltip({
                                                 cssClass: 'utopiasoftware-ej2-validation-tooltip',
                                                 position: 'TopCenter',
                                                 opensOn: 'Custom'
-                                            }).appendTo(element);
+                                            }).appendTo($('#login-page #login-form').get(0));
                                         });
 
                                         // create the button for showing password visibility on the signup page
