@@ -1,12 +1,12 @@
 <ons-page id="login-page">
     <ons-carousel id="login-carousel" fullscreen direction="horizontal" auto-scroll auto-scroll-ratio="0.1"
                   item-width="100%" initial-index="0" animation="none">
-        <ons-carousel-item class="first" style="overflow-y: auto">
+        <ons-carousel-item class="first">
             <div style="width: 100%; text-align: center; margin-top: 1.5em;">
                 <img src="css/app-images/oak-banner.jpg" style="width: 14em;">
             </div>
 
-            <div style="width: 100%; text-align: center; margin-top: 1em;">
+            <div style="width: 100%; text-align: center; margin-top: 1em; position: fixed; z-index: 2">
                 <ons-segment class="login-segment" active-index="0" style="min-width: 60%; max-width: 100%;">
                     <button onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
                     loginPageViewModel.segmentButtonClicked(0);">Sign In</button>
@@ -15,7 +15,8 @@
                 </ons-segment>
             </div>
 
-            <div style="position: absolute; width: 80%; padding: 0; margin-top: 1.5em;
+            <div style="overflow-y: scroll; min-height: 50vh; max-height: 60vh;
+            position: absolute; width: 80%; padding: 0; margin-top: 1.6em;
             margin-left: 10%; margin-right: 10%;">
 
                 <div style="width: 100%; text-align: center; color: #363E7C; margin-bottom: 1em;">
@@ -87,12 +88,12 @@
             </div>
         </ons-carousel-item>
 
-        <ons-carousel-item class="second" style="overflow-y: auto">
+        <ons-carousel-item class="second">
             <div style="width: 100%; text-align: center; margin-top: 1.5em;">
                 <img src="css/app-images/oak-banner.jpg" style="width: 14em;">
             </div>
 
-            <div style="width: 100%; text-align: center; margin-top: 1em;">
+            <div style="width: 100%; text-align: center; margin-top: 1em; position: fixed; z-index: 2">
                 <ons-segment class="login-segment" active-index="1" style="min-width: 60%; max-width: 100%;">
                     <button onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
                     loginPageViewModel.segmentButtonClicked(0);">Sign In</button>
@@ -101,7 +102,8 @@
                 </ons-segment>
             </div>
 
-            <div style="position: absolute; width: 80%; padding: 0; margin-top: 1.5em;
+            <div style="overflow-y: scroll; min-height: 50vh; max-height: 60vh; position: absolute;
+            width: 80%; padding: 0; margin-top: 1.6em;
             margin-left: 10%; margin-right: 10%;">
 
                 <div style="width: 100%; text-align: center; color: #363E7C; margin-bottom: 1em;">
