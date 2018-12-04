@@ -842,14 +842,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     // add padding to the bottom, to allow elements to scroll into view
                     $("#login-page ons-carousel-item.first .login-page-form-container").css({ "padding-bottom": adjustedKeyboardHeight + "px" });
                     // scroll to the currently focused input element
-                    $("#login-page ons-carousel-item.first .login-page-form-container").scrollTop(Math.floor($(document.activeElement).closest("ons-input").position().top - 20));
+                    $("#login-page ons-carousel-item.first .login-page-form-container").scrollTop(Math.floor($(document.activeElement).closest("ons-input").position().top - 30));
                     break;
 
                 case 1:
                     // add padding to the bottom, to allow elements to scroll into view
                     $("#login-page ons-carousel-item.second .login-page-form-container").css({ "padding-bottom": adjustedKeyboardHeight + "px" });
                     // scroll to the currently focused input element
-                    $("#login-page ons-carousel-item.second .login-page-form-container").scrollTop(Math.floor($(document.activeElement).closest("ons-input").position().top - 20));
+                    $("#login-page ons-carousel-item.second .login-page-form-container").scrollTop(Math.floor($(document.activeElement).closest("ons-input").position().top - 30));
                     break;
 
                 case 2:
