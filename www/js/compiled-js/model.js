@@ -21,7 +21,12 @@ utopiasoftware[utopiasoftware_app_namespace].model = {
     /**
      * holds the encrypted pouchDB database used by the app
      */
-    encryptedAppDatabase: null
+    encryptedAppDatabase: null,
+
+    /**
+     * holds the base url which the app will use to connect to the app server and make requests
+     */
+    appBaseUrl: "https://shopoakexclusive.com",
 
 
 };
