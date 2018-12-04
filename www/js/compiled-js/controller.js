@@ -362,6 +362,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         loginFormValidator: null,
 
+        /**
+         * used to hold the parsley form validation object for the signup page
+         */
+        signupFormValidator: null,
 
         /**
          * event is triggered when page is initialised
@@ -397,6 +401,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.loginFormValidator =
                     $('#login-page #login-form').parsley();
 
+                // initialise the login form validation
+                utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.signupFormValidator =
+                    $('#login-page #signup-form').parsley();
+
                 // listen for log in form field validation failure event
                 utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.loginFormValidator.on('field:error', function(fieldInstance) {
                     // get the element that triggered the field validation error and use it to display tooltip
@@ -420,8 +428,32 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.loginFormValidator.on('form:success',
                     utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.loginFormValidated);
 
+                // listen for signup form field validation failure event
+                utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.signupFormValidator.on('field:error', function(fieldInstance) {
+                    // get the element that triggered the field validation error and use it to display tooltip
+                    // display tooltip
+                    let tooltip = $('#login-page #signup-form').get(0).
+                        ej2_instances[fieldInstance.$element.get(0)._utopiasoftware_validator_index];
+                    tooltip.content = fieldInstance.getErrorsMessages()[0];
+                    tooltip.dataBind();
+                    tooltip.open(fieldInstance.$element.get(0));
+                });
+
+                // listen for sign up form field validation success event
+                utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.signupFormValidator.on('field:success', function(fieldInstance) {
+                    // hide tooltip from element
+                    let tooltip = $('#login-page #signup-form').get(0).
+                        ej2_instances[fieldInstance.$element.get(0)._utopiasoftware_validator_index];
+                    tooltip.close();
+                });
+
+                // listen for log in form validation success
+                utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.signupFormValidator.on('form:success',
+                    utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.signupFormValidated);
+
+
                 // listen for scroll event on the page to adjust the tooltips when page scrolls
-                $('#login-page ons-carousel-item',).on("scroll", function(){
+                $('#login-page .login-page-form-container',).on("scroll", function(){
 
                     // place function execution in the event queue to be executed ASAP
                     window.setTimeout(function(){
@@ -458,6 +490,17 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         }).appendTo($('#login-page #login-form').get(0));
                     });
 
+                    // create the tooltip objects for the signup form
+                    $('#signup-form ons-input', $thisPage).each(function(index, element){
+                        element._utopiasoftware_validator_index = index;
+                        // create the tool tips for every element being validated, but attach it to the html form object
+                        new ej.popups.Tooltip({
+                            cssClass: 'utopiasoftware-ej2-validation-tooltip',
+                            position: 'TopCenter',
+                            opensOn: 'Custom'
+                        }).appendTo($('#login-page #signup-form').get(0));
+                    });
+
                     // create the button for showing password visibility on the signup page
                     new ej.buttons.Button({
                         isToggle: true,
@@ -492,12 +535,44 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // remove listener for when the device keyboard is shown
             window.removeEventListener('keyboardDidShow',
                 utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.keyboardShownAdjustView);
+
+            // hide the tooltips on the login form
+            $('#login-page #login-form').get(0).ej2_instances.forEach(function(tooltipArrayElem){
+                // hide the tooltip
+                tooltipArrayElem.close();
+            });
+
+            // hide the tooltips on the signup form
+            $('#login-page #signup-form').get(0).ej2_instances.forEach(function(tooltipArrayElem){
+                // hide the tooltip
+                tooltipArrayElem.close();
+            });
+
+            // reset all form validator objects
+            utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.loginFormValidator.reset();
+            utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.signupFormValidator.reset();
         },
 
         /**
          * method is triggered when page is destroyed
          */
         pageDestroy: function(){
+
+            // destroy the tooltips on the login form
+            $('#login-page #login-form').get(0).ej2_instances.forEach(function(tooltipArrayElem){
+                // destroy the tooltip
+                tooltipArrayElem.destroy();
+            });
+
+            // destroy the tooltips on the signup form
+            $('#login-page #signup-form').get(0).ej2_instances.forEach(function(tooltipArrayElem){
+                // hide the tooltip
+                tooltipArrayElem.destroy();
+            });
+
+            // destroy all form validator objects
+            utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.loginFormValidator.destroy();
+            utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.signupFormValidator.destroy();
 
         },
 
@@ -565,7 +640,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     $("#login-page ons-carousel-item.second .login-segment button:nth-of-type(1) input").prop("checked", false);
                     $("#login-page ons-carousel-item.third .login-segment button input").prop("checked", false);
                     // scroll to the top of the active carousel item
-                    $('#login-page ons-carousel-item.first').scrollTop(0);
+                    $('#login-page ons-carousel-item.first .login-page-form-container').scrollTop(0);
 
                     break;
 
@@ -575,7 +650,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     $("#login-page ons-carousel-item.first .login-segment button:nth-of-type(2) input").prop("checked", false);
                     $("#login-page ons-carousel-item.third .login-segment button input").prop("checked", false);
                     // scroll to the top of the active carousel item
-                    $('#login-page ons-carousel-item.second').scrollTop(0);
+                    $('#login-page ons-carousel-item.second .login-page-form-container').scrollTop(0);
                     break;
 
                 case 2:
@@ -584,7 +659,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     $("#login-page ons-carousel-item.first .login-segment button:nth-of-type(2) input").prop("checked", false);
                     $("#login-page ons-carousel-item.second .login-segment button:nth-of-type(2) input").prop("checked", true);
                     $("#login-page ons-carousel-item.second .login-segment button:nth-of-type(1) input").prop("checked", false);
-                    $('#login-page ons-carousel-item.third').scrollTop(0);
+                    $('#login-page ons-carousel-item.third .login-page-form-container').scrollTop(0);
                     break;
             }
         },
@@ -610,6 +685,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 case 1:
 
+                    // hide the tooltips on the login form
+                    $('#login-page #signup-form').get(0).ej2_instances.forEach(function(tooltipArrayElem){
+                        // hide the tooltip
+                        tooltipArrayElem.close();
+                    });
                     break;
 
                 case 2:
@@ -630,26 +710,24 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             switch ($('#login-page #login-carousel').get(0).getActiveIndex()) { // get the active carousel item
                 case 0:
                     // add padding to the bottom, to allow elements to scroll into view
-                    $("#login-page ons-carousel-item.first").css({"padding-bottom": adjustedKeyboardHeight + "px"});
+                    $("#login-page ons-carousel-item.first .login-page-form-container").
+                    css({"padding-bottom": adjustedKeyboardHeight + "px"});
                     // scroll to the currently focused input element
-                    $("#login-page ons-carousel-item.first").
+                    $("#login-page ons-carousel-item.first .login-page-form-container").
                     scrollTop(Math.floor($(document.activeElement).closest("ons-input").position().top));
                     break;
 
                 case 1:
                     // add padding to the bottom, to allow elements to scroll into view
-                    $("#login-page ons-carousel-item.second").css({"padding-bottom": adjustedKeyboardHeight + "px"});
+                    $("#login-page ons-carousel-item.second .login-page-form-container").
+                    css({"padding-bottom": adjustedKeyboardHeight + "px"});
                     // scroll to the currently focused input element
-                    $("#login-page ons-carousel-item.second").
+                    $("#login-page ons-carousel-item.second .login-page-form-container").
                     scrollTop(Math.floor($(document.activeElement).closest("ons-input").position().top));
                     break;
 
                 case 2:
-                    // add padding to the bottom, to allow elements to scroll into view
-                    $("#login-page ons-carousel-item.third").css({"padding-bottom": adjustedKeyboardHeight + "px"});
-                    // scroll to the currently focused input element
-                    $("#login-page ons-carousel-item.third").
-                    scrollTop(Math.floor($(document.activeElement).closest("ons-input").position().top));
+
                     break;
             }
         },
@@ -666,11 +744,31 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         },
 
         /**
+         * method is triggered when the "Sign Up" button is clicked
+         *
+         * @returns {Promise<void>}
+         */
+        async signupButtonClicked() {
+
+            // run the validation method for the sign-in form
+            utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.signupFormValidator.whenValidate();
+        },
+
+        /**
          * method is triggered when the login form is successfully validated
          *
          * @returns {Promise<void>}
          */
         async loginFormValidated(){
+
+        },
+
+        /**
+         * method is triggered when the sign up form is successfully validated
+         *
+         * @returns {Promise<void>}
+         */
+        async signupFormValidated(){
 
         }
     },

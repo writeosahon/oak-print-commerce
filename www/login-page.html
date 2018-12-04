@@ -6,7 +6,7 @@
                 <img src="css/app-images/oak-banner.jpg" style="width: 14em;">
             </div>
 
-            <div style="width: 100%; text-align: center; margin-top: 1em; position: fixed; z-index: 2">
+            <div style="width: 100%; text-align: center; margin-top: 1em; position: fixed; z-index: 1000">
                 <ons-segment class="login-segment" active-index="0" style="min-width: 60%; max-width: 100%;">
                     <button onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
                     loginPageViewModel.segmentButtonClicked(0);">Sign In</button>
@@ -15,7 +15,7 @@
                 </ons-segment>
             </div>
 
-            <div style="overflow-y: scroll; min-height: 50vh; max-height: 60vh;
+            <div class="login-page-form-container" style="overflow-y: scroll; min-height: 50vh; max-height: 60vh;
             position: absolute; width: 80%; padding: 0; margin-top: 1.6em;
             margin-left: 10%; margin-right: 10%;">
 
@@ -35,8 +35,7 @@
                         caret-color: #ffffff !important; color: #ffffff !important;" required
                                        placeholder="Email" disable-auto-styling
                                        data-parsley-required-message="email is required"
-                                       data-parsley-type-message="provide a valid email"
-                                       class="hint--top"></ons-input>
+                                       data-parsley-type-message="provide a valid email"></ons-input>
                         </ons-col>
                     </ons-row>
                     <ons-row vertical-align="bottom" style="margin-bottom: 2em; text-align: center;">
@@ -46,8 +45,7 @@
                             <ons-input id="login-password" type="password" style="width: 75%;
                         caret-color: #ffffff !important; color: #ffffff !important;" required
                                        placeholder="Password" disable-auto-styling
-                                       data-parsley-required-message="password is required"
-                                       class="hint--top"></ons-input>
+                                       data-parsley-required-message="password is required"></ons-input>
                         </ons-col>
                     </ons-row>
                     <ons-row style="margin-bottom: 1.5em;">
@@ -93,7 +91,7 @@
                 <img src="css/app-images/oak-banner.jpg" style="width: 14em;">
             </div>
 
-            <div style="width: 100%; text-align: center; margin-top: 1em; position: fixed; z-index: 2">
+            <div style="width: 100%; text-align: center; margin-top: 1em; position: fixed; z-index: 1000">
                 <ons-segment class="login-segment" active-index="1" style="min-width: 60%; max-width: 100%;">
                     <button onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
                     loginPageViewModel.segmentButtonClicked(0);">Sign In</button>
@@ -102,7 +100,7 @@
                 </ons-segment>
             </div>
 
-            <div style="overflow-y: scroll; min-height: 50vh; max-height: 60vh; position: absolute;
+            <div class="login-page-form-container" style="overflow-y: scroll; min-height: 50vh; max-height: 60vh; position: absolute;
             width: 80%; padding: 0; margin-top: 1.6em;
             margin-left: 10%; margin-right: 10%;">
 
@@ -122,7 +120,7 @@
                         caret-color: #ffffff !important; color: #ffffff !important;" required
                                        placeholder="Email" disable-auto-styling
                                        data-parsley-required-message="new email is required"
-                                       class="hint--top"></ons-input>
+                                       data-parsley-type-message="provide a valid email"></ons-input>
                         </ons-col>
                     </ons-row>
                     <ons-row vertical-align="bottom" style="margin-bottom: 2em; text-align: center;">
@@ -132,8 +130,7 @@
                             <ons-input id="signup-password" type="password" style="width: 60%;
                         caret-color: #ffffff !important; color: #ffffff !important;" required
                                        placeholder="Password" disable-auto-styling
-                                       data-parsley-required-message="new password is required"
-                                       class="hint--top"></ons-input>
+                                       data-parsley-required-message="new password is required"></ons-input>
                             <button id="signup-password-view-button" type="button"
                                     style="background-color: transparent; color: #ffffff; float: right; clear: both"
                             onclick="utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.
@@ -146,7 +143,8 @@
                         <ons-col width="60%" style="text-align: center">
                             <ons-button style="border-color: #363E7C; background-color: #ffffff; color: #363E7C"
                                         disable-auto-styling modifier="large"
-                                        onclick="">
+                                 onclick="utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.
+                                 signupButtonClicked()">
                                 Sign Up
                             </ons-button>
                         </ons-col>
