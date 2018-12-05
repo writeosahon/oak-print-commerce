@@ -54,27 +54,27 @@
 /** STYLE FOR THE APP ALERT DIALOG ENDS **/
 
 /** STYLE FOR DEFAULT PAGE PRE-LOADERS BEGINS **/
-.progress-bar--material__primary,
-.progress-bar--material__secondary {
+.progress-bar--default-page-preloader__primary,
+.progress-bar--default-page-preloader__secondary {
     background-color: #ff0000;
     background-color: rgba(255, 0, 0, 1);
     border-radius: 0;
 }
-.progress-bar--material__secondary {
+.progress-bar--default-page-preloader__secondary {
     background-color: #548ba7;
     z-index: 0;
 }
-.progress-bar--material.progress-bar--indeterminate:before { /* FIXME */
+.progress-bar--default-page-preloader.progress-bar--indeterminate:before {
     background-color: #ff0000;
     background-color: rgba(255, 0, 0, 1);
     border-radius: 0;
 }
-.progress-bar--material.progress-bar--indeterminate:after { /* FIXME */
+.progress-bar--default-page-preloader.progress-bar--indeterminate:after {
     background-color: #ff0000;
     background-color: rgba(255, 0, 0, 1);
     border-radius: 0;
 }
-/** STYLE FOR DEFAULT PAGE [RE-LOADERS ENDS **/
+/** STYLE FOR DEFAULT PAGE PRE-LOADERS ENDS **/
 
 /** STYLE FOR LOADER MODAL BEGINS **/
 #loader-modal ons-icon[spin] {
