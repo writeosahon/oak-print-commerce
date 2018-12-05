@@ -134,6 +134,8 @@
 
 #home-page #home-latest-design-block .e-card {
     background-color: rgba(211, 211, 211, 0.7);
+    background-color: transparent;
+    box-shadow: none !important;
 }
 #home-page #home-latest-design-block .e-card .e-card-separator {
     border-bottom: 1px solid rgba(0, 0, 255, 0.12);
@@ -154,6 +156,8 @@
 
 #home-page #home-featured-design-block .e-card {
     background-color: rgba(211, 211, 211, 0.7);
+    background-color: transparent;
+    box-shadow: none !important;
 }
 #home-page #home-featured-design-block .e-card .e-card-separator {
     border-bottom: 1px solid rgba(0, 0, 255, 0.12);
@@ -175,6 +179,8 @@
 
 #home-page #home-sales-design-block .e-card {
     background-color: rgba(211, 211, 211, 0.7);
+    background-color: transparent;
+    box-shadow: none !important;
 }
 #home-page #home-sales-design-block .e-card .e-card-separator {
     border-bottom: 1px solid rgba(0, 0, 255, 0.12);
