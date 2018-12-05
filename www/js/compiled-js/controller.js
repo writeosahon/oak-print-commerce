@@ -150,7 +150,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         cellAlign: 'left',
                         contain: false,
                         prevNextButtons: false,
-                        pageDots: true
+                        pageDots: false
                     });
                     newProductsCarousel.on("scroll", function(){
                         // check if the carousel object has a timer attached
@@ -186,7 +186,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         cellAlign: 'left',
                         contain: false,
                         prevNextButtons: false,
-                        pageDots: true
+                        pageDots: false
                     });
                     featuredProductsCarousel.on("scroll", function(){
                         // check if the carousel object has a timer attached
@@ -222,7 +222,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         cellAlign: 'left',
                         contain: false,
                         prevNextButtons: false,
-                        pageDots: true
+                        pageDots: false
                     });
                     salesProductsCarousel.on("scroll", function(){
                         // check if the carousel object has a timer attached

@@ -182,7 +182,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             cellAlign: 'left',
                                             contain: false,
                                             prevNextButtons: false,
-                                            pageDots: true
+                                            pageDots: false
                                         });
 
                                         newProductsCarousel.on("scroll", function () {
@@ -221,7 +221,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             cellAlign: 'left',
                                             contain: false,
                                             prevNextButtons: false,
-                                            pageDots: true
+                                            pageDots: false
                                         });
 
                                         featuredProductsCarousel.on("scroll", function () {
@@ -260,7 +260,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             cellAlign: 'left',
                                             contain: false,
                                             prevNextButtons: false,
-                                            pageDots: true
+                                            pageDots: false
                                         });
 
                                         salesProductsCarousel.on("scroll", function () {
