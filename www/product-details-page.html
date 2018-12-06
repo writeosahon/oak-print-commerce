@@ -29,9 +29,10 @@
 
     <div class="e-card" style="box-shadow: none; border: none">
         <div class="e-card-image" style="min-height: 160px; background-image: url('css/app-images/1-13.jpg');">
-                    <span class="e-badge e-badge-danger" style="color: white; font-size: 0.8em; float: right; clear: both;">
+                    <span class="e-badge e-badge-danger" style="background-color: transparent; color: #d64113;
+                    border: 1px #d64113 solid; font-size: 0.8em; float: right; clear: both;">
                                     50% OFF
-                     </span>
+                    </span>
         </div>
         <div class="e-card-header">
             <div class="e-card-header-caption"  style="padding-left: 3px; padding-right: 5px">
@@ -175,15 +176,17 @@
 
     </ons-list>
 
-    <ons-bottom-toolbar modifier="aligned noshadow">
+    <ons-bottom-toolbar modifier="noshadow transparent">
 
         <div style="text-align: center; width: 100%">
-            <button id="product-details-add-to-cart" type="button" style="background-color: #363E7C; color: #ffffff">
+            <button id="product-details-add-to-cart" type="button"
+                    style="background-color: #363E7C; color: #ffffff; box-shadow: none">
                 <ons-ripple></ons-ripple>
                 Add To Cart
             </button>
 
-            <button id="product-details-customise-product" type="button" style="background-color: #363E7C; color: #ffffff">
+            <button id="product-details-customise-product" type="button"
+                    style="background-color: #363E7C; color: #ffffff; box-shadow: none">
                 <ons-ripple></ons-ripple>
                 Customise
             </button>
