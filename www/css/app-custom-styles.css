@@ -218,9 +218,14 @@
     background-position: center;
 }
 
-
 /** STYLE FOR HOME PAGE ENDS **/
 
+/** STYLE FOR CATEGORIES PAGE START **/
+#categories-page .page__background,
+#categories-page .page--material__background {
+    background-color: #ffffff;
+}
+/** STYLE FOR CATEGORIES PAGE ENDS **/
 
 /** STYLE FOR PRODUCTS PAGE BEGINS **/
 #products-page .e-card-image{
