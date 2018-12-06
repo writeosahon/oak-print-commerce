@@ -227,6 +227,13 @@
 }
 /** STYLE FOR CATEGORIES PAGE ENDS **/
 
+/** STYLE FOR SEARCH PAGE START **/
+#search-page .page__background,
+#search-page .page--material__background {
+    background-color: #ffffff;
+}
+/** STYLE FOR SEARCH PAGE ENDS **/
+
 /** STYLE FOR PRODUCTS PAGE BEGINS **/
 #products-page .page__background,
 #products-page .page--material__background {
@@ -256,6 +263,10 @@
 /** STYLE FOR PRODUCTS PAGE ENDS **/
 
 /** STYLE FOR PRODUCT DETAILS PAGE BEGINS **/
+#product-details-page .page__background,
+#product-details-page .page--material__background {
+    background-color: #ffffff;
+}
 #product-details-page .e-card-image{
     background-repeat: no-repeat;
     background-size: contain;
