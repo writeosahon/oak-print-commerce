@@ -228,6 +228,15 @@
 /** STYLE FOR CATEGORIES PAGE ENDS **/
 
 /** STYLE FOR PRODUCTS PAGE BEGINS **/
+#products-page .page__background,
+#products-page .page--material__background {
+    background-color: #ffffff;
+}
+#products-page .e-card {
+    background-color: rgba(211, 211, 211, 0.7);
+    background-color: transparent;
+    box-shadow: none !important;
+}
 #products-page .e-card-image{
     background-repeat: no-repeat;
     background-size: contain;
