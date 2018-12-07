@@ -234,6 +234,13 @@
 }
 /** STYLE FOR SEARCH PAGE ENDS **/
 
+/** STYLE FOR ACCOUNT PAGE BEGINS **/
+#account-page .page__background,
+#account-page .page--material__background {
+    background-color: #ffffff;
+}
+/** STYLE FOR ACCOUNT PAGE ENDS **/
+
 /** STYLE FOR PRODUCTS PAGE BEGINS **/
 #products-page .page__background,
 #products-page .page--material__background {
