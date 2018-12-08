@@ -519,9 +519,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                 <div class="e-card-sub-title" style="text-align: center;">
                                                 &#x20a6;${kendo.toString(kendo.parseFloat(productsArray[index].price), "n2")}
                                                 </div>
-                                                <div class="e-card-sub-title" style="text-align: left;">
+                                                <div class="e-card-sub-title" style="text-align: center;">
                                                     <span class="e-badge e-badge-danger" style="background-color: transparent; color: #d64113;
-                                                    border: 1px #d64113 solid; font-size: 1em; float: right; clear: both;">
+                                                    border: 1px #d64113 solid; font-size: 1em;">
                                                     ${Math.ceil((Math.abs(kendo.parseFloat(productsArray[index].price) - 
                                                     kendo.parseFloat(productsArray[index].regular_price)) / 
                                                     kendo.parseFloat(productsArray[index].regular_price)) * 100)}% OFF
