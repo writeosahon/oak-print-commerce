@@ -371,7 +371,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     )).then(function(productsArray){
                         $('#home-page #home-latest-design-block').css("opacity", "1"); // show the "Products" segment
                         // attach the products to the page
-                        for(let index = 0; index < productsArray.length; index++){
+                        for(let index = 1; index < productsArray.length; index++){
                             let columnContent =
                                 `<div class="col-xs-5" style="padding-left: 0.5em; padding-right: 0.5em;">
                                     <div class="e-card" style="min-height: 34vh;">
