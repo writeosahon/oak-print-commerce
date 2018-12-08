@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -27,7 +27,9 @@ var utopiasoftware = _defineProperty({}, utopiasoftware_app_namespace, {
   /**
    * holds the randomisation engine used by Random.Js
    */
-  randomisationEngine: Random.engines.browserCrypto
+  randomisationEngine: Random.engines.browserCrypto,
+
+  accessor: "ZGV2ZWxvcGVyQHNob3BvYWtleGNsdXNpdmUuY29tOk9ha0RldmVsb3BlckAx"
 });
 
 //# sourceMappingURL=base-compiled.js.map

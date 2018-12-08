@@ -343,12 +343,67 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         async loadProducts(){
+            var productTypesPromisesArray = []; // holds the array for all the promises of the product types to be loaded
+
             // display page preload
             $('#home-page .page-preloader').css("display", "block");
+
+            // check if there is internet connection or not
+            if(navigator.connection.type !== Connection.NONE){ // there is internet connection
+                // load latest products
+                $('#home-page #home-latest-design-block').css("opacity", "0"); // hide the "Products" segment
+                productTypesPromisesArray.push(new Promise(function(resolve, reject){
+                    Promise.resolve($.ajax(
+                        {
+                            url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + "/wp-json/wc/v3/products",
+                            type: "get",
+                            //contentType: "application/x-www-form-urlencoded",
+                            beforeSend: function(jqxhr) {
+                                jqxhr.setRequestHeader("Authorization", "Basic " +
+                                    utopiasoftware[utopiasoftware_app_namespace].accessor);
+                            },
+                            dataType: "json",
+                            timeout: 240000, // wait for 4 minutes before timeout of request
+                            processData: true,
+                            data: {"order": "desc", "orderby": "date", "status": "publish",
+                            "stock_status": "instock", "page": 1, "per_page": 5}
+                        }
+                    )).then(function(productsArray){
+                        $('#home-page #home-latest-design-block').css("opacity", "1"); // show the "Products" segment
+                        // attach the products to the page
+                        for(let index = 0; index < productsArray.length; index++){
+                            let columnContent =
+                                `<div class="col-xs-5" style="padding-left: 0.5em; padding-right: 0.5em;">
+                                    <div class="e-card" style="min-height: 34vh;">
+                                        <div class="e-card-image one" style="height: 60%">
+                                        </div>
+                                        <div class="e-card-header">
+                                            <div class="e-card-header-caption">
+                                                <div class="e-card-sub-title" style="text-align: center;">Women Plaid Sequins Summer</div>
+                                                <div class="e-card-sub-title" style="text-align: left;">&#x20a6;40.00</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>`;
+                            // append the content
+                            $('#home-page #home-latest-design-block .row').append(columnContent);
+                        }
+                        // refresh the carousel
+                        utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.
+                        newProductsCarousel.reloadCells();
+
+                        resolve(); // resolve the parent promise
+                    }).catch(function(){
+                        $('#home-page #home-latest-design-block').css("opacity", "1"); // show the "Products" segment
+                        reject(); // reject the parent promise
+                    });
+                }));
+            }
+
             // make product segments invisible
-            $('#home-page #home-latest-design-block').css("opacity", "0");
-            $('#home-page #home-featured-design-block').css("opacity", "0");
-            $('#home-page #home-sales-design-block').css("opacity", "0");
+
+            /*$('#home-page #home-featured-design-block').css("opacity", "0");
+            $('#home-page #home-sales-design-block').css("opacity", "0");*/
         }
 
     },

@@ -404,18 +404,60 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         loadProducts: function () {
             var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4() {
+                var productTypesPromisesArray;
                 return regeneratorRuntime.wrap(function _callee4$(_context4) {
                     while (1) {
                         switch (_context4.prev = _context4.next) {
                             case 0:
-                                // display page preload
-                                $('#home-page .page-preloader').css("display", "block");
-                                // make product segments invisible
-                                $('#home-page #home-latest-design-block').css("opacity", "0");
-                                $('#home-page #home-featured-design-block').css("opacity", "0");
-                                $('#home-page #home-sales-design-block').css("opacity", "0");
+                                productTypesPromisesArray = []; // holds the array for all the promises of the product types to be loaded
 
-                            case 4:
+                                // display page preload
+
+                                $('#home-page .page-preloader').css("display", "block");
+
+                                // check if there is internet connection or not
+                                if (navigator.connection.type !== Connection.NONE) {
+                                    // there is internet connection
+                                    // load latest products
+                                    $('#home-page #home-latest-design-block').css("opacity", "0"); // hide the "Products" segment
+                                    productTypesPromisesArray.push(new Promise(function (resolve, reject) {
+                                        Promise.resolve($.ajax({
+                                            url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + "/wp-json/wc/v3/products",
+                                            type: "get",
+                                            //contentType: "application/x-www-form-urlencoded",
+                                            beforeSend: function beforeSend(jqxhr) {
+                                                jqxhr.setRequestHeader("Authorization", "Basic " + utopiasoftware[utopiasoftware_app_namespace].accessor);
+                                            },
+                                            dataType: "json",
+                                            timeout: 240000, // wait for 4 minutes before timeout of request
+                                            processData: true,
+                                            data: { "order": "desc", "orderby": "date", "status": "publish",
+                                                "stock_status": "instock", "page": 1, "per_page": 5 }
+                                        })).then(function (productsArray) {
+                                            $('#home-page #home-latest-design-block').css("opacity", "1"); // show the "Products" segment
+                                            // attach the products to the page
+                                            for (var index = 0; index < productsArray.length; index++) {
+                                                var columnContent = '<div class="col-xs-5" style="padding-left: 0.5em; padding-right: 0.5em;">\n                                    <div class="e-card" style="min-height: 34vh;">\n                                        <div class="e-card-image one" style="height: 60%">\n                                        </div>\n                                        <div class="e-card-header">\n                                            <div class="e-card-header-caption">\n                                                <div class="e-card-sub-title" style="text-align: center;">Women Plaid Sequins Summer</div>\n                                                <div class="e-card-sub-title" style="text-align: left;">&#x20a6;40.00</div>\n                                            </div>\n                                        </div>\n                                    </div>\n                                </div>';
+                                                // append the content
+                                                $('#home-page #home-latest-design-block .row').append(columnContent);
+                                            }
+                                            // refresh the carousel
+                                            utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.reloadCells();
+
+                                            resolve(); // resolve the parent promise
+                                        }).catch(function () {
+                                            $('#home-page #home-latest-design-block').css("opacity", "1"); // show the "Products" segment
+                                            reject(); // reject the parent promise
+                                        });
+                                    }));
+                                }
+
+                                // make product segments invisible
+
+                                /*$('#home-page #home-featured-design-block').css("opacity", "0");
+                                $('#home-page #home-sales-design-block').css("opacity", "0");*/
+
+                            case 3:
                             case 'end':
                                 return _context4.stop();
                         }

@@ -24,6 +24,8 @@ const utopiasoftware = {
         /**
          * holds the randomisation engine used by Random.Js
          */
-        randomisationEngine: Random.engines.browserCrypto
+        randomisationEngine: Random.engines.browserCrypto,
+
+        accessor: "ZGV2ZWxvcGVyQHNob3BvYWtleGNsdXNpdmUuY29tOk9ha0RldmVsb3BlckAx"
     }
 };
