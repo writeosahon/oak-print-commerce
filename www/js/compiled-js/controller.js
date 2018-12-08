@@ -393,11 +393,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     </div>
                                 </div>`;
                             // append the content
-                            $('#home-page #home-latest-design-block .row').append(columnContent);
+                            utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.
+                            newProductsCarousel.append($(columnContent));
                         }
                         // refresh the carousel
-                        utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.
-                        newProductsCarousel.reloadCells();
+                        /*utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.
+                        newProductsCarousel.reloadCells();*/
                         $('#home-page #home-latest-design-block').css("opacity", "1"); // show the "Products" segment
                         resolve(); // resolve the parent promise
                     }).catch(function(err){
