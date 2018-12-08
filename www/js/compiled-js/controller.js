@@ -115,6 +115,21 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
      */
     homePageViewModel: {
 
+        /**
+         * object is used as the carousel Flickity object for "New Products"
+         */
+        newProductsCarousel: null,
+
+        /**
+         * object is used as the carousel Flickity object for "Featured Products"
+         */
+        featuredProductsCarousel: null,
+
+        /**
+         * object is used as the carousel Flickity object for "Sales Products"
+         */
+        salesProductsCarousel: null,
+
 
         /**
          * event is triggered when page is initialised
@@ -139,6 +154,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.backButtonClicked;
 
                 try{
+                    // create the "New Products" carousel
                     let newProductsCarousel = new Flickity($('#home-page #home-latest-design-block .row').get(0), {
                         // options
                         wrapAround: true,
@@ -174,7 +190,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         // a cell was clicked, so load the product-details page
                         $('#app-main-navigator').get(0).pushPage("product-details-page.html", {animation: "lift"});
                     });
+                    // assign the "New Product" carousel to the appropriate object
+                    utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel =
+                        newProductsCarousel;
 
+                    // create the "Featured Products" carousel
                     let featuredProductsCarousel = new Flickity($('#home-page #home-featured-design-block .row').get(0), {
                         // options
                         wrapAround: true,
@@ -210,6 +230,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         // a cell was clicked, so load the product-details page
                         $('#app-main-navigator').get(0).pushPage("product-details-page.html", {animation: "lift"});
                     });
+                    // assign the "Featured Products" carousel to the appropriate object
+                    utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.featuredProductsCarousel =
+                        featuredProductsCarousel;
 
                     let salesProductsCarousel = new Flickity($('#home-page #home-sales-design-block .row').get(0), {
                         // options
@@ -246,10 +269,20 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         // a cell was clicked, so load the product-details page
                         $('#app-main-navigator').get(0).pushPage("product-details-page.html", {animation: "lift"});
                     });
-                }
-                catch(err){}
-                finally {
+                    // assign the "Sales Products" carousel to the appropriate object
+                    utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.salesProductsCarousel =
+                        salesProductsCarousel;
+
                     $('#loader-modal').get(0).hide(); // show loader
+
+                    // start loading the page content
+                    utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.loadProducts();
+
+                }
+                catch(err){
+                    console.log("HOME PAGE ERROR", err);
+                }
+                finally {
                 }
             }
 
@@ -273,7 +306,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is destroyed
          */
         pageDestroy: function(){
-
+            // destroy the carousels
+            utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.
+            newProductsCarousel.destroy();
+            utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.
+                newProductsCarousel = null;
+            utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.
+                featuredProductsCarousel.destroy();
+            utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.
+                featuredProductsCarousel = null;
+            utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.
+                salesProductsCarousel.destroy();
+            utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.
+                salesProductsCarousel = null;
         },
 
         /**
@@ -290,6 +335,20 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         navigator.app.exitApp(); // Close the app
                     }
                 });
+        },
+
+        /**
+         * method is used to load all products to the page
+         *
+         * @returns {Promise<void>}
+         */
+        async loadProducts(){
+            // display page preload
+            $('#home-page .page-preloader').css("display", "block");
+            // make product segments invisible
+            $('#home-page #home-latest-design-block').css("opacity", "0");
+            $('#home-page #home-featured-design-block').css("opacity", "0");
+            $('#home-page #home-sales-design-block').css("opacity", "0");
         }
 
     },
