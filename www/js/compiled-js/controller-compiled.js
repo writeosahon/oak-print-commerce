@@ -434,12 +434,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             data: { "order": "desc", "orderby": "date", "status": "publish",
                                                 "stock_status": "instock", "page": 1, "per_page": 5 }
                                         })).then(function (productsArray) {
-                                            $('#home-page #home-latest-design-block').css("opacity", "1"); // show the "Products" segment
+                                            // remove the previously slides from the carousel
+                                            utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.remove($('#home-page #home-latest-design-block .row .col-xs-5').get());
                                             // attach the products to the page
                                             for (var index = 1; index < productsArray.length; index++) {
                                                 var columnContent = '<div class="col-xs-5" style="padding-left: 0.5em; padding-right: 0.5em;">\n                                    <div class="e-card" style="min-height: 34vh;">\n                                        <div class="e-card-image" style="height: 60%; \n                                        background-image: url(\'' + productsArray[index].images[0].src + '\');">\n                                        </div>\n                                        <div class="e-card-header">\n                                            <div class="e-card-header-caption">\n                                                <div class="e-card-sub-title" style="text-align: center;">\n                                                    ' + productsArray[index].name + '\n                                                </div>\n                                                <div class="e-card-sub-title" style="text-align: left;">\n                                                &#x20a6;' + kendo.toString(kendo.parseFloat(productsArray[index].price), "n2") + '</div>\n                                            </div>\n                                        </div>\n                                    </div>\n                                </div>';
                                                 // append the content
-                                                $('#home-page #home-latest-design-block .row').html(columnContent);
+                                                $('#home-page #home-latest-design-block .row').append(columnContent);
                                             }
                                             // refresh the carousel
                                             utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.reloadCells();

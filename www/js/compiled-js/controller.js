@@ -369,7 +369,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             "stock_status": "instock", "page": 1, "per_page": 5}
                         }
                     )).then(function(productsArray){
-                        $('#home-page #home-latest-design-block').css("opacity", "1"); // show the "Products" segment
+                        // remove the previously slides from the carousel
+                        utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.
+                            newProductsCarousel.
+                        remove($('#home-page #home-latest-design-block .row .col-xs-5').get());
                         // attach the products to the page
                         for(let index = 1; index < productsArray.length; index++){
                             let columnContent =
@@ -390,7 +393,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     </div>
                                 </div>`;
                             // append the content
-                            $('#home-page #home-latest-design-block .row').html(columnContent);
+                            $('#home-page #home-latest-design-block .row').append(columnContent);
                         }
                         // refresh the carousel
                         utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.
