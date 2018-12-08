@@ -437,15 +437,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             $('#home-page #home-latest-design-block').css("opacity", "1"); // show the "Products" segment
                                             // attach the products to the page
                                             for (var index = 0; index < productsArray.length; index++) {
-                                                var columnContent = '<div class="col-xs-5" style="padding-left: 0.5em; padding-right: 0.5em;">\n                                    <div class="e-card" style="min-height: 34vh;">\n                                        <div class="e-card-image one" style="height: 60%">\n                                        </div>\n                                        <div class="e-card-header">\n                                            <div class="e-card-header-caption">\n                                                <div class="e-card-sub-title" style="text-align: center;">Women Plaid Sequins Summer</div>\n                                                <div class="e-card-sub-title" style="text-align: left;">&#x20a6;40.00</div>\n                                            </div>\n                                        </div>\n                                    </div>\n                                </div>';
+                                                var columnContent = '<div class="col-xs-5" style="padding-left: 0.5em; padding-right: 0.5em;">\n                                    <div class="e-card" style="min-height: 34vh;">\n                                        <div class="e-card-image" style="height: 60%; \n                                        background-image: url(\'' + productsArray[index].images[0].src + '\');">\n                                        </div>\n                                        <div class="e-card-header">\n                                            <div class="e-card-header-caption">\n                                                <div class="e-card-sub-title" style="text-align: center;">\n                                                    ' + productsArray[index].name + '\n                                                </div>\n                                                <div class="e-card-sub-title" style="text-align: left;">\n                                                &#x20a6;' + kendo.toString(kendo.parseFloat(productsArray[index].price), "n2") + '</div>\n                                            </div>\n                                        </div>\n                                    </div>\n                                </div>';
                                                 // append the content
-                                                $('#home-page #home-latest-design-block .row').append(columnContent);
+                                                $('#home-page #home-latest-design-block .row').html(columnContent);
                                             }
                                             // refresh the carousel
                                             utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.reloadCells();
-
+                                            $('#home-page #home-latest-design-block').css("opacity", "1"); // show the "Products" segment
                                             resolve(); // resolve the parent promise
-                                        }).catch(function () {
+                                        }).catch(function (err) {
+                                            console.log("LOAD PRODUCT", err);
                                             $('#home-page #home-latest-design-block').css("opacity", "1"); // show the "Products" segment
                                             reject(); // reject the parent promise
                                         });
