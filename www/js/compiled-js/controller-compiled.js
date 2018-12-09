@@ -320,13 +320,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         title: '',
                                         content: '',
                                         cssClass: 'default-ej2-toast',
-                                        target: $('#home-page .page__content').get(0),
+                                        target: document.body,
                                         position: { X: "Center", Y: "Top" },
                                         width: "100%",
                                         timeOut: 0,
                                         extendedTimeout: 0,
                                         showCloseButton: true
-                                    }).appendTo(document.body);
+                                    }).appendTo($('#home-page .page__content').get(0));
 
                                     $('#loader-modal').get(0).hide(); // show loader
 
@@ -569,7 +569,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 else {
                                         // there is no internet connection
                                         // display toast to show that there is no internet connection
-                                        toast = document.body.ej2_instances[0];
+                                        toast = $('#home-page .page__content').get(0).ej2_instances[0];
 
                                         toast.content = "No Internet connection. Refresh to see live products";
                                         toast.dataBind();
