@@ -321,7 +321,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         content: '',
                                         cssClass: 'default-ej2-toast',
                                         target: document.body,
-                                        position: { X: "Center", Y: "Top" },
+                                        position: { X: "Center", Y: "Bottom" },
                                         width: "100%",
                                         timeOut: 0,
                                         extendedTimeout: 0,
