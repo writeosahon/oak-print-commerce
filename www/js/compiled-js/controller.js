@@ -276,6 +276,20 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.salesProductsCarousel =
                         salesProductsCarousel;
 
+                    // create the ej2 toast component
+                    new ej.notifications.Toast({
+                        title: '',
+                        content: '',
+                        cssClass: 'default-ej2-toast',
+                        target: $('#home-page .page__content').get(0),
+                        position: {X: "Center",  Y: "Top"},
+                        width: "100%",
+                        timeOut: 0,
+                        extendedTimeout: 0,
+                        showCloseButton: true
+                    }).appendTo($('#home-page .page__content').get(0));
+
+
                     $('#loader-modal').get(0).hide(); // show loader
 
                     // display page preloader
@@ -558,6 +572,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 }));
             } // end of loading products with Internet Connection
             else{ // there is no internet connection
+                // display toast to show that there is no internet connection
+                let toast = $('#home-page .page__content').get(0).ej2_instances[0];
+                toast.content = "No Internet connection. Refresh to see live products";
+                toast.dataBind();
+                toast.show();
                 // load latest products from cached data
                 productTypesPromisesArray.push(new Promise(function(resolve, reject){
                     Promise.resolve(utopiasoftware[utopiasoftware_app_namespace].databaseOperations.

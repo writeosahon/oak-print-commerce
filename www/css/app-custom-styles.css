@@ -84,6 +84,13 @@
 }
 /** STYLE FOR LOADER MODAL ENDS **/
 
+/** STYLE FOR DEFAULT EJ2 TOAST BEGINS **/
+.default-ej2-toast {
+    background-color: #363E7C;
+    color: #ffffff;
+}
+/** STYLE FOR DEFAULT EJ2 TOAST ENDS **/
+
 /** STYLE FOR APP MAIN PAGE BEGINS **/
 /*#app-main-tab-home {
     background-position: center;

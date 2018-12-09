@@ -315,38 +315,51 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // assign the "Sales Products" carousel to the appropriate object
                                     utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.salesProductsCarousel = salesProductsCarousel;
 
+                                    // create the ej2 toast component
+                                    new ej.notifications.Toast({
+                                        title: '',
+                                        content: '',
+                                        cssClass: 'default-ej2-toast',
+                                        target: $('#home-page .page__content').get(0),
+                                        position: { X: "Center", Y: "Top" },
+                                        width: "100%",
+                                        timeOut: 0,
+                                        extendedTimeout: 0,
+                                        showCloseButton: true
+                                    }).appendTo($('#home-page .page__content').get(0));
+
                                     $('#loader-modal').get(0).hide(); // show loader
 
                                     // display page preloader
                                     $('#home-page .page-preloader').css("display", "block");
 
                                     // start loading the page content
-                                    _context2.next = 21;
+                                    _context2.next = 22;
                                     return utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.loadProducts();
 
-                                case 21:
+                                case 22:
 
                                     // hide the preloader
                                     $('#home-page .page-preloader').css("display", "none");
-                                    _context2.next = 27;
+                                    _context2.next = 28;
                                     break;
 
-                                case 24:
-                                    _context2.prev = 24;
+                                case 25:
+                                    _context2.prev = 25;
                                     _context2.t0 = _context2['catch'](4);
 
                                     console.log("HOME PAGE ERROR", _context2.t0);
 
-                                case 27:
-                                    _context2.prev = 27;
-                                    return _context2.finish(27);
+                                case 28:
+                                    _context2.prev = 28;
+                                    return _context2.finish(28);
 
-                                case 29:
+                                case 30:
                                 case 'end':
                                     return _context2.stop();
                             }
                         }
-                    }, _callee2, this, [[4, 24, 27, 29]]);
+                    }, _callee2, this, [[4, 25, 28, 30]]);
                 }));
 
                 return function loadPageOnAppReady() {
@@ -426,7 +439,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         loadProducts: function () {
             var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4() {
-                var productTypesPromisesArray;
+                var productTypesPromisesArray, toast;
                 return regeneratorRuntime.wrap(function _callee4$(_context4) {
                     while (1) {
                         switch (_context4.prev = _context4.next) {
@@ -555,6 +568,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 } // end of loading products with Internet Connection
                                 else {
                                         // there is no internet connection
+                                        // display toast to show that there is no internet connection
+                                        toast = $('#home-page .page__content').get(0).ej2_instances[0];
+
+                                        toast.content = "No Internet connection. Refresh to see live products";
+                                        toast.dataBind();
+                                        toast.show();
                                         // load latest products from cached data
                                         productTypesPromisesArray.push(new Promise(function (resolve, reject) {
                                             Promise.resolve(utopiasoftware[utopiasoftware_app_namespace].databaseOperations.loadData("latest-products", utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)).then(function (cachedProductsData) {
