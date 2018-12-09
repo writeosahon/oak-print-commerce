@@ -326,7 +326,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         timeOut: 0,
                                         extendedTimeout: 0,
                                         showCloseButton: true
-                                    }).appendTo($('#home-page .page__content').get(0));
+                                    }).appendTo(document.body);
 
                                     $('#loader-modal').get(0).hide(); // show loader
 
