@@ -91,6 +91,10 @@
     box-shadow: none !important;
     border: 1px #363E7C solid !important;
 }
+.default-ej2-toast * {
+    color: #363E7C !important;
+    background-color: #ffffff !important;
+}
 /** STYLE FOR DEFAULT EJ2 TOAST ENDS **/
 
 /** STYLE FOR APP MAIN PAGE BEGINS **/
