@@ -484,7 +484,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // display toast to show that an error
                                     toast = $('#home-page .page-toast').get(0).ej2_instances[0];
 
-                                    toast.cssClass = 'default-ej2-toast';
+                                    toast.cssClass = 'error-ej2-toast';
                                     toast.content = "Sorry, an error occurred. Refresh to try again";
                                     toast.dataBind();
                                     toast.show();
