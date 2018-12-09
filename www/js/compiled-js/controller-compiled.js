@@ -317,7 +317,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                     // create the ej2 toast component
                                     new ej.notifications.Toast({
-                                        title: '',
                                         content: '',
                                         cssClass: 'default-ej2-toast',
                                         target: document.body,
