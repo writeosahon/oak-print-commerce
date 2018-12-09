@@ -558,24 +558,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 }));
             } // end of loading products with Internet Connection
             else{ // there is no internet connection
-                // load latest products
+                // load latest products from cached data
                 productTypesPromisesArray.push(new Promise(function(resolve, reject){
-                    Promise.resolve($.ajax(
-                        {
-                            url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + "/wp-json/wc/v3/products",
-                            type: "get",
-                            //contentType: "application/x-www-form-urlencoded",
-                            beforeSend: function(jqxhr) {
-                                jqxhr.setRequestHeader("Authorization", "Basic " +
-                                    utopiasoftware[utopiasoftware_app_namespace].accessor);
-                            },
-                            dataType: "json",
-                            timeout: 240000, // wait for 4 minutes before timeout of request
-                            processData: true,
-                            data: {"order": "desc", "orderby": "date", "status": "publish",
-                                "stock_status": "instock", "page": 1, "per_page": 5}
-                        }
-                    )).then(function(productsArray){
+                    Promise.resolve(utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                    loadData("latest-products", utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)).
+                    then(function(cachedProductsData){
+                        return cachedProductsData.products;
+                    }).
+                    then(function(productsArray){
                         $('#home-page #home-latest-design-block').css("opacity", "1"); // hide the "Products" segment
                         // remove the previously slides from the carousel
                         utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.
@@ -613,24 +603,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     });
                 }));
 
-                // load featured products
+                // load featured products from cached data
                 productTypesPromisesArray.push(new Promise(function(resolve, reject){
-                    Promise.resolve($.ajax(
-                        {
-                            url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + "/wp-json/wc/v3/products",
-                            type: "get",
-                            //contentType: "application/x-www-form-urlencoded",
-                            beforeSend: function(jqxhr) {
-                                jqxhr.setRequestHeader("Authorization", "Basic " +
-                                    utopiasoftware[utopiasoftware_app_namespace].accessor);
-                            },
-                            dataType: "json",
-                            timeout: 240000, // wait for 4 minutes before timeout of request
-                            processData: true,
-                            data: {"order": "desc", "orderby": "date", "status": "publish",
-                                "stock_status": "instock", "page": 1, "per_page": 5, "featured": true}
-                        }
-                    )).then(function(productsArray){
+                    Promise.resolve(utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                    loadData("featured-products", utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)).
+                    then(function(cachedProductsData){
+                        return cachedProductsData.products;
+                    }).then(function(productsArray){
                         if(productsArray.length > 0){
                             // show the "Products" segment
                             $('#home-page #home-featured-design-block').css({"opacity": "1", "display": "block"});
@@ -674,24 +653,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     });
                 }));
 
-                // load sales products
+                // load sales products from cached data
                 productTypesPromisesArray.push(new Promise(function(resolve, reject){
-                    Promise.resolve($.ajax(
-                        {
-                            url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + "/wp-json/wc/v3/products",
-                            type: "get",
-                            //contentType: "application/x-www-form-urlencoded",
-                            beforeSend: function(jqxhr) {
-                                jqxhr.setRequestHeader("Authorization", "Basic " +
-                                    utopiasoftware[utopiasoftware_app_namespace].accessor);
-                            },
-                            dataType: "json",
-                            timeout: 240000, // wait for 4 minutes before timeout of request
-                            processData: true,
-                            data: {"order": "desc", "orderby": "date", "status": "publish",
-                                "stock_status": "instock", "page": 1, "per_page": 5, "on_sale": true}
-                        }
-                    )).then(function(productsArray){
+                    Promise.resolve(utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                    loadData("sales-products", utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)).
+                    then(function(cachedProductsData){
+                        return cachedProductsData.products;
+                    }).then(function(productsArray){
                         if(productsArray.length > 0){
                             // show the "Products" segment
                             $('#home-page #home-sales-design-block').css({"opacity": "1", "display": "block"});
