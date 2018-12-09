@@ -187,32 +187,7 @@
 }
 /** ============================================================== **/
 
-#home-page .e-card-image.one {
-    background-image: url('app-images/1-11.jpg');
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
-}
-#home-page .e-card-image.two {
-    background-image: url('app-images/1-12.jpg');
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
-}
-#home-page .e-card-image.three {
-    background-image: url('app-images/1-13.jpg');
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
-}
-#home-page .e-card-image.four {
-    background-image: url('app-images/1-33.jpg');
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
-}
-#home-page .e-card-image.five {
-    background-image: url('app-images/1-12.jpg');
+#home-page .e-card-image {
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;

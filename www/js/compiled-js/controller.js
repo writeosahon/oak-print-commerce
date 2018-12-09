@@ -278,12 +278,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                     $('#loader-modal').get(0).hide(); // show loader
 
-                    // display page preload
+                    // display page preloader
                     $('#home-page .page-preloader').css("display", "block");
 
                     // start loading the page content
-                    utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.loadProducts();
+                    await utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.loadProducts();
 
+                    // hide the preloader
+                    $('#home-page .page-preloader').css("display", "none");
                 }
                 catch(err){
                     console.log("HOME PAGE ERROR", err);
@@ -541,8 +543,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         reject(); // reject the parent promise
                     });
                 }));
-            }
+            } // end of loading products with Internet Connection
 
+            return Promise.all(productTypesPromisesArray); // return a promise which resolves when all promises in the array resolve
         }
 
     },

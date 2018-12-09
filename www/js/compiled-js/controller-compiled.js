@@ -185,152 +185,168 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // listen for the back button event
                                     event.target.onDeviceBackButton = utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.backButtonClicked;
 
-                                    try {
-                                        // create the "New Products" carousel
-                                        newProductsCarousel = new Flickity($('#home-page #home-latest-design-block .row').get(0), {
-                                            // options
-                                            wrapAround: true,
-                                            groupCells: 1,
-                                            cellSelector: '.col-xs-5',
-                                            autoPlay: 3000,
-                                            pauseAutoPlayOnHover: false,
-                                            dragThreshold: 10,
-                                            initialIndex: 0,
-                                            cellAlign: 'left',
-                                            contain: false,
-                                            prevNextButtons: false,
-                                            pageDots: false
-                                        });
+                                    _context2.prev = 4;
 
-                                        newProductsCarousel.on("scroll", function () {
-                                            // check if the carousel object has a timer attached
-                                            if (newProductsCarousel._utopiasoftware_scrollTimer) {
-                                                // there is a timer
-                                                // clear the timer
-                                                window.clearTimeout(newProductsCarousel._utopiasoftware_scrollTimer);
-                                                newProductsCarousel._utopiasoftware_scrollTimer = null;
-                                            }
+                                    // create the "New Products" carousel
+                                    newProductsCarousel = new Flickity($('#home-page #home-latest-design-block .row').get(0), {
+                                        // options
+                                        wrapAround: true,
+                                        groupCells: 1,
+                                        cellSelector: '.col-xs-5',
+                                        autoPlay: 3000,
+                                        pauseAutoPlayOnHover: false,
+                                        dragThreshold: 10,
+                                        initialIndex: 0,
+                                        cellAlign: 'left',
+                                        contain: false,
+                                        prevNextButtons: false,
+                                        pageDots: false
+                                    });
 
-                                            // automatically start the the carousel autoplay
-                                            newProductsCarousel._utopiasoftware_scrollTimer = window.setTimeout(function () {
-                                                newProductsCarousel.playPlayer(); // start carousel autoplay
-                                            }, 0);
-                                        });
-                                        newProductsCarousel.on("staticClick", function (event, pointer, cellElement, cellIndex) {
-                                            // check if it was a cell that was clicked
-                                            if (!cellElement) {
-                                                // it was not a slider cell that was clicked
-                                                // clear the timer
-                                                return;
-                                            }
-                                            // a cell was clicked, so load the product-details page
-                                            $('#app-main-navigator').get(0).pushPage("product-details-page.html", { animation: "lift" });
-                                        });
-                                        // assign the "New Product" carousel to the appropriate object
-                                        utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel = newProductsCarousel;
+                                    newProductsCarousel.on("scroll", function () {
+                                        // check if the carousel object has a timer attached
+                                        if (newProductsCarousel._utopiasoftware_scrollTimer) {
+                                            // there is a timer
+                                            // clear the timer
+                                            window.clearTimeout(newProductsCarousel._utopiasoftware_scrollTimer);
+                                            newProductsCarousel._utopiasoftware_scrollTimer = null;
+                                        }
 
-                                        // create the "Featured Products" carousel
-                                        featuredProductsCarousel = new Flickity($('#home-page #home-featured-design-block .row').get(0), {
-                                            // options
-                                            wrapAround: true,
-                                            groupCells: 1,
-                                            cellSelector: '.col-xs-5',
-                                            autoPlay: 4000,
-                                            pauseAutoPlayOnHover: false,
-                                            dragThreshold: 10,
-                                            initialIndex: 0,
-                                            cellAlign: 'left',
-                                            contain: false,
-                                            prevNextButtons: false,
-                                            pageDots: false
-                                        });
+                                        // automatically start the the carousel autoplay
+                                        newProductsCarousel._utopiasoftware_scrollTimer = window.setTimeout(function () {
+                                            newProductsCarousel.playPlayer(); // start carousel autoplay
+                                        }, 0);
+                                    });
+                                    newProductsCarousel.on("staticClick", function (event, pointer, cellElement, cellIndex) {
+                                        // check if it was a cell that was clicked
+                                        if (!cellElement) {
+                                            // it was not a slider cell that was clicked
+                                            // clear the timer
+                                            return;
+                                        }
+                                        // a cell was clicked, so load the product-details page
+                                        $('#app-main-navigator').get(0).pushPage("product-details-page.html", { animation: "lift" });
+                                    });
+                                    // assign the "New Product" carousel to the appropriate object
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel = newProductsCarousel;
 
-                                        featuredProductsCarousel.on("scroll", function () {
-                                            // check if the carousel object has a timer attached
-                                            if (featuredProductsCarousel._utopiasoftware_scrollTimer) {
-                                                // there is a timer
-                                                // clear the timer
-                                                window.clearTimeout(featuredProductsCarousel._utopiasoftware_scrollTimer);
-                                                featuredProductsCarousel._utopiasoftware_scrollTimer = null;
-                                            }
+                                    // create the "Featured Products" carousel
+                                    featuredProductsCarousel = new Flickity($('#home-page #home-featured-design-block .row').get(0), {
+                                        // options
+                                        wrapAround: true,
+                                        groupCells: 1,
+                                        cellSelector: '.col-xs-5',
+                                        autoPlay: 4000,
+                                        pauseAutoPlayOnHover: false,
+                                        dragThreshold: 10,
+                                        initialIndex: 0,
+                                        cellAlign: 'left',
+                                        contain: false,
+                                        prevNextButtons: false,
+                                        pageDots: false
+                                    });
 
-                                            // automatically start the the carousel autoplay
-                                            featuredProductsCarousel._utopiasoftware_scrollTimer = window.setTimeout(function () {
-                                                featuredProductsCarousel.playPlayer(); // start carousel autoplay
-                                            }, 0);
-                                        });
-                                        featuredProductsCarousel.on("staticClick", function (event, pointer, cellElement, cellIndex) {
-                                            // check if it was a cell that was clicked
-                                            if (!cellElement) {
-                                                // it was not a slider cell that was clicked
-                                                // clear the timer
-                                                return;
-                                            }
-                                            // a cell was clicked, so load the product-details page
-                                            $('#app-main-navigator').get(0).pushPage("product-details-page.html", { animation: "lift" });
-                                        });
-                                        // assign the "Featured Products" carousel to the appropriate object
-                                        utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.featuredProductsCarousel = featuredProductsCarousel;
+                                    featuredProductsCarousel.on("scroll", function () {
+                                        // check if the carousel object has a timer attached
+                                        if (featuredProductsCarousel._utopiasoftware_scrollTimer) {
+                                            // there is a timer
+                                            // clear the timer
+                                            window.clearTimeout(featuredProductsCarousel._utopiasoftware_scrollTimer);
+                                            featuredProductsCarousel._utopiasoftware_scrollTimer = null;
+                                        }
 
-                                        salesProductsCarousel = new Flickity($('#home-page #home-sales-design-block .row').get(0), {
-                                            // options
-                                            wrapAround: true,
-                                            groupCells: 1,
-                                            cellSelector: '.col-xs-5',
-                                            autoPlay: 5000,
-                                            pauseAutoPlayOnHover: false,
-                                            dragThreshold: 10,
-                                            initialIndex: 0,
-                                            cellAlign: 'left',
-                                            contain: false,
-                                            prevNextButtons: false,
-                                            pageDots: false
-                                        });
+                                        // automatically start the the carousel autoplay
+                                        featuredProductsCarousel._utopiasoftware_scrollTimer = window.setTimeout(function () {
+                                            featuredProductsCarousel.playPlayer(); // start carousel autoplay
+                                        }, 0);
+                                    });
+                                    featuredProductsCarousel.on("staticClick", function (event, pointer, cellElement, cellIndex) {
+                                        // check if it was a cell that was clicked
+                                        if (!cellElement) {
+                                            // it was not a slider cell that was clicked
+                                            // clear the timer
+                                            return;
+                                        }
+                                        // a cell was clicked, so load the product-details page
+                                        $('#app-main-navigator').get(0).pushPage("product-details-page.html", { animation: "lift" });
+                                    });
+                                    // assign the "Featured Products" carousel to the appropriate object
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.featuredProductsCarousel = featuredProductsCarousel;
 
-                                        salesProductsCarousel.on("scroll", function () {
-                                            // check if the carousel object has a timer attached
-                                            if (salesProductsCarousel._utopiasoftware_scrollTimer) {
-                                                // there is a timer
-                                                // clear the timer
-                                                window.clearTimeout(salesProductsCarousel._utopiasoftware_scrollTimer);
-                                                salesProductsCarousel._utopiasoftware_scrollTimer = null;
-                                            }
+                                    salesProductsCarousel = new Flickity($('#home-page #home-sales-design-block .row').get(0), {
+                                        // options
+                                        wrapAround: true,
+                                        groupCells: 1,
+                                        cellSelector: '.col-xs-5',
+                                        autoPlay: 5000,
+                                        pauseAutoPlayOnHover: false,
+                                        dragThreshold: 10,
+                                        initialIndex: 0,
+                                        cellAlign: 'left',
+                                        contain: false,
+                                        prevNextButtons: false,
+                                        pageDots: false
+                                    });
 
-                                            // automatically start the the carousel autoplay
-                                            salesProductsCarousel._utopiasoftware_scrollTimer = window.setTimeout(function () {
-                                                salesProductsCarousel.playPlayer(); // start carousel autoplay
-                                            }, 0);
-                                        });
-                                        salesProductsCarousel.on("staticClick", function (event, pointer, cellElement, cellIndex) {
-                                            // check if it was a cell that was clicked
-                                            if (!cellElement) {
-                                                // it was not a slider cell that was clicked
-                                                // clear the timer
-                                                return;
-                                            }
-                                            // a cell was clicked, so load the product-details page
-                                            $('#app-main-navigator').get(0).pushPage("product-details-page.html", { animation: "lift" });
-                                        });
-                                        // assign the "Sales Products" carousel to the appropriate object
-                                        utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.salesProductsCarousel = salesProductsCarousel;
+                                    salesProductsCarousel.on("scroll", function () {
+                                        // check if the carousel object has a timer attached
+                                        if (salesProductsCarousel._utopiasoftware_scrollTimer) {
+                                            // there is a timer
+                                            // clear the timer
+                                            window.clearTimeout(salesProductsCarousel._utopiasoftware_scrollTimer);
+                                            salesProductsCarousel._utopiasoftware_scrollTimer = null;
+                                        }
 
-                                        $('#loader-modal').get(0).hide(); // show loader
+                                        // automatically start the the carousel autoplay
+                                        salesProductsCarousel._utopiasoftware_scrollTimer = window.setTimeout(function () {
+                                            salesProductsCarousel.playPlayer(); // start carousel autoplay
+                                        }, 0);
+                                    });
+                                    salesProductsCarousel.on("staticClick", function (event, pointer, cellElement, cellIndex) {
+                                        // check if it was a cell that was clicked
+                                        if (!cellElement) {
+                                            // it was not a slider cell that was clicked
+                                            // clear the timer
+                                            return;
+                                        }
+                                        // a cell was clicked, so load the product-details page
+                                        $('#app-main-navigator').get(0).pushPage("product-details-page.html", { animation: "lift" });
+                                    });
+                                    // assign the "Sales Products" carousel to the appropriate object
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.salesProductsCarousel = salesProductsCarousel;
 
-                                        // display page preload
-                                        $('#home-page .page-preloader').css("display", "block");
+                                    $('#loader-modal').get(0).hide(); // show loader
 
-                                        // start loading the page content
-                                        utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.loadProducts();
-                                    } catch (err) {
-                                        console.log("HOME PAGE ERROR", err);
-                                    } finally {}
+                                    // display page preloader
+                                    $('#home-page .page-preloader').css("display", "block");
 
-                                case 5:
+                                    // start loading the page content
+                                    _context2.next = 21;
+                                    return utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.loadProducts();
+
+                                case 21:
+
+                                    // hide the preloader
+                                    $('#home-page .page-preloader').css("display", "none");
+                                    _context2.next = 27;
+                                    break;
+
+                                case 24:
+                                    _context2.prev = 24;
+                                    _context2.t0 = _context2['catch'](4);
+
+                                    console.log("HOME PAGE ERROR", _context2.t0);
+
+                                case 27:
+                                    _context2.prev = 27;
+                                    return _context2.finish(27);
+
+                                case 29:
                                 case 'end':
                                     return _context2.stop();
                             }
                         }
-                    }, _callee2, this);
+                    }, _callee2, this, [[4, 24, 27, 29]]);
                 }));
 
                 return function loadPageOnAppReady() {
@@ -529,9 +545,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             reject(); // reject the parent promise
                                         });
                                     }));
-                                }
+                                } // end of loading products with Internet Connection
 
-                            case 2:
+                                return _context4.abrupt('return', Promise.all(productTypesPromisesArray));
+
+                            case 3:
                             case 'end':
                                 return _context4.stop();
                         }
