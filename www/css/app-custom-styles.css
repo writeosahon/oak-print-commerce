@@ -97,6 +97,12 @@
 }
 /** STYLE FOR DEFAULT EJ2 TOAST ENDS **/
 
+/** STYLE FOR DEFAULT PULL-HOOK INDETERMINATE LOADER BEGINS **/
+.progress-circular--pull-hook__primary {
+    stroke: #363E7C;
+}
+/** STYLE FOR DEFAULT PULL-HOOK INDETERMINATE LOADER ENDS **/
+
 /** STYLE FOR APP MAIN PAGE BEGINS **/
 /*#app-main-tab-home {
     background-position: center;
