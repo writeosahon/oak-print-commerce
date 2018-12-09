@@ -86,8 +86,8 @@
 
 /** STYLE FOR DEFAULT EJ2 TOAST BEGINS **/
 .default-ej2-toast {
-    background-color: #363E7C;
-    color: #ffffff;
+    background-color: #363E7C !important;
+    color: #ffffff !important;
 }
 /** STYLE FOR DEFAULT EJ2 TOAST ENDS **/
 
