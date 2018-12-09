@@ -26,6 +26,57 @@ const utopiasoftware = {
          */
         randomisationEngine: Random.engines.browserCrypto,
 
-        accessor: "ZGV2ZWxvcGVyQHNob3BvYWtleGNsdXNpdmUuY29tOk9ha0RldmVsb3BlckAx"
+        accessor: "ZGV2ZWxvcGVyQHNob3BvYWtleGNsdXNpdmUuY29tOk9ha0RldmVsb3BlckAx",
+
+        /**
+         * object is responsible for handling database operations for the app
+         */
+        databaseOperations: {
+
+            /**
+             * method loads the data from the specified app database
+             *
+             * @param docId {String}
+             * @param database {Object}
+             *
+             * @returns {Promise<void>}
+             */
+            async loadData(docId, database){
+
+                try{
+                    // get specified data
+                    return await database.get(docId);
+                }
+                finally{
+                }
+            },
+
+            /**
+             * method is used to save the data into the specified database
+             *
+             * @param saveData
+             * @param database
+             *
+             * @returns {Promise<void>}
+             */
+            async saveData(saveData, database){
+
+                try{
+                    try{
+                        // get the last _rev property that was used to save the data
+                        saveData._rev =
+                            (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                            loadData(saveData._id, database))._rev;
+                    }
+                    catch(err){}
+
+                    // return the game settings data
+                    return await database.put(saveData);
+                }
+                finally{
+                }
+            }
+
+        }
     }
 };

@@ -452,6 +452,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             data: { "order": "desc", "orderby": "date", "status": "publish",
                                                 "stock_status": "instock", "page": 1, "per_page": 5 }
                                         })).then(function (productsArray) {
+                                            // save the retrieved data to app database as cache
+                                            utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData({ _id: "latest-products", docType: "LATEST_PRODUCTS", products: productsArray }, utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
+
                                             $('#home-page #home-latest-design-block').css("opacity", "1"); // hide the "Products" segment
                                             // remove the previously slides from the carousel
                                             utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.remove($('#home-page #home-latest-design-block .row .col-xs-5').get());
@@ -486,6 +489,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                 "stock_status": "instock", "page": 1, "per_page": 5, "featured": true }
                                         })).then(function (productsArray) {
                                             if (productsArray.length > 0) {
+                                                // save the retrieved data to app database as cache
+                                                utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData({ _id: "featured-products", docType: "FEATURED_PRODUCTS", products: productsArray }, utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
                                                 // show the "Products" segment
                                                 $('#home-page #home-featured-design-block').css({ "opacity": "1", "display": "block" });
                                                 // remove the previously slides from the carousel
@@ -524,6 +529,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                 "stock_status": "instock", "page": 1, "per_page": 5, "on_sale": true }
                                         })).then(function (productsArray) {
                                             if (productsArray.length > 0) {
+                                                // save the retrieved data to app database as cache
+                                                utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData({ _id: "sales-products", docType: "SALES_PRODUCTS", products: productsArray }, utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
                                                 // show the "Products" segment
                                                 $('#home-page #home-sales-design-block').css({ "opacity": "1", "display": "block" });
                                                 // remove the previously slides from the carousel
@@ -546,6 +553,117 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         });
                                     }));
                                 } // end of loading products with Internet Connection
+                                else {
+                                        // there is no internet connection
+                                        // load latest products
+                                        productTypesPromisesArray.push(new Promise(function (resolve, reject) {
+                                            Promise.resolve($.ajax({
+                                                url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + "/wp-json/wc/v3/products",
+                                                type: "get",
+                                                //contentType: "application/x-www-form-urlencoded",
+                                                beforeSend: function beforeSend(jqxhr) {
+                                                    jqxhr.setRequestHeader("Authorization", "Basic " + utopiasoftware[utopiasoftware_app_namespace].accessor);
+                                                },
+                                                dataType: "json",
+                                                timeout: 240000, // wait for 4 minutes before timeout of request
+                                                processData: true,
+                                                data: { "order": "desc", "orderby": "date", "status": "publish",
+                                                    "stock_status": "instock", "page": 1, "per_page": 5 }
+                                            })).then(function (productsArray) {
+                                                $('#home-page #home-latest-design-block').css("opacity", "1"); // hide the "Products" segment
+                                                // remove the previously slides from the carousel
+                                                utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.remove($('#home-page #home-latest-design-block .row .col-xs-5').get());
+                                                // attach the products to the page
+                                                for (var index = 0; index < productsArray.length; index++) {
+                                                    var columnContent = '<div class="col-xs-5" style="padding-left: 0.5em; padding-right: 0.5em;">\n                                    <div class="e-card" style="min-height: 34vh;">\n                                        <div class="e-card-image" style="height: 60%; \n                                        background-image: url(\'' + productsArray[index].images[0].src + '\');">\n                                        </div>\n                                        <div class="e-card-header">\n                                            <div class="e-card-header-caption">\n                                                <div class="e-card-sub-title" style="text-align: center; font-size: 14px; text-transform: capitalize">\n                                                    ' + productsArray[index].name + '\n                                                </div>\n                                                <div class="e-card-sub-title" style="text-align: center;">\n                                                &#x20a6;' + kendo.toString(kendo.parseFloat(productsArray[index].price), "n2") + '</div>\n                                            </div>\n                                        </div>\n                                    </div>\n                                </div>';
+                                                    // append the content
+                                                    utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.append($(columnContent));
+                                                }
+                                                $('#home-page #home-latest-design-block').css("opacity", "1"); // show the "Products" segment
+                                                resolve(); // resolve the parent promise
+                                            }).catch(function (err) {
+                                                console.log("LOAD PRODUCT", err);
+                                                $('#home-page #home-latest-design-block').css("opacity", "1"); // show the "Products" segment
+                                                reject(); // reject the parent promise
+                                            });
+                                        }));
+
+                                        // load featured products
+                                        productTypesPromisesArray.push(new Promise(function (resolve, reject) {
+                                            Promise.resolve($.ajax({
+                                                url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + "/wp-json/wc/v3/products",
+                                                type: "get",
+                                                //contentType: "application/x-www-form-urlencoded",
+                                                beforeSend: function beforeSend(jqxhr) {
+                                                    jqxhr.setRequestHeader("Authorization", "Basic " + utopiasoftware[utopiasoftware_app_namespace].accessor);
+                                                },
+                                                dataType: "json",
+                                                timeout: 240000, // wait for 4 minutes before timeout of request
+                                                processData: true,
+                                                data: { "order": "desc", "orderby": "date", "status": "publish",
+                                                    "stock_status": "instock", "page": 1, "per_page": 5, "featured": true }
+                                            })).then(function (productsArray) {
+                                                if (productsArray.length > 0) {
+                                                    // show the "Products" segment
+                                                    $('#home-page #home-featured-design-block').css({ "opacity": "1", "display": "block" });
+                                                    // remove the previously slides from the carousel
+                                                    utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.featuredProductsCarousel.remove($('#home-page #home-featured-design-block .row .col-xs-5').get());
+                                                } else {
+                                                    // hide the "Products" segment
+                                                    $('#home-page #home-featured-design-block').css({ "opacity": "0", "display": "none" });
+                                                }
+
+                                                // attach the products to the page
+                                                for (var index = 0; index < productsArray.length; index++) {
+                                                    var columnContent = '<div class="col-xs-5" style="padding-left: 0.5em; padding-right: 0.5em;">\n                                    <div class="e-card" style="min-height: 34vh;">\n                                        <div class="e-card-image" style="height: 60%; \n                                        background-image: url(\'' + productsArray[index].images[0].src + '\');">\n                                        </div>\n                                        <div class="e-card-header">\n                                            <div class="e-card-header-caption">\n                                                <div class="e-card-sub-title" style="text-align: center; font-size: 14px; text-transform: capitalize">\n                                                    ' + productsArray[index].name + '\n                                                </div>\n                                                <div class="e-card-sub-title" style="text-align: center;">\n                                                &#x20a6;' + kendo.toString(kendo.parseFloat(productsArray[index].price), "n2") + '</div>\n                                            </div>\n                                        </div>\n                                    </div>\n                                </div>';
+                                                    // append the content
+                                                    utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.featuredProductsCarousel.append($(columnContent));
+                                                }
+                                                resolve(); // resolve the parent promise
+                                            }).catch(function (err) {
+                                                console.log("LOAD PRODUCT", err);
+                                                reject(); // reject the parent promise
+                                            });
+                                        }));
+
+                                        // load sales products
+                                        productTypesPromisesArray.push(new Promise(function (resolve, reject) {
+                                            Promise.resolve($.ajax({
+                                                url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + "/wp-json/wc/v3/products",
+                                                type: "get",
+                                                //contentType: "application/x-www-form-urlencoded",
+                                                beforeSend: function beforeSend(jqxhr) {
+                                                    jqxhr.setRequestHeader("Authorization", "Basic " + utopiasoftware[utopiasoftware_app_namespace].accessor);
+                                                },
+                                                dataType: "json",
+                                                timeout: 240000, // wait for 4 minutes before timeout of request
+                                                processData: true,
+                                                data: { "order": "desc", "orderby": "date", "status": "publish",
+                                                    "stock_status": "instock", "page": 1, "per_page": 5, "on_sale": true }
+                                            })).then(function (productsArray) {
+                                                if (productsArray.length > 0) {
+                                                    // show the "Products" segment
+                                                    $('#home-page #home-sales-design-block').css({ "opacity": "1", "display": "block" });
+                                                    // remove the previously slides from the carousel
+                                                    utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.salesProductsCarousel.remove($('#home-page #home-sales-design-block .row .col-xs-5').get());
+                                                } else {
+                                                    // hide the "Products" segment
+                                                    $('#home-page #home-sales-design-block').css({ "opacity": "0", "display": "none" });
+                                                }
+
+                                                // attach the products to the page
+                                                for (var index = 0; index < productsArray.length; index++) {
+                                                    var columnContent = '<div class="col-xs-5" style="padding-left: 0.5em; padding-right: 0.5em;">\n                                    <div class="e-card" style="min-height: 34vh;">\n                                        <div class="e-card-image" style="height: 60%; \n                                        background-image: url(\'' + productsArray[index].images[0].src + '\');">\n                                        </div>\n                                        <div class="e-card-header">\n                                            <div class="e-card-header-caption">\n                                                <div class="e-card-sub-title" style="text-align: center; font-size: 14px; text-transform: capitalize">\n                                                    ' + productsArray[index].name + '\n                                                </div>\n                                                <div class="e-card-sub-title" style="text-align: center; text-decoration: line-through">\n                                                &#x20a6;' + kendo.toString(kendo.parseFloat(productsArray[index].regular_price), "n2") + '\n                                                </div>\n                                                <div class="e-card-sub-title" style="text-align: center;">\n                                                &#x20a6;' + kendo.toString(kendo.parseFloat(productsArray[index].price), "n2") + '\n                                                </div>\n                                                <div class="e-card-sub-title" style="text-align: center;">\n                                                    <span class="e-badge e-badge-danger" style="background-color: transparent; color: #d64113;\n                                                    border: 1px #d64113 solid; font-size: 1em;">\n                                                    ' + Math.ceil(Math.abs(kendo.parseFloat(productsArray[index].price) - kendo.parseFloat(productsArray[index].regular_price)) / kendo.parseFloat(productsArray[index].regular_price) * 100) + '% OFF\n                                                    </span>\n                                                </div>\n                                            </div>\n                                        </div>\n                                    </div>\n                                </div>';
+                                                    // append the content
+                                                    utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.salesProductsCarousel.append($(columnContent));
+                                                }
+                                                resolve(); // resolve the parent promise
+                                            }).catch(function (err) {
+                                                console.log("LOAD PRODUCT", err);
+                                                reject(); // reject the parent promise
+                                            });
+                                        }));
+                                    }
 
                                 return _context4.abrupt('return', Promise.all(productTypesPromisesArray));
 
