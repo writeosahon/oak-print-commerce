@@ -185,7 +185,32 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // listen for the back button event
                                     event.target.onDeviceBackButton = utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.backButtonClicked;
 
-                                    _context2.prev = 4;
+                                    // add method to handle the loading action of the pull-to-refresh widget
+                                    $('#home-page-pull-hook', $thisPage).get(0).onAction = utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.pagePullHookAction;
+
+                                    // register listener for the pull-to-refresh widget
+                                    $('#ome-page-pull-hook', $thisPage).on("changestate", function (event) {
+
+                                        // check the state of the pull-to-refresh widget
+                                        switch (event.originalEvent.state) {
+                                            case 'initial':
+                                                // update the displayed content
+                                                $('#home-page-pull-hook-fab', event.originalEvent.pullHook).html('<ons-icon icon="md-long-arrow-down" size="24px" style="color: #363E7C"></ons-icon>');
+                                                break;
+
+                                            case 'preaction':
+                                                // update the displayed content
+                                                $('#home-page-pull-hook-fab', event.originalEvent.pullHook).html('<ons-icon icon="md-long-arrow-up" size="24px" style="color: #363E7C"></ons-icon>');
+                                                break;
+
+                                            case 'action':
+                                                // update the displayed content
+                                                $('#home-page-pull-hook-fab', event.originalEvent.pullHook).html('<ons-progress-circular indeterminate modifier="pull-hook"></ons-progress-circular>');
+                                                break;
+                                        }
+                                    });
+
+                                    _context2.prev = 6;
 
                                     // create the "New Products" carousel
                                     newProductsCarousel = new Flickity($('#home-page #home-latest-design-block .row').get(0), {
@@ -333,32 +358,32 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     $('#home-page .page-preloader').css("display", "block");
 
                                     // start loading the page content
-                                    _context2.next = 22;
+                                    _context2.next = 24;
                                     return utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.loadProducts();
 
-                                case 22:
+                                case 24:
 
                                     // hide the preloader
                                     $('#home-page .page-preloader').css("display", "none");
-                                    _context2.next = 28;
+                                    _context2.next = 30;
                                     break;
 
-                                case 25:
-                                    _context2.prev = 25;
-                                    _context2.t0 = _context2['catch'](4);
+                                case 27:
+                                    _context2.prev = 27;
+                                    _context2.t0 = _context2['catch'](6);
 
                                     console.log("HOME PAGE ERROR", _context2.t0);
 
-                                case 28:
-                                    _context2.prev = 28;
-                                    return _context2.finish(28);
-
                                 case 30:
+                                    _context2.prev = 30;
+                                    return _context2.finish(30);
+
+                                case 32:
                                 case 'end':
                                     return _context2.stop();
                             }
                         }
-                    }, _callee2, this, [[4, 25, 28, 30]]);
+                    }, _callee2, this, [[6, 27, 30, 32]]);
                 }));
 
                 return function loadPageOnAppReady() {
@@ -413,6 +438,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.featuredProductsCarousel = null;
             utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.salesProductsCarousel.destroy();
             utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.salesProductsCarousel = null;
+            // destroy the ej2 toast component
+            $('#home-page .page-toast').get(0).ej2_instances[0].destroy();
         },
 
         /**
@@ -432,16 +459,69 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
 
         /**
-         * method is used to load all products to the page
+         * method is triggered when the pull-hook on the page is active
          *
+         * @param doneCallBack
          * @returns {Promise<void>}
          */
-        loadProducts: function () {
+        pagePullHookAction: function () {
             var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4() {
-                var productTypesPromisesArray, toast;
+                var doneCallBack = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : function () {};
+                var toast;
                 return regeneratorRuntime.wrap(function _callee4$(_context4) {
                     while (1) {
                         switch (_context4.prev = _context4.next) {
+                            case 0:
+                                // disable pull-to-refresh widget till loading is done
+                                $('#home-page #home-page-pull-hook').attr("disabled", true);
+                                // hide all previously displayed ej2 toast
+                                $('#home-page .page-toast').get(0).ej2_instances[0].hide('All');
+
+                                try {
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.loadProducts();
+                                } catch (err) {
+                                    // an error occurred
+                                    // display toast to show that an error
+                                    toast = $('#home-page .page-toast').get(0).ej2_instances[0];
+
+                                    toast.cssClass = 'default-ej2-toast';
+                                    toast.content = "Sorry, an error occurred. Refresh to try again";
+                                    toast.dataBind();
+                                    toast.show();
+                                } finally {
+                                    // enable pull-to-refresh widget till loading is done
+                                    $('#home-page #home-page-pull-hook').removeAttr("disabled");
+                                    // signal that loading is done
+                                    doneCallBack();
+                                }
+
+                            case 3:
+                            case 'end':
+                                return _context4.stop();
+                        }
+                    }
+                }, _callee4, this);
+            }));
+
+            function pagePullHookAction() {
+                return _ref4.apply(this, arguments);
+            }
+
+            return pagePullHookAction;
+        }(),
+
+
+        /**
+        * method is used to load all products to the page
+        *
+        * @returns {Promise<void>}
+        */
+        loadProducts: function () {
+            var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
+                var productTypesPromisesArray, toast;
+                return regeneratorRuntime.wrap(function _callee5$(_context5) {
+                    while (1) {
+                        switch (_context5.prev = _context5.next) {
                             case 0:
                                 productTypesPromisesArray = []; // holds the array for all the promises of the product types to be loaded
 
@@ -570,7 +650,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         // display toast to show that there is no internet connection
                                         toast = $('#home-page .page-toast').get(0).ej2_instances[0];
 
-                                        toast.content = "No Internet connection. Refresh to see live products";
+                                        toast.cssClass = 'default-ej2-toast';
+                                        toast.content = "No Internet connection. Pull down to refresh and see live products";
                                         toast.dataBind();
                                         toast.show();
                                         // load latest products from cached data
@@ -653,18 +734,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         }));
                                     }
 
-                                return _context4.abrupt('return', Promise.all(productTypesPromisesArray));
+                                return _context5.abrupt('return', Promise.all(productTypesPromisesArray));
 
                             case 3:
                             case 'end':
-                                return _context4.stop();
+                                return _context5.stop();
                         }
                     }
-                }, _callee4, this);
+                }, _callee5, this);
             }));
 
             function loadProducts() {
-                return _ref4.apply(this, arguments);
+                return _ref5.apply(this, arguments);
             }
 
             return loadProducts;
@@ -683,19 +764,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             //function is used to initialise the page if the app is fully ready for execution
             var loadPageOnAppReady = function () {
-                var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
+                var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6() {
                     var accordion;
-                    return regeneratorRuntime.wrap(function _callee5$(_context5) {
+                    return regeneratorRuntime.wrap(function _callee6$(_context6) {
                         while (1) {
-                            switch (_context5.prev = _context5.next) {
+                            switch (_context6.prev = _context6.next) {
                                 case 0:
                                     if (!(!ons.isReady() || utopiasoftware[utopiasoftware_app_namespace].model.isAppReady === false)) {
-                                        _context5.next = 3;
+                                        _context6.next = 3;
                                         break;
                                     }
 
                                     setTimeout(loadPageOnAppReady, 500); // call this function again after half a second
-                                    return _context5.abrupt('return');
+                                    return _context6.abrupt('return');
 
                                 case 3:
 
@@ -710,14 +791,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 case 4:
                                 case 'end':
-                                    return _context5.stop();
+                                    return _context6.stop();
                             }
                         }
-                    }, _callee5, this);
+                    }, _callee6, this);
                 }));
 
                 return function loadPageOnAppReady() {
-                    return _ref5.apply(this, arguments);
+                    return _ref6.apply(this, arguments);
                 };
             }();
 
@@ -738,20 +819,20 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is hidden
          */
         pageHide: function () {
-            var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6() {
-                return regeneratorRuntime.wrap(function _callee6$(_context6) {
+            var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7() {
+                return regeneratorRuntime.wrap(function _callee7$(_context7) {
                     while (1) {
-                        switch (_context6.prev = _context6.next) {
+                        switch (_context7.prev = _context7.next) {
                             case 0:
                             case 'end':
-                                return _context6.stop();
+                                return _context7.stop();
                         }
                     }
-                }, _callee6, this);
+                }, _callee7, this);
             }));
 
             function pageHide() {
-                return _ref6.apply(this, arguments);
+                return _ref7.apply(this, arguments);
             }
 
             return pageHide;
@@ -785,18 +866,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             //function is used to initialise the page if the app is fully ready for execution
             var loadPageOnAppReady = function () {
-                var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7() {
-                    return regeneratorRuntime.wrap(function _callee7$(_context7) {
+                var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8() {
+                    return regeneratorRuntime.wrap(function _callee8$(_context8) {
                         while (1) {
-                            switch (_context7.prev = _context7.next) {
+                            switch (_context8.prev = _context8.next) {
                                 case 0:
                                     if (!(!ons.isReady() || utopiasoftware[utopiasoftware_app_namespace].model.isAppReady === false)) {
-                                        _context7.next = 3;
+                                        _context8.next = 3;
                                         break;
                                     }
 
                                     setTimeout(loadPageOnAppReady, 500); // call this function again after half a second
-                                    return _context7.abrupt('return');
+                                    return _context8.abrupt('return');
 
                                 case 3:
 
@@ -917,14 +998,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 case 16:
                                 case 'end':
-                                    return _context7.stop();
+                                    return _context8.stop();
                             }
                         }
-                    }, _callee7, this);
+                    }, _callee8, this);
                 }));
 
                 return function loadPageOnAppReady() {
-                    return _ref7.apply(this, arguments);
+                    return _ref8.apply(this, arguments);
                 };
             }();
 
@@ -948,10 +1029,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is hidden
          */
         pageHide: function () {
-            var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8() {
-                return regeneratorRuntime.wrap(function _callee8$(_context8) {
+            var _ref9 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9() {
+                return regeneratorRuntime.wrap(function _callee9$(_context9) {
                     while (1) {
-                        switch (_context8.prev = _context8.next) {
+                        switch (_context9.prev = _context9.next) {
                             case 0:
 
                                 // remove listener for when the device keyboard is shown
@@ -975,14 +1056,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 5:
                             case 'end':
-                                return _context8.stop();
+                                return _context9.stop();
                         }
                     }
-                }, _callee8, this);
+                }, _callee9, this);
             }));
 
             function pageHide() {
-                return _ref8.apply(this, arguments);
+                return _ref9.apply(this, arguments);
             }
 
             return pageHide;
@@ -1175,10 +1256,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         signinButtonClicked: function () {
-            var _ref9 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9() {
-                return regeneratorRuntime.wrap(function _callee9$(_context9) {
+            var _ref10 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10() {
+                return regeneratorRuntime.wrap(function _callee10$(_context10) {
                     while (1) {
-                        switch (_context9.prev = _context9.next) {
+                        switch (_context10.prev = _context10.next) {
                             case 0:
 
                                 // run the validation method for the sign-in form
@@ -1186,14 +1267,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 1:
                             case 'end':
-                                return _context9.stop();
+                                return _context10.stop();
                         }
                     }
-                }, _callee9, this);
+                }, _callee10, this);
             }));
 
             function signinButtonClicked() {
-                return _ref9.apply(this, arguments);
+                return _ref10.apply(this, arguments);
             }
 
             return signinButtonClicked;
@@ -1206,10 +1287,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         signupButtonClicked: function () {
-            var _ref10 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10() {
-                return regeneratorRuntime.wrap(function _callee10$(_context10) {
+            var _ref11 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee11() {
+                return regeneratorRuntime.wrap(function _callee11$(_context11) {
                     while (1) {
-                        switch (_context10.prev = _context10.next) {
+                        switch (_context11.prev = _context11.next) {
                             case 0:
 
                                 // run the validation method for the sign-in form
@@ -1217,14 +1298,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 1:
                             case 'end':
-                                return _context10.stop();
+                                return _context11.stop();
                         }
                     }
-                }, _callee10, this);
+                }, _callee11, this);
             }));
 
             function signupButtonClicked() {
-                return _ref10.apply(this, arguments);
+                return _ref11.apply(this, arguments);
             }
 
             return signupButtonClicked;
@@ -1237,32 +1318,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         loginFormValidated: function () {
-            var _ref11 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee11() {
-                return regeneratorRuntime.wrap(function _callee11$(_context11) {
-                    while (1) {
-                        switch (_context11.prev = _context11.next) {
-                            case 0:
-                            case 'end':
-                                return _context11.stop();
-                        }
-                    }
-                }, _callee11, this);
-            }));
-
-            function loginFormValidated() {
-                return _ref11.apply(this, arguments);
-            }
-
-            return loginFormValidated;
-        }(),
-
-
-        /**
-         * method is triggered when the sign up form is successfully validated
-         *
-         * @returns {Promise<void>}
-         */
-        signupFormValidated: function () {
             var _ref12 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee12() {
                 return regeneratorRuntime.wrap(function _callee12$(_context12) {
                     while (1) {
@@ -1275,8 +1330,34 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 }, _callee12, this);
             }));
 
-            function signupFormValidated() {
+            function loginFormValidated() {
                 return _ref12.apply(this, arguments);
+            }
+
+            return loginFormValidated;
+        }(),
+
+
+        /**
+         * method is triggered when the sign up form is successfully validated
+         *
+         * @returns {Promise<void>}
+         */
+        signupFormValidated: function () {
+            var _ref13 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee13() {
+                return regeneratorRuntime.wrap(function _callee13$(_context13) {
+                    while (1) {
+                        switch (_context13.prev = _context13.next) {
+                            case 0:
+                            case 'end':
+                                return _context13.stop();
+                        }
+                    }
+                }, _callee13, this);
+            }));
+
+            function signupFormValidated() {
+                return _ref13.apply(this, arguments);
             }
 
             return signupFormValidated;
@@ -1295,18 +1376,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             //function is used to initialise the page if the app is fully ready for execution
             var loadPageOnAppReady = function () {
-                var _ref13 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee13() {
-                    return regeneratorRuntime.wrap(function _callee13$(_context13) {
+                var _ref14 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee14() {
+                    return regeneratorRuntime.wrap(function _callee14$(_context14) {
                         while (1) {
-                            switch (_context13.prev = _context13.next) {
+                            switch (_context14.prev = _context14.next) {
                                 case 0:
                                     if (!(!ons.isReady() || utopiasoftware[utopiasoftware_app_namespace].model.isAppReady === false)) {
-                                        _context13.next = 3;
+                                        _context14.next = 3;
                                         break;
                                     }
 
                                     setTimeout(loadPageOnAppReady, 500); // call this function again after half a second
-                                    return _context13.abrupt('return');
+                                    return _context14.abrupt('return');
 
                                 case 3:
 
@@ -1340,14 +1421,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 case 6:
                                 case 'end':
-                                    return _context13.stop();
+                                    return _context14.stop();
                             }
                         }
-                    }, _callee13, this);
+                    }, _callee14, this);
                 }));
 
                 return function loadPageOnAppReady() {
-                    return _ref13.apply(this, arguments);
+                    return _ref14.apply(this, arguments);
                 };
             }();
 
@@ -1369,20 +1450,20 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is hidden
          */
         pageHide: function () {
-            var _ref14 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee14() {
-                return regeneratorRuntime.wrap(function _callee14$(_context14) {
+            var _ref15 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee15() {
+                return regeneratorRuntime.wrap(function _callee15$(_context15) {
                     while (1) {
-                        switch (_context14.prev = _context14.next) {
+                        switch (_context15.prev = _context15.next) {
                             case 0:
                             case 'end':
-                                return _context14.stop();
+                                return _context15.stop();
                         }
                     }
-                }, _callee14, this);
+                }, _callee15, this);
             }));
 
             function pageHide() {
-                return _ref14.apply(this, arguments);
+                return _ref15.apply(this, arguments);
             }
 
             return pageHide;
@@ -1406,19 +1487,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             //function is used to initialise the page if the app is fully ready for execution
             var loadPageOnAppReady = function () {
-                var _ref15 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee15() {
+                var _ref16 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee16() {
                     var addToCartButton, customiseProductButton, wishListButton, compareButton, reviewButton, shareButton;
-                    return regeneratorRuntime.wrap(function _callee15$(_context15) {
+                    return regeneratorRuntime.wrap(function _callee16$(_context16) {
                         while (1) {
-                            switch (_context15.prev = _context15.next) {
+                            switch (_context16.prev = _context16.next) {
                                 case 0:
                                     if (!(!ons.isReady() || utopiasoftware[utopiasoftware_app_namespace].model.isAppReady === false)) {
-                                        _context15.next = 3;
+                                        _context16.next = 3;
                                         break;
                                     }
 
                                     setTimeout(loadPageOnAppReady, 500); // call this function again after half a second
-                                    return _context15.abrupt('return');
+                                    return _context16.abrupt('return');
 
                                 case 3:
 
@@ -1475,14 +1556,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 case 5:
                                 case 'end':
-                                    return _context15.stop();
+                                    return _context16.stop();
                             }
                         }
-                    }, _callee15, this);
+                    }, _callee16, this);
                 }));
 
                 return function loadPageOnAppReady() {
-                    return _ref15.apply(this, arguments);
+                    return _ref16.apply(this, arguments);
                 };
             }();
 
@@ -1503,20 +1584,20 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is hidden
          */
         pageHide: function () {
-            var _ref16 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee16() {
-                return regeneratorRuntime.wrap(function _callee16$(_context16) {
+            var _ref17 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee17() {
+                return regeneratorRuntime.wrap(function _callee17$(_context17) {
                     while (1) {
-                        switch (_context16.prev = _context16.next) {
+                        switch (_context17.prev = _context17.next) {
                             case 0:
                             case 'end':
-                                return _context16.stop();
+                                return _context17.stop();
                         }
                     }
-                }, _callee16, this);
+                }, _callee17, this);
             }));
 
             function pageHide() {
-                return _ref16.apply(this, arguments);
+                return _ref17.apply(this, arguments);
             }
 
             return pageHide;

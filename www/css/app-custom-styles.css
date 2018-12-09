@@ -84,7 +84,7 @@
 }
 /** STYLE FOR LOADER MODAL ENDS **/
 
-/** STYLE FOR DEFAULT EJ2 TOAST BEGINS **/
+/** STYLE FOR EJ2 TOAST BEGINS **/
 .default-ej2-toast {
     color: #363E7C !important;
     background-color: #ffffff !important;
@@ -95,7 +95,18 @@
     color: #363E7C !important;
     background-color: #ffffff !important;
 }
-/** STYLE FOR DEFAULT EJ2 TOAST ENDS **/
+.error-ej2-toast {
+    color: #363E7C !important;
+    background-color: #ffffff !important;
+    box-shadow: none !important;
+    border: 1px #363E7C solid !important;
+}
+.error-ej2-toast * {
+    color: #363E7C !important;
+    background-color: #ffffff !important;
+}
+
+/** STYLE FOR EJ2 TOAST ENDS **/
 
 /** STYLE FOR DEFAULT PULL-HOOK INDETERMINATE LOADER BEGINS **/
 .progress-circular--pull-hook__primary {

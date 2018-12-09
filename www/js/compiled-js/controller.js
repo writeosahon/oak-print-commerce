@@ -153,6 +153,35 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 event.target.onDeviceBackButton =
                     utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.backButtonClicked;
 
+                // add method to handle the loading action of the pull-to-refresh widget
+                $('#home-page-pull-hook', $thisPage).get(0).onAction =
+                    utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.pagePullHookAction;
+
+                // register listener for the pull-to-refresh widget
+                $('#ome-page-pull-hook', $thisPage).on("changestate", function(event){
+
+                    // check the state of the pull-to-refresh widget
+                    switch (event.originalEvent.state){
+                        case 'initial':
+                            // update the displayed content
+                            $('#home-page-pull-hook-fab', event.originalEvent.pullHook).
+                            html('<ons-icon icon="md-long-arrow-down" size="24px" style="color: #363E7C"></ons-icon>');
+                            break;
+
+                        case 'preaction':
+                            // update the displayed content
+                            $('#home-page-pull-hook-fab', event.originalEvent.pullHook).
+                            html('<ons-icon icon="md-long-arrow-up" size="24px" style="color: #363E7C"></ons-icon>');
+                            break;
+
+                        case 'action':
+                            // update the displayed content
+                            $('#home-page-pull-hook-fab', event.originalEvent.pullHook).
+                            html('<ons-progress-circular indeterminate modifier="pull-hook"></ons-progress-circular>');
+                            break;
+                    }
+                });
+
                 try{
                     // create the "New Products" carousel
                     let newProductsCarousel = new Flickity($('#home-page #home-latest-design-block .row').get(0), {
@@ -340,6 +369,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 salesProductsCarousel.destroy();
             utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.
                 salesProductsCarousel = null;
+            // destroy the ej2 toast component
+            $('#home-page .page-toast').get(0).ej2_instances[0].destroy();
         },
 
         /**
@@ -359,6 +390,37 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         },
 
         /**
+         * method is triggered when the pull-hook on the page is active
+         *
+         * @param doneCallBack
+         * @returns {Promise<void>}
+         */
+        async pagePullHookAction(doneCallBack = function(){}){
+            // disable pull-to-refresh widget till loading is done
+            $('#home-page #home-page-pull-hook').attr("disabled", true);
+            // hide all previously displayed ej2 toast
+            $('#home-page .page-toast').get(0).ej2_instances[0].hide('All');
+
+            try{
+                utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.loadProducts();
+            }
+            catch(err){ // an error occurred
+                // display toast to show that an error
+                let toast = $('#home-page .page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'default-ej2-toast';
+                toast.content = "Sorry, an error occurred. Refresh to try again";
+                toast.dataBind();
+                toast.show();
+            }
+            finally{
+                // enable pull-to-refresh widget till loading is done
+                $('#home-page #home-page-pull-hook').removeAttr("disabled");
+                // signal that loading is done
+                doneCallBack();
+            }
+        },
+
+            /**
          * method is used to load all products to the page
          *
          * @returns {Promise<void>}
@@ -573,7 +635,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             else{ // there is no internet connection
                 // display toast to show that there is no internet connection
                 let toast = $('#home-page .page-toast').get(0).ej2_instances[0];
-                toast.content = "No Internet connection. Refresh to see live products";
+                toast.cssClass = 'default-ej2-toast';
+                toast.content = "No Internet connection. Pull down to refresh and see live products";
                 toast.dataBind();
                 toast.show();
                 // load latest products from cached data
