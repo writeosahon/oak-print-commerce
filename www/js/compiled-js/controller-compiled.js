@@ -569,7 +569,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 else {
                                         // there is no internet connection
                                         // display toast to show that there is no internet connection
-                                        toast = $('#home-page .page__content').get(0).ej2_instances[0];
+                                        toast = document.body.ej2_instances[0];
 
                                         toast.content = "No Internet connection. Refresh to see live products";
                                         toast.dataBind();
