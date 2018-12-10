@@ -558,7 +558,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             dataType: "json",
                                             timeout: 240000, // wait for 4 minutes before timeout of request
                                             processData: true,
-                                            data: { "order": "desc", "orderby": "date", "status": "publishd",
+                                            data: { "order": "desc", "orderby": "date", "status": "publish",
                                                 "stock_status": "instock", "page": 1, "per_page": 5 }
                                         })).then(function (productsArray) {
                                             // save the retrieved data to app database as cache
@@ -595,7 +595,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             timeout: 240000, // wait for 4 minutes before timeout of request
                                             processData: true,
                                             data: { "order": "desc", "orderby": "date", "status": "publish",
-                                                "stock_status": "instock", "page": 1000, "per_page": 5, "featured": true }
+                                                "stock_status": "instock", "page": 1, "per_page": 5, "featured": true }
                                         })).then(function (productsArray) {
                                             if (productsArray.length > 0) {
                                                 // save the retrieved data to app database as cache
