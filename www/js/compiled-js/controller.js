@@ -329,7 +329,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     $('#home-page .page-preloader').css("display", "none");
                 }
                 catch(err){
-                    console.log("HOME PAGE ERROR", err);
+                    // hide all previously displayed ej2 toast
+                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                    // display toast to show that an error
+                    let toast = $('.page-toast').get(0).ej2_instances[0];
+                    toast.cssClass = 'error-ej2-toast';
+                    toast.content = "Sorry, an error occurred. Pull down to refresh and try again";
+                    toast.dataBind();
+                    toast.show();
                 }
                 finally {
                 }
@@ -402,7 +409,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 await utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.loadProducts();
             }
             catch(err){ // an error occurred
-                // display toast to show that an error
+                // display toast to show that error
                 let toast = $('.page-toast').get(0).ej2_instances[0];
                 toast.cssClass = 'error-ej2-toast';
                 toast.content = "Sorry, an error occurred. Refresh to try again";
@@ -441,7 +448,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             dataType: "json",
                             timeout: 240000, // wait for 4 minutes before timeout of request
                             processData: true,
-                            data: {"order": "desc", "orderby": "date", "status": "publish",
+                            data: {"order": "desc", "orderby": "date", "status": "publishd",
                             "stock_status": "instock", "page": 1, "per_page": 5}
                         }
                     )).then(function(productsArray){
@@ -502,7 +509,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             timeout: 240000, // wait for 4 minutes before timeout of request
                             processData: true,
                             data: {"order": "desc", "orderby": "date", "status": "publish",
-                                "stock_status": "instock", "page": 1, "per_page": 5, "featured": true}
+                                "stock_status": "instock", "page": 1000, "per_page": 5, "featured": true}
                         }
                     )).then(function(productsArray){
                         if(productsArray.length > 0){

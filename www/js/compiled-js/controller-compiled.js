@@ -179,7 +179,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             //function is used to initialise the page if the app is fully ready for execution
             var loadPageOnAppReady = function () {
                 var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-                    var newProductsCarousel, featuredProductsCarousel, salesProductsCarousel;
+                    var newProductsCarousel, featuredProductsCarousel, salesProductsCarousel, toast;
                     return regeneratorRuntime.wrap(function _callee2$(_context2) {
                         while (1) {
                             switch (_context2.prev = _context2.next) {
@@ -365,25 +365,33 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                     // hide the preloader
                                     $('#home-page .page-preloader').css("display", "none");
-                                    _context2.next = 29;
+                                    _context2.next = 34;
                                     break;
 
                                 case 26:
                                     _context2.prev = 26;
                                     _context2.t0 = _context2['catch'](6);
 
-                                    console.log("HOME PAGE ERROR", _context2.t0);
+                                    // hide all previously displayed ej2 toast
+                                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                                    // display toast to show that an error
+                                    toast = $('.page-toast').get(0).ej2_instances[0];
 
-                                case 29:
-                                    _context2.prev = 29;
-                                    return _context2.finish(29);
+                                    toast.cssClass = 'error-ej2-toast';
+                                    toast.content = "Sorry, an error occurred. Pull down to refresh and try again";
+                                    toast.dataBind();
+                                    toast.show();
 
-                                case 31:
+                                case 34:
+                                    _context2.prev = 34;
+                                    return _context2.finish(34);
+
+                                case 36:
                                 case 'end':
                                     return _context2.stop();
                             }
                         }
-                    }, _callee2, this, [[6, 26, 29, 31]]);
+                    }, _callee2, this, [[6, 26, 34, 36]]);
                 }));
 
                 return function loadPageOnAppReady() {
@@ -487,7 +495,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 _context4.prev = 7;
                                 _context4.t0 = _context4['catch'](2);
                                 // an error occurred
-                                // display toast to show that an error
+                                // display toast to show that error
                                 toast = $('.page-toast').get(0).ej2_instances[0];
 
                                 toast.cssClass = 'error-ej2-toast';
@@ -550,7 +558,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             dataType: "json",
                                             timeout: 240000, // wait for 4 minutes before timeout of request
                                             processData: true,
-                                            data: { "order": "desc", "orderby": "date", "status": "publish",
+                                            data: { "order": "desc", "orderby": "date", "status": "publishd",
                                                 "stock_status": "instock", "page": 1, "per_page": 5 }
                                         })).then(function (productsArray) {
                                             // save the retrieved data to app database as cache
@@ -587,7 +595,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             timeout: 240000, // wait for 4 minutes before timeout of request
                                             processData: true,
                                             data: { "order": "desc", "orderby": "date", "status": "publish",
-                                                "stock_status": "instock", "page": 1, "per_page": 5, "featured": true }
+                                                "stock_status": "instock", "page": 1000, "per_page": 5, "featured": true }
                                         })).then(function (productsArray) {
                                             if (productsArray.length > 0) {
                                                 // save the retrieved data to app database as cache
