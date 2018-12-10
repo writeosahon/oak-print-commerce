@@ -841,6 +841,268 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
     },
 
     /**
+     * this is the view-model/controller for the Categories page
+     */
+    categoriesPageViewModel: {
+
+        /**
+         * property holds the current "page" of the categories being accessed
+         */
+        currentPage: 0,
+
+        /**
+         * property holds the size i.e. number of items that can be contained in currentPage being accessed
+         */
+        pageSize: 20,
+
+        /**
+         * event is triggered when page is initialised
+         */
+        pageInit: function(event){
+
+            var $thisPage = $(event.target); // get the current page shown
+
+            // call the function used to initialise the app page if the app is fully loaded
+            loadPageOnAppReady();
+
+            //function is used to initialise the page if the app is fully ready for execution
+            async function loadPageOnAppReady() {
+                // check to see if onsen is ready and if all app loading has been completed
+                if (!ons.isReady() || utopiasoftware[utopiasoftware_app_namespace].model.isAppReady === false) {
+                    setTimeout(loadPageOnAppReady, 500); // call this function again after half a second
+                    return;
+                }
+
+                // listen for the back button event
+                event.target.onDeviceBackButton =
+                    utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.backButtonClicked;
+
+                // add method to handle the loading action of the pull-to-refresh widget
+                $('#categories-page-pull-hook', $thisPage).get(0).onAction =
+                    utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.pagePullHookAction;
+
+                // register listener for the pull-to-refresh widget
+                $('#categories-page-pull-hook', $thisPage).on("changestate", function(event){
+
+                    // check the state of the pull-to-refresh widget
+                    switch (event.originalEvent.state){
+                        case 'initial':
+                            // update the displayed content
+                            $('#categories-page-pull-hook-fab', event.originalEvent.pullHook).
+                            html('<ons-icon icon="md-long-arrow-down" size="24px" style="color: #363E7C"></ons-icon>');
+                            break;
+
+                        case 'preaction':
+                            // update the displayed content
+                            $('#categories-page-pull-hook-fab', event.originalEvent.pullHook).
+                            html('<ons-icon icon="md-long-arrow-up" size="24px" style="color: #363E7C"></ons-icon>');
+                            break;
+
+                        case 'action':
+                            // update the displayed content
+                            $('#categories-page-pull-hook-fab', event.originalEvent.pullHook).
+                            html('<ons-progress-circular indeterminate modifier="pull-hook"></ons-progress-circular>');
+                            break;
+                    }
+                });
+
+                try{
+
+                    // start loading the page content
+                    await utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.loadCategories();
+
+                    // hide the preloader
+                    $('#categories-page .page-preloader').css("display", "none");
+                }
+                catch(err){
+                    // hide all previously displayed ej2 toast
+                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                    // display toast to show that an error
+                    let toast = $('.page-toast').get(0).ej2_instances[0];
+                    toast.cssClass = 'error-ej2-toast';
+                    toast.content = `Sorry, an error occurred.${navigator.connection.type === Connection.NONE ? " Connect to the Internet." : ""} Pull down to refresh and try again`;
+                    toast.dataBind();
+                    toast.show();
+                }
+                finally {
+                }
+            }
+
+        },
+
+        /**
+         * method is triggered when page is shown
+         */
+        pageShow: function(){
+            window.SoftInputMode.set('adjustPan');
+
+            // listen for when the device does not have Internet connection
+            document.addEventListener("offline",
+                utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.deviceOfflineListener, false);
+            // listen for when the device has Internet connection
+            document.addEventListener("online",
+                utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.deviceOnlineListener, false);
+        },
+
+
+        /**
+         * method is triggered when page is hidden
+         */
+        pageHide: async function(){
+
+            // remove listener for when the device does not have Internet connection
+            document.removeEventListener("offline",
+                utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.deviceOfflineListener, false);
+            // remove listener for when the device has Internet connection
+            document.removeEventListener("online",
+                utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.deviceOnlineListener, false);
+        },
+
+        /**
+         * method is triggered when page is destroyed
+         */
+        pageDestroy: function(){
+
+        },
+
+        /**
+         * method is triggered when the device back button is clicked OR a similar action is triggered
+         */
+        backButtonClicked(){
+            // go to the "Home" page (tab)
+            $('#app-main-tabbar').get(0).setActiveTab(0);
+        },
+
+        /**
+         * method is triggered whenever the user's device is offline
+         */
+        deviceOfflineListener(){
+            // display toast to show that there is no internet connection
+            let toast = $('.page-toast').get(0).ej2_instances[0];
+            toast.hide('All'); // hide all previously displayed ej2 toast
+            toast.cssClass = 'default-ej2-toast';
+            toast.content = "No Internet connection. Connect to the Internet to see updated categories";
+            toast.dataBind();
+            toast.show();// show ej2 toast
+        },
+
+        /**
+         * method is triggered whenever the user's device is online
+         */
+        deviceOnlineListener(){
+            // hide all previously displayed ej2 toast
+            $('.page-toast').get(0).ej2_instances[0].hide('All');
+        },
+
+        /**
+         * method is triggered when the pull-hook on the page is active
+         *
+         * @param doneCallBack
+         * @returns {Promise<void>}
+         */
+        async pagePullHookAction(doneCallBack = function(){}){
+            // disable pull-to-refresh widget till loading is done
+            $('#categories-page #categories-page-pull-hook').attr("disabled", true);
+            // hide all previously displayed ej2 toast
+            $('.page-toast').get(0).ej2_instances[0].hide('All');
+
+            try{
+                await utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.loadCategories();
+            }
+            catch(err){ // an error occurred
+                // display toast to show that error
+                let toast = $('.page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.content = "Sorry, an error occurred. Refresh to try again";
+                toast.dataBind();
+                toast.show();
+            }
+            finally{
+                // enable pull-to-refresh widget till loading is done
+                $('#categories-page #categories-page-pull-hook').removeAttr("disabled");
+                // signal that loading is done
+                doneCallBack();
+            }
+        },
+
+        /**
+         * method is used to load products categories to the page
+         *
+         * @returns {Promise<void>}
+         */
+        async loadCategories(pageToAccess = utopiasoftware[utopiasoftware_app_namespace].
+                                            controller.categoriesPageViewModel.currentPage + 1,
+                             pageSize = utopiasoftware[utopiasoftware_app_namespace].
+                                        controller.categoriesPageViewModel.pageSize){
+            var categoryPromisesArray = []; // holds the array for the promises used to load the product categories
+
+            // check if there is internet connection or not
+            if(navigator.connection.type !== Connection.NONE){ // there is internet connection
+                // load the requested categories list from the server
+                categoryPromisesArray.push(new Promise(function(resolve, reject){
+                    Promise.resolve($.ajax(
+                        {
+                            url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + "/wp-json/wc/v3/products/categories",
+                            type: "get",
+                            //contentType: "application/x-www-form-urlencoded",
+                            beforeSend: function(jqxhr) {
+                                jqxhr.setRequestHeader("Authorization", "Basic " +
+                                    utopiasoftware[utopiasoftware_app_namespace].accessor);
+                            },
+                            dataType: "json",
+                            timeout: 240000, // wait for 4 minutes before timeout of request
+                            processData: true,
+                            data: {"order": "asc", "orderby": "name", "hide_empty": "true",
+                                "page": pageToAccess, "per_page": pageSize}
+                        }
+                    )).then(function(categoriesArray){
+                        // check if there is any data to cache in the app database
+                        if(categoriesArray.length > 0){ // there is data to cache
+                            // generate an id for the data being cached
+                            let cachedDataId = ("" + pageToAccess).padStart(7, "0");
+                            // save the retrieved data to app database as cached data
+                            utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
+                                {_id: cachedDataId, docType: "PRODUCT_CATEGORIES", categories: categoriesArray},
+                                utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
+                        }
+                        resolve(categoriesArray); // resolve the parent promise with the data gotten from the server
+
+                    }).catch(function(err){ // an error occurred
+                        console.log("LOAD CATEGORY", err);
+                        reject(err); // reject the parent promise with the error
+                    });
+                }));
+
+            } // end of loading product categories with Internet Connection
+            else{ // there is no internet connection
+                // display toast to show that there is no internet connection
+                let toast = $('.page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'default-ej2-toast';
+                toast.content = "No Internet connection. Pull down to refresh and see updated categories";
+                toast.dataBind();
+                toast.show();
+                // load the requested product categories from cached data
+                categoryPromisesArray.push(new Promise(function(resolve, reject){
+                    // generate the id for the cached data being retrieved
+                    let cachedDataId = ("" + pageToAccess).padStart(7, "0");
+                    Promise.resolve(utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                    loadData(cachedDataId, utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)).
+                    then(function(cachedCategoriesData){
+                        resolve(cachedCategoriesData.categories); // resolve the parent promise with the cached categories data
+                    }).
+                    catch(function(err){ // an error occurred
+                        console.log("LOAD CATEGORY", err);
+                        reject(); // reject the parent promise with the error
+                    });
+                }));
+            }
+
+            return Promise.all(categoryPromisesArray); // return a promise which resolves when all promises in the array resolve
+        }
+
+    },
+
+    /**
      * this is the view-model/controller for the Account page
      */
     accountPageViewModel: {
