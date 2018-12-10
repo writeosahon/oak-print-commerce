@@ -38,6 +38,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             $('#loader-modal-message').html("Loading App...");
                             $('#loader-modal').get(0).show(); // show loader
 
+                            // create the ej2 toast component for the app
+                            new ej.notifications.Toast({
+                                content: '',
+                                cssClass: 'default-ej2-toast',
+                                target: document.body,
+                                position: { X: "Center", Y: "Bottom" },
+                                width: "100%",
+                                timeOut: 0,
+                                extendedTimeout: 0,
+                                showCloseButton: true
+                            }).appendTo($('.page-toast').get(0));
+
                             if (true) {
                                 // there is a previous logged in user
                                 // load the app main page
@@ -54,7 +66,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 screen.orientation.lock('portrait');
                             } catch (err) {}
 
-                            _context.prev = 5;
+                            _context.prev = 6;
                             // START ALL THE CORDOVA PLUGINS CONFIGURATION WHICH REQUIRE PROMISE SYNTAX
 
                             // create the pouchdb app database
@@ -73,30 +85,30 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             // generate a password for encrypting the app database (if it does NOT already exist)
                             secureKey = null;
-                            _context.prev = 9;
-                            _context.next = 12;
+                            _context.prev = 10;
+                            _context.next = 13;
                             return new Promise(function (resolve, reject) {
                                 NativeStorage.getItem("utopiasoftware-oak-print-service-secure-key", resolve, reject);
                             });
 
-                        case 12:
+                        case 13:
                             secureKey = _context.sent;
-                            _context.next = 20;
+                            _context.next = 21;
                             break;
 
-                        case 15:
-                            _context.prev = 15;
-                            _context.t0 = _context['catch'](9);
-                            _context.next = 19;
+                        case 16:
+                            _context.prev = 16;
+                            _context.t0 = _context['catch'](10);
+                            _context.next = 20;
                             return new Promise(function (resolve, reject) {
                                 NativeStorage.setItem("utopiasoftware-oak-print-service-secure-key", { password: Random.uuid4(utopiasoftware[utopiasoftware_app_namespace].randomisationEngine) }, resolve, reject);
                             });
 
-                        case 19:
+                        case 20:
                             secureKey = _context.sent;
 
-                        case 20:
-                            _context.next = 22;
+                        case 21:
+                            _context.next = 23;
                             return new Promise(function (resolve, reject) {
                                 utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase.crypto(secureKey.password, {
                                     ignore: ['_attachments', '_deleted'],
@@ -111,31 +123,31 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     } });
                             });
 
-                        case 22:
-                            _context.next = 27;
+                        case 23:
+                            _context.next = 28;
                             break;
 
-                        case 24:
-                            _context.prev = 24;
-                            _context.t1 = _context['catch'](5);
+                        case 25:
+                            _context.prev = 25;
+                            _context.t1 = _context['catch'](6);
 
                             console.log("APP LOADING ERROR", _context.t1);
 
-                        case 27:
-                            _context.prev = 27;
+                        case 28:
+                            _context.prev = 28;
 
                             // set status bar color
                             StatusBar.backgroundColorByHexString("#363E7C");
                             navigator.splashscreen.hide(); // hide the splashscreen
                             utopiasoftware[utopiasoftware_app_namespace].model.isAppReady = true; // flag that app is fully loaded and ready
-                            return _context.finish(27);
+                            return _context.finish(28);
 
-                        case 32:
+                        case 33:
                         case 'end':
                             return _context.stop();
                     }
                 }
-            }, _callee, this, [[5, 24, 27, 32], [9, 15]]);
+            }, _callee, this, [[6, 25, 28, 33], [10, 16]]);
         }))); // end of ons.ready()
     },
 

@@ -29,6 +29,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             $('#loader-modal-message').html("Loading App...");
             $('#loader-modal').get(0).show(); // show loader
 
+            // create the ej2 toast component for the app
+            new ej.notifications.Toast({
+                content: '',
+                cssClass: 'default-ej2-toast',
+                target: document.body,
+                position: {X: "Center",  Y: "Bottom"},
+                width: "100%",
+                timeOut: 0,
+                extendedTimeout: 0,
+                showCloseButton: true
+            }).appendTo($('.page-toast').get(0));
+
             if(true){ // there is a previous logged in user
                 // load the app main page
                 $('ons-splitter').get(0).content.load("app-main-template");
