@@ -340,50 +340,38 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // assign the "Sales Products" carousel to the appropriate object
                                     utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.salesProductsCarousel = salesProductsCarousel;
 
-                                    // create the ej2 toast component
-                                    new ej.notifications.Toast({
-                                        content: '',
-                                        cssClass: 'default-ej2-toast',
-                                        target: document.body,
-                                        position: { X: "Center", Y: "Bottom" },
-                                        width: "100%",
-                                        timeOut: 0,
-                                        extendedTimeout: 0,
-                                        showCloseButton: true
-                                    }).appendTo($('#home-page .page-toast').get(0));
-
                                     $('#loader-modal').get(0).hide(); // show loader
 
                                     // display page preloader
                                     $('#home-page .page-preloader').css("display", "block");
 
                                     // start loading the page content
-                                    _context2.next = 24;
+                                    _context2.next = 23;
                                     return utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.loadProducts();
 
-                                case 24:
+                                case 23:
 
                                     // hide the preloader
                                     $('#home-page .page-preloader').css("display", "none");
-                                    _context2.next = 30;
+                                    _context2.next = 29;
                                     break;
 
-                                case 27:
-                                    _context2.prev = 27;
+                                case 26:
+                                    _context2.prev = 26;
                                     _context2.t0 = _context2['catch'](6);
 
                                     console.log("HOME PAGE ERROR", _context2.t0);
 
-                                case 30:
-                                    _context2.prev = 30;
-                                    return _context2.finish(30);
+                                case 29:
+                                    _context2.prev = 29;
+                                    return _context2.finish(29);
 
-                                case 32:
+                                case 31:
                                 case 'end':
                                     return _context2.stop();
                             }
                         }
-                    }, _callee2, this, [[6, 27, 30, 32]]);
+                    }, _callee2, this, [[6, 26, 29, 31]]);
                 }));
 
                 return function loadPageOnAppReady() {
@@ -438,8 +426,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.featuredProductsCarousel = null;
             utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.salesProductsCarousel.destroy();
             utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.salesProductsCarousel = null;
-            // destroy the ej2 toast component
-            $('#home-page .page-toast').get(0).ej2_instances[0].destroy();
         },
 
         /**
@@ -475,7 +461,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 // disable pull-to-refresh widget till loading is done
                                 $('#home-page #home-page-pull-hook').attr("disabled", true);
                                 // hide all previously displayed ej2 toast
-                                $('#home-page .page-toast').get(0).ej2_instances[0].hide('All');
+                                $('.page-toast').get(0).ej2_instances[0].hide('All');
 
                                 _context4.prev = 2;
                                 _context4.next = 5;
@@ -490,7 +476,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 _context4.t0 = _context4['catch'](2);
                                 // an error occurred
                                 // display toast to show that an error
-                                toast = $('#home-page .page-toast').get(0).ej2_instances[0];
+                                toast = $('.page-toast').get(0).ej2_instances[0];
 
                                 toast.cssClass = 'error-ej2-toast';
                                 toast.content = "Sorry, an error occurred. Refresh to try again";
@@ -659,7 +645,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 else {
                                         // there is no internet connection
                                         // display toast to show that there is no internet connection
-                                        toast = $('#home-page .page-toast').get(0).ej2_instances[0];
+                                        toast = $('.page-toast').get(0).ej2_instances[0];
 
                                         toast.cssClass = 'default-ej2-toast';
                                         toast.content = "No Internet connection. Pull down to refresh and see live products";

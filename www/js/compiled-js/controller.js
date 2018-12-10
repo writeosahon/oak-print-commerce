@@ -305,19 +305,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.salesProductsCarousel =
                         salesProductsCarousel;
 
-                    // create the ej2 toast component
-                    new ej.notifications.Toast({
-                        content: '',
-                        cssClass: 'default-ej2-toast',
-                        target: document.body,
-                        position: {X: "Center",  Y: "Bottom"},
-                        width: "100%",
-                        timeOut: 0,
-                        extendedTimeout: 0,
-                        showCloseButton: true
-                    }).appendTo($('#home-page .page-toast').get(0));
-
-
                     $('#loader-modal').get(0).hide(); // show loader
 
                     // display page preloader
@@ -369,8 +356,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 salesProductsCarousel.destroy();
             utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.
                 salesProductsCarousel = null;
-            // destroy the ej2 toast component
-            $('#home-page .page-toast').get(0).ej2_instances[0].destroy();
         },
 
         /**
@@ -399,14 +384,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // disable pull-to-refresh widget till loading is done
             $('#home-page #home-page-pull-hook').attr("disabled", true);
             // hide all previously displayed ej2 toast
-            $('#home-page .page-toast').get(0).ej2_instances[0].hide('All');
+            $('.page-toast').get(0).ej2_instances[0].hide('All');
 
             try{
                 await utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.loadProducts();
             }
             catch(err){ // an error occurred
                 // display toast to show that an error
-                let toast = $('#home-page .page-toast').get(0).ej2_instances[0];
+                let toast = $('.page-toast').get(0).ej2_instances[0];
                 toast.cssClass = 'error-ej2-toast';
                 toast.content = "Sorry, an error occurred. Refresh to try again";
                 toast.dataBind();
@@ -634,7 +619,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             } // end of loading products with Internet Connection
             else{ // there is no internet connection
                 // display toast to show that there is no internet connection
-                let toast = $('#home-page .page-toast').get(0).ej2_instances[0];
+                let toast = $('.page-toast').get(0).ej2_instances[0];
                 toast.cssClass = 'default-ej2-toast';
                 toast.content = "No Internet connection. Pull down to refresh and see live products";
                 toast.dataBind();
