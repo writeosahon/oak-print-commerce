@@ -158,7 +158,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.pagePullHookAction;
 
                 // register listener for the pull-to-refresh widget
-                $('#ome-page-pull-hook', $thisPage).on("changestate", function(event){
+                $('#home-page-pull-hook', $thisPage).on("changestate", function(event){
 
                     // check the state of the pull-to-refresh widget
                     switch (event.originalEvent.state){
@@ -402,7 +402,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             $('#home-page .page-toast').get(0).ej2_instances[0].hide('All');
 
             try{
-                utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.loadProducts();
+                await utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.loadProducts();
             }
             catch(err){ // an error occurred
                 // display toast to show that an error
@@ -468,7 +468,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         </div>
                                         <div class="e-card-header">
                                             <div class="e-card-header-caption">
-                                                <div class="e-card-sub-title" style="text-align: center; font-size: 14px; text-transform: capitalize">
+                                                <div class="e-card-sub-title" style="color: #000000; text-align: center; font-size: 14px; text-transform: capitalize">
                                                     ${productsArray[index].name}
                                                 </div>
                                                 <div class="e-card-sub-title" style="text-align: center;">
@@ -535,7 +535,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         </div>
                                         <div class="e-card-header">
                                             <div class="e-card-header-caption">
-                                                <div class="e-card-sub-title" style="text-align: center; font-size: 14px; text-transform: capitalize">
+                                                <div class="e-card-sub-title" style="color: #000000; text-align: center; font-size: 14px; text-transform: capitalize">
                                                     ${productsArray[index].name}
                                                 </div>
                                                 <div class="e-card-sub-title" style="text-align: center;">
@@ -600,7 +600,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         </div>
                                         <div class="e-card-header">
                                             <div class="e-card-header-caption">
-                                                <div class="e-card-sub-title" style="text-align: center; font-size: 14px; text-transform: capitalize">
+                                                <div class="e-card-sub-title" style="color: #000000; text-align: center; font-size: 14px; text-transform: capitalize">
                                                     ${productsArray[index].name}
                                                 </div>
                                                 <div class="e-card-sub-title" style="text-align: center; text-decoration: line-through">
@@ -662,7 +662,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         </div>
                                         <div class="e-card-header">
                                             <div class="e-card-header-caption">
-                                                <div class="e-card-sub-title" style="text-align: center; font-size: 14px; text-transform: capitalize">
+                                                <div class="e-card-sub-title" style="color: #000000; text-align: center; font-size: 14px; text-transform: capitalize">
                                                     ${productsArray[index].name}
                                                 </div>
                                                 <div class="e-card-sub-title" style="text-align: center;">
@@ -714,7 +714,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         </div>
                                         <div class="e-card-header">
                                             <div class="e-card-header-caption">
-                                                <div class="e-card-sub-title" style="text-align: center; font-size: 14px; text-transform: capitalize">
+                                                <div class="e-card-sub-title" style="color: #000000; text-align: center; font-size: 14px; text-transform: capitalize">
                                                     ${productsArray[index].name}
                                                 </div>
                                                 <div class="e-card-sub-title" style="text-align: center;">
@@ -764,7 +764,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         </div>
                                         <div class="e-card-header">
                                             <div class="e-card-header-caption">
-                                                <div class="e-card-sub-title" style="text-align: center; font-size: 14px; text-transform: capitalize">
+                                                <div class="e-card-sub-title" style="color: #000000; text-align: center; font-size: 14px; text-transform: capitalize">
                                                     ${productsArray[index].name}
                                                 </div>
                                                 <div class="e-card-sub-title" style="text-align: center; text-decoration: line-through">
