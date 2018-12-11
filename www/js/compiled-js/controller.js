@@ -502,7 +502,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         for(let index = 0; index < productsArray.length; index++){
                             let columnContent =
                                 `<div class="col-xs-12" style="padding-left: 0; padding-right: 0;">
-                                    <div class="e-card" style="min-height: 50vh; max-height: 90vh">
+                                    <div class="e-card" style="min-height: 40vh; max-height: 90vh">
                                         <div class="e-card-image" style="">
                                         <img src="${productsArray[index].images[0].src}" style="width: 100%; height: auto; max-height: 90vh">
                                         </div>
