@@ -203,7 +203,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         adaptiveHeight: true,
                         imagesLoaded: true,
                         cellSelector: '.col-xs-12',
-                        autoPlay: 3000,
+                        autoPlay: 4000,
                         pauseAutoPlayOnHover: false,
                         dragThreshold: 10,
                         initialIndex: 0,
@@ -502,7 +502,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         for(let index = 0; index < productsArray.length; index++){
                             let columnContent =
                                 `<div class="col-xs-12" style="padding-left: 0; padding-right: 0;">
-                                    <div class="e-card">
+                                    <div class="e-card" style="min-height: 40vh; max-height: 50vh">
                                         <div class="e-card-image" style="">
                                         <img src="${productsArray[index].images[0].src}" style="width: 100%; height: auto; max-height: 50vh">
                                         </div>
