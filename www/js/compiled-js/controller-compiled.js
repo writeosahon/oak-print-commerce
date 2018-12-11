@@ -229,7 +229,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         // options
                                         wrapAround: true,
                                         groupCells: 1,
-                                        adaptiveHeight: true,
+                                        // adaptiveHeight: true,
                                         imagesLoaded: true,
                                         cellSelector: '.col-xs-12',
                                         autoPlay: 4000,
