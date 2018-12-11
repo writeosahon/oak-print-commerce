@@ -47,16 +47,16 @@ $(document).on("hide", "#home-page", utopiasoftware[utopiasoftware_app_namespace
 // listen for when the HOME page is destroyed
 $(document).on("destroy", "#home-page", utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.pageDestroy);
 
-// listen for the initialisation of the categories page
+// listen for the initialisation of the CATEGORIES page
 $(document).on("init", "#categories-page", utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.pageInit);
 
-// listen for when the categories page is shown
+// listen for when the CATEGORIES page is shown
 $(document).on("show", "#categories-page", utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.pageShow);
 
-// listen for when the categories page is hidden
+// listen for when the CATEGORIES page is hidden
 $(document).on("hide", "#categories-page", utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.pageHide);
 
-// listen for when the categories page is destroyed
+// listen for when the CATEGORIES page is destroyed
 $(document).on("destroy", "#categories-page", utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.pageDestroy);
 
 // listen for the initialisation of the ACCOUNT page
