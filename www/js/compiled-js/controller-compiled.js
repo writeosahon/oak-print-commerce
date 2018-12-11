@@ -229,7 +229,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         // options
                                         wrapAround: true,
                                         groupCells: 1,
-                                        cellSelector: '.col-xs-5',
+                                        adaptiveHeight: true,
+                                        cellSelector: '.col-xs-12',
                                         autoPlay: 3000,
                                         pauseAutoPlayOnHover: false,
                                         dragThreshold: 10,
@@ -604,7 +605,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.remove($('#home-page #home-latest-design-block .row .col-xs-5').get());
                                             // attach the products to the page
                                             for (var index = 0; index < productsArray.length; index++) {
-                                                var columnContent = '<div class="col-xs-5" style="padding-left: 0.5em; padding-right: 0.5em;">\n                                    <div class="e-card" style="min-height: 34vh;">\n                                        <div class="e-card-image" style="height: 60%; \n                                        background-image: url(\'' + productsArray[index].images[0].src + '\');">\n                                        </div>\n                                        <div class="e-card-header">\n                                            <div class="e-card-header-caption">\n                                                <div class="e-card-sub-title" style="color: #000000; text-align: center; font-size: 14px; text-transform: capitalize">\n                                                    ' + productsArray[index].name + '\n                                                </div>\n                                                <div class="e-card-sub-title" style="text-align: center;">\n                                                &#x20a6;' + kendo.toString(kendo.parseFloat(productsArray[index].price), "n2") + '</div>\n                                            </div>\n                                        </div>\n                                    </div>\n                                </div>';
+                                                var columnContent = '<div class="col-xs-12" style="padding-left: 0; padding-right: 0;">\n                                    <div class="e-card">\n                                        <div class="e-card-image" style="">\n                                        <img src="' + productsArray[index].images[0].src + '" style="width: 100%; height: auto; max-height: 50vh">\n                                        </div>\n                                    </div>\n                                </div>';
                                                 // append the content
                                                 utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.append($(columnContent));
                                             }

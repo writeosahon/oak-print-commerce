@@ -200,7 +200,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         // options
                         wrapAround: true,
                         groupCells: 1,
-                        cellSelector: '.col-xs-5',
+                        adaptiveHeight: true,
+                        cellSelector: '.col-xs-12',
                         autoPlay: 3000,
                         pauseAutoPlayOnHover: false,
                         dragThreshold: 10,
@@ -499,19 +500,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         // attach the products to the page
                         for(let index = 0; index < productsArray.length; index++){
                             let columnContent =
-                                `<div class="col-xs-5" style="padding-left: 0.5em; padding-right: 0.5em;">
-                                    <div class="e-card" style="min-height: 34vh;">
-                                        <div class="e-card-image" style="height: 60%; 
-                                        background-image: url('${productsArray[index].images[0].src}');">
-                                        </div>
-                                        <div class="e-card-header">
-                                            <div class="e-card-header-caption">
-                                                <div class="e-card-sub-title" style="color: #000000; text-align: center; font-size: 14px; text-transform: capitalize">
-                                                    ${productsArray[index].name}
-                                                </div>
-                                                <div class="e-card-sub-title" style="text-align: center;">
-                                                &#x20a6;${kendo.toString(kendo.parseFloat(productsArray[index].price), "n2")}</div>
-                                            </div>
+                                `<div class="col-xs-12" style="padding-left: 0; padding-right: 0;">
+                                    <div class="e-card">
+                                        <div class="e-card-image" style="">
+                                        <img src="${productsArray[index].images[0].src}" style="width: 100%; height: auto; max-height: 50vh">
                                         </div>
                                     </div>
                                 </div>`;
