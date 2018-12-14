@@ -244,7 +244,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         wrapAround: true,
                         groupCells: 1,
                         cellSelector: '.col-xs-5',
-                        autoPlay: 4000,
+                        autoPlay: false,
                         pauseAutoPlayOnHover: false,
                         dragThreshold: 10,
                         initialIndex: 0,

@@ -184,12 +184,12 @@
     background: red !important;
 }
 #home-page #home-featured-design-block .row .col-xs-5:not(.is-selected) {
-    opacity: 0.75;
-    transform: scale(0.7);
+    opacity: 0.6;
+    transform: scale(0.6);
 }
 #home-page #home-featured-design-block .row .col-xs-5.is-selected {
     opacity: 1;
-    transform: scale(1);
+    transform: scale(2);
 }
 #home-page #home-featured-design-block .e-card {
     background-color: rgba(211, 211, 211, 0.7);
