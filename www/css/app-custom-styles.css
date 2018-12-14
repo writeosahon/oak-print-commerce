@@ -190,7 +190,7 @@
 }
 #home-page #home-featured-design-block .row .col-xs-5.is-selected {
     opacity: 1;
-    transform:skew(170deg,170deg);
+    transform:skew(180deg,180deg);
 }
 #home-page #home-featured-design-block .e-card {
     background-color: rgba(211, 211, 211, 0.7);
