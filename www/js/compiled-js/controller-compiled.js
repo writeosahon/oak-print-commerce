@@ -279,7 +279,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         pauseAutoPlayOnHover: false,
                                         dragThreshold: 10,
                                         initialIndex: 0,
-                                        cellAlign: 'left',
+                                        cellAlign: 'center',
                                         contain: false,
                                         prevNextButtons: false,
                                         pageDots: false
