@@ -184,12 +184,13 @@
     background: red !important;
 }
 #home-page #home-featured-design-block .row .col-xs-5:not(.is-selected) {
-    opacity: 0.6;
-    transform: scale(0.6);
+    opacity: 0.8;
+    transform:skew(170deg,170deg);
+    transition: opacity 0.5s, transform 0.5s;
 }
 #home-page #home-featured-design-block .row .col-xs-5.is-selected {
     opacity: 1;
-    transform: scale(2);
+    transform:skew(170deg,170deg);
 }
 #home-page #home-featured-design-block .e-card {
     background-color: rgba(211, 211, 211, 0.7);
