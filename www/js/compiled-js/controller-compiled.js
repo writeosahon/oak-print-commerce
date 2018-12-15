@@ -321,7 +321,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         pauseAutoPlayOnHover: false,
                                         dragThreshold: 10,
                                         initialIndex: 0,
-                                        cellAlign: 'left',
+                                        cellAlign: 'center',
                                         contain: false,
                                         prevNextButtons: false,
                                         pageDots: false
@@ -525,7 +525,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 return utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.loadProducts();
 
                             case 5:
-                                _context4.next = 14;
+                                _context4.next = 15;
                                 break;
 
                             case 7:
@@ -535,26 +535,27 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 // display toast to show that error
                                 toast = $('.page-toast').get(0).ej2_instances[0];
 
+                                toast.hide('All');
                                 toast.cssClass = 'error-ej2-toast';
                                 toast.content = "Sorry, an error occurred. Refresh to try again";
                                 toast.dataBind();
                                 toast.show();
 
-                            case 14:
-                                _context4.prev = 14;
+                            case 15:
+                                _context4.prev = 15;
 
                                 // enable pull-to-refresh widget till loading is done
                                 $('#home-page #home-page-pull-hook').removeAttr("disabled");
                                 // signal that loading is done
                                 doneCallBack();
-                                return _context4.finish(14);
+                                return _context4.finish(15);
 
-                            case 18:
+                            case 19:
                             case 'end':
                                 return _context4.stop();
                         }
                     }
-                }, _callee4, this, [[2, 7, 14, 18]]);
+                }, _callee4, this, [[2, 7, 15, 19]]);
             }));
 
             function pagePullHookAction() {
@@ -1120,6 +1121,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         // display toast to show that there is no internet connection
                                         toast = $('.page-toast').get(0).ej2_instances[0];
 
+                                        toast.hide('All');
                                         toast.cssClass = 'default-ej2-toast';
                                         toast.content = "No Internet connection. Pull down to refresh and see updated categories";
                                         toast.dataBind();

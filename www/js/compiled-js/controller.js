@@ -288,7 +288,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         pauseAutoPlayOnHover: false,
                         dragThreshold: 10,
                         initialIndex: 0,
-                        cellAlign: 'left',
+                        cellAlign: 'center',
                         contain: false,
                         prevNextButtons: false,
                         pageDots: false
@@ -447,6 +447,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             catch(err){ // an error occurred
                 // display toast to show that error
                 let toast = $('.page-toast').get(0).ej2_instances[0];
+                toast.hide('All');
                 toast.cssClass = 'error-ej2-toast';
                 toast.content = "Sorry, an error occurred. Refresh to try again";
                 toast.dataBind();
@@ -1069,6 +1070,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             else{ // there is no internet connection
                 // display toast to show that there is no internet connection
                 let toast = $('.page-toast').get(0).ej2_instances[0];
+                toast.hide('All');
                 toast.cssClass = 'default-ej2-toast';
                 toast.content = "No Internet connection. Pull down to refresh and see updated categories";
                 toast.dataBind();
