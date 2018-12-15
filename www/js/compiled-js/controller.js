@@ -203,7 +203,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         // adaptiveHeight: true,
                         imagesLoaded: true,
                         cellSelector: '.col-xs-12',
-                        autoPlay: 4000,
+                        autoPlay: 5000,
                         pauseAutoPlayOnHover: false,
                         dragThreshold: 10,
                         initialIndex: 0,
@@ -244,7 +244,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         wrapAround: true,
                         groupCells: 1,
                         cellSelector: '.col-xs-5',
-                        autoPlay: false,
+                        autoPlay: 4000,
                         pauseAutoPlayOnHover: false,
                         dragThreshold: 10,
                         initialIndex: 0,
@@ -284,7 +284,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         wrapAround: true,
                         groupCells: 1,
                         cellSelector: '.col-xs-5',
-                        autoPlay: 5000,
+                        autoPlay: 4500,
                         pauseAutoPlayOnHover: false,
                         dragThreshold: 10,
                         initialIndex: 0,
@@ -628,6 +628,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     <div class="e-card" style="min-height: 34vh;">
                                         <div class="e-card-image" style="height: 60%; 
                                         background-image: url('${productsArray[index].images[0].src}');">
+                                        <span class="e-badge e-badge-danger" style="float: right; clear: both; 
+                                                    background-color: transparent; color: #d64113;
+                                                    border: 1px #d64113 solid; font-size: 0.8em;">
+                                                    ${Math.ceil((Math.abs(kendo.parseFloat(productsArray[index].price) -
+                                    kendo.parseFloat(productsArray[index].regular_price)) /
+                                    kendo.parseFloat(productsArray[index].regular_price)) * 100)}% OFF
+                                                    </span>
                                         </div>
                                         <div class="e-card-header">
                                             <div class="e-card-header-caption">
@@ -639,14 +646,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                 </div>
                                                 <div class="e-card-sub-title" style="text-align: center;">
                                                 &#x20a6;${kendo.toString(kendo.parseFloat(productsArray[index].price), "n2")}
-                                                </div>
-                                                <div class="e-card-sub-title" style="text-align: center;">
-                                                    <span class="e-badge e-badge-danger" style="background-color: transparent; color: #d64113;
-                                                    border: 1px #d64113 solid; font-size: 1em;">
-                                                    ${Math.ceil((Math.abs(kendo.parseFloat(productsArray[index].price) - 
-                                                    kendo.parseFloat(productsArray[index].regular_price)) / 
-                                                    kendo.parseFloat(productsArray[index].regular_price)) * 100)}% OFF
-                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -666,6 +665,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             else{ // there is no internet connection
                 // display toast to show that there is no internet connection
                 let toast = $('.page-toast').get(0).ej2_instances[0];
+                toast.hide('All');
                 toast.cssClass = 'default-ej2-toast';
                 toast.content = "No Internet connection. Pull down to refresh and see live products";
                 toast.dataBind();
@@ -792,6 +792,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     <div class="e-card" style="min-height: 34vh;">
                                         <div class="e-card-image" style="height: 60%; 
                                         background-image: url('${productsArray[index].images[0].src}');">
+                                            <span class="e-badge e-badge-danger" style="float: right; clear: both; 
+                                                    background-color: transparent; color: #d64113;
+                                                    border: 1px #d64113 solid; font-size: 0.8em;">
+                                                    ${Math.ceil((Math.abs(kendo.parseFloat(productsArray[index].price) -
+                                    kendo.parseFloat(productsArray[index].regular_price)) /
+                                    kendo.parseFloat(productsArray[index].regular_price)) * 100)}% OFF
+                                            </span>
                                         </div>
                                         <div class="e-card-header">
                                             <div class="e-card-header-caption">
@@ -803,15 +810,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                 </div>
                                                 <div class="e-card-sub-title" style="text-align: center;">
                                                 &#x20a6;${kendo.toString(kendo.parseFloat(productsArray[index].price), "n2")}
-                                                </div>
-                                                <div class="e-card-sub-title" style="text-align: center;">
-                                                    <span class="e-badge e-badge-danger" style="background-color: transparent; color: #d64113;
-                                                    border: 1px #d64113 solid; font-size: 1em;">
-                                                    ${Math.ceil((Math.abs(kendo.parseFloat(productsArray[index].price) -
-                                    kendo.parseFloat(productsArray[index].regular_price)) /
-                                    kendo.parseFloat(productsArray[index].regular_price)) * 100)}% OFF
-                                                    </span>
-                                                </div>
+                                                </div>                                         
                                             </div>
                                         </div>
                                     </div>
