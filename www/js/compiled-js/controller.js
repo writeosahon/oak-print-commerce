@@ -283,7 +283,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         // options
                         wrapAround: true,
                         groupCells: 1,
-                        cellSelector: '.col-xs-5',
+                        cellSelector: '.col-xs-7',
                         autoPlay: 4500,
                         pauseAutoPlayOnHover: false,
                         dragThreshold: 10,
@@ -498,7 +498,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         // remove the previously slides from the carousel
                         utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.
                             newProductsCarousel.
-                        remove($('#home-page #home-latest-design-block .row .col-xs-5').get());
+                        remove($('#home-page #home-latest-design-block .row .col-xs-12').get());
                         // attach the products to the page
                         for(let index = 0; index < productsArray.length; index++){
                             let columnContent =
@@ -550,7 +550,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             // remove the previously slides from the carousel
                             utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.
                             featuredProductsCarousel.
-                            remove($('#home-page #home-featured-design-block .row .col-xs-5').get());
+                            remove($('#home-page #home-featured-design-block .row .col-xs-7').get());
                         }
                         else{
                             // hide the "Products" segment
@@ -615,7 +615,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             // remove the previously slides from the carousel
                             utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.
                             salesProductsCarousel.
-                            remove($('#home-page #home-sales-design-block .row .col-xs-5').get());
+                            remove($('#home-page #home-sales-design-block .row .col-xs-7').get());
                         }
                         else{
                             // hide the "Products" segment
@@ -625,7 +625,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         // attach the products to the page
                         for(let index = 0; index < productsArray.length; index++){
                             let columnContent =
-                                `<div class="col-xs-5" style="padding-left: 0.5em; padding-right: 0.5em;">
+                                `<div class="col-xs-7" style="margin-left: 20.5%; margin-right: 20.5%;">
                                     <div class="e-card" style="min-height: 34vh;">
                                         <div class="e-card-image" style="height: 60%; 
                                         background-image: url('${productsArray[index].images[0].src}');">
@@ -683,23 +683,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         // remove the previously slides from the carousel
                         utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.
                         newProductsCarousel.
-                        remove($('#home-page #home-latest-design-block .row .col-xs-5').get());
+                        remove($('#home-page #home-latest-design-block .row .col-xs-12').get());
                         // attach the products to the page
                         for(let index = 0; index < productsArray.length; index++){
                             let columnContent =
-                                `<div class="col-xs-5" style="padding-left: 0.5em; padding-right: 0.5em;">
-                                    <div class="e-card" style="min-height: 34vh;">
-                                        <div class="e-card-image" style="height: 60%; 
-                                        background-image: url('${productsArray[index].images[0].src}');">
-                                        </div>
-                                        <div class="e-card-header">
-                                            <div class="e-card-header-caption">
-                                                <div class="e-card-sub-title" style="color: #000000; text-align: center; font-size: 14px; text-transform: capitalize">
-                                                    ${productsArray[index].name}
-                                                </div>
-                                                <div class="e-card-sub-title" style="text-align: center;">
-                                                &#x20a6;${kendo.toString(kendo.parseFloat(productsArray[index].price), "n2")}</div>
-                                            </div>
+                                `<div class="col-xs-12" style="padding-left: 0; padding-right: 0;">
+                                    <div class="e-card" style="min-height: 40vh; max-height: 90vh">
+                                        <div class="e-card-image" style="">
+                                        <img src="css/app-images/test-ad-1.jpg" style="width: 100%; height: auto; max-height: 90vh">
                                         </div>
                                     </div>
                                 </div>`;
@@ -729,7 +720,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             // remove the previously slides from the carousel
                             utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.
                             featuredProductsCarousel.
-                            remove($('#home-page #home-featured-design-block .row .col-xs-5').get());
+                            remove($('#home-page #home-featured-design-block .row .col-xs-7').get());
                         }
                         else{
                             // hide the "Products" segment
@@ -779,7 +770,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             // remove the previously slides from the carousel
                             utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.
                             salesProductsCarousel.
-                            remove($('#home-page #home-sales-design-block .row .col-xs-5').get());
+                            remove($('#home-page #home-sales-design-block .row .col-xs-7').get());
                         }
                         else{
                             // hide the "Products" segment
@@ -789,17 +780,17 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         // attach the products to the page
                         for(let index = 0; index < productsArray.length; index++){
                             let columnContent =
-                                `<div class="col-xs-5" style="padding-left: 0.5em; padding-right: 0.5em;">
+                                `<div class="col-xs-7" style="margin-left: 20.5%; margin-right: 20.5%;">
                                     <div class="e-card" style="min-height: 34vh;">
                                         <div class="e-card-image" style="height: 60%; 
                                         background-image: url('${productsArray[index].images[0].src}');">
-                                            <span class="e-badge e-badge-danger" style="float: right; clear: both; 
+                                        <span class="e-badge e-badge-danger" style="float: right; clear: both; 
                                                     background-color: transparent; color: #d64113;
-                                                    border: 1px #d64113 solid; font-size: 0.8em;">
+                                                    border: 1px #d64113 solid; font-size: 0.6em;">
                                                     ${Math.ceil((Math.abs(kendo.parseFloat(productsArray[index].price) -
                                     kendo.parseFloat(productsArray[index].regular_price)) /
                                     kendo.parseFloat(productsArray[index].regular_price)) * 100)}% OFF
-                                            </span>
+                                                    </span>
                                         </div>
                                         <div class="e-card-header">
                                             <div class="e-card-header-caption">
@@ -811,7 +802,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                 </div>
                                                 <div class="e-card-sub-title" style="text-align: center;">
                                                 &#x20a6;${kendo.toString(kendo.parseFloat(productsArray[index].price), "n2")}
-                                                </div>                                         
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
