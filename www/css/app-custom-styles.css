@@ -251,6 +251,11 @@
     background-color: transparent;
     box-shadow: none !important;
 }
+#categories-page .e-card-image{
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
 /** STYLE FOR CATEGORIES PAGE ENDS **/
 
 /** STYLE FOR SEARCH PAGE START **/
