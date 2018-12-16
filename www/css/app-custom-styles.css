@@ -246,6 +246,11 @@
 #categories-page .page--material__background {
     background-color: #ffffff;
 }
+#categories-page .e-card {
+    background-color: rgba(211, 211, 211, 0.7);
+    background-color: transparent;
+    box-shadow: none !important;
+}
 /** STYLE FOR CATEGORIES PAGE ENDS **/
 
 /** STYLE FOR SEARCH PAGE START **/
