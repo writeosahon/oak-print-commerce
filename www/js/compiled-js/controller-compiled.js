@@ -411,6 +411,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is shown
          */
         pageShow: function pageShow() {
+            $('#app-main-page ons-toolbar div.center').html("OAK");
             window.SoftInputMode.set('adjustPan');
 
             // listen for when the device does not have Internet connection
@@ -926,6 +927,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is shown
          */
         pageShow: function pageShow() {
+            $('#app-main-page ons-toolbar div.center').html("PRODUCTS");
             window.SoftInputMode.set('adjustPan');
 
             // listen for when the device does not have Internet connection
