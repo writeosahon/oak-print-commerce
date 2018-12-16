@@ -919,7 +919,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is shown
          */
         pageShow: function(){
-            $('#app-main-page ons-toolbar div.title-bar').html("PRODUCTS");
+            $('#app-main-page ons-toolbar div.title-bar').html("Products");
             window.SoftInputMode.set('adjustPan');
 
             // listen for when the device does not have Internet connection
