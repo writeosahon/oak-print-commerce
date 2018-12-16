@@ -243,7 +243,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         // options
                         wrapAround: true,
                         groupCells: 1,
-                        cellSelector: '.col-xs-5',
+                        cellSelector: '.col-xs-7',
                         autoPlay: 4000,
                         pauseAutoPlayOnHover: false,
                         dragThreshold: 10,
@@ -560,7 +560,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         // attach the products to the page
                         for(let index = 0; index < productsArray.length; index++){
                             let columnContent =
-                                `<div class="col-xs-5" style="padding-left: 0.5em; padding-right: 0.5em;">
+                                `<div class="col-xs-7" style="margin-left: 20.5%; margin-right: 20.5%;">
                                     <div class="e-card" style="min-height: 34vh;">
                                         <div class="e-card-image" style="height: 60%; 
                                         background-image: url('${productsArray[index].images[0].src}');">
@@ -631,7 +631,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         background-image: url('${productsArray[index].images[0].src}');">
                                         <span class="e-badge e-badge-danger" style="float: right; clear: both; 
                                                     background-color: transparent; color: #d64113;
-                                                    border: 1px #d64113 solid; font-size: 0.8em;">
+                                                    border: 1px #d64113 solid; font-size: 0.6em;">
                                                     ${Math.ceil((Math.abs(kendo.parseFloat(productsArray[index].price) -
                                     kendo.parseFloat(productsArray[index].regular_price)) /
                                     kendo.parseFloat(productsArray[index].regular_price)) * 100)}% OFF
@@ -739,7 +739,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         // attach the products to the page
                         for(let index = 0; index < productsArray.length; index++){
                             let columnContent =
-                                `<div class="col-xs-5" style="padding-left: 0.5em; padding-right: 0.5em;">
+                                `<div class="col-xs-7" style="margin-left: 20.5%; margin-right: 20.5%;">
                                     <div class="e-card" style="min-height: 34vh;">
                                         <div class="e-card-image" style="height: 60%; 
                                         background-image: url('${productsArray[index].images[0].src}');">
