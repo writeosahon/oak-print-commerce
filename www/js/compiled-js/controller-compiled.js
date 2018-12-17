@@ -1212,7 +1212,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         // loop through the array content and display it
                                         for (var index = 0; index < categoriesArray.length; index++) {
                                             categoriesContent += '<div class="col-xs-4" ';
-                                            if (index % 3 !== 0) {
+                                            if ((index + 1) % 3 !== 0) {
                                                 // this is NOT the last column in the row
                                                 categoriesContent += 'style="border-right: 1px lightgray solid; border-bottom: 1px lightgray solid">';
                                             } else {
