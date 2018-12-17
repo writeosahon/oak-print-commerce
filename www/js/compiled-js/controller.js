@@ -544,7 +544,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         if(productsArray.length > 0){
                             // save the retrieved data to app database as cache
                             utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
-                                {_id: "featured-products", docType: "FEATURED_PRODUCTS", products: productsArray},
+                                {_id: "popular-products", docType: "POPULAR_PRODUCTS", products: productsArray},
                                 utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
                             // show the "Products" segment
                             $('#home-page #home-featured-design-block').css({"opacity": "1", "display": "block"});
@@ -711,7 +711,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // load featured products from cached data
                 productTypesPromisesArray.push(new Promise(function(resolve, reject){
                     Promise.resolve(utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
-                    loadData("featured-products", utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)).
+                    loadData("popular-products", utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)).
                     then(function(cachedProductsData){
                         return cachedProductsData.products;
                     }).then(function(productsArray){
