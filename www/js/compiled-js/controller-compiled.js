@@ -597,18 +597,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             dataType: "json",
                                             timeout: 240000, // wait for 4 minutes before timeout of request
                                             processData: true,
-                                            data: { "order": "desc", "orderby": "date", "status": "publish",
-                                                "stock_status": "instock", "page": 1, "per_page": 5 }
+                                            data: { "order": "desc", "orderby": "date", "status": "private",
+                                                "type": "external", "page": 1, "per_page": 5 }
                                         })).then(function (productsArray) {
                                             // save the retrieved data to app database as cache
-                                            utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData({ _id: "latest-products", docType: "LATEST_PRODUCTS", products: productsArray }, utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
+                                            utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData({ _id: "banner-products", docType: "BANNER_PRODUCTS", products: productsArray }, utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
 
                                             $('#home-page #home-latest-design-block').css("opacity", "1"); // hide the "Products" segment
                                             // remove the previously slides from the carousel
                                             utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.remove($('#home-page #home-latest-design-block .row .col-xs-12').get());
                                             // attach the products to the page
                                             for (var index = 0; index < productsArray.length; index++) {
-                                                var columnContent = '<div class="col-xs-12" style="padding-left: 0; padding-right: 0;">\n                                    <div class="e-card" style="min-height: 40vh; max-height: 90vh">\n                                        <div class="e-card-image" style="">\n                                        <img src="css/app-images/test-ad-1.jpg" style="width: 100%; height: auto; max-height: 90vh">\n                                        </div>\n                                    </div>\n                                </div>';
+                                                var columnContent = '<div class="col-xs-12" style="padding-left: 0; padding-right: 0;">\n                                    <div class="e-card" style="min-height: 40vh; max-height: 90vh">\n                                        <div class="e-card-image" style="">\n                                        <img src="' + productsArray[index].images[0].src + '" style="width: 100%; height: auto; max-height: 90vh">\n                                        </div>\n                                    </div>\n                                </div>';
                                                 // append the content
                                                 utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.append($(columnContent));
                                             }
@@ -713,7 +713,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         toast.show();
                                         // load latest products from cached data
                                         productTypesPromisesArray.push(new Promise(function (resolve, reject) {
-                                            Promise.resolve(utopiasoftware[utopiasoftware_app_namespace].databaseOperations.loadData("latest-products", utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)).then(function (cachedProductsData) {
+                                            Promise.resolve(utopiasoftware[utopiasoftware_app_namespace].databaseOperations.loadData("banner-products", utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)).then(function (cachedProductsData) {
                                                 return cachedProductsData.products;
                                             }).then(function (productsArray) {
                                                 $('#home-page #home-latest-design-block').css("opacity", "1"); // hide the "Products" segment
@@ -721,7 +721,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                 utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.remove($('#home-page #home-latest-design-block .row .col-xs-12').get());
                                                 // attach the products to the page
                                                 for (var index = 0; index < productsArray.length; index++) {
-                                                    var columnContent = '<div class="col-xs-12" style="padding-left: 0; padding-right: 0;">\n                                    <div class="e-card" style="min-height: 40vh; max-height: 90vh">\n                                        <div class="e-card-image" style="">\n                                        <img src="css/app-images/test-ad-1.jpg" style="width: 100%; height: auto; max-height: 90vh">\n                                        </div>\n                                    </div>\n                                </div>';
+                                                    var columnContent = '<div class="col-xs-12" style="padding-left: 0; padding-right: 0;">\n                                    <div class="e-card" style="min-height: 40vh; max-height: 90vh">\n                                        <div class="e-card-image" style="">\n                                        <img src="' + productsArray[index].images[0].src + '" style="width: 100%; height: auto; max-height: 90vh">\n                                        </div>\n                                    </div>\n                                </div>';
                                                     // append the content
                                                     utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.append($(columnContent));
                                                 }
