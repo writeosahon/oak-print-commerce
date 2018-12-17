@@ -472,7 +472,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             // check if there is internet connection or not
             if(navigator.connection.type !== Connection.NONE){ // there is internet connection
-                // load latest products
+                // load banner products
                 productTypesPromisesArray.push(new Promise(function(resolve, reject){
                     Promise.resolve($.ajax(
                         {
@@ -538,7 +538,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             timeout: 240000, // wait for 4 minutes before timeout of request
                             processData: true,
                             data: {"order": "desc", "orderby": "date", "status": "publish",
-                                "stock_status": "instock", "page": 1, "per_page": 5, "featured": true}
+                                "type": "variable", "stock_status": "instock", "page": 1, "per_page": 5, "featured": true}
                         }
                     )).then(function(productsArray){
                         if(productsArray.length > 0){
@@ -672,7 +672,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 toast.content = "No Internet connection. Pull down to refresh and see live products";
                 toast.dataBind();
                 toast.show();
-                // load latest products from cached data
+                // load banner products from cached data
                 productTypesPromisesArray.push(new Promise(function(resolve, reject){
                     Promise.resolve(utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
                     loadData("banner-products", utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)).
@@ -838,7 +838,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         /**
          * property holds the size i.e. number of items that can be contained in currentPage being accessed
          */
-        pageSize: 20,
+        pageSize: 100,
 
         /**
          * event is triggered when page is initialised
@@ -894,7 +894,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 try{
 
                     // start loading the page content
-                    await utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.loadCategories();
+                    let categoryArray = await utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.loadCategories();
+                    await utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.displayPageContent(categoryArray[0]);
 
                     // hide the preloader
                     $('#categories-page .page-preloader').css("display", "none");
@@ -1014,6 +1015,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         /**
          * method is used to load products categories to the page
          *
+         * @param pageToAccess {Integer} the page within the paginated categories to retrieve
+         *
+         * @param pageSize {Integer} the size of the page i.e. the number of category items to retrieve
+         *
          * @returns {Promise<void>}
          */
         async loadCategories(pageToAccess = utopiasoftware[utopiasoftware_app_namespace].
@@ -1038,18 +1043,26 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             dataType: "json",
                             timeout: 240000, // wait for 4 minutes before timeout of request
                             processData: true,
-                            data: {"order": "asc", "orderby": "name", "hide_empty": "true",
+                            data: {"order": "asc", "orderby": "name", "hide_empty": false,
                                 "page": pageToAccess, "per_page": pageSize}
                         }
                     )).then(function(categoriesArray){
                         // check if there is any data to cache in the app database
                         if(categoriesArray.length > 0){ // there is data to cache
+                            // remove the 'uncategorized' category
+                            categoriesArray = categoriesArray.filter(function(element){
+                                return element.slug !== 'uncategorized';
+                            });
                             // generate an id for the data being cached
                             let cachedDataId = ("" + pageToAccess).padStart(7, "0");
                             // save the retrieved data to app database as cached data
                             utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
                                 {_id: cachedDataId, docType: "PRODUCT_CATEGORIES", categories: categoriesArray},
                                 utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
+
+                            // increase the current page being viewed by 1
+                            utopiasoftware[utopiasoftware_app_namespace].
+                                controller.categoriesPageViewModel.currentPage += 1;
                         }
                         resolve(categoriesArray); // resolve the parent promise with the data gotten from the server
 
@@ -1079,12 +1092,84 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     }).
                     catch(function(err){ // an error occurred
                         console.log("LOAD CATEGORY", err);
-                        reject(); // reject the parent promise with the error
+                        reject(err); // reject the parent promise with the error
                     });
                 }));
             }
 
             return Promise.all(categoryPromisesArray); // return a promise which resolves when all promises in the array resolve
+        },
+
+        /**
+         * method is used to display the retrieved products categories on the app screen
+         *
+         * @param categoriesArray
+         *
+         * @param appendContent {Boolean} if the value is true,
+         * add each content to the end of other items on the screen.
+         * Else, prepend the content to the top of other items
+         *
+         * @param overwriteContent {Boolean} should the old content be replaced or added to
+         *
+         * @returns {Promise<void>}
+         */
+        async displayPageContent(categoriesArray, appendContent = true, overwriteContent = true){
+            var displayCompletedPromise = new Promise(function(resolve, reject){
+
+                let categoriesContent = ""; // holds the contents for the categories
+
+                // check if the categoriesArray is empty or not
+                if(categoriesArray.length <= 0){ // there are no new content to display
+                    resolve(categoriesArray.length); // resolve promise with the length of the categories array
+                }
+                else{ // there are some categories to display
+
+                    // loop through the array content and display it
+                    for(let index = 0; index < categoriesArray.length; index++){
+                        categoriesContent += `<div class="col-xs-4" `;
+                        if(index % 3 !== 0){ // this is NOT the last column in the row
+                            categoriesContent += `style="border-right: 1px lightgray solid; border-bottom: 1px lightgray solid">`;
+                        }
+                        else{ // this is the last column in the row
+                            categoriesContent += `style="border-bottom: 1px lightgray solid">`;
+                        }
+                        categoriesContent += `
+                        <div class="e-card">
+                            <div class="e-card-image" style="min-height: 100px; 
+                            background-image: url('${categoriesArray[index].image.src}');">
+                            </div>
+                            <div class="e-card-header">
+                                <div class="e-card-header-caption"  style="padding-left: 3px; padding-right: 5px">
+                                    <div class="e-card-sub-title" style="font-size: 14px; text-align: center; text-transform: capitalize">
+                                        ${categoriesArray[index].name}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                      </div>`;
+
+                    }
+
+                    // check if the contents are to be overwritten
+                    if(overwriteContent === true){ // content wants to be overwritten
+                        $('#categories-page #categories-contents-container').html(categoriesContent);
+                    }
+                    else{ // content is NOT to be overwritten
+                        if(appendContent === true){ // append content
+                            $('#categories-page #categories-contents-container').append(categoriesContent);
+                        }
+                        else{ // prepend content
+                            $('#categories-page #categories-contents-container').prepend(categoriesContent);
+                        }
+                    }
+
+                    resolve(categoriesArray.length); // resolve the promise with length of the categoriesArray
+                }
+
+            });
+
+            return displayCompletedPromise; // return the promise object ot indicate if the display has been completed or not
+
         }
 
     },
