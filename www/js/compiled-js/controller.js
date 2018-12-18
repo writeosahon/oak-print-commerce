@@ -897,6 +897,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // get the height of the view content container
                 utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.viewContentHeight =
                     Math.floor($('#categories-page .page__content').height());
+                console.log("CONTENT HEIGHT", utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.viewContentHeight);
 
                 // listen for the scroll event on the page
                 $('#categories-page .page__content').on("scroll", function(){

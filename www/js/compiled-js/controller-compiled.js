@@ -881,6 +881,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                     // get the height of the view content container
                                     utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.viewContentHeight = Math.floor($('#categories-page .page__content').height());
+                                    console.log("CONTENT HEIGHT", utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.viewContentHeight);
 
                                     // listen for the scroll event on the page
                                     $('#categories-page .page__content').on("scroll", function () {
@@ -900,25 +901,25 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         }, 0);
                                     });
 
-                                    _context6.prev = 8;
-                                    _context6.next = 11;
+                                    _context6.prev = 9;
+                                    _context6.next = 12;
                                     return utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.loadCategories();
 
-                                case 11:
+                                case 12:
                                     categoryArray = _context6.sent;
-                                    _context6.next = 14;
+                                    _context6.next = 15;
                                     return utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.displayPageContent(categoryArray[0]);
 
-                                case 14:
+                                case 15:
 
                                     // hide the preloader
                                     $('#categories-page .page-preloader').css("display", "none");
-                                    _context6.next = 26;
+                                    _context6.next = 27;
                                     break;
 
-                                case 17:
-                                    _context6.prev = 17;
-                                    _context6.t0 = _context6['catch'](8);
+                                case 18:
+                                    _context6.prev = 18;
+                                    _context6.t0 = _context6['catch'](9);
 
                                     console.log("CATEGORIES PAGE", _context6.t0);
                                     // hide all previously displayed ej2 toast
@@ -931,16 +932,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     toast.dataBind();
                                     toast.show();
 
-                                case 26:
-                                    _context6.prev = 26;
-                                    return _context6.finish(26);
+                                case 27:
+                                    _context6.prev = 27;
+                                    return _context6.finish(27);
 
-                                case 28:
+                                case 29:
                                 case 'end':
                                     return _context6.stop();
                             }
                         }
-                    }, _callee6, this, [[8, 17, 26, 28]]);
+                    }, _callee6, this, [[9, 18, 27, 29]]);
                 }));
 
                 return function loadPageOnAppReady() {
