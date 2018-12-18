@@ -909,7 +909,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         // get the percentage of scroll that has taken place from the top position
                         var percentageScroll = (scrollTop /  utopiasoftware[utopiasoftware_app_namespace].controller.
                                                 categoriesPageViewModel.viewContentHeight) * 100;
-                        if(percentageScroll < 100){ // if the scroll position is >= halfway
+                        if(percentageScroll >= 50){ // if the scroll position is >= halfway
                             $('#categories-page #categories-page-scroll-top-fab').css({"visibility": "visible"});
                         }
                         else{ // if the scroll position is < halfway
