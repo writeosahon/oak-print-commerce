@@ -830,6 +830,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         pageSize: 100,
 
+        /**
+         * property holds the height of the "content view" for the page
+         */
         viewContentHeight: 0,
 
         /**
@@ -1948,6 +1951,21 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
     productsPageViewModel: {
 
         /**
+         * property holds the current "page" of the categories being accessed
+         */
+        currentPage: 0,
+
+        /**
+         * property holds the size i.e. number of items that can be contained in currentPage being accessed
+         */
+        pageSize: 100,
+
+        /**
+         * property holds the height of the "content view" for the page
+         */
+        viewContentHeight: 0,
+
+        /**
          * event is triggered when page is initialised
          */
         pageInit: function pageInit(event) {
@@ -1969,24 +1987,56 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 case 3:
 
-                                    // listen for when the "product-layout" segment is clicked
-                                    $('#products-page #products-layout-segment').on("postchange", function (postChangeEvent) {
+                                    // listen for the back button event
+                                    event.target.onDeviceBackButton = utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.backButtonClicked;
 
-                                        // check which tab was clicked and act accordingly
-                                        switch (postChangeEvent.originalEvent.index) {
-                                            case 0:
-                                                // user selected to display items in 2-column
-                                                $('#products-page .col-xs-12').removeClass('col-xs-12').addClass('col-xs-6');
+                                    // add method to handle the loading action of the pull-to-refresh widget
+                                    $('#products-page-pull-hook', $thisPage).get(0).onAction = utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.pagePullHookAction;
+
+                                    // register listener for the pull-to-refresh widget
+                                    $('#products-page-pull-hook', $thisPage).on("changestate", function (event) {
+
+                                        // check the state of the pull-to-refresh widget
+                                        switch (event.originalEvent.state) {
+                                            case 'initial':
+                                                // update the displayed content
+                                                $('#products-page-pull-hook-fab', event.originalEvent.pullHook).html('<ons-icon icon="md-long-arrow-down" size="24px" style="color: #363E7C"></ons-icon>');
                                                 break;
 
-                                            case 1:
-                                                // user selected to display items in 1-column
-                                                $('#products-page .col-xs-6').removeClass('col-xs-6').addClass('col-xs-12');
+                                            case 'preaction':
+                                                // update the displayed content
+                                                $('#products-page-pull-hook-fab', event.originalEvent.pullHook).html('<ons-icon icon="md-long-arrow-up" size="24px" style="color: #363E7C"></ons-icon>');
+                                                break;
+
+                                            case 'action':
+                                                // update the displayed content
+                                                $('#products-page-pull-hook-fab', event.originalEvent.pullHook).html('<ons-progress-circular indeterminate modifier="pull-hook"></ons-progress-circular>');
                                                 break;
                                         }
+                                    });
 
-                                        // scroll to the top of the page
-                                        $('#products-page .page__content').scrollTop(0);
+                                    // get the height of the view content container
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.viewContentHeight = Math.floor($('#products-page .page__content').height());
+                                    console.log("CONTENT HEIGHT", utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.viewContentHeight);
+
+                                    // listen for the scroll event on the page
+                                    $('#products-page .page__content').on("scroll", function () {
+                                        // handle the logic in a different event queue slot
+                                        window.setTimeout(function () {
+                                            // get the scrollTop position of the view content
+                                            var scrollTop = Math.floor($('#products-page .page__content').scrollTop());
+                                            console.log("SCROLL TOP", scrollTop);
+                                            // get the percentage of scroll that has taken place from the top position
+                                            var percentageScroll = scrollTop / utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.viewContentHeight * 100;
+                                            if (percentageScroll >= 50) {
+                                                // if the scroll position is >= halfway
+                                                $('#products-page #products-page-scroll-top-fab').css({ "transform": "scale(1)",
+                                                    "display": "inline-block" });
+                                            } else {
+                                                // if the scroll position is < halfway
+                                                $('#products-page #products-page-scroll-top-fab').css({ "transform": "scale(0)" });
+                                            }
+                                        }, 0);
                                     });
 
                                     // listen for when a product card is clicked
@@ -1997,7 +2047,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                     try {} catch (err) {}
 
-                                case 6:
+                                case 11:
                                 case 'end':
                                     return _context20.stop();
                             }
