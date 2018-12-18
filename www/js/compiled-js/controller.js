@@ -926,6 +926,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     $('#categories-page .page-preloader').css("display", "none");
                 }
                 catch(err){
+                    console.log("CATEGORIES PAGE", err);
                     // hide all previously displayed ej2 toast
                     $('.page-toast').get(0).ej2_instances[0].hide('All');
                     // display toast to show that an error
@@ -1144,7 +1145,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         async displayPageContent(categoriesArray, appendContent = true, overwriteContent = true){
             for(let index = 0; index < 10; index++){ // REMOVE THIS LATER JUST FOR TEST TODO
-                categoriesArray.push(categoriesArray);
+                categoriesArray.push(...categoriesArray);
             }
             var displayCompletedPromise = new Promise(function(resolve, reject){
 

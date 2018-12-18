@@ -1,5 +1,7 @@
 'use strict';
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 /**
@@ -911,13 +913,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                     // hide the preloader
                                     $('#categories-page .page-preloader').css("display", "none");
-                                    _context6.next = 25;
+                                    _context6.next = 26;
                                     break;
 
                                 case 17:
                                     _context6.prev = 17;
                                     _context6.t0 = _context6['catch'](8);
 
+                                    console.log("CATEGORIES PAGE", _context6.t0);
                                     // hide all previously displayed ej2 toast
                                     $('.page-toast').get(0).ej2_instances[0].hide('All');
                                     // display toast to show that an error
@@ -928,16 +931,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     toast.dataBind();
                                     toast.show();
 
-                                case 25:
-                                    _context6.prev = 25;
-                                    return _context6.finish(25);
+                                case 26:
+                                    _context6.prev = 26;
+                                    return _context6.finish(26);
 
-                                case 27:
+                                case 28:
                                 case 'end':
                                     return _context6.stop();
                             }
                         }
-                    }, _callee6, this, [[8, 17, 25, 27]]);
+                    }, _callee6, this, [[8, 17, 26, 28]]);
                 }));
 
                 return function loadPageOnAppReady() {
@@ -1228,7 +1231,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             case 0:
                                 for (index = 0; index < 10; index++) {
                                     // REMOVE THIS LATER JUST FOR TEST TODO
-                                    categoriesArray.push(categoriesArray);
+                                    categoriesArray.push.apply(categoriesArray, _toConsumableArray(categoriesArray));
                                 }
                                 displayCompletedPromise = new Promise(function (resolve, reject) {
 
