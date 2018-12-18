@@ -915,10 +915,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         var percentageScroll = (scrollTop /  utopiasoftware[utopiasoftware_app_namespace].controller.
                                                 categoriesPageViewModel.viewContentHeight) * 100;
                         if(percentageScroll >= 50){ // if the scroll position is >= halfway
-                            $('#categories-page #categories-page-scroll-top-fab').css({"transform": "scale(1) !important"});
+                            $('#categories-page #categories-page-scroll-top-fab').css(
+                                {"transform": "scale(1)",
+                                "display": "inline-block"});
                         }
                         else{ // if the scroll position is < halfway
-                            $('#categories-page #categories-page-scroll-top-fab').css({"transform": "scale(0) !important"});
+                            $('#categories-page #categories-page-scroll-top-fab').css({"transform": "scale(0)"});
                         }
                     }, 0);
                 });

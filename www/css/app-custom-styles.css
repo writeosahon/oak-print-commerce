@@ -258,8 +258,7 @@
     background-position: center;
 }
 #categories-page #categories-page-scroll-top-fab {
-    transform: scale(0) !important;
-    transition: visibility 0.5s;
+    display: none;
 }
 /** STYLE FOR CATEGORIES PAGE ENDS **/
 
