@@ -905,6 +905,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     window.setTimeout(function(){
                         // get the scrollTop position of the view content
                         var scrollTop = Math.floor($('#categories-page .page__content').scrollTop());
+                        console.log("SCROLL TOP", scrollTop);
                         // get the percentage of scroll that has taken place from the top position
                         var percentageScroll = (scrollTop /  utopiasoftware[utopiasoftware_app_namespace].controller.
                                                 categoriesPageViewModel.viewContentHeight) * 100;
