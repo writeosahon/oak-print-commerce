@@ -1210,6 +1210,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             return displayCompletedPromise; // return the promise object ot indicate if the display has been completed or not
 
+        },
+
+        /**
+         * method scrolls the page to the top
+         * @returns {Promise<void>}
+         */
+        async scrollPageToTop(){
+            window.setTimeout(function(){
+                $('#categories-page .page__content').animate({ scrollTop: 0 }, 400);
+            }, 0);
         }
 
     },
