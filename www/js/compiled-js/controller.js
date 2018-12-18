@@ -625,6 +625,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                         // attach the products to the page
                         for(let index = 0; index < productsArray.length; index++){
+                            if(!productsArray[index].regular_price){ // regular price was NOT set, so set it
+                                productsArray[index].regular_price = "0.01";
+                            }
                             let columnContent =
                                 `<div class="col-xs-7" style="margin-left: 20.5%; margin-right: 20.5%;">
                                     <div class="e-card" style="min-height: 34vh;">
@@ -910,10 +913,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         var percentageScroll = (scrollTop /  utopiasoftware[utopiasoftware_app_namespace].controller.
                                                 categoriesPageViewModel.viewContentHeight) * 100;
                         if(percentageScroll >= 50){ // if the scroll position is >= halfway
-                            $('#categories-page #categories-page-scroll-top-fab').css({"visibility": "visible"});
+                            $('#categories-page #categories-page-scroll-top-fab').css({"transform": "scale(1)"});
                         }
                         else{ // if the scroll position is < halfway
-                            $('#categories-page #categories-page-scroll-top-fab').css({"visibility": "hidden"});
+                            $('#categories-page #categories-page-scroll-top-fab').css({"transform": "scale(0)"});
                         }
                     }, 0);
                 });
@@ -1075,7 +1078,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             dataType: "json",
                             timeout: 240000, // wait for 4 minutes before timeout of request
                             processData: true,
-                            data: {"order": "asc", "orderby": "name", "hide_empty": false,
+                            data: {"order": "asc", "orderby": "name", "hide_empty": true,
                                 "page": pageToAccess, "per_page": pageSize}
                         }
                     )).then(function(categoriesArray){

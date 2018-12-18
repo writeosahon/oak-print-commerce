@@ -692,6 +692,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                             // attach the products to the page
                                             for (var index = 0; index < productsArray.length; index++) {
+                                                if (!productsArray[index].regular_price) {
+                                                    // regular price was NOT set, so set it
+                                                    productsArray[index].regular_price = "0.01";
+                                                }
                                                 var columnContent = '<div class="col-xs-7" style="margin-left: 20.5%; margin-right: 20.5%;">\n                                    <div class="e-card" style="min-height: 34vh;">\n                                        <div class="e-card-image" style="height: 60%; \n                                        background-image: url(\'' + productsArray[index].images[0].src + '\');">\n                                        <span class="e-badge e-badge-danger" style="float: right; clear: both; \n                                                    background-color: transparent; color: #d64113;\n                                                    border: 1px #d64113 solid; font-size: 0.6em;">\n                                                    ' + Math.ceil(Math.abs(kendo.parseFloat(productsArray[index].price) - kendo.parseFloat(productsArray[index].regular_price)) / kendo.parseFloat(productsArray[index].regular_price) * 100) + '% OFF\n                                                    </span>\n                                        </div>\n                                        <div class="e-card-header">\n                                            <div class="e-card-header-caption">\n                                                <div class="e-card-sub-title" style="color: #000000; text-align: center; font-size: 14px; text-transform: capitalize">\n                                                    ' + productsArray[index].name + '\n                                                </div>\n                                                <div class="e-card-sub-title" style="text-align: center; text-decoration: line-through">\n                                                &#x20a6;' + kendo.toString(kendo.parseFloat(productsArray[index].regular_price), "n2") + '\n                                                </div>\n                                                <div class="e-card-sub-title" style="text-align: center;">\n                                                &#x20a6;' + kendo.toString(kendo.parseFloat(productsArray[index].price), "n2") + '\n                                                </div>\n                                            </div>\n                                        </div>\n                                    </div>\n                                </div>';
                                                 // append the content
                                                 utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.salesProductsCarousel.append($(columnContent));
@@ -894,10 +898,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             var percentageScroll = scrollTop / utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.viewContentHeight * 100;
                                             if (percentageScroll >= 50) {
                                                 // if the scroll position is >= halfway
-                                                $('#categories-page #categories-page-scroll-top-fab').css({ "visibility": "visible" });
+                                                $('#categories-page #categories-page-scroll-top-fab').css({ "transform": "scale(1)" });
                                             } else {
                                                 // if the scroll position is < halfway
-                                                $('#categories-page #categories-page-scroll-top-fab').css({ "visibility": "hidden" });
+                                                $('#categories-page #categories-page-scroll-top-fab').css({ "transform": "scale(0)" });
                                             }
                                         }, 0);
                                     });
@@ -1141,7 +1145,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             dataType: "json",
                                             timeout: 240000, // wait for 4 minutes before timeout of request
                                             processData: true,
-                                            data: { "order": "asc", "orderby": "name", "hide_empty": false,
+                                            data: { "order": "asc", "orderby": "name", "hide_empty": true,
                                                 "page": pageToAccess, "per_page": pageSize }
                                         })).then(function (categoriesArray) {
                                             // check if there is any data to cache in the app database
