@@ -625,7 +625,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                         // attach the products to the page
                         for(let index = 0; index < productsArray.length; index++){
-                            if(!productsArray[index].regular_price){ // regular price was NOT set, so set it
+                            if(!productsArray[index].regular_price || productsArray[index].regular_price == ""){ // regular price was NOT set, so set it
                                 productsArray[index].regular_price = "0.01";
                             }
                             let columnContent =
