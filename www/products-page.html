@@ -1,5 +1,15 @@
 <!-- products page -->
 <ons-page id="products-page">
+    <!-- page pull hook -->
+    <ons-pull-hook id="products-page-pull-hook" threshold-height="120px" fixed-content style="text-align: center">
+        <ons-fab id="categories-page-pull-hook-fab" modifier="mini" style="background-color: #ffffff; color: #ff0000;
+        box-shadow: none; border: 1px #ff0000 solid">
+            <ons-icon icon="md-long-arrow-down" size="24px" style="color: #363E7C"></ons-icon>
+        </ons-fab>
+    </ons-pull-hook>
+    <!-- page preloader -->
+    <ons-progress-bar class="page-preloader" indeterminate modifier="default-page-preloader"
+                      style="position: fixed; z-index: 2; width: 100%; display: block;"></ons-progress-bar>
 
     <!--<ons-segment id="products-layout-segment" active-index="0"
                  style="position: fixed; top: 5px; width: 90px; margin-left: calc(100vw - 85px); box-shadow: none; z-index: 2;">
@@ -17,7 +27,7 @@
                 </div>
                 <div class="e-card-header">
                     <div class="e-card-header-caption"  style="padding-left: 3px; padding-right: 5px">
-                        <div class="e-card-sub-title" style="font-size: 14px; text-align: center; text-transform: capitalize">
+                        <div class="e-card-sub-title" style="color: #000000; font-size: 14px; text-align: center; text-transform: capitalize">
                             White mug
                         </div>
                         <div style="color: gold; font-size: 0.7em !important;">
@@ -45,7 +55,7 @@
                 </div>
                 <div class="e-card-header">
                     <div class="e-card-header-caption"  style="padding-left: 3px; padding-right: 5px">
-                        <div class="e-card-sub-title" style="font-size: 14px; text-align: center; text-transform: capitalize">
+                        <div class="e-card-sub-title" style="color: #000000; font-size: 14px; text-align: center; text-transform: capitalize">
                             White mug
                         </div>
                         <div style="color: gold; font-size: 0.7em !important;">
@@ -73,7 +83,7 @@
                 </div>
                 <div class="e-card-header">
                     <div class="e-card-header-caption"  style="padding-left: 3px; padding-right: 5px">
-                        <div class="e-card-sub-title" style="font-size: 14px; text-align: center; text-transform: capitalize">
+                        <div class="e-card-sub-title" style="color: #000000; font-size: 14px; text-align: center; text-transform: capitalize">
                             White mug
                         </div>
                         <div style="color: gold; font-size: 0.7em !important;">

@@ -824,6 +824,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         pageSize: 100,
 
+        viewContentHeight: 0,
+
         /**
          * event is triggered when page is initialised
          */
@@ -875,25 +877,46 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         }
                                     });
 
-                                    _context6.prev = 6;
-                                    _context6.next = 9;
+                                    // get the height of the view content container
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.viewContentHeight = Math.floor($('#categories-page .page__content').height());
+
+                                    // listen for the scroll event on the page
+                                    $('#categories-page .page__content').on("scroll", function () {
+                                        // handle the logic in a different event queue slot
+                                        window.setTimeout(function () {
+                                            // get the scrollTop position of the view content
+                                            var scrollTop = Math.floor($('#categories-page .page__content').scrollTop());
+                                            // get the percentage of scroll that has taken place from the top position
+                                            var percentageScroll = scrollTop / utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.viewContentHeight * 100;
+                                            if (percentageScroll >= 50) {
+                                                // if the scroll position is >= halfway
+                                                $('#categories-page #categories-page-scroll-top-fab').css({ "visibility": "visible" });
+                                            } else {
+                                                // if the scroll position is < halfway
+                                                $('#categories-page #categories-page-scroll-top-fab').css({ "visibility": "hidden" });
+                                            }
+                                        }, 0);
+                                    });
+
+                                    _context6.prev = 8;
+                                    _context6.next = 11;
                                     return utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.loadCategories();
 
-                                case 9:
+                                case 11:
                                     categoryArray = _context6.sent;
-                                    _context6.next = 12;
+                                    _context6.next = 14;
                                     return utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.displayPageContent(categoryArray[0]);
 
-                                case 12:
+                                case 14:
 
                                     // hide the preloader
                                     $('#categories-page .page-preloader').css("display", "none");
-                                    _context6.next = 23;
+                                    _context6.next = 25;
                                     break;
 
-                                case 15:
-                                    _context6.prev = 15;
-                                    _context6.t0 = _context6['catch'](6);
+                                case 17:
+                                    _context6.prev = 17;
+                                    _context6.t0 = _context6['catch'](8);
 
                                     // hide all previously displayed ej2 toast
                                     $('.page-toast').get(0).ej2_instances[0].hide('All');
@@ -905,16 +928,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     toast.dataBind();
                                     toast.show();
 
-                                case 23:
-                                    _context6.prev = 23;
-                                    return _context6.finish(23);
-
                                 case 25:
+                                    _context6.prev = 25;
+                                    return _context6.finish(25);
+
+                                case 27:
                                 case 'end':
                                     return _context6.stop();
                             }
                         }
-                    }, _callee6, this, [[6, 15, 23, 25]]);
+                    }, _callee6, this, [[8, 17, 25, 27]]);
                 }));
 
                 return function loadPageOnAppReady() {
@@ -1017,7 +1040,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         pagePullHookAction: function () {
             var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8() {
                 var doneCallBack = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : function () {};
-                var toast;
+                var categoryArray, toast;
                 return regeneratorRuntime.wrap(function _callee8$(_context8) {
                     while (1) {
                         switch (_context8.prev = _context8.next) {
@@ -1029,14 +1052,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 _context8.prev = 2;
                                 _context8.next = 5;
-                                return utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.loadCategories();
+                                return utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.loadCategories(1, utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.pageSize);
 
                             case 5:
-                                _context8.next = 14;
+                                categoryArray = _context8.sent;
+                                _context8.next = 8;
+                                return utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.displayPageContent(categoryArray[0]);
+
+                            case 8:
+                                _context8.next = 17;
                                 break;
 
-                            case 7:
-                                _context8.prev = 7;
+                            case 10:
+                                _context8.prev = 10;
                                 _context8.t0 = _context8['catch'](2);
                                 // an error occurred
                                 // display toast to show that error
@@ -1047,21 +1075,21 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 toast.dataBind();
                                 toast.show();
 
-                            case 14:
-                                _context8.prev = 14;
+                            case 17:
+                                _context8.prev = 17;
 
                                 // enable pull-to-refresh widget till loading is done
                                 $('#categories-page #categories-page-pull-hook').removeAttr("disabled");
                                 // signal that loading is done
                                 doneCallBack();
-                                return _context8.finish(14);
+                                return _context8.finish(17);
 
-                            case 18:
+                            case 21:
                             case 'end':
                                 return _context8.stop();
                         }
                     }
-                }, _callee8, this, [[2, 7, 14, 18]]);
+                }, _callee8, this, [[2, 10, 17, 21]]);
             }));
 
             function pagePullHookAction() {
@@ -1193,11 +1221,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             var _ref10 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10(categoriesArray) {
                 var appendContent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
                 var overwriteContent = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
-                var displayCompletedPromise;
+                var index, displayCompletedPromise;
                 return regeneratorRuntime.wrap(function _callee10$(_context10) {
                     while (1) {
                         switch (_context10.prev = _context10.next) {
                             case 0:
+                                for (index = 0; index < 10; index++) {
+                                    // REMOVE THIS LATER JUST FOR TEST TODO
+                                    categoriesArray.push(categoriesArray);
+                                }
                                 displayCompletedPromise = new Promise(function (resolve, reject) {
 
                                     var categoriesContent = ""; // holds the contents for the categories
@@ -1210,16 +1242,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         // there are some categories to display
 
                                         // loop through the array content and display it
-                                        for (var index = 0; index < categoriesArray.length; index++) {
+                                        for (var _index = 0; _index < categoriesArray.length; _index++) {
                                             categoriesContent += '<div class="col-xs-4" ';
-                                            if ((index + 1) % 3 !== 0) {
+                                            if ((_index + 1) % 3 !== 0) {
                                                 // this is NOT the last column in the row
                                                 categoriesContent += 'style="border-right: 1px lightgray solid; border-bottom: 1px lightgray solid">';
                                             } else {
                                                 // this is the last column in the row
                                                 categoriesContent += 'style="border-bottom: 1px lightgray solid">';
                                             }
-                                            categoriesContent += '\n                        <div class="e-card">\n                            <div class="e-card-image" style="min-height: 100px; \n                            background-image: url(\'' + categoriesArray[index].image.src + '\');">\n                            </div>\n                            <div class="e-card-header">\n                                <div class="e-card-header-caption"  style="padding-left: 3px; padding-right: 5px">\n                                    <div class="e-card-sub-title" style="font-size: 14px; text-align: center; text-transform: capitalize">\n                                        ' + categoriesArray[index].name + '\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                      </div>';
+                                            categoriesContent += '\n                        <div class="e-card">\n                            <div class="e-card-image" style="min-height: 100px; \n                            background-image: url(\'' + categoriesArray[_index].image.src + '\');">\n                            </div>\n                            <div class="e-card-header">\n                                <div class="e-card-header-caption"  style="padding-left: 3px; padding-right: 5px">\n                                    <div class="e-card-sub-title" style="font-size: 14px; text-align: center; text-transform: capitalize">\n                                        ' + categoriesArray[_index].name + '\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                      </div>';
                                         }
 
                                         // check if the contents are to be overwritten
@@ -1242,7 +1274,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 });
                                 return _context10.abrupt('return', displayCompletedPromise);
 
-                            case 2:
+                            case 3:
                             case 'end':
                                 return _context10.stop();
                         }

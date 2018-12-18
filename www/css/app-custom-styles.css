@@ -257,6 +257,10 @@
     background-size: contain;
     background-position: center;
 }
+#categories-page #categories-page-scroll-top-fab {
+    visibility: hidden;
+    transition: visibility 0.5s;
+}
 /** STYLE FOR CATEGORIES PAGE ENDS **/
 
 /** STYLE FOR SEARCH PAGE START **/

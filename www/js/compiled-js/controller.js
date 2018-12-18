@@ -840,6 +840,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         pageSize: 100,
 
+
+        viewContentHeight: 0,
+
         /**
          * event is triggered when page is initialised
          */
@@ -889,6 +892,28 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             html('<ons-progress-circular indeterminate modifier="pull-hook"></ons-progress-circular>');
                             break;
                     }
+                });
+
+                // get the height of the view content container
+                utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.viewContentHeight =
+                    Math.floor($('#categories-page .page__content').height());
+
+                // listen for the scroll event on the page
+                $('#categories-page .page__content').on("scroll", function(){
+                    // handle the logic in a different event queue slot
+                    window.setTimeout(function(){
+                        // get the scrollTop position of the view content
+                        var scrollTop = Math.floor($('#categories-page .page__content').scrollTop());
+                        // get the percentage of scroll that has taken place from the top position
+                        var percentageScroll = (scrollTop /  utopiasoftware[utopiasoftware_app_namespace].controller.
+                                                categoriesPageViewModel.viewContentHeight) * 100;
+                        if(percentageScroll >= 50){ // if the scroll position is >= halfway
+                            $('#categories-page #categories-page-scroll-top-fab').css({"visibility": "visible"});
+                        }
+                        else{ // if the scroll position is < halfway
+                            $('#categories-page #categories-page-scroll-top-fab').css({"visibility": "hidden"});
+                        }
+                    }, 0);
                 });
 
                 try{
@@ -994,7 +1019,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             $('.page-toast').get(0).ej2_instances[0].hide('All');
 
             try{
-                await utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.loadCategories();
+                // start loading the page content
+                let categoryArray = await utopiasoftware[utopiasoftware_app_namespace].controller.
+                categoriesPageViewModel.loadCategories(1, utopiasoftware[utopiasoftware_app_namespace].
+                    controller.categoriesPageViewModel.pageSize);
+                await utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.displayPageContent(categoryArray[0]);
             }
             catch(err){ // an error occurred
                 // display toast to show that error
@@ -1114,6 +1143,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         async displayPageContent(categoriesArray, appendContent = true, overwriteContent = true){
+            for(let index = 0; index < 10; index++){ // REMOVE THIS LATER JUST FOR TEST TODO
+                categoriesArray.push(categoriesArray);
+            }
             var displayCompletedPromise = new Promise(function(resolve, reject){
 
                 let categoriesContent = ""; // holds the contents for the categories
