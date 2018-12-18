@@ -1229,7 +1229,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     while (1) {
                         switch (_context10.prev = _context10.next) {
                             case 0:
-                                for (index = 0; index < 3; index++) {
+                                for (index = 0; index < 4; index++) {
                                     // REMOVE THIS LATER JUST FOR TEST TODO
                                     categoriesArray.push.apply(categoriesArray, _toConsumableArray(categoriesArray));
                                 }
