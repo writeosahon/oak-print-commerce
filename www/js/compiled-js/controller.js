@@ -1144,7 +1144,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         async displayPageContent(categoriesArray, appendContent = true, overwriteContent = true){
-            for(let index = 0; index < 10; index++){ // REMOVE THIS LATER JUST FOR TEST TODO
+            for(let index = 0; index < 3; index++){ // REMOVE THIS LATER JUST FOR TEST TODO
                 categoriesArray.push(...categoriesArray);
             }
             var displayCompletedPromise = new Promise(function(resolve, reject){
