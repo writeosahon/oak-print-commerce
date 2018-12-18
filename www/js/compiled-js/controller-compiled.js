@@ -676,7 +676,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             timeout: 240000, // wait for 4 minutes before timeout of request
                                             processData: true,
                                             data: { "order": "desc", "orderby": "date", "status": "publish",
-                                                "stock_status": "instock", "page": 1, "per_page": 5, "on_sale": true }
+                                                "type": "variable", "stock_status": "instock", "page": 1, "per_page": 5, "on_sale": true }
                                         })).then(function (productsArray) {
                                             if (productsArray.length > 0) {
                                                 // save the retrieved data to app database as cache
