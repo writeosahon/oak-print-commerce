@@ -626,7 +626,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         // attach the products to the page
                         for(let index = 0; index < productsArray.length; index++){
                             if(!productsArray[index].regular_price || productsArray[index].regular_price == ""){ // regular price was NOT set, so set it
-                                productsArray[index].regular_price = "0.01";
+                                productsArray[index].regular_price = "0.00";
                             }
                             let columnContent =
                                 `<div class="col-xs-7" style="margin-left: 20.5%; margin-right: 20.5%;">
@@ -638,7 +638,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                     border: 1px #d64113 solid; font-size: 0.6em;">
                                                     ${Math.ceil((Math.abs(kendo.parseFloat(productsArray[index].price) -
                                     kendo.parseFloat(productsArray[index].regular_price)) /
-                                    kendo.parseFloat(productsArray[index].regular_price)) * 100)}% OFF
+                                    kendo.parseFloat(productsArray[index].regular_price === "0.00" ? 
+                                        productsArray[index].price : productsArray[index].regular_price)) 
+                                    * 100)}% OFF
                                                     </span>
                                         </div>
                                         <div class="e-card-header">
