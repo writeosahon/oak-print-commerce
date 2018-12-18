@@ -639,7 +639,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                     ${Math.ceil((Math.abs(kendo.parseFloat(productsArray[index].price) -
                                     kendo.parseFloat(productsArray[index].regular_price)) /
                                     kendo.parseFloat(productsArray[index].regular_price === "0.00" ? 
-                                        productsArray[index].price : productsArray[index].regular_price)) 
+                                         productsArray[index].price : productsArray[index].regular_price)) 
                                     * 100)}% OFF
                                                     </span>
                                         </div>
