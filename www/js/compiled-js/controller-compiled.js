@@ -2020,7 +2020,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is shown
          */
         pageShow: function pageShow() {
-
+            $('#app-main-page ons-toolbar div.title-bar').html("Products"); // change the title of the screen
             window.SoftInputMode.set('adjustPan');
         },
 
