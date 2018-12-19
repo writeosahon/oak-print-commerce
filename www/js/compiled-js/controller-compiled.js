@@ -2111,6 +2111,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // listen for when the navigation tab has changed and update the lastActiveNavTab
                                     $('#app-main-tabbar').on("prechange", function (event) {
                                         utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.lastActiveNavTab = event.originalEvent.index;
+                                        console.log("TAB CHANGED", utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.lastActiveNavTab);
                                     });
 
                                     // listen for when a product card is clicked
