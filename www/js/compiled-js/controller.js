@@ -785,6 +785,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                         // attach the products to the page
                         for(let index = 0; index < productsArray.length; index++){
+                            if(!productsArray[index].regular_price || productsArray[index].regular_price == ""){ // regular price was NOT set, so set it
+                                productsArray[index].regular_price = "0.00";
+                            }
                             let columnContent =
                                 `<div class="col-xs-7" style="margin-left: 20.5%; margin-right: 20.5%;">
                                     <div class="e-card" style="min-height: 34vh;">
@@ -795,7 +798,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                     border: 1px #d64113 solid; font-size: 0.6em;">
                                                     ${Math.ceil((Math.abs(kendo.parseFloat(productsArray[index].price) -
                                     kendo.parseFloat(productsArray[index].regular_price)) /
-                                    kendo.parseFloat(productsArray[index].regular_price)) * 100)}% OFF
+                                    kendo.parseFloat(productsArray[index].regular_price === "0.00" ?
+                                        productsArray[index].price : productsArray[index].regular_price))
+                                    * 100)}% OFF
                                                     </span>
                                         </div>
                                         <div class="e-card-header">
@@ -1095,15 +1100,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 return element.slug !== 'uncategorized';
                             });
                             // generate an id for the data being cached
-                            let cachedDataId = ("" + pageToAccess).padStart(7, "0");
+                            let cachedDataId = ("" + pageToAccess).padStart(7, "0") + "categories";
                             // save the retrieved data to app database as cached data
                             utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
                                 {_id: cachedDataId, docType: "PRODUCT_CATEGORIES", categories: categoriesArray},
                                 utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
 
-                            // increase the current page being viewed by 1
+                            // update the current page being viewed
                             utopiasoftware[utopiasoftware_app_namespace].
-                                controller.categoriesPageViewModel.currentPage += 1;
+                                controller.categoriesPageViewModel.currentPage = pageToAccess;
                         }
                         resolve(categoriesArray); // resolve the parent promise with the data gotten from the server
 
@@ -1125,7 +1130,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // load the requested product categories from cached data
                 categoryPromisesArray.push(new Promise(function(resolve, reject){
                     // generate the id for the cached data being retrieved
-                    let cachedDataId = ("" + pageToAccess).padStart(7, "0");
+                    let cachedDataId = ("" + pageToAccess).padStart(7, "0") + "categories";
                     Promise.resolve(utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
                     loadData(cachedDataId, utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)).
                     then(function(cachedCategoriesData){
@@ -1728,6 +1733,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         viewContentHeight: 0,
 
         /**
+         * property holds the index position of the last active
+         * navigation tab before user landed on this page
+         */
+        lastActiveNavTab: 0,
+
+        /**
          * event is triggered when page is initialised
          */
         pageInit: function(event){
@@ -1792,7 +1803,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         console.log("SCROLL TOP", scrollTop);
                         // get the percentage of scroll that has taken place from the top position
                         var percentageScroll = (scrollTop /  utopiasoftware[utopiasoftware_app_namespace].controller.
-                            categoriesPageViewModel.viewContentHeight) * 100;
+                            productsPageViewModel.viewContentHeight) * 100;
                         if(percentageScroll >= 50){ // if the scroll position is >= halfway
                             $('#products-page #products-page-scroll-top-fab').css(
                                 {"transform": "scale(1)",
@@ -1802,6 +1813,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             $('#products-page #products-page-scroll-top-fab').css({"transform": "scale(0)"});
                         }
                     }, 0);
+                });
+
+                // listen for when the navigation tab has changed and update the lastActiveNavTab
+                $('#app-main-tabbar').on("prechange", function(event){
+                    utopiasoftware[utopiasoftware_app_namespace].controller.
+                        productsPageViewModel.lastActiveNavTab = event.originalEvent.index;
                 });
 
                 // listen for when a product card is clicked
@@ -1823,7 +1840,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         pageShow: function(){
             $('#app-main-page ons-toolbar div.title-bar').html("Products"); // change the title of the screen
+            // show the preloader
+            $('#products-page .page-preloader').css("display", "block");
             window.SoftInputMode.set('adjustPan');
+
+            // listen for when the device does not have Internet connection
+            document.addEventListener("offline",
+                utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.deviceOfflineListener, false);
+            // listen for when the device has Internet connection
+            document.addEventListener("online",
+                utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.deviceOnlineListener, false);
         },
 
 
@@ -1831,12 +1857,271 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is hidden
          */
         pageHide: async function(){
+            // remove listener for when the device does not have Internet connection
+            document.removeEventListener("offline",
+                utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.deviceOfflineListener, false);
+            // remove listener for when the device has Internet connection
+            document.removeEventListener("online",
+                utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.deviceOnlineListener, false);
         },
 
         /**
          * method is triggered when page is destroyed
          */
         pageDestroy: function(){
+
+        },
+
+        /**
+         * method is triggered when the device back button is clicked OR a similar action is triggered
+         */
+        backButtonClicked(){
+            // go to the "Home" page (tab)
+            $('#app-main-tabbar').get(0).
+            setActiveTab(utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.lastActiveNavTab);
+        },
+
+        /**
+         * method is triggered whenever the user's device is offline
+         */
+        deviceOfflineListener(){
+            // display toast to show that there is no internet connection
+            let toast = $('.page-toast').get(0).ej2_instances[0];
+            toast.hide('All'); // hide all previously displayed ej2 toast
+            toast.cssClass = 'default-ej2-toast';
+            toast.content = "No Internet connection. Connect to the Internet to see updated categories";
+            toast.dataBind();
+            toast.show();// show ej2 toast
+        },
+
+        /**
+         * method is triggered whenever the user's device is online
+         */
+        deviceOnlineListener(){
+            // hide all previously displayed ej2 toast
+            $('.page-toast').get(0).ej2_instances[0].hide('All');
+        },
+
+        /**
+         * method is triggered when the pull-hook on the page is active
+         *
+         * @param doneCallBack
+         * @returns {Promise<void>}
+         */
+        async pagePullHookAction(doneCallBack = function(){}){
+            // disable pull-to-refresh widget till loading is done
+            $('#products-page #products-page-pull-hook').attr("disabled", true);
+            // hide all previously displayed ej2 toast
+            $('.page-toast').get(0).ej2_instances[0].hide('All');
+
+            try{
+                // start loading the page content
+                let productArray = await utopiasoftware[utopiasoftware_app_namespace].controller.
+                productsPageViewModel.loadProducts(1, utopiasoftware[utopiasoftware_app_namespace].
+                    controller.productsPageViewModel.pageSize);
+                await utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.displayPageContent(productArray[0]);
+            }
+            catch(err){ // an error occurred
+                // display toast to show that error
+                let toast = $('.page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.content = "Sorry, an error occurred. Refresh to try again";
+                toast.dataBind();
+                toast.show();
+            }
+            finally{
+                // enable pull-to-refresh widget till loading is done
+                $('#products-page #products-page-pull-hook').removeAttr("disabled");
+                // signal that loading is done
+                doneCallBack();
+            }
+        },
+
+        /**
+         * method is used to load products to the page
+         *
+         * @param pageToAccess {Integer} the page within the paginated categories to retrieve
+         *
+         * @param pageSize {Integer} the size of the page i.e. the number of category items to retrieve
+         *
+         * @param queryParam {Object} holds the objects that contains the query
+         * params for the type of products to retrieve
+         *
+         * @returns {Promise<void>}
+         */
+        async loadProducts(queryParam, pageToAccess = queryParam.page || utopiasoftware[utopiasoftware_app_namespace].
+                                 controller.productsPageViewModel.currentPage + 1,
+                             pageSize = queryParam.per_page || utopiasoftware[utopiasoftware_app_namespace].
+                                 controller.productsPageViewModel.pageSize){
+            queryParam.page = pageToAccess;
+            queryParam.per_page = pageSize;
+
+            var productPromisesArray = []; // holds the array for the promises used to load the products
+
+            // check if there is internet connection or not
+            if(navigator.connection.type !== Connection.NONE){ // there is internet connection
+                // load the requested products list from the server
+                productPromisesArray.push(new Promise(function(resolve, reject){
+                    Promise.resolve($.ajax(
+                        {
+                            url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + "/wp-json/wc/v3/products",
+                            type: "get",
+                            //contentType: "application/x-www-form-urlencoded",
+                            beforeSend: function(jqxhr) {
+                                jqxhr.setRequestHeader("Authorization", "Basic " +
+                                    utopiasoftware[utopiasoftware_app_namespace].accessor);
+                            },
+                            dataType: "json",
+                            timeout: 240000, // wait for 4 minutes before timeout of request
+                            processData: true,
+                            data: queryParam
+                        }
+                    )).then(function(productsArray){
+                        // check if there is any data to cache in the app database
+                        if(productsArray.length > 0){ // there is data to cache
+                            // generate an id for the data being cached
+                            let cachedDataId = ("" + pageToAccess).padStart(7, "0") + "products";
+                            // save the retrieved data to app database as cached data
+                            utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
+                                {_id: cachedDataId, docType: "PRODUCTS", products: productsArray},
+                                utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
+
+                            // update the current page being viewed
+                            utopiasoftware[utopiasoftware_app_namespace].
+                                controller.productsPageViewModel.currentPage = queryParam.page;
+                        }
+                        resolve(productsArray); // resolve the parent promise with the data gotten from the server
+
+                    }).catch(function(err){ // an error occurred
+                        console.log("LOAD PRODUCTS", err);
+                        reject(err); // reject the parent promise with the error
+                    });
+                }));
+
+            } // end of loading products with Internet Connection
+            else{ // there is no internet connection
+                // display toast to show that there is no internet connection
+                let toast = $('.page-toast').get(0).ej2_instances[0];
+                toast.hide('All');
+                toast.cssClass = 'default-ej2-toast';
+                toast.content = "No Internet connection. Pull down to refresh and see updated products";
+                toast.dataBind();
+                toast.show();
+                // load the requested products from cached data
+                productPromisesArray.push(new Promise(function(resolve, reject){
+                    // generate the id for the cached data being retrieved
+                    let cachedDataId = ("" + pageToAccess).padStart(7, "0") + "products";
+                    Promise.resolve(utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                    loadData(cachedDataId, utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)).
+                    then(function(cachedProductsData){
+                        resolve(cachedProductsData.products); // resolve the parent promise with the cached products data
+                    }).
+                    catch(function(err){ // an error occurred
+                        console.log("LOAD PRODUCTS", err);
+                        reject(err); // reject the parent promise with the error
+                    });
+                }));
+            }
+
+            return Promise.all(productPromisesArray); // return a promise which resolves when all promises in the array resolve
+        },
+
+        /**
+         * method is used to display the retrieved products on the app screen
+         *
+         * @param productsArray
+         *
+         * @param appendContent {Boolean} if the value is true,
+         * add each content to the end of other items on the screen.
+         * Else, prepend the content to the top of other items
+         *
+         * @param overwriteContent {Boolean} should the old content be replaced or added to
+         *
+         * @returns {Promise<void>}
+         */
+        async displayPageContent(productsArray, appendContent = true, overwriteContent = true){
+            for(let index = 0; index < 4; index++){ // REMOVE THIS LATER JUST FOR TEST TODO
+                productsArray.push(...productsArray);
+            }
+            var displayCompletedPromise = new Promise(function(resolve, reject){
+
+                let productsContent = ""; // holds the contents for the products
+
+                // check if the productsArray is empty or not
+                if(productsArray.length <= 0){ // there are no new content to display
+                    resolve(productsArray.length); // resolve promise with the length of the products array
+                }
+                else{ // there are some products to display
+
+                    // loop through the array content and display it
+                    for(let index = 0; index < productsArray.length; index++){
+                        if(!productsArray[index].regular_price || productsArray[index].regular_price == ""){ // regular price was NOT set, so set it
+                            productsArray[index].regular_price = "0.00";
+                        }
+
+                        productsContent += `<div class="col-xs-4" `;
+                        if((index + 1) % 3 !== 0){ // this is NOT the last column in the row
+                            productsContent += `style="border-right: 1px lightgray solid; border-bottom: 1px lightgray solid">`;
+                        }
+                        else{ // this is the last column in the row
+                            productsContent += `style="border-bottom: 1px lightgray solid">`;
+                        }
+                        productsContent += `
+                        <div class="e-card">
+                            <div class="e-card-image" style="min-height: 100px; 
+                            background-image: url('${productsArray[index].images[0].src}');">
+                            ${productsArray[index].on_sale === true ? `
+                            <span class="e-badge e-badge-danger" style="float: right; clear: both; 
+                                                    background-color: transparent; color: #d64113;
+                                                    border: 1px #d64113 solid; font-size: 0.6em;">
+                                                    ${Math.ceil((Math.abs(kendo.parseFloat(productsArray[index].price) -
+                            kendo.parseFloat(productsArray[index].regular_price)) /
+                            kendo.parseFloat(productsArray[index].regular_price === "0.00" ?
+                                productsArray[index].price : productsArray[index].regular_price))
+                            * 100)}% OFF
+                             </span>` : ""}
+                            </div>
+                            <div class="e-card-header">
+                                <div class="e-card-header-caption"  style="padding-left: 3px; padding-right: 5px">
+                                    <div class="e-card-sub-title" style="color: #000000; font-size: 14px; text-align: center; text-transform: capitalize">
+                                        ${productsArray[index].name}
+                                    </div>
+                        <div style="color: gold; font-size: 0.6em !important; white-space: nowrap !important">
+                        ${Math.floor(kendo.parseFloat(productsArray[index].average_rating)) > 0 ? 
+                            `<ons-icon icon="md-star" fixed-width></ons-icon>`.
+                        repeat(Math.floor(kendo.parseFloat(productsArray[index].average_rating))):
+                            `<ons-icon icon="md-outline" style="color: lightgray" fixed-width></ons-icon>`.repeat(5)}
+                            <span style="display: inline-block; color: gray;">(${productsArray[index].rating_count})</span>
+                        </div>
+                        <div class="e-card-sub-title" style="text-align: left;">&#x20a6;${kendo.toString(kendo.parseFloat(productsArray[index].price), "n2")}</div>
+                        <div class="e-card-sub-title" style="text-align: left; text-decoration: line-through; 
+                        ${productsArray[index].on_sale === true ? "visibility: visible": "visibility: hidden"}">&#x20a6;${kendo.toString(kendo.parseFloat(productsArray[index].regular_price), "n2")}</div>
+                        </div>
+                        </div>
+                        </div>
+                        </div>`;
+
+                    }
+
+                    // check if the contents are to be overwritten
+                    if(overwriteContent === true){ // content wants to be overwritten
+                        $('#products-page #products-contents-container').html(productsContent);
+                    }
+                    else{ // content is NOT to be overwritten
+                        if(appendContent === true){ // append content
+                            $('#products-page #products-contents-container').append(productsContent);
+                        }
+                        else{ // prepend content
+                            $('#products-page #products-contents-container').prepend(productsContent);
+                        }
+                    }
+
+                    resolve(productsArray.length); // resolve the promise with length of the productsArray
+                }
+
+            });
+
+            return displayCompletedPromise; // return the promise object ot indicate if the display has been completed or not
 
         }
     },
