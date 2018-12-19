@@ -992,7 +992,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is shown
          */
         pageShow: function(){
-            $('#app-main-page ons-toolbar div.title-bar').html("Products");
+            $('#app-main-page ons-toolbar div.title-bar').html("Products"); // update the title of the page
+            // hide the page scroll fab
+            $('#categories-page #categories-page-scroll-top-fab').css({"transform": "scale(0)"});
+
             window.SoftInputMode.set('adjustPan');
 
             // listen for when the device does not have Internet connection
@@ -1190,9 +1193,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         async displayPageContent(categoriesArray, appendContent = true, overwriteContent = true){
-            for(let index = 0; index < 4; index++){ // REMOVE THIS LATER JUST FOR TEST TODO
+            /*for(let index = 0; index < 4; index++){ // REMOVE THIS LATER JUST FOR TEST TODO
                 categoriesArray.push(...categoriesArray);
-            }
+            }*/
             var displayCompletedPromise = new Promise(function(resolve, reject){
 
                 let categoriesContent = ""; // holds the contents for the categories
@@ -1213,6 +1216,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             categoriesContent += `style="border-bottom: 1px lightgray solid">`;
                         }
                         categoriesContent += `
+                        <ons-ripple></ons-ripple>
                         <div class="e-card" data-category-id="${categoriesArray[index].id}">
                             <div class="e-card-image" style="min-height: 100px; 
                             background-image: url('${categoriesArray[index].image.src}');">
@@ -1261,6 +1265,74 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             }, 0);
         }
 
+    },
+
+    /**
+     * this is the view-model/controller for the Search page
+     */
+    searchPageViewModel: {
+
+        /**
+         * event is triggered when page is initialised
+         */
+        pageInit: function(event){
+
+            var $thisPage = $(event.target); // get the current page shown
+
+            // call the function used to initialise the app page if the app is fully loaded
+            loadPageOnAppReady();
+
+            //function is used to initialise the page if the app is fully ready for execution
+            async function loadPageOnAppReady() {
+                // check to see if onsen is ready and if all app loading has been completed
+                if (!ons.isReady() || utopiasoftware[utopiasoftware_app_namespace].model.isAppReady === false) {
+                    setTimeout(loadPageOnAppReady, 500); // call this function again after half a second
+                    return;
+                }
+
+                // listen for the back button event
+                event.target.onDeviceBackButton =
+                    utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.backButtonClicked;
+
+                try{
+
+                }
+                catch(err){}
+            }
+
+        },
+
+        /**
+         * method is triggered when page is shown
+         */
+        pageShow: function(){
+            $('#app-main-page ons-toolbar div.title-bar').html("Search"); // update the title of the page
+
+            window.SoftInputMode.set('adjustPan');
+        },
+
+
+        /**
+         * method is triggered when page is hidden
+         */
+        pageHide: async function(){
+        },
+
+        /**
+         * method is triggered when page is destroyed
+         */
+        pageDestroy: function(){
+
+        },
+
+        /**
+         * method is triggered when the device back button is clicked OR a similar action is triggered
+         */
+        backButtonClicked(){
+
+            // go to the "Categories" page (tab)
+            $('#app-main-tabbar').get(0).setActiveTab(1);
+        }
     },
 
     /**
@@ -1878,6 +1950,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             $('#app-main-page ons-toolbar div.title-bar').html("Products"); // change the title of the screen
             // show the preloader
             $('#products-page .page-preloader').css("display", "block");
+            // empty the content of the page
+            $('#products-page #products-contents-container').html('');
+            // hide the page scroll fab
+            $('#products-page #products-page-scroll-top-fab').css({"transform": "scale(0)"});
+
             window.SoftInputMode.set('adjustPan');
 
             // listen for when the device does not have Internet connection
@@ -2103,6 +2180,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             productsContent += `style="border-bottom: 1px lightgray solid">`;
                         }
                         productsContent += `
+                        <ons-ripple></ons-ripple>
                         <div class="e-card">
                             <div class="e-card-image" style="min-height: 100px; 
                             background-image: url('${productsArray[index].images[0].src}');">
