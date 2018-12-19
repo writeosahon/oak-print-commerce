@@ -287,6 +287,7 @@
     box-shadow: none !important;
 }
 #products-page .e-card-image{
+    margin-top: 2px;
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
