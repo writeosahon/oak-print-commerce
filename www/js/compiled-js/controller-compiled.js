@@ -925,21 +925,25 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                         case 0:
                                                             _context6.prev = 0;
                                                             _context6.next = 3;
+                                                            return $('#app-main-tabbar').get(0).setActiveTab(4, { animation: 'none' });
+
+                                                        case 3:
+                                                            _context6.next = 5;
                                                             return utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.loadProducts({ "order": "desc", "orderby": "date", "status": "publish",
                                                                 "type": "variable", "stock_status": "instock", "page": 1, "per_page": 5,
                                                                 category: $(clickEvent.target).attr("data-category-id") });
 
-                                                        case 3:
+                                                        case 5:
                                                             productArray = _context6.sent;
-                                                            _context6.next = 6;
+                                                            _context6.next = 8;
                                                             return utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.displayPageContent(productArray[0]);
 
-                                                        case 6:
-                                                            _context6.next = 17;
+                                                        case 8:
+                                                            _context6.next = 19;
                                                             break;
 
-                                                        case 8:
-                                                            _context6.prev = 8;
+                                                        case 10:
+                                                            _context6.prev = 10;
                                                             _context6.t0 = _context6['catch'](0);
 
                                                             console.log("PRODUCTS PAGE", _context6.t0);
@@ -953,12 +957,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                             toast.dataBind();
                                                             toast.show();
 
-                                                        case 17:
+                                                        case 19:
                                                         case 'end':
                                                             return _context6.stop();
                                                     }
                                                 }
-                                            }, _callee6, this, [[0, 8]]);
+                                            }, _callee6, this, [[0, 10]]);
                                         })), 0);
                                     });
 

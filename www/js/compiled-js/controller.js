@@ -937,6 +937,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     // load the products page in a separate event queue
                     window.setTimeout(async function(){
                         try{
+                            // navigate to the products page
+                            await $('#app-main-tabbar').get(0).setActiveTab(4, {animation: 'none'});
                             // request for products from the category that was clicked
                             let productArray = await utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.
                             loadProducts({"order": "desc", "orderby": "date", "status": "publish",
