@@ -943,7 +943,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             let productArray = await utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.
                             loadProducts({"order": "desc", "orderby": "date", "status": "publish",
                                 "type": "variable", "stock_status": "instock", "page": 1, "per_page": 5,
-                                category: $(clickEvent.target).attr("data-category-id")});
+                                "category": $(clickEvent.target).attr("data-category-id")});
                             await utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.displayPageContent(productArray[0]);
                         }
                         catch(err){
@@ -956,6 +956,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             toast.content = `Sorry, an error occurred.${navigator.connection.type === Connection.NONE ? " Connect to the Internet." : ""} Pull down to refresh and try again`;
                             toast.dataBind();
                             toast.show();
+                        }
+                        finally{
+                            // hide the preloader for the products page
+                            $('#products-page .page-preloader').css("display", "none");
                         }
                     }, 0);
                 });

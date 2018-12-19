@@ -931,7 +931,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                             _context6.next = 5;
                                                             return utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.loadProducts({ "order": "desc", "orderby": "date", "status": "publish",
                                                                 "type": "variable", "stock_status": "instock", "page": 1, "per_page": 5,
-                                                                category: $(clickEvent.target).attr("data-category-id") });
+                                                                "category": $(clickEvent.target).attr("data-category-id") });
 
                                                         case 5:
                                                             productArray = _context6.sent;
@@ -958,11 +958,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                             toast.show();
 
                                                         case 19:
+                                                            _context6.prev = 19;
+
+                                                            // hide the preloader for the products page
+                                                            $('#products-page .page-preloader').css("display", "none");
+                                                            return _context6.finish(19);
+
+                                                        case 22:
                                                         case 'end':
                                                             return _context6.stop();
                                                     }
                                                 }
-                                            }, _callee6, this, [[0, 10]]);
+                                            }, _callee6, this, [[0, 10, 19, 22]]);
                                         })), 0);
                                     });
 
