@@ -943,7 +943,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             let productArray = await utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.
                             loadProducts({"order": "desc", "orderby": "date", "status": "publish",
                                 "type": "variable", "stock_status": "instock", "page": 1, "per_page": 5,
-                                "category": $(clickEvent.target).attr("data-category-id")});
+                                "category": $(clickEvent.currentTarget).attr("data-category-id")});
                             await utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.displayPageContent(productArray[0]);
                         }
                         catch(err){
@@ -2116,12 +2116,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     <div class="e-card-sub-title" style="color: #000000; font-size: 14px; text-align: center; text-transform: capitalize">
                                         ${productsArray[index].name}
                                     </div>
-                        <div style="color: gold; font-size: 0.6em !important; white-space: nowrap !important">
+                        <div style="color: gold; font-size: 0.6em !important; white-space: nowrap !important; 
+                        text-overflow: ellipsis">
                         ${Math.floor(kendo.parseFloat(productsArray[index].average_rating)) > 0 ? 
                             `<ons-icon icon="md-star" fixed-width></ons-icon>`.
                         repeat(Math.floor(kendo.parseFloat(productsArray[index].average_rating))):
-                            `<ons-icon icon="md-outline" style="color: lightgray" fixed-width></ons-icon>`.repeat(5)}
-                            <span style="display: inline-block; color: gray;">(${productsArray[index].rating_count})</span>
+                            `<ons-icon icon="md-star-outline" style="color: lightgray" fixed-width></ons-icon>`.repeat(5)}
+                            <span style="display: inline-block; color: gray;">
+                            ${Math.floor(kendo.parseFloat(productsArray[index].average_rating)) > 0 ? 
+                        `(${productsArray[index].rating_count})` : ""}
+                           </span>
                         </div>
                         <div class="e-card-sub-title" style="text-align: left;">&#x20a6;${kendo.toString(kendo.parseFloat(productsArray[index].price), "n2")}</div>
                         <div class="e-card-sub-title" style="text-align: left; text-decoration: line-through; 
