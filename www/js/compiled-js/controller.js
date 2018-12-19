@@ -1847,6 +1847,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 // listen for when the navigation tab has changed and update the lastActiveNavTab
                 $('#app-main-tabbar').on("prechange", function(event){
+                    if(event.originalEvent.index === 4){ // if the tab index is this page, don't update the lastActiveNavTab
+                        return; // exit the method
+                    }
+
                     utopiasoftware[utopiasoftware_app_namespace].controller.
                         productsPageViewModel.lastActiveNavTab = event.originalEvent.index;
                     console.log("TAB CHANGED", utopiasoftware[utopiasoftware_app_namespace].controller.
