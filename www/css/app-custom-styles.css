@@ -291,6 +291,9 @@
     background-size: contain;
     background-position: center;
 }
+#products-page #products-page-scroll-top-fab {
+    display: none;
+}
 #products-page .e-card .e-card-separator {
     border-bottom: 1px solid rgba(0, 0, 255, 0.12);
 }

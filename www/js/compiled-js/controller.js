@@ -932,14 +932,36 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     }, 0);
                 });
 
-                try{
+                // listen for when a category card is clicked
+                $thisPage.on("click", ".e-card", function(clickEvent){
+                    // load the products page in a separate event queue
+                    window.setTimeout(async function(){
+                        try{
+                            // request for products from the category that was clicked
+                            let productArray = await utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.
+                            loadProducts({"order": "desc", "orderby": "date", "status": "publish",
+                                "type": "variable", "stock_status": "instock", "page": 1, "per_page": 5,
+                                category: $(clickEvent.target).attr("data-category-id")});
+                            await utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.displayPageContent(productArray[0]);
+                        }
+                        catch(err){
+                            console.log("PRODUCTS PAGE", err);
+                            // hide all previously displayed ej2 toast
+                            $('.page-toast').get(0).ej2_instances[0].hide('All');
+                            // display toast to show that an error
+                            let toast = $('.page-toast').get(0).ej2_instances[0];
+                            toast.cssClass = 'error-ej2-toast';
+                            toast.content = `Sorry, an error occurred.${navigator.connection.type === Connection.NONE ? " Connect to the Internet." : ""} Pull down to refresh and try again`;
+                            toast.dataBind();
+                            toast.show();
+                        }
+                    }, 0);
+                });
 
+                try{
                     // start loading the page content
                     let categoryArray = await utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.loadCategories();
                     await utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.displayPageContent(categoryArray[0]);
-
-                    // hide the preloader
-                    $('#categories-page .page-preloader').css("display", "none");
                 }
                 catch(err){
                     console.log("CATEGORIES PAGE", err);
@@ -953,6 +975,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     toast.show();
                 }
                 finally {
+                    // hide the preloader
+                    $('#categories-page .page-preloader').css("display", "none");
                 }
             }
 
@@ -1183,7 +1207,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             categoriesContent += `style="border-bottom: 1px lightgray solid">`;
                         }
                         categoriesContent += `
-                        <div class="e-card">
+                        <div class="e-card" data-category-id="${categoriesArray[index].id}">
                             <div class="e-card-image" style="min-height: 100px; 
                             background-image: url('${categoriesArray[index].image.src}');">
                             </div>
@@ -1824,7 +1848,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // listen for when a product card is clicked
                 $thisPage.on("click", ".e-card > *:not(.e-card-actions)", function(){
                     // load the product-details page
-                    $('#app-main-navigator').get(0).pushPage("product-details-page.html", {animation: "lift"});
+                    //$('#app-main-navigator').get(0).pushPage("product-details-page.html", {animation: "lift"});
                 });
 
                 try{
@@ -2123,6 +2147,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             return displayCompletedPromise; // return the promise object ot indicate if the display has been completed or not
 
+        },
+
+        /**
+         * method scrolls the page to the top
+         * @returns {Promise<void>}
+         */
+        async scrollPageToTop(){
+            window.setTimeout(function(){
+                $('#products-page .page__content').animate({ scrollTop: 0 }, 400);
+            }, 0);
         }
     },
 
