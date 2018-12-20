@@ -2157,9 +2157,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // hide all previously displayed ej2 toast
             $('.page-toast').get(0).ej2_instances[0].hide('All');
 
+            let productArray = []; // holds the array of products retrieved for display
+
             try{
                 // start loading the NEXT page content
-                let productArray = await utopiasoftware[utopiasoftware_app_namespace].controller.
+                productArray = await utopiasoftware[utopiasoftware_app_namespace].controller.
                 productsPageViewModel.loadProducts(utopiasoftware[utopiasoftware_app_namespace].
                     controller.productsPageViewModel.currentQueryParam,
                     utopiasoftware[utopiasoftware_app_namespace].
@@ -2168,17 +2170,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 await utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.
                 displayPageContent(productArray[0], true, false);
 
-                // check if any new products were retrieved
-                if(productArray[0].length <= 0){ // no more products where retrieve
-                    // scroll the page to the top a little bit, to prevent page-infinite-scroll from looping indefinitely
-                    $('#products-page .page__content').
-                    scrollTop( Math.floor($('#products-page .page__content').scrollTop() - 30));
-                }
             }
             catch(err){ // an error occurred
-                // scroll the page to the top a little bit, to prevent page-infinite-scroll from looping indefinitely
-                $('#products-page .page__content').
-                scrollTop( Math.floor($('#products-page .page__content').scrollTop() - 30));
 
                 // display toast to show that error
                 let toast = $('.page-toast').get(0).ej2_instances[0];
@@ -2190,8 +2183,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             finally{
                 // remove the infinite load indicator from the bottom of the page
                 $('#products-page .page__content .infinite-load-container').remove();
-                // signal that loading is done
-                doneCallBack();
+                // check if any new products were retrieved
+                if(productArray[0].length > 0){ // products were retrieve
+                    // signal that loading is done
+                    doneCallBack();
+                }
             }
         },
 
