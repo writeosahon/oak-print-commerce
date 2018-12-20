@@ -2619,7 +2619,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 if (productArray.length < 0) {
                                     // no more products where retrieve
                                     // scroll the page to the top a little bit, to prevent page-infinite-scroll from looping indefinitely
-                                    $('#products-page .page__content').scrollTop(Math.floor($('#products-page .page__content').scrollTop() - 20));
+                                    $('#products-page .page__content').scrollTop(Math.floor($('#products-page .page__content').scrollTop() - 200));
                                 }
                                 _context30.next = 19;
                                 break;
@@ -2629,7 +2629,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 _context30.t0 = _context30['catch'](2);
                                 // an error occurred
                                 // scroll the page to the top a little bit, to prevent page-infinite-scroll from looping indefinitely
-                                $('#products-page .page__content').scrollTop(Math.floor($('#products-page .page__content').scrollTop() - 20));
+                                $('#products-page .page__content').scrollTop(Math.floor($('#products-page .page__content').scrollTop() - 200));
 
                                 // display toast to show that error
                                 toast = $('.page-toast').get(0).ej2_instances[0];
