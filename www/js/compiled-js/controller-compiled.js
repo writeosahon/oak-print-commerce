@@ -2438,7 +2438,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             case 5:
                                 productArray = _context26.sent;
                                 _context26.next = 8;
-                                return utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.displayPageContent(productArray[0], true, false);
+                                return utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.displayPageContent(productArray[0], true, false);
 
                             case 8:
                                 _context26.next = 17;

@@ -2085,7 +2085,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     utopiasoftware[utopiasoftware_app_namespace].
                         controller.productsPageViewModel.currentPage);
                 // append the new content to the previous contents
-                await utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.
+                await utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.
                 displayPageContent(productArray[0], true, false);
             }
             catch(err){ // an error occurred
