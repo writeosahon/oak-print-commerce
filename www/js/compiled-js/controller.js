@@ -232,7 +232,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             return;
                         }
                         // a cell was clicked, so load the product-details page
-                        $('#app-main-navigator').get(0).pushPage("product-details-page.html", {animation: "lift"});
+                        //  $('#app-main-navigator').get(0).pushPage("product-details-page.html", {animation: "lift"});
                     });
                     // assign the "New Product" carousel to the appropriate object
                     utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel =
@@ -444,6 +444,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             try{
                 await utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.loadProducts();
+                // hide the preloader
+                $('#home-page .page-preloader').css("display", "none");
             }
             catch(err){ // an error occurred
                 // display toast to show that error
@@ -1842,6 +1844,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         lastActiveNavTab: 0,
 
         /**
+         * property holds the current query parameter used to display the products on screen
+         */
+        currentQueryParam: {},
+
+        /**
          * event is triggered when page is initialised
          */
         pageInit: function(event){
@@ -1862,6 +1869,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // listen for the back button event
                 event.target.onDeviceBackButton =
                     utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.backButtonClicked;
+
+                // add method to handle page-infinite-scroll
+                event.target.onInfiniteScroll =
+                    utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.pageInfinteScroll;
 
                 // add method to handle the loading action of the pull-to-refresh widget
                 $('#products-page-pull-hook', $thisPage).get(0).onAction =
@@ -1990,7 +2001,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when the device back button is clicked OR a similar action is triggered
          */
         backButtonClicked(){
-            // go to the "Home" page (tab)
+            // go to the last active page (tab)
             $('#app-main-tabbar').get(0).
             setActiveTab(utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.lastActiveNavTab);
         },
@@ -2031,8 +2042,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             try{
                 // start loading the page content
                 let productArray = await utopiasoftware[utopiasoftware_app_namespace].controller.
-                productsPageViewModel.loadProducts(1, utopiasoftware[utopiasoftware_app_namespace].
-                    controller.productsPageViewModel.pageSize);
+                productsPageViewModel.loadProducts(utopiasoftware[utopiasoftware_app_namespace].
+                    controller.productsPageViewModel.currentQueryParam);
                 await utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.displayPageContent(productArray[0]);
             }
             catch(err){ // an error occurred
@@ -2046,6 +2057,48 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             finally{
                 // enable pull-to-refresh widget till loading is done
                 $('#products-page #products-page-pull-hook').removeAttr("disabled");
+                // signal that loading is done
+                doneCallBack();
+            }
+        },
+
+        /**
+         * method is triggered when the pull-hook on the page is active
+         *
+         * @param doneCallBack
+         * @returns {Promise<void>}
+         */
+        async pageInfinteScroll(doneCallBack = function(){}){
+            // append an infinite load indicator to the bottom of the page
+            $('#products-page .page__content').
+            append(`<div class="infinite-load-container" style="text-align: center">
+                        <ons-progress-circular indeterminate modifier="pull-hook"></ons-progress-circular>
+                    </div>`);
+            // hide all previously displayed ej2 toast
+            $('.page-toast').get(0).ej2_instances[0].hide('All');
+
+            try{
+                // start loading the NEXT page content
+                let productArray = await utopiasoftware[utopiasoftware_app_namespace].controller.
+                productsPageViewModel.loadProducts(utopiasoftware[utopiasoftware_app_namespace].
+                    controller.productsPageViewModel.currentQueryParam,
+                    utopiasoftware[utopiasoftware_app_namespace].
+                        controller.productsPageViewModel.currentPage);
+                // append the new content to the previous contents
+                await utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.
+                displayPageContent(productArray[0], true, false);
+            }
+            catch(err){ // an error occurred
+                // display toast to show that error
+                let toast = $('.page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.content = "Sorry, an error occurred. Refresh to try again";
+                toast.dataBind();
+                toast.show();
+            }
+            finally{
+                // remove the infinite load indicator from the bottom of the page
+                $('#products-page .page__content .infinite-load-container').remove();
                 // signal that loading is done
                 doneCallBack();
             }
@@ -2103,6 +2156,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             // update the current page being viewed
                             utopiasoftware[utopiasoftware_app_namespace].
                                 controller.productsPageViewModel.currentPage = queryParam.page;
+                            // update the current query parameter for the page
+                            utopiasoftware[utopiasoftware_app_namespace].
+                                controller.productsPageViewModel.currentQueryParam = queryParam;
                         }
                         resolve(productsArray); // resolve the parent promise with the data gotten from the server
 
