@@ -2083,7 +2083,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 productsPageViewModel.loadProducts(utopiasoftware[utopiasoftware_app_namespace].
                     controller.productsPageViewModel.currentQueryParam,
                     utopiasoftware[utopiasoftware_app_namespace].
-                        controller.productsPageViewModel.currentPage);
+                        controller.productsPageViewModel.currentPage + 1);
                 // append the new content to the previous contents
                 await utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.
                 displayPageContent(productArray[0], true, false);

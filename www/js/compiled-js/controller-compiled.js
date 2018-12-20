@@ -2433,7 +2433,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 _context26.prev = 2;
                                 _context26.next = 5;
-                                return utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.loadProducts(utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.currentQueryParam, utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.currentPage);
+                                return utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.loadProducts(utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.currentQueryParam, utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.currentPage + 1);
 
                             case 5:
                                 productArray = _context26.sent;
