@@ -464,7 +464,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             }
         },
 
-            /**
+        /**
          * method is used to load all products to the page
          *
          * @returns {Promise<void>}
@@ -833,6 +833,74 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             }
 
             return Promise.all(productTypesPromisesArray); // return a promise which resolves when all promises in the array resolve
+        },
+
+        /**
+         * method is triggered when the user wishes to view more featured products
+         * @returns {Promise<void>}
+         */
+        async showMoreFeaturedProducts(){
+            // load the products page in a separate event queue
+            window.setTimeout(async function(){
+                try{
+                    // navigate to the products page
+                    await $('#app-main-tabbar').get(0).setActiveTab(4, {animation: 'none'});
+                    // request for products from the category that was clicked
+                    let productArray = await utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.
+                    loadProducts({"order": "desc", "orderby": "date", "status": "publish",
+                        "type": "variable", "stock_status": "instock", "page": 1, "per_page": 20, "featured": true});
+                    await utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.displayPageContent(productArray[0]);
+                }
+                catch(err){
+                    console.log("PRODUCTS PAGE", err);
+                    // hide all previously displayed ej2 toast
+                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                    // display toast to show that an error
+                    let toast = $('.page-toast').get(0).ej2_instances[0];
+                    toast.cssClass = 'error-ej2-toast';
+                    toast.content = `Sorry, an error occurred.${navigator.connection.type === Connection.NONE ? " Connect to the Internet." : ""} Pull down to refresh and try again`;
+                    toast.dataBind();
+                    toast.show();
+                }
+                finally{
+                    // hide the preloader for the products page
+                    $('#products-page .page-preloader').css("display", "none");
+                }
+            }, 0);
+        },
+
+        /**
+         * method is triggered when the user wishes to view more featured products
+         * @returns {Promise<void>}
+         */
+        async showMoreSalesProducts(){
+            // load the products page in a separate event queue
+            window.setTimeout(async function(){
+                try{
+                    // navigate to the products page
+                    await $('#app-main-tabbar').get(0).setActiveTab(4, {animation: 'none'});
+                    // request for products from the category that was clicked
+                    let productArray = await utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.
+                    loadProducts({"order": "desc", "orderby": "date", "status": "publish",
+                        "type": "variable", "stock_status": "instock", "page": 1, "per_page": 20, "on_sale": true});
+                    await utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.displayPageContent(productArray[0]);
+                }
+                catch(err){
+                    console.log("PRODUCTS PAGE", err);
+                    // hide all previously displayed ej2 toast
+                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                    // display toast to show that an error
+                    let toast = $('.page-toast').get(0).ej2_instances[0];
+                    toast.cssClass = 'error-ej2-toast';
+                    toast.content = `Sorry, an error occurred.${navigator.connection.type === Connection.NONE ? " Connect to the Internet." : ""} Pull down to refresh and try again`;
+                    toast.dataBind();
+                    toast.show();
+                }
+                finally{
+                    // hide the preloader for the products page
+                    $('#products-page .page-preloader').css("display", "none");
+                }
+            }, 0);
         }
 
     },
