@@ -2614,11 +2614,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 return utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.displayPageContent(productArray[0], true, false);
 
                             case 8:
-                                _context30.next = 17;
+
+                                // check if any new products were retrieved
+                                if (productArray.length < 0) {
+                                    // no more products where retrieve
+                                    // scroll the page to the top a little bit, to prevent page-infinite-scroll from looping indefinitely
+                                    $('#products-page .page__content').scrollTop(Math.floor($('#products-page .page__content').scrollTop() - 20));
+                                }
+                                _context30.next = 18;
                                 break;
 
-                            case 10:
-                                _context30.prev = 10;
+                            case 11:
+                                _context30.prev = 11;
                                 _context30.t0 = _context30['catch'](2);
                                 // an error occurred
                                 // display toast to show that error
@@ -2629,21 +2636,21 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 toast.dataBind();
                                 toast.show();
 
-                            case 17:
-                                _context30.prev = 17;
+                            case 18:
+                                _context30.prev = 18;
 
                                 // remove the infinite load indicator from the bottom of the page
                                 $('#products-page .page__content .infinite-load-container').remove();
                                 // signal that loading is done
                                 doneCallBack();
-                                return _context30.finish(17);
+                                return _context30.finish(18);
 
-                            case 21:
+                            case 22:
                             case 'end':
                                 return _context30.stop();
                         }
                     }
-                }, _callee30, this, [[2, 10, 17, 21]]);
+                }, _callee30, this, [[2, 11, 18, 22]]);
             }));
 
             function pageInfinteScroll() {

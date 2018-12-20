@@ -2167,6 +2167,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // append the new content to the previous contents
                 await utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.
                 displayPageContent(productArray[0], true, false);
+
+                // check if any new products were retrieved
+                if(productArray.length < 0){ // no more products where retrieve
+                    // scroll the page to the top a little bit, to prevent page-infinite-scroll from looping indefinitely
+                    $('#products-page .page__content').
+                    scrollTop( Math.floor($('#products-page .page__content').scrollTop() - 20));
+                }
             }
             catch(err){ // an error occurred
                 // display toast to show that error
