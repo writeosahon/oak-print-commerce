@@ -2181,13 +2181,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 toast.show();
             }
             finally{
-                // remove the infinite load indicator from the bottom of the page
-                $('#products-page .page__content .infinite-load-container').remove();
                 // check if any new products were retrieved
                 if(productArray[0].length > 0){ // products were retrieve
-                    // signal that loading is done
-                    doneCallBack();
+                    // remove the infinite load indicator from the bottom of the page
+                    $('#products-page .page__content .infinite-load-container').remove();
                 }
+                else{ // no products were retrieved
+                    $('#products-page .page__content .infinite-load-container').css({"visibility": "hidden"});
+                }
+                // signal that loading is done
+                doneCallBack();
             }
         },
 
