@@ -1429,6 +1429,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     return;
                 }
 
+                // listen for when the device back button is tapped
+                event.target.onDeviceBackButton = utopiasoftware[utopiasoftware_app_namespace].controller.
+                    accountPageViewModel.backButtonClicked;
+
                 try{
                     let accordion = new ej.navigations.Accordion({
                         expandMode: 'Single'
@@ -1461,7 +1465,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         pageDestroy: function(){
 
-        }
+        },
+
+        /**
+         * method is triggered when the device back button is clicked OR a similar action is triggered
+         */
+        backButtonClicked(){
+            // go to the "Home" page (tab)
+            $('#app-main-tabbar').get(0).setActiveTab(2);
+        },
     },
 
     /**
@@ -2112,7 +2124,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 let productArray = await utopiasoftware[utopiasoftware_app_namespace].controller.
                 productsPageViewModel.loadProducts(utopiasoftware[utopiasoftware_app_namespace].
                     controller.productsPageViewModel.currentQueryParam);
-                await utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.displayPageContent(productArray[0]);
+                await utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.displayPageContent(productArray[0]);
             }
             catch(err){ // an error occurred
                 // display toast to show that error

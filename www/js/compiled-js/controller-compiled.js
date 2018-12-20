@@ -1688,6 +1688,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 case 3:
 
+                                    // listen for when the device back button is tapped
+                                    event.target.onDeviceBackButton = utopiasoftware[utopiasoftware_app_namespace].controller.accountPageViewModel.backButtonClicked;
+
                                     try {
                                         accordion = new ej.navigations.Accordion({
                                             expandMode: 'Single'
@@ -1697,7 +1700,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         accordion.expandItem(true, 0);
                                     } catch (err) {}
 
-                                case 4:
+                                case 5:
                                 case 'end':
                                     return _context19.stop();
                             }
@@ -1750,7 +1753,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         /**
          * method is triggered when page is destroyed
          */
-        pageDestroy: function pageDestroy() {}
+        pageDestroy: function pageDestroy() {},
+
+        /**
+         * method is triggered when the device back button is clicked OR a similar action is triggered
+         */
+        backButtonClicked: function backButtonClicked() {
+            // go to the "Home" page (tab)
+            $('#app-main-tabbar').get(0).setActiveTab(2);
+        }
     },
 
     /**
@@ -2531,7 +2542,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             case 5:
                                 productArray = _context29.sent;
                                 _context29.next = 8;
-                                return utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.displayPageContent(productArray[0]);
+                                return utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.displayPageContent(productArray[0]);
 
                             case 8:
                                 _context29.next = 17;
