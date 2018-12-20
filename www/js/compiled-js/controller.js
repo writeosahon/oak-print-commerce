@@ -2179,7 +2179,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // scroll the page to the top a little bit, to prevent page-infinite-scroll from looping indefinitely
                 $('#products-page .page__content').
                 scrollTop( Math.floor($('#products-page .page__content').scrollTop() - 20));
-
+//
                 // display toast to show that error
                 let toast = $('.page-toast').get(0).ej2_instances[0];
                 toast.cssClass = 'error-ej2-toast';
