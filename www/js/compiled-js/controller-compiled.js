@@ -930,7 +930,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                         case 3:
                                                             _context6.next = 5;
                                                             return utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.loadProducts({ "order": "desc", "orderby": "date", "status": "publish",
-                                                                "type": "variable", "stock_status": "instock", "page": 1, "per_page": 5,
+                                                                "type": "variable", "stock_status": "instock", "page": 1, "per_page": 20,
                                                                 "category": $(clickEvent.currentTarget).attr("data-category-id") });
 
                                                         case 5:
@@ -1033,7 +1033,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         pageShow: function pageShow() {
             $('#app-main-page ons-toolbar div.title-bar').html("Products"); // update the title of the page
             // hide the page scroll fab
-            $('#categories-page #categories-page-scroll-top-fab').css({ "transform": "scale(0)" });
+            $('#categories-page #categories-page-scroll-top-fab').css({ "display": "none" });
 
             window.SoftInputMode.set('adjustPan');
 
@@ -2256,7 +2256,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // empty the content of the page
             $('#products-page #products-contents-container').html('');
             // hide the page scroll fab
-            $('#products-page #products-page-scroll-top-fab').css({ "transform": "scale(0)" });
+            $('#products-page #products-page-scroll-top-fab').css({ "display": "none" });
 
             window.SoftInputMode.set('adjustPan');
 
