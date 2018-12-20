@@ -2476,7 +2476,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 // remove listener for when the device has Internet connection
                                 document.removeEventListener("online", utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.deviceOnlineListener, false);
 
-                                // remove allthe infinite load indicator from the bottom of the page (if any exist)
+                                // remove all the infinite load indicator from the bottom of the page (if any exist)
                                 $('#products-page .page__content .infinite-load-container').remove();
 
                             case 3:
@@ -2560,13 +2560,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 return utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.displayPageContent(productArray[0]);
 
                             case 8:
-                                _context29.next = 17;
+                                _context29.next = 18;
                                 break;
 
                             case 10:
                                 _context29.prev = 10;
                                 _context29.t0 = _context29['catch'](2);
                                 // an error occurred
+                                console.log("PRODICT REFRESH ERROR", _context29.t0);
                                 // display toast to show that error
                                 toast = $('.page-toast').get(0).ej2_instances[0];
 
@@ -2575,21 +2576,21 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 toast.dataBind();
                                 toast.show();
 
-                            case 17:
-                                _context29.prev = 17;
+                            case 18:
+                                _context29.prev = 18;
 
                                 // enable pull-to-refresh widget till loading is done
                                 $('#products-page #products-page-pull-hook').removeAttr("disabled");
                                 // signal that loading is done
                                 doneCallBack();
-                                return _context29.finish(17);
+                                return _context29.finish(18);
 
-                            case 21:
+                            case 22:
                             case 'end':
                                 return _context29.stop();
                         }
                     }
-                }, _callee29, this, [[2, 10, 17, 21]]);
+                }, _callee29, this, [[2, 10, 18, 22]]);
             }));
 
             function pagePullHookAction() {
@@ -2609,9 +2610,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         pageInfiniteScroll: function () {
             var _ref30 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee30() {
                 var doneCallBack = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : function () {};
-
-                var productArray, toast, _toast;
-
+                var productArray, toast;
                 return regeneratorRuntime.wrap(function _callee30$(_context30) {
                     while (1) {
                         switch (_context30.prev = _context30.next) {
@@ -2658,14 +2657,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     $('#products-page .page__content .infinite-load-container').remove();
                                 } else {
                                     // no products were retrieved
-                                    // display toast to show that error
-                                    _toast = $('.timed-page-toast').get(0).ej2_instances[0];
-
-                                    _toast.cssClass = 'default-ej2-toast';
-                                    _toast.content = "No more products";
-                                    _toast.timeOut = 4000;
-                                    _toast.dataBind();
-                                    _toast.show();
 
                                     $('#products-page .page__content .infinite-load-container').css({ "visibility": "hidden" });
                                 }

@@ -2081,7 +2081,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             document.removeEventListener("online",
                 utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.deviceOnlineListener, false);
 
-            // remove allthe infinite load indicator from the bottom of the page (if any exist)
+            // remove all the infinite load indicator from the bottom of the page (if any exist)
             $('#products-page .page__content .infinite-load-container').remove();
         },
 
@@ -2142,6 +2142,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 await utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.displayPageContent(productArray[0]);
             }
             catch(err){ // an error occurred
+                console.log("PRODICT REFRESH ERROR", err);
                 // display toast to show that error
                 let toast = $('.page-toast').get(0).ej2_instances[0];
                 toast.cssClass = 'error-ej2-toast';
@@ -2201,13 +2202,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     $('#products-page .page__content .infinite-load-container').remove();
                 }
                 else{ // no products were retrieved
-                    // display toast to show that error
-                    let toast = $('.timed-page-toast').get(0).ej2_instances[0];
-                    toast.cssClass = 'default-ej2-toast';
-                    toast.content = "No more products";
-                    toast.timeOut = 4000;
-                    toast.dataBind();
-                    toast.show();
 
                     $('#products-page .page__content .infinite-load-container').css({"visibility": "hidden"});
                 }
