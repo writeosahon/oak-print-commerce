@@ -1216,7 +1216,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             categoriesContent += `style="border-bottom: 1px lightgray solid">`;
                         }
                         categoriesContent += `
-                        <ons-ripple></ons-ripple>
+                        <ons-ripple background="rgba(63, 81, 181, 0.5)"></ons-ripple>
                         <div class="e-card" data-category-id="${categoriesArray[index].id}">
                             <div class="e-card-image" style="min-height: 100px; 
                             background-image: url('${categoriesArray[index].image.src}');">
@@ -1827,7 +1827,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         /**
          * property holds the size i.e. number of items that can be contained in currentPage being accessed
          */
-        pageSize: 100,
+        pageSize: 20,
 
         /**
          * property holds the height of the "content view" for the page
@@ -2180,7 +2180,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             productsContent += `style="border-bottom: 1px lightgray solid">`;
                         }
                         productsContent += `
-                        <ons-ripple></ons-ripple>
+                        <ons-ripple background="rgba(63, 81, 181, 0.5)"></ons-ripple>
                         <div class="e-card">
                             <div class="e-card-image" style="min-height: 100px; 
                             background-image: url('${productsArray[index].images[0].src}');">
