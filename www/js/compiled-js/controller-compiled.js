@@ -40,7 +40,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             $('#loader-modal-message').html("Loading App...");
                             $('#loader-modal').get(0).show(); // show loader
 
-                            // create the ej2 toast component for the app
+                            // create the ej2 bottom toast component for the app
                             new ej.notifications.Toast({
                                 content: '',
                                 cssClass: 'default-ej2-toast',
@@ -51,6 +51,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 extendedTimeout: 0,
                                 showCloseButton: true
                             }).appendTo($('.page-toast').get(0));
+
+                            // create the ej2 "timed" bottom toast component for the app
+                            new ej.notifications.Toast({
+                                content: '',
+                                cssClass: 'default-ej2-toast',
+                                target: document.body,
+                                position: { X: "Center", Y: "Bottom" },
+                                width: "100%",
+                                timeOut: 4000, // default 4 sec
+                                extendedTimeout: 0,
+                                showCloseButton: true
+                            }).appendTo($('.timed-page-toast').get(0));
 
                             if (true) {
                                 // there is a previous logged in user
@@ -68,7 +80,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 screen.orientation.lock('portrait');
                             } catch (err) {}
 
-                            _context.prev = 6;
+                            _context.prev = 7;
                             // START ALL THE CORDOVA PLUGINS CONFIGURATION WHICH REQUIRE PROMISE SYNTAX
 
                             // create the pouchdb app database
@@ -87,30 +99,30 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             // generate a password for encrypting the app database (if it does NOT already exist)
                             secureKey = null;
-                            _context.prev = 10;
-                            _context.next = 13;
+                            _context.prev = 11;
+                            _context.next = 14;
                             return new Promise(function (resolve, reject) {
                                 NativeStorage.getItem("utopiasoftware-oak-print-service-secure-key", resolve, reject);
                             });
 
-                        case 13:
+                        case 14:
                             secureKey = _context.sent;
-                            _context.next = 21;
+                            _context.next = 22;
                             break;
 
-                        case 16:
-                            _context.prev = 16;
-                            _context.t0 = _context['catch'](10);
-                            _context.next = 20;
+                        case 17:
+                            _context.prev = 17;
+                            _context.t0 = _context['catch'](11);
+                            _context.next = 21;
                             return new Promise(function (resolve, reject) {
                                 NativeStorage.setItem("utopiasoftware-oak-print-service-secure-key", { password: Random.uuid4(utopiasoftware[utopiasoftware_app_namespace].randomisationEngine) }, resolve, reject);
                             });
 
-                        case 20:
+                        case 21:
                             secureKey = _context.sent;
 
-                        case 21:
-                            _context.next = 23;
+                        case 22:
+                            _context.next = 24;
                             return new Promise(function (resolve, reject) {
                                 utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase.crypto(secureKey.password, {
                                     ignore: ['_attachments', '_deleted'],
@@ -125,31 +137,31 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     } });
                             });
 
-                        case 23:
-                            _context.next = 28;
+                        case 24:
+                            _context.next = 29;
                             break;
 
-                        case 25:
-                            _context.prev = 25;
-                            _context.t1 = _context['catch'](6);
+                        case 26:
+                            _context.prev = 26;
+                            _context.t1 = _context['catch'](7);
 
                             console.log("APP LOADING ERROR", _context.t1);
 
-                        case 28:
-                            _context.prev = 28;
+                        case 29:
+                            _context.prev = 29;
 
                             // set status bar color
                             StatusBar.backgroundColorByHexString("#363E7C");
                             navigator.splashscreen.hide(); // hide the splashscreen
                             utopiasoftware[utopiasoftware_app_namespace].model.isAppReady = true; // flag that app is fully loaded and ready
-                            return _context.finish(28);
+                            return _context.finish(29);
 
-                        case 33:
+                        case 34:
                         case 'end':
                             return _context.stop();
                     }
                 }
-            }, _callee, this, [[6, 25, 28, 33], [10, 16]]);
+            }, _callee, this, [[7, 26, 29, 34], [11, 17]]);
         }))); // end of ons.ready()
     },
 
@@ -2341,7 +2353,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     event.target.onDeviceBackButton = utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.backButtonClicked;
 
                                     // add method to handle page-infinite-scroll
-                                    event.target.onInfiniteScroll = utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.pageInfinteScroll;
+                                    event.target.onInfiniteScroll = utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.pageInfiniteScroll;
 
                                     // add method to handle the loading action of the pull-to-refresh widget
                                     $('#products-page-pull-hook', $thisPage).get(0).onAction = utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.pagePullHookAction;
@@ -2464,7 +2476,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 // remove listener for when the device has Internet connection
                                 document.removeEventListener("online", utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.deviceOnlineListener, false);
 
-                            case 2:
+                                // remove allthe infinite load indicator from the bottom of the page (if any exist)
+                                $('#products-page .page__content .infinite-load-container').remove();
+
+                            case 3:
                             case 'end':
                                 return _context28.stop();
                         }
@@ -2591,10 +2606,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @param doneCallBack
          * @returns {Promise<void>}
          */
-        pageInfinteScroll: function () {
+        pageInfiniteScroll: function () {
             var _ref30 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee30() {
                 var doneCallBack = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : function () {};
-                var productArray, toast;
+
+                var productArray, toast, _toast;
+
                 return regeneratorRuntime.wrap(function _callee30$(_context30) {
                     while (1) {
                         switch (_context30.prev = _context30.next) {
@@ -2623,7 +2640,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 _context30.prev = 11;
                                 _context30.t0 = _context30['catch'](3);
                                 // an error occurred
-
                                 // display toast to show that error
                                 toast = $('.page-toast').get(0).ej2_instances[0];
 
@@ -2642,6 +2658,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     $('#products-page .page__content .infinite-load-container').remove();
                                 } else {
                                     // no products were retrieved
+                                    // display toast to show that error
+                                    _toast = $('.timed-page-toast').get(0).ej2_instances[0];
+
+                                    _toast.cssClass = 'default-ej2-toast';
+                                    _toast.content = "No more products";
+                                    _toast.timeOut = 4000;
+                                    _toast.dataBind();
+                                    _toast.show();
+
                                     $('#products-page .page__content .infinite-load-container').css({ "visibility": "hidden" });
                                 }
                                 // signal that loading is done
@@ -2656,11 +2681,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 }, _callee30, this, [[3, 11, 18, 22]]);
             }));
 
-            function pageInfinteScroll() {
+            function pageInfiniteScroll() {
                 return _ref30.apply(this, arguments);
             }
 
-            return pageInfinteScroll;
+            return pageInfiniteScroll;
         }(),
 
 

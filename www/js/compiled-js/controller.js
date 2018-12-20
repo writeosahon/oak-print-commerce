@@ -29,7 +29,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             $('#loader-modal-message').html("Loading App...");
             $('#loader-modal').get(0).show(); // show loader
 
-            // create the ej2 toast component for the app
+            // create the ej2 bottom toast component for the app
             new ej.notifications.Toast({
                 content: '',
                 cssClass: 'default-ej2-toast',
@@ -40,6 +40,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 extendedTimeout: 0,
                 showCloseButton: true
             }).appendTo($('.page-toast').get(0));
+
+            // create the ej2 "timed" bottom toast component for the app
+            new ej.notifications.Toast({
+                content: '',
+                cssClass: 'default-ej2-toast',
+                target: document.body,
+                position: {X: "Center",  Y: "Bottom"},
+                width: "100%",
+                timeOut: 4000, // default 4 sec
+                extendedTimeout: 0,
+                showCloseButton: true
+            }).appendTo($('.timed-page-toast').get(0));
 
             if(true){ // there is a previous logged in user
                 // load the app main page
@@ -1952,7 +1964,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 // add method to handle page-infinite-scroll
                 event.target.onInfiniteScroll =
-                    utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.pageInfinteScroll;
+                    utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.pageInfiniteScroll;
 
                 // add method to handle the loading action of the pull-to-refresh widget
                 $('#products-page-pull-hook', $thisPage).get(0).onAction =
@@ -2068,6 +2080,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // remove listener for when the device has Internet connection
             document.removeEventListener("online",
                 utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.deviceOnlineListener, false);
+
+            // remove allthe infinite load indicator from the bottom of the page (if any exist)
+            $('#products-page .page__content .infinite-load-container').remove();
         },
 
         /**
@@ -2148,7 +2163,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @param doneCallBack
          * @returns {Promise<void>}
          */
-        async pageInfinteScroll(doneCallBack = function(){}){
+        async pageInfiniteScroll(doneCallBack = function(){}){
             // append an infinite load indicator to the bottom of the page
             $('#products-page .page__content').
             append(`<div class="infinite-load-container" style="text-align: center">
@@ -2172,7 +2187,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             }
             catch(err){ // an error occurred
-
                 // display toast to show that error
                 let toast = $('.page-toast').get(0).ej2_instances[0];
                 toast.cssClass = 'error-ej2-toast';
@@ -2187,6 +2201,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     $('#products-page .page__content .infinite-load-container').remove();
                 }
                 else{ // no products were retrieved
+                    // display toast to show that error
+                    let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                    toast.cssClass = 'default-ej2-toast';
+                    toast.content = "No more products";
+                    toast.timeOut = 4000;
+                    toast.dataBind();
+                    toast.show();
+
                     $('#products-page .page__content .infinite-load-container').css({"visibility": "hidden"});
                 }
                 // signal that loading is done
