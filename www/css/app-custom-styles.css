@@ -267,7 +267,7 @@
 #search-page .page--material__background {
     background-color: #ffffff;
 }
-
+/** style for search input on the search page begins **/
 #search-page #search-page-input {
     border: none !important;
     vertical-align: top !important;
@@ -292,6 +292,31 @@
     display: inline-block;
     text-indent: 0 !important;
 }
+
+#search-page .search-page-input-container .e-input-group.e-input-focus:hover:not(.e-success):not(.e-warning):not(.e-error):not(.e-disabled):not(.e-float-icon-left),
+#search-page .search-page-input-container .e-input-group.e-control-wrapper.e-input-focus:hover:not(.e-success):not(.e-warning):not(.e-error):not(.e-disabled):not(.e-float-icon-left),
+#search-page .search-page-input-container .e-float-input.e-input-focus:hover:not(.e-success):not(.e-warning):not(.e-error):not(.e-disabled):not(.e-float-icon-left),
+#search-page .search-page-input-container .e-float-input.e-control-wrapper.e-input-focus:hover:not(.e-success):not(.e-warning):not(.e-error):not(.e-disabled):not(.e-float-icon-left),
+#search-page .search-page-input-container .e-input-group.e-input-focus.e-float-icon-left:not(.e-success):not(.e-warning):not(.e-error):not(.e-disabled) .e-input-in-wrap:hover,
+#search-page .search-page-input-container .e-input-group.e-control-wrapper.e-input-focus.e-float-icon-left:not(.e-success):not(.e-warning):not(.e-error):not(.e-disabled) .e-input-in-wrap:hover,
+#search-page .search-page-input-container .e-float-input.e-input-focus.e-float-icon-left:not(.e-success):not(.e-warning):not(.e-error):not(.e-disabled) .e-input-in-wrap:hover,
+#search-page .search-page-input-container .e-float-input.e-input-focus:hover:not(.e-input-group):not(.e-success):not(.e-warning):not(.e-error):not(.e-disabled) input:not([disabled]),
+#search-page .search-page-input-container .e-float-input.e-control-wrapper.e-input-focus.e-float-icon-left:not(.e-success):not(.e-warning):not(.e-error):not(.e-disabled) .e-input-in-wrap:hover,
+#search-page .search-page-input-container .e-float-input.e-control-wrapper.e-input-focus:hover:not(.e-input-group):not(.e-success):not(.e-warning):not(.e-error):not(.e-disabled) input:not([disabled]){
+    border-color: transparent;
+}
+
+#search-page .search-page-input-container .e-input-group:not(.e-float-icon-left):not(.e-float-input)::before,
+#search-page .search-page-input-container .e-input-group:not(.e-float-icon-left):not(.e-float-input)::after,
+#search-page .search-page-input-container .e-input-group.e-float-icon-left:not(.e-float-input) .e-input-in-wrap::before,
+#search-page .search-page-input-container .e-input-group.e-float-icon-left:not(.e-float-input) .e-input-in-wrap::after,
+#search-page .search-page-input-container .e-input-group.e-control-wrapper:not(.e-float-icon-left):not(.e-float-input)::before,
+#search-page .search-page-input-container .e-input-group.e-control-wrapper:not(.e-float-icon-left):not(.e-float-input)::after,
+#search-page .search-page-input-container .e-input-group.e-control-wrapper.e-float-icon-left:not(.e-float-input) .e-input-in-wrap::before,
+#search-page .search-page-input-container .e-input-group.e-control-wrapper.e-float-icon-left:not(.e-float-input) .e-input-in-wrap::after {
+    background: transparent;
+}
+/** style for search input on the search page ends **/
 /** STYLE FOR SEARCH PAGE ENDS **/
 
 /** STYLE FOR ACCOUNT PAGE BEGINS **/
