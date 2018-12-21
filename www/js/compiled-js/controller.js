@@ -2142,7 +2142,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 await utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.displayPageContent(productArray[0]);
             }
             catch(err){ // an error occurred
-                console.log("PRODICT REFRESH ERROR", err);
+                console.log("PROJECT REFRESH ERROR", err);
                 // display toast to show that error
                 let toast = $('.page-toast').get(0).ej2_instances[0];
                 toast.cssClass = 'error-ej2-toast';

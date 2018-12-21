@@ -2567,7 +2567,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 _context29.prev = 10;
                                 _context29.t0 = _context29['catch'](2);
                                 // an error occurred
-                                console.log("PRODICT REFRESH ERROR", _context29.t0);
+                                console.log("PROJECT REFRESH ERROR", _context29.t0);
                                 // display toast to show that error
                                 toast = $('.page-toast').get(0).ej2_instances[0];
 
