@@ -2104,6 +2104,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             event.target.onInfiniteScroll =
                 utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.pageInfiniteScroll;
 
+            console.log("PAGE SHOW");
+
             window.SoftInputMode.set('adjustPan');
 
             // listen for when the device does not have Internet connection
@@ -2119,8 +2121,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is hidden
          */
         pageHide: async function(event){
-            // add method to handle page-infinite-scroll
-            delete event.target.onInfiniteScroll;
+            // remove method to handle page-infinite-scroll
+            event.target.onInfiniteScroll = undefined;
+
+            console.log("PAGE HIDE");
+
             // remove listener for when the device does not have Internet connection
             document.removeEventListener("offline",
                 utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.deviceOfflineListener, false);

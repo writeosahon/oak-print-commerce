@@ -2500,6 +2500,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // add method to handle page-infinite-scroll
             event.target.onInfiniteScroll = utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.pageInfiniteScroll;
 
+            console.log("PAGE SHOW");
+
             window.SoftInputMode.set('adjustPan');
 
             // listen for when the device does not have Internet connection
@@ -2517,8 +2519,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     while (1) {
                         switch (_context28.prev = _context28.next) {
                             case 0:
-                                // add method to handle page-infinite-scroll
-                                delete event.target.onInfiniteScroll;
+                                // remove method to handle page-infinite-scroll
+                                event.target.onInfiniteScroll = undefined;
+
+                                console.log("PAGE HIDE");
+
                                 // remove listener for when the device does not have Internet connection
                                 document.removeEventListener("offline", utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.deviceOfflineListener, false);
                                 // remove listener for when the device has Internet connection
@@ -2527,7 +2532,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 // remove all the infinite load indicator from the bottom of the page (if any exist)
                                 $('#products-page .page__content .infinite-load-container').remove();
 
-                            case 4:
+                            case 5:
                             case 'end':
                                 return _context28.stop();
                         }
