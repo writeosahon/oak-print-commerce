@@ -1607,7 +1607,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     try {
 
                                         //instantiate the autocomplete widget for the search input
-                                        new ej.dropdowns.AutoComplete(["Apple", "Banana", "Curry"]).appendTo('#search-page-inner-input');
+                                        new ej.dropdowns.AutoComplete({
+                                            dataSource: ["Apple", "Banana", "Curry"]
+                                        }).appendTo('#search-page-inner-input');
                                     } catch (err) {}
 
                                 case 5:
