@@ -2092,6 +2092,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is shown
          */
         pageShow: function(event){
+            event.target._allowInfinitePageScroll = false;
             $('#app-main-page ons-toolbar div.title-bar').html("Products"); // change the title of the screen
             // show the preloader
             $('#products-page .page-preloader').css("display", "block");
@@ -2119,6 +2120,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is hidden
          */
         pageHide: async function(event){
+            event.target._allowInfinitePageScroll = false;
 
             console.log("PAGE HIDE");
 
@@ -2213,6 +2215,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         async pageInfiniteScroll(doneCallBack = function(){}){
+            if($('#products-page').get(0)._allowInfinitePageScroll === false){
+                doneCallBack();
+                return;
+            }
             console.log("PRODUCT PULL-HOOK CALLED");
             // append an infinite load indicator to the bottom of the page
             $('#products-page .page__content').
@@ -2246,7 +2252,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             }
             finally{
                 // check if any new products were retrieved
-                if(productArray[0].length > 0){ // products were retrieve
+                if(productArray && productArray[0].length > 0){ // products were retrieve
                     // remove the infinite load indicator from the bottom of the page
                     $('#products-page .page__content .infinite-load-container').remove();
                 }
@@ -2446,8 +2452,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         }
                     }
 
-                    // remove the extra margin that was added to products-content-container
-                    $('#products-page #products-contents-container').css("margin-bottom", "0");
+                    // allow infinite page scroll to be triggered
+                    $('#products-page').get(0)._allowInfinitePageScroll = true;
                     resolve(productsArray.length); // resolve the promise with length of the productsArray
                 }
 
