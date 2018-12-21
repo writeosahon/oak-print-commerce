@@ -1384,7 +1384,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         floatLabelType: "Never",
                         placeholder: "Search Products",
                         dataSource: ["Apple", "Banana", "Curry"]
-                    }).appendTo('#search-page-inner-input');
+                    }).appendTo('#search-page-input');
 
                 }
                 catch(err){}
