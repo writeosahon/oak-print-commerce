@@ -1378,13 +1378,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 try{
 
-                    /*//instantiate the autocomplete widget for the search input
+                    //instantiate the autocomplete widget for the search input
                     new ej.dropdowns.AutoComplete({
                         cssClass: "search-input",
                         floatLabelType: "Never",
                         placeholder: "Search Products",
                         dataSource: ["Apple", "Banana", "Curry"]
-                    }).appendTo('#search-page-input');*/
+                    }).appendTo('#search-page-inner-input');
 
                 }
                 catch(err){}
