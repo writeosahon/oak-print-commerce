@@ -2394,8 +2394,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // listen for the back button event
                                     event.target.onDeviceBackButton = utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.backButtonClicked;
 
-                                    // add method to handle page-infinite-scroll
-                                    event.target.onInfiniteScroll = utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.pageInfiniteScroll;
+                                    /*// add method to handle page-infinite-scroll
+                                    event.target.onInfiniteScroll =
+                                        utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.pageInfiniteScroll;*/
 
                                     // add method to handle the loading action of the pull-to-refresh widget
                                     $('#products-page-pull-hook', $thisPage).get(0).onAction = utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.pagePullHookAction;
@@ -2465,7 +2466,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                     try {} catch (err) {}
 
-                                case 13:
+                                case 12:
                                 case 'end':
                                     return _context27.stop();
                             }
@@ -2487,7 +2488,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         /**
          * method is triggered when page is shown
          */
-        pageShow: function pageShow() {
+        pageShow: function pageShow(event) {
             $('#app-main-page ons-toolbar div.title-bar').html("Products"); // change the title of the screen
             // show the preloader
             $('#products-page .page-preloader').css("display", "block");
@@ -2495,6 +2496,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             $('#products-page #products-contents-container').html('');
             // hide the page scroll fab
             $('#products-page #products-page-scroll-top-fab').css({ "display": "none" });
+
+            // add method to handle page-infinite-scroll
+            event.target.onInfiniteScroll = utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.pageInfiniteScroll;
 
             window.SoftInputMode.set('adjustPan');
 
@@ -2508,11 +2512,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is hidden
          */
         pageHide: function () {
-            var _ref28 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee28() {
+            var _ref28 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee28(event) {
                 return regeneratorRuntime.wrap(function _callee28$(_context28) {
                     while (1) {
                         switch (_context28.prev = _context28.next) {
                             case 0:
+                                // add method to handle page-infinite-scroll
+                                delete event.target.onInfiniteScroll;
                                 // remove listener for when the device does not have Internet connection
                                 document.removeEventListener("offline", utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.deviceOfflineListener, false);
                                 // remove listener for when the device has Internet connection
@@ -2521,7 +2527,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 // remove all the infinite load indicator from the bottom of the page (if any exist)
                                 $('#products-page .page__content .infinite-load-container').remove();
 
-                            case 3:
+                            case 4:
                             case 'end':
                                 return _context28.stop();
                         }
@@ -2529,7 +2535,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 }, _callee28, this);
             }));
 
-            function pageHide() {
+            function pageHide(_x8) {
                 return _ref28.apply(this, arguments);
             }
 
@@ -2594,7 +2600,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 _context29.prev = 2;
                                 _context29.next = 5;
-                                return utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.loadProducts(utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.currentQueryParam);
+                                return utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.loadProducts(utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.currentQueryParam, 1);
 
                             case 5:
                                 productArray = _context29.sent;
@@ -2821,7 +2827,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 }, _callee31, this);
             }));
 
-            function loadProducts(_x12) {
+            function loadProducts(_x13) {
                 return _ref31.apply(this, arguments);
             }
 
@@ -2912,7 +2918,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 }, _callee32, this);
             }));
 
-            function displayPageContent(_x15) {
+            function displayPageContent(_x16) {
                 return _ref32.apply(this, arguments);
             }
 

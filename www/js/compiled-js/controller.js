@@ -2003,9 +2003,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 event.target.onDeviceBackButton =
                     utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.backButtonClicked;
 
-                // add method to handle page-infinite-scroll
+                /*// add method to handle page-infinite-scroll
                 event.target.onInfiniteScroll =
-                    utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.pageInfiniteScroll;
+                    utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.pageInfiniteScroll;*/
 
                 // add method to handle the loading action of the pull-to-refresh widget
                 $('#products-page-pull-hook', $thisPage).get(0).onAction =
@@ -2091,7 +2091,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         /**
          * method is triggered when page is shown
          */
-        pageShow: function(){
+        pageShow: function(event){
             $('#app-main-page ons-toolbar div.title-bar').html("Products"); // change the title of the screen
             // show the preloader
             $('#products-page .page-preloader').css("display", "block");
@@ -2099,6 +2099,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             $('#products-page #products-contents-container').html('');
             // hide the page scroll fab
             $('#products-page #products-page-scroll-top-fab').css({"display": "none"});
+
+            // add method to handle page-infinite-scroll
+            event.target.onInfiniteScroll =
+                utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.pageInfiniteScroll;
 
             window.SoftInputMode.set('adjustPan');
 
@@ -2114,7 +2118,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         /**
          * method is triggered when page is hidden
          */
-        pageHide: async function(){
+        pageHide: async function(event){
+            // add method to handle page-infinite-scroll
+            delete event.target.onInfiniteScroll;
             // remove listener for when the device does not have Internet connection
             document.removeEventListener("offline",
                 utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.deviceOfflineListener, false);
@@ -2179,7 +2185,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // start loading the page content
                 let productArray = await utopiasoftware[utopiasoftware_app_namespace].controller.
                 productsPageViewModel.loadProducts(utopiasoftware[utopiasoftware_app_namespace].
-                    controller.productsPageViewModel.currentQueryParam);
+                    controller.productsPageViewModel.currentQueryParam, 1);
                 await utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.displayPageContent(productArray[0]);
             }
             catch(err){ // an error occurred
