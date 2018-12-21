@@ -2122,7 +2122,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         pageHide: async function(event){
             // remove method to handle page-infinite-scroll
-            event.target.onInfiniteScroll = undefined;
+            event.target.onInfiniteScroll = function(done){done();};
 
             console.log("PAGE HIDE");
 

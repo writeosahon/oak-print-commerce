@@ -2520,7 +2520,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         switch (_context28.prev = _context28.next) {
                             case 0:
                                 // remove method to handle page-infinite-scroll
-                                event.target.onInfiniteScroll = undefined;
+                                event.target.onInfiniteScroll = function (done) {
+                                    done();
+                                };
 
                                 console.log("PAGE HIDE");
 
