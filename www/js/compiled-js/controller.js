@@ -2003,9 +2003,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 event.target.onDeviceBackButton =
                     utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.backButtonClicked;
 
-                /*// add method to handle page-infinite-scroll
+                // add method to handle page-infinite-scroll
                 event.target.onInfiniteScroll =
-                    utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.pageInfiniteScroll;*/
+                    utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.pageInfiniteScroll;
 
                 // add method to handle the loading action of the pull-to-refresh widget
                 $('#products-page-pull-hook', $thisPage).get(0).onAction =
@@ -2095,14 +2095,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             $('#app-main-page ons-toolbar div.title-bar').html("Products"); // change the title of the screen
             // show the preloader
             $('#products-page .page-preloader').css("display", "block");
+            // add extra margin to the products-content-container to prevent page infinite scroll from being called unexpectedly
+            $('#products-page #products-contents-container').css("margin-bottom", "102vh");
             // empty the content of the page
             $('#products-page #products-contents-container').html('');
             // hide the page scroll fab
             $('#products-page #products-page-scroll-top-fab').css({"display": "none"});
-
-            // add method to handle page-infinite-scroll
-            event.target.onInfiniteScroll =
-                utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.pageInfiniteScroll;
 
             console.log("PAGE SHOW");
 
@@ -2121,8 +2119,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is hidden
          */
         pageHide: async function(event){
-            // remove method to handle page-infinite-scroll
-            event.target.onInfiniteScroll = function(done){done();};
 
             console.log("PAGE HIDE");
 
@@ -2217,6 +2213,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         async pageInfiniteScroll(doneCallBack = function(){}){
+            console.log("PRODUCT PULL-HOOK CALLED");
             // append an infinite load indicator to the bottom of the page
             $('#products-page .page__content').
             append(`<div class="infinite-load-container" style="text-align: center">
@@ -2449,6 +2446,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         }
                     }
 
+                    // remove the extra margin that was added to products-content-container
+                    $('#products-page #products-contents-container').css("margin-bottom", "0");
                     resolve(productsArray.length); // resolve the promise with length of the productsArray
                 }
 
