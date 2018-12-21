@@ -2096,8 +2096,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             $('#app-main-page ons-toolbar div.title-bar').html("Products"); // change the title of the screen
             // show the preloader
             $('#products-page .page-preloader').css("display", "block");
-            // add extra margin to the products-content-container to prevent page infinite scroll from being called unexpectedly
-            $('#products-page #products-contents-container').css("margin-bottom", "102vh");
             // empty the content of the page
             $('#products-page #products-contents-container').html('');
             // hide the page scroll fab
