@@ -1378,6 +1378,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 try{
 
+                    //instantiate the autocomplete widget for the search input
+                    new ej.dropdowns.AutoComplete(["Apple", "Banana", "Curry"]).appendTo('#search-page-inner-input');
+
                 }
                 catch(err){}
             }
@@ -1391,6 +1394,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             $('#app-main-page ons-toolbar div.title-bar').html("Search"); // update the title of the page
 
             window.SoftInputMode.set('adjustPan');
+
+            // listen for when the device does not have Internet connection
+            document.addEventListener("offline",
+                utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.deviceOfflineListener, false);
+            // listen for when the device has Internet connection
+            document.addEventListener("online",
+                utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.deviceOnlineListener, false);
         },
 
 
@@ -1398,6 +1408,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is hidden
          */
         pageHide: async function(){
+            // remove listener for when the device does not have Internet connection
+            document.removeEventListener("offline",
+                utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.deviceOfflineListener, false);
+            // remove listener for when the device has Internet connection
+            document.removeEventListener("online",
+                utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.deviceOnlineListener, false);
         },
 
         /**
@@ -1414,6 +1430,27 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             // go to the "Categories" page (tab)
             $('#app-main-tabbar').get(0).setActiveTab(1);
+        },
+
+        /**
+         * method is triggered whenever the user's device is offline
+         */
+        deviceOfflineListener(){
+            // display toast to show that there is no internet connection
+            let toast = $('.page-toast').get(0).ej2_instances[0];
+            toast.hide('All'); // hide all previously displayed ej2 toast
+            toast.cssClass = 'default-ej2-toast';
+            toast.content = "No Internet connection. Connect to the Internet to see search results";
+            toast.dataBind();
+            toast.show();// show ej2 toast
+        },
+
+        /**
+         * method is triggered whenever the user's device is online
+         */
+        deviceOnlineListener(){
+            // hide all previously displayed ej2 toast
+            $('.page-toast').get(0).ej2_instances[0].hide('All');
         }
     },
 
