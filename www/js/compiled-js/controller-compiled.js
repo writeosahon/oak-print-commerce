@@ -1616,18 +1616,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             minLength: 1000, // minimum number of characters that will automatically trigger autocomplete search
                                             suggestionCount: 20, // specified how many items will be in the popup
                                             dataSource: [],
-                                            noRecordsTemplate: 'Tap \'Enter\' key to begin search'
+                                            noRecordsTemplate: 'Tap \'Enter\' key to begin search',
+                                            focus: function focus() {
+                                                // track when the component has focus
+                                                this.dataSource = [];
+                                                this.dataBind();
+                                                this.showPopup();
+                                                console.log("AUTOCOMPLETE FOCUS");
+                                            }
                                         }).appendTo('#search-page-input');
-
-                                        // add listeners for the searchAutoComplete
-
-                                        searchAutoComplete.addEventListener("focus", function () {
-                                            // track when the component has focus
-                                            this.dataSource = [];
-                                            this.dataBind();
-                                            this.showPopup();
-                                            console.log("AUTOCOMPLETE FOCUS");
-                                        });
                                     } catch (err) {}
 
                                 case 5:
