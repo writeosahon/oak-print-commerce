@@ -1638,9 +1638,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                 this.noRecordsTemplate = 'Searching for products';
                                                 this.dataSource = [];
                                                 this.dataBind();
-                                                this.showPopup();
+                                                //this.showPopup();
                                                 this.showSpinner();
-                                                this.refresh();
                                                 console.log("AUTOCOMPLETE CHANGED");
                                             },
 
@@ -1783,6 +1782,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                         searchAutoComplete.value = $('#search-page #search-page-input').val();
                                         searchAutoComplete.dataBind();
+                                        $('#search-page #search-page-input').val($('#search-page #search-page-input').val() + " ");
                                     }
 
                             case 1:
