@@ -1626,6 +1626,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             this.dataSource = [];
                                             this.dataBind();
                                             this.showPopup();
+                                            console.log("AUTOCOMPLETE FOCUS");
                                         });
                                     } catch (err) {}
 
