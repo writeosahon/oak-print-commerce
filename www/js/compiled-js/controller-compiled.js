@@ -1783,7 +1783,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         searchAutoComplete.value = $('#search-page #search-page-input').val();
                                         searchAutoComplete.dataBind();
                                         $('#search-page #search-page-input').val($('#search-page #search-page-input').val() + " ");
-                                        $('#search-page #search-page-input').trigger("keypress");
+                                        $('#search-page #search-page-input').trigger("keyup");
                                     }
 
                             case 1:
