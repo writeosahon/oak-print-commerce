@@ -1639,7 +1639,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                 this.dataSource = [];
                                                 this.dataBind();
                                                 this.showPopup();
-                                                //this.showSpinner();
+                                                this.showSpinner();
+                                                this.refresh();
                                                 console.log("AUTOCOMPLETE CHANGED");
                                             },
 
