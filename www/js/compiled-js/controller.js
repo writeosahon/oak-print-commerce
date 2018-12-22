@@ -1387,23 +1387,35 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         minLength: 1, // minimum number of characters that will automatically trigger autocomplete search
                         suggestionCount: 20, // specified how many items will be in the popup
                         dataSource: [],
-                        noRecordsTemplate: `Tap 'Enter' key to begin search`,
+                        noRecordsTemplate: `Tap 'Search' key to begin search`,
                         focus: function(){ // track when the component has focus
+                            this.noRecordsTemplate = `Tap 'Search' key to begin search`;
                             this.dataSource = [];
                             this.dataBind();
                             this.showPopup();
                             console.log("AUTOCOMPLETE FOCUS");
                         },
+                        filtering: function(){ // track when the component is being filtered
+                            this.noRecordsTemplate = `Tap 'Search' key to begin search`;
+                            this.dataSource = [];
+                            this.dataBind();
+                            this.showPopup();
+                            console.log("AUTOCOMPLETE FILTERING");
+                        },
+                        change: function(){ // track when the component's value has changed
+                            this.noRecordsTemplate = `Searching for products`;
+                            this.dataSource = [];
+                            this.dataBind();
+                            this.showPopup();
+                            this.showSpinner();
+                            console.log("AUTOCOMPLETE CHANGED");
+                        },
+
                         actionBegin: function(){
                             console.log("AUTOCOMPLETE ACTION BEGIN");
                         },
                         actionComplete: function(){console.log("AUTOCOMPLETE ACTION COMPLETE");},
                         actionFailure: function(){console.log("AUTOCOMPLETE ACTION FAILURE");},
-                        filtering: function(){ // track when the component is being filtered
-                            this.dataSource = [];
-                            this.dataBind();
-                            console.log("AUTOCOMPLETE FILTERING");
-                        }
                     }).appendTo('#search-page-input');
 
                 }
