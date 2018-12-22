@@ -1627,6 +1627,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             },
                                             blur: function blur() {
                                                 // track when the component has focus
+                                                this._allowRemoteSearch = false;
                                                 // hide the popover
                                                 $('#search-page-search-input-popover').get(0).hide();
                                                 console.log("AUTOCOMPLETE BLUR");
