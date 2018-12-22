@@ -1619,7 +1619,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             noRecordsTemplate: 'Tap \'Search\' key to begin search',
                                             focus: function focus() {
                                                 // track when the component has focus
-                                                $('#view-reports-additional-menu-popover').get(0).show(document.getElementById('search-page-input'));
+                                                $('#search-page-search-input-popover').get(0).show(document.getElementById('search-page-input'));
                                                 console.log("AUTOCOMPLETE FOCUS");
                                             },
                                             filtering: function filtering() {

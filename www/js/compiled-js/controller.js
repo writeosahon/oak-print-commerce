@@ -1389,7 +1389,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         dataSource: [],
                         noRecordsTemplate: `Tap 'Search' key to begin search`,
                         focus: function(){ // track when the component has focus
-                            $('#view-reports-additional-menu-popover').get(0).
+                            $('#search-page-search-input-popover').get(0).
                             show(document.getElementById('search-page-input'));
                             console.log("AUTOCOMPLETE FOCUS");
                         },
