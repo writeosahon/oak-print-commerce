@@ -1636,7 +1636,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             change: function change() {
                                                 // track when the component's value has changed
                                                 this.noRecordsTemplate = 'Searching for products';
-                                                this.dataSource = [];
+                                                //this.dataSource = [];
                                                 this.dataBind();
                                                 this.showPopup();
                                                 this.showSpinner();
