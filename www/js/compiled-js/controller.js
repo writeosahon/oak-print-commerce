@@ -1410,16 +1410,21 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             console.log("AUTOCOMPLETE BLUR");
                         },
                         change: function(){ // track when the component's value has changed
-                            this.noRecordsTemplate = `Searching for products`;
+                            if(this._allowRemoteSearch !== true){
+                                this._allowRemoteSearch = false;
+                                return; // exit
+                            }
+
                             // inform user that search is ongoing
                             $('#search-page-search-input-popover #search-input-popover-list').
                             html(`
                             <ons-list-item modifier="nodivider" lock-on-drag="true">
                                 <div class="left">
-                                    <ons-progress-circular indeterminate modifier="pull-hook"></ons-progress-circular>
+                                    <ons-progress-circular indeterminate modifier="pull-hook" 
+                                    style="transform: scale(0.6)"></ons-progress-circular>
                                 </div>
                                 <div class="center">
-                                    <div style="text-align: center; width: 100%;">
+                                    <div style="text-align: center;">
                                         Searching for products
                                     </div>
                                 </div>
@@ -1522,6 +1527,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 let searchAutoComplete = $('#search-page #search-page-input').get(0).ej2_instances[0];
                 searchAutoComplete.value = $('#search-page #search-page-input').val();
+                searchAutoComplete._allowRemoteSearch = true;
                 searchAutoComplete.dataBind();
 
             }
