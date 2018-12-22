@@ -1384,15 +1384,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         placeholder: "Search Products",
                         allowCustom: true,
                         filterType: "Contains",
-                        minLength: 1, // minimum number of characters that will automatically trigger autocomplete search
+                        minLength: 1000, // minimum number of characters that will automatically trigger autocomplete search
                         suggestionCount: 20, // specified how many items will be in the popup
                         dataSource: [],
                         noRecordsTemplate: `Tap 'Search' key to begin search`,
                         focus: function(){ // track when the component has focus
-                            this.noRecordsTemplate = `Tap 'Search' key to begin search`;
-                            this.dataSource = [];
-                            this.dataBind();
-                            this.showPopup();
+                            $('#view-reports-additional-menu-popover').get(0).
+                            show(document.getElementById('search-page-input'));
                             console.log("AUTOCOMPLETE FOCUS");
                         },
                         filtering: function(){ // track when the component is being filtered
@@ -1501,9 +1499,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             if(keyEvent.which === kendo.keys.ENTER) // if the enter key was pressed
             {
                 // prevent the default action from occurring
-                /*keyEvent.preventDefault();
+                keyEvent.preventDefault();
                 keyEvent.stopImmediatePropagation();
-                keyEvent.stopPropagation();*/
+                keyEvent.stopPropagation();
                 // hide the device keyboard
                 Keyboard.hide();
 
