@@ -1623,6 +1623,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                 this.dataBind();
                                                 this.showPopup();
                                                 console.log("AUTOCOMPLETE FOCUS");
+                                            },
+                                            actionBegin: function actionBegin() {
+                                                console.log("AUTOCOMPLETE ACTION BEGIN");
+                                            },
+                                            actionComplete: function actionComplete() {
+                                                console.log("AUTOCOMPLETE ACTION COMPLETE");
+                                            },
+                                            actionFailure: function actionFailure() {
+                                                console.log("AUTOCOMPLETE ACTION FAILURE");
+                                            },
+                                            filtering: function filtering() {
+                                                console.log("AUTOCOMPLETE FILTERING");
                                             }
                                         }).appendTo('#search-page-input');
                                     } catch (err) {}

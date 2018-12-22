@@ -1393,7 +1393,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             this.dataBind();
                             this.showPopup();
                             console.log("AUTOCOMPLETE FOCUS");
-                        }
+                        },
+                        actionBegin: function(){
+                            console.log("AUTOCOMPLETE ACTION BEGIN");
+                        },
+                        actionComplete: function(){console.log("AUTOCOMPLETE ACTION COMPLETE");},
+                        actionFailure: function(){console.log("AUTOCOMPLETE ACTION FAILURE");},
+                        filtering: function(){console.log("AUTOCOMPLETE FILTERING");}
                     }).appendTo('#search-page-input');
 
 
