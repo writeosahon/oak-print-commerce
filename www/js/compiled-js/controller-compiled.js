@@ -1772,9 +1772,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 if (keyEvent.which === kendo.keys.ENTER) // if the enter key was pressed
                                     {
                                         // prevent the default action from occurring
-                                        keyEvent.preventDefault();
+                                        /*keyEvent.preventDefault();
                                         keyEvent.stopImmediatePropagation();
-                                        keyEvent.stopPropagation();
+                                        keyEvent.stopPropagation();*/
                                         // hide the device keyboard
                                         Keyboard.hide();
 
@@ -1782,8 +1782,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                         searchAutoComplete.value = $('#search-page #search-page-input').val();
                                         searchAutoComplete.dataBind();
-                                        $('#search-page #search-page-input').val($('#search-page #search-page-input').val() + " ");
-                                        $('#search-page #search-page-input').trigger("keyup");
                                     }
 
                             case 1:
