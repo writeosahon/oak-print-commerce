@@ -1625,6 +1625,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             // track when the component has focus
                                             this.dataSource = [];
                                             this.dataBind();
+                                            this.showPopup();
                                         });
                                     } catch (err) {}
 

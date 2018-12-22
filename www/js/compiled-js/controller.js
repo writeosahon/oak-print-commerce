@@ -1394,6 +1394,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     searchAutoComplete.addEventListener("focus", function(){ // track when the component has focus
                         this.dataSource = [];
                         this.dataBind();
+                        this.showPopup();
                     });
 
 
