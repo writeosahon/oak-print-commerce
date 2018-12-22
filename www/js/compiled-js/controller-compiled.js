@@ -1634,6 +1634,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                 console.log("AUTOCOMPLETE ACTION FAILURE");
                                             },
                                             filtering: function filtering() {
+                                                // track when the component is being filtered
+                                                this.dataSource = [];
+                                                this.dataBind();
+                                                this.showPopup();
                                                 console.log("AUTOCOMPLETE FILTERING");
                                             }
                                         }).appendTo('#search-page-input');

@@ -1399,7 +1399,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         },
                         actionComplete: function(){console.log("AUTOCOMPLETE ACTION COMPLETE");},
                         actionFailure: function(){console.log("AUTOCOMPLETE ACTION FAILURE");},
-                        filtering: function(){console.log("AUTOCOMPLETE FILTERING");}
+                        filtering: function(){ // track when the component is being filtered
+                            this.dataSource = [];
+                            this.dataBind();
+                            this.showPopup();
+                            console.log("AUTOCOMPLETE FILTERING");
+                        }
                     }).appendTo('#search-page-input');
 
 
