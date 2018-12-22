@@ -1389,31 +1389,46 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         dataSource: [],
                         noRecordsTemplate: `Tap 'Search' key to begin search`,
                         focus: function(){ // track when the component has focus
+                            // inform user on how to initiate search
+                            $('#search-page-search-input-popover #search-input-popover-list').
+                            html(`
+                            <ons-list-item modifier="nodivider" lock-on-drag="true">
+                                <div class="center">
+                                    <div style="text-align: center; width: 100%;">
+                                        Tap 'Search' key to begin search
+                                    </div>
+                                </div>
+                            </ons-list-item>`);
+                            // display the popover
                             $('#search-page-search-input-popover').get(0).
                             show(document.getElementById('search-page-input'));
                             console.log("AUTOCOMPLETE FOCUS");
                         },
-                        filtering: function(){ // track when the component is being filtered
-                            this.noRecordsTemplate = `Tap 'Search' key to begin search`;
-                            this.dataSource = [];
-                            this.dataBind();
-                            this.showPopup();
-                            console.log("AUTOCOMPLETE FILTERING");
+                        blur: function(){ // track when the component has focus
+                            // hide the popover
+                            $('#search-page-search-input-popover').get(0).hide();
+                            console.log("AUTOCOMPLETE BLUR");
                         },
                         change: function(){ // track when the component's value has changed
                             this.noRecordsTemplate = `Searching for products`;
-                            this.dataSource = [];
-                            this.dataBind();
-                            //this.showPopup();
-                            this.showSpinner();
+                            // inform user that search is ongoing
+                            $('#search-page-search-input-popover #search-input-popover-list').
+                            html(`
+                            <ons-list-item modifier="nodivider" lock-on-drag="true">
+                                <div class="left">
+                                    <ons-progress-circular indeterminate modifier="pull-hook"></ons-progress-circular>
+                                </div>
+                                <div class="center">
+                                    <div style="text-align: center; width: 100%;">
+                                        Searching for products
+                                    </div>
+                                </div>
+                            </ons-list-item>`);
+                            // display the popover
+                            $('#search-page-search-input-popover').get(0).
+                            show(document.getElementById('search-page-input'));
                             console.log("AUTOCOMPLETE CHANGED");
-                        },
-
-                        actionBegin: function(){
-                            console.log("AUTOCOMPLETE ACTION BEGIN");
-                        },
-                        actionComplete: function(){console.log("AUTOCOMPLETE ACTION COMPLETE");},
-                        actionFailure: function(){console.log("AUTOCOMPLETE ACTION FAILURE");},
+                        }
                     }).appendTo('#search-page-input');
 
                 }

@@ -1619,35 +1619,26 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             noRecordsTemplate: 'Tap \'Search\' key to begin search',
                                             focus: function focus() {
                                                 // track when the component has focus
+                                                // inform user on how to initiate search
+                                                $('#search-page-search-input-popover #search-input-popover-list').html('\n                            <ons-list-item modifier="nodivider" lock-on-drag="true">\n                                <div class="center">\n                                    <div style="text-align: center; width: 100%;">\n                                        Tap \'Search\' key to begin search\n                                    </div>\n                                </div>\n                            </ons-list-item>');
+                                                // display the popover
                                                 $('#search-page-search-input-popover').get(0).show(document.getElementById('search-page-input'));
                                                 console.log("AUTOCOMPLETE FOCUS");
                                             },
-                                            filtering: function filtering() {
-                                                // track when the component is being filtered
-                                                this.noRecordsTemplate = 'Tap \'Search\' key to begin search';
-                                                this.dataSource = [];
-                                                this.dataBind();
-                                                this.showPopup();
-                                                console.log("AUTOCOMPLETE FILTERING");
+                                            blur: function blur() {
+                                                // track when the component has focus
+                                                // hide the popover
+                                                $('#search-page-search-input-popover').get(0).hide();
+                                                console.log("AUTOCOMPLETE BLUR");
                                             },
                                             change: function change() {
                                                 // track when the component's value has changed
                                                 this.noRecordsTemplate = 'Searching for products';
-                                                this.dataSource = [];
-                                                this.dataBind();
-                                                //this.showPopup();
-                                                this.showSpinner();
+                                                // inform user that search is ongoing
+                                                $('#search-page-search-input-popover #search-input-popover-list').html('\n                            <ons-list-item modifier="nodivider" lock-on-drag="true">\n                                <div class="left">\n                                    <ons-progress-circular indeterminate modifier="pull-hook"></ons-progress-circular>\n                                </div>\n                                <div class="center">\n                                    <div style="text-align: center; width: 100%;">\n                                        Searching for products\n                                    </div>\n                                </div>\n                            </ons-list-item>');
+                                                // display the popover
+                                                $('#search-page-search-input-popover').get(0).show(document.getElementById('search-page-input'));
                                                 console.log("AUTOCOMPLETE CHANGED");
-                                            },
-
-                                            actionBegin: function actionBegin() {
-                                                console.log("AUTOCOMPLETE ACTION BEGIN");
-                                            },
-                                            actionComplete: function actionComplete() {
-                                                console.log("AUTOCOMPLETE ACTION COMPLETE");
-                                            },
-                                            actionFailure: function actionFailure() {
-                                                console.log("AUTOCOMPLETE ACTION FAILURE");
                                             }
                                         }).appendTo('#search-page-input');
                                     } catch (err) {}
