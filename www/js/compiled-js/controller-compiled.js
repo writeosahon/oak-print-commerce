@@ -1614,7 +1614,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             allowCustom: true,
                                             filterType: "Contains",
                                             minLength: 1000, // minimum number of characters that will automatically trigger autocomplete search
-                                            suggestionCount: 20, // specified how many items will be in the popup
+                                            suggestionCount: 1, // specified how many items will be in the popup
                                             dataSource: [],
                                             noRecordsTemplate: 'Tap \'Enter\' key to begin search',
                                             focus: function focus() {
@@ -1637,7 +1637,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                 // track when the component is being filtered
                                                 this.dataSource = [];
                                                 this.dataBind();
-                                                this.showPopup();
                                                 console.log("AUTOCOMPLETE FILTERING");
                                             }
                                         }).appendTo('#search-page-input');
