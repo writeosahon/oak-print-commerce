@@ -1587,6 +1587,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             //function is used to initialise the page if the app is fully ready for execution
             var loadPageOnAppReady = function () {
                 var _ref17 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee17() {
+                    var searchAutoComplete;
                     return regeneratorRuntime.wrap(function _callee17$(_context17) {
                         while (1) {
                             switch (_context17.prev = _context17.next) {
@@ -1607,11 +1608,24 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     try {
 
                                         //instantiate the autocomplete widget for the search input
-                                        new ej.dropdowns.AutoComplete({
+                                        searchAutoComplete = new ej.dropdowns.AutoComplete({
                                             floatLabelType: "Never",
                                             placeholder: "Search Products",
-                                            dataSource: ["Apple", "Banana", "Curry"]
+                                            allowCustom: true,
+                                            filterType: "Contains",
+                                            minLength: 1000, // minimum number of characters that will automatically trigger autocomplete search
+                                            suggestionCount: 20, // specified how many items will be in the popup
+                                            dataSource: [],
+                                            noRecordsTemplate: 'Tap \'Enter\' key to begin search'
                                         }).appendTo('#search-page-input');
+
+                                        // add listeners for the searchAutoComplete
+
+                                        searchAutoComplete.addEventListener("focus", function () {
+                                            // track when the component has focus
+                                            this.dataSource = [];
+                                            this.dataBind();
+                                        });
                                     } catch (err) {}
 
                                 case 5:
