@@ -1530,7 +1530,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 searchAutoComplete.value = $('#search-page #search-page-input').val();
                 searchAutoComplete._allowRemoteSearch = true;
                 searchAutoComplete.dataBind();
-
+                searchAutoComplete.change();
             }
         }
     },
