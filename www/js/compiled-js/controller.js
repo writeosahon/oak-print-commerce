@@ -1125,7 +1125,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             let toast = $('.page-toast').get(0).ej2_instances[0];
             toast.hide('All'); // hide all previously displayed ej2 toast
             toast.cssClass = 'default-ej2-toast';
-            toast.content = "No Internet connection. Connect to the Internet to see updated categories";
+            toast.content = "No Internet connection. Connect to the Internet to see updated products";
             toast.dataBind();
             toast.show();// show ej2 toast
         },
@@ -1239,7 +1239,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 let toast = $('.page-toast').get(0).ej2_instances[0];
                 toast.hide('All');
                 toast.cssClass = 'default-ej2-toast';
-                toast.content = "No Internet connection. Pull down to refresh and see updated categories";
+                toast.content = "No Internet connection. Pull down to refresh and see updated products";
                 toast.dataBind();
                 toast.show();
                 // load the requested product categories from cached data
