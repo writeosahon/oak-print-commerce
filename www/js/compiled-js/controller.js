@@ -2092,6 +2092,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is shown
          */
         pageShow: function(event){
+            // flag that page infinite scroll should NOT be allowed
             event.target._allowInfinitePageScroll = false;
             $('#app-main-page ons-toolbar div.title-bar').html("Products"); // change the title of the screen
             // show the preloader
@@ -2118,6 +2119,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is hidden
          */
         pageHide: async function(event){
+            // flag that page infinite scroll should NOT be allowed
             event.target._allowInfinitePageScroll = false;
 
             console.log("PAGE HIDE");
@@ -2213,7 +2215,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         async pageInfiniteScroll(doneCallBack = function(){}){
-            if($('#products-page').get(0)._allowInfinitePageScroll === false){
+            // check of page infinite scroll is allowed or not
+            if($('#products-page').get(0)._allowInfinitePageScroll === false){ // page infinite scroll is NOT allowed
                 doneCallBack();
                 return;
             }
@@ -2417,7 +2420,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         ${productsArray[index].name}
                                     </div>
                         <div style="color: gold; font-size: 0.6em !important; white-space: nowrap !important; 
-                        text-overflow: ellipsis">
+                        text-overflow: ellipsis; overflow: hidden;">
                         ${Math.floor(kendo.parseFloat(productsArray[index].average_rating)) > 0 ? 
                             `<ons-icon icon="md-star" fixed-width></ons-icon>`.
                         repeat(Math.floor(kendo.parseFloat(productsArray[index].average_rating))):
