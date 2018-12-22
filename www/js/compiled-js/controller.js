@@ -1384,8 +1384,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         placeholder: "Search Products",
                         allowCustom: true,
                         filterType: "Contains",
-                        minLength: 1000, // minimum number of characters that will automatically trigger autocomplete search
-                        suggestionCount: 1, // specified how many items will be in the popup
+                        minLength: 1, // minimum number of characters that will automatically trigger autocomplete search
+                        suggestionCount: 20, // specified how many items will be in the popup
                         dataSource: [],
                         noRecordsTemplate: `Tap 'Enter' key to begin search`,
                         focus: function(){ // track when the component has focus
