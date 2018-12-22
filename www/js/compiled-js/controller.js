@@ -1404,7 +1404,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         },
                         change: function(){ // track when the component's value has changed
                             this.noRecordsTemplate = `Searching for products`;
-                            //this.dataSource = [];
+                            this.dataSource = [];
                             this.dataBind();
                             this.showPopup();
                             this.showSpinner();
@@ -1488,6 +1488,29 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         deviceOnlineListener(){
             // hide all previously displayed ej2 toast
             $('.page-toast').get(0).ej2_instances[0].hide('All');
+        },
+
+        /**
+         * method is triggered when the enter button is clicked on the device keyboard
+         *
+         * @param keyEvent
+         * @returns {Promise<void>}
+         */
+        async enterButtonClicked(keyEvent){
+            // check which key was pressed
+            if(keyEvent.which === kendo.keys.ENTER) // if the enter key was pressed
+            {
+                // prevent the default action from occurring
+                keyEvent.preventDefault();
+                keyEvent.stopImmediatePropagation();
+                keyEvent.stopPropagation();
+                // hide the device keyboard
+                Keyboard.hide();
+
+                let searchAutoComplete = $('#search-page #search-page-input').get(0).ej2_instances[0];
+                searchAutoComplete.value = $('#search-page #search-page-input').val();
+                searchAutoComplete.dataBind();
+            }
         }
     },
 
