@@ -337,6 +337,11 @@
     min-height: auto !important;
     max-height: 60vh;
 }
+#search-page .e-card-image {
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
 /** STYLE FOR SEARCH PAGE ENDS **/
 
 /** STYLE FOR ACCOUNT PAGE BEGINS **/

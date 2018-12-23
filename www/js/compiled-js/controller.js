@@ -1404,17 +1404,30 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             show(document.getElementById('search-page-input'));
                             console.log("AUTOCOMPLETE FOCUS");
                         },
-                        blur: function(){ // track when the component has focus
-                            this._allowRemoteSearch = false;
+                        blur: function(){ // track when the component has lost focus
+                            this._allowRemoteSearch = false; // set that remote search is NOT allowed
                             // hide the popover
                             $('#search-page-search-input-popover').get(0).hide();
                             console.log("AUTOCOMPLETE BLUR");
                         },
                         change: function(){ // track when the component's value has changed
-                            if(this._allowRemoteSearch !== true){
-                                this._allowRemoteSearch = false;
-                                return; // exit
+
+                            let searchValue = ""; // holds the term to be searched for
+
+                            // check if the search component can perform a remote search
+                            if(this._allowRemoteSearch !== true){  // remote search is NOT allowed
+                                this._allowRemoteSearch = false; // set that remote search is NOT allowed
+                                return; // exit function
                             }
+
+                            // check that there is actually a search term entered in the search component
+                            if(!this.value || this.value.trim() === ""){ // no search term
+                                this._allowRemoteSearch = false; // set that remote search is NOT allowed
+                                return; // exit function
+                            }
+
+                            // update the search term value
+                            searchValue = this.value.trim();
 
                             // inform user that search is ongoing
                             $('#search-page-search-input-popover #search-input-popover-list').
@@ -1433,6 +1446,22 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             // display the popover
                             $('#search-page-search-input-popover').get(0).
                             show(document.getElementById('search-page-input'));
+
+                            // run the actual search in a different event queue
+                            window.setTimeout(async function() {
+                                var searchResultsArray = [];
+                                try{
+                                    searchResultsArray = utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.
+                                    loadProducts({"order": "desc", "orderby": "date", "status": "publish",
+                                        "type": "variable", "stock_status": "instock", "page": 1, "per_page": 20,
+                                        "search": searchValue});
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.
+                                    displayPageContent(searchResultsArray[0]);
+                                }
+                                catch(err){
+                                    //
+                                }
+                            }, 0);
                             console.log("AUTOCOMPLETE CHANGED");
                         }
                     }).appendTo('#search-page-input');
@@ -1526,12 +1555,135 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // hide the device keyboard
                 Keyboard.hide();
 
+                // get the search autocomplete component
                 let searchAutoComplete = $('#search-page #search-page-input').get(0).ej2_instances[0];
+                // update the value of the retrieved component
                 searchAutoComplete.value = $('#search-page #search-page-input').val();
-                searchAutoComplete._allowRemoteSearch = true;
-                searchAutoComplete.dataBind();
-                searchAutoComplete.change();
+                searchAutoComplete._allowRemoteSearch = true; // flag the remote search can occur
+                searchAutoComplete.dataBind(); // bind new value to the component
+                searchAutoComplete.change(); // trigger the change method
             }
+        },
+
+        /**
+         * method is used to load products to the page
+         *
+         * @param pageToAccess {Integer} the page within the paginated categories to retrieve
+         *
+         * @param pageSize {Integer} the size of the page i.e. the number of category items to retrieve
+         *
+         * @param queryParam {Object} holds the objects that contains the query
+         * params for the type of products to retrieve
+         *
+         * @returns {Promise<void>}
+         */
+        async loadProducts(queryParam, pageToAccess = queryParam.page || 1,
+                           pageSize = queryParam.per_page || 3){
+            queryParam.page = pageToAccess;
+            queryParam.per_page = pageSize;
+
+            var productPromisesArray = []; // holds the array for the promises used to load the products
+
+            // check if there is internet connection or not
+            if(navigator.connection.type !== Connection.NONE){ // there is internet connection
+                // load the requested products list from the server
+                productPromisesArray.push(new Promise(function(resolve, reject){
+                    Promise.resolve($.ajax(
+                        {
+                            url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + "/wp-json/wc/v3/products",
+                            type: "get",
+                            //contentType: "application/x-www-form-urlencoded",
+                            beforeSend: function(jqxhr) {
+                                jqxhr.setRequestHeader("Authorization", "Basic " +
+                                    utopiasoftware[utopiasoftware_app_namespace].accessor);
+                            },
+                            dataType: "json",
+                            timeout: 240000, // wait for 4 minutes before timeout of request
+                            processData: true,
+                            data: queryParam
+                        }
+                    )).then(function(productsArray){
+
+                        resolve(productsArray); // resolve the parent promise with the data gotten from the server
+
+                    }).catch(function(err){ // an error occurred
+                        console.log("LOAD SEARCH PRODUCTS", err);
+                        reject(err); // reject the parent promise with the error
+                    });
+                }));
+
+            } // end of loading products with Internet Connection
+            else{ // there is no internet connection
+                productPromisesArray.push(Promise.reject("no internet connection"));
+            }
+
+            return Promise.all(productPromisesArray); // return a promise which resolves when all promises in the array resolve
+        },
+
+        /**
+         * method is used to display the retrieved products on the search popover
+         *
+         * @param productsArray
+         *
+         * @returns {Promise<void>}
+         */
+        async displayPageContent(productsArray){
+
+            var displayCompletedPromise = new Promise(function(resolve, reject){
+
+                let productsContent = ""; // holds the contents for the products
+
+                // check if the productsArray is empty or not
+                if(productsArray.length <= 0){ // there are no new content to display
+                    // inform the user that no result for the search was founc'
+                    $('#search-page-search-input-popover #search-input-popover-list').
+                    html(`<ons-list-item modifier="nodivider" lock-on-drag="true">
+                                <div class="center">
+                                    <div style="text-align: center; width: 100%;">
+                                        No Results Found
+                                    </div>
+                                </div>
+                            </ons-list-item>`);
+                    resolve(productsArray.length); // resolve promise with the length of the products array
+                }
+                else{ // there are some products to display
+
+                    // loop through the array content and display it
+                    for(let index = 0; index < productsArray.length; index++){
+
+                        productsContent +=
+                            `<ons-list-item modifier="nodivider" lock-on-drag="true">
+                                <div class="left">
+                                    <div class="search-img" style='background-image: url("${productsArray[index].images[0].src}"); 
+                                                            width: 2em; height: 2em'></div>
+                                </div>
+                                <div class="center">
+                                    <div style="text-align: center;">
+                                        ${productsArray[index].name}
+                                    </div>
+                                </div>
+                            </ons-list-item>`;
+                    }
+
+                    // append the "Load More" search item
+                    productsContent +=
+                        `<ons-list-item modifier="nodivider" lock-on-drag="true">
+                                <div class="center">
+                                    <div style="text-align: center; width: 100%;">
+                                        Tap 'Search' key to begin search
+                                    </div>
+                                </div>
+                            </ons-list-item>`;
+                    // attach the new search results to the search popover
+                    $('#search-page-search-input-popover #search-input-popover-list').html(productsContent);
+
+                    resolve(productsArray.length); // resolve the promise with length of the productsArray
+                }
+
+            });
+
+            return displayCompletedPromise; // return the promise object ot indicate if the display has been completed or not
+
         }
     },
 
