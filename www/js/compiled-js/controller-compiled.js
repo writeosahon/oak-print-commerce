@@ -1673,7 +1673,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                                     _context17.prev = 1;
                                                                     _context17.next = 4;
                                                                     return utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.loadProducts({ "order": "desc", "orderby": "date", "status": "publish",
-                                                                        "type": "variable", "stock_status": "instock", "page": 1, "per_page": 20,
+                                                                        "type": "variable", "stock_status": "instock", "page": 1, "per_page": 3,
                                                                         "search": searchValue });
 
                                                                 case 4:
