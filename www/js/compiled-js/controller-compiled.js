@@ -36,6 +36,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 // does nothing for now!!
                             });
 
+                            // disable the default back button handler for the 'search-page-search-input-popover'
+                            $('#search-page-search-input-popover').get(0).onDeviceBackButton.disable();
+
                             // displaying prepping message
                             $('#loader-modal-message').html("Loading App...");
                             $('#loader-modal').get(0).show(); // show loader
@@ -80,7 +83,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 screen.orientation.lock('portrait');
                             } catch (err) {}
 
-                            _context.prev = 7;
+                            _context.prev = 8;
                             // START ALL THE CORDOVA PLUGINS CONFIGURATION WHICH REQUIRE PROMISE SYNTAX
 
                             // create the pouchdb app database
@@ -99,30 +102,30 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             // generate a password for encrypting the app database (if it does NOT already exist)
                             secureKey = null;
-                            _context.prev = 11;
-                            _context.next = 14;
+                            _context.prev = 12;
+                            _context.next = 15;
                             return new Promise(function (resolve, reject) {
                                 NativeStorage.getItem("utopiasoftware-oak-print-service-secure-key", resolve, reject);
                             });
 
-                        case 14:
+                        case 15:
                             secureKey = _context.sent;
-                            _context.next = 22;
+                            _context.next = 23;
                             break;
 
-                        case 17:
-                            _context.prev = 17;
-                            _context.t0 = _context['catch'](11);
-                            _context.next = 21;
+                        case 18:
+                            _context.prev = 18;
+                            _context.t0 = _context['catch'](12);
+                            _context.next = 22;
                             return new Promise(function (resolve, reject) {
                                 NativeStorage.setItem("utopiasoftware-oak-print-service-secure-key", { password: Random.uuid4(utopiasoftware[utopiasoftware_app_namespace].randomisationEngine) }, resolve, reject);
                             });
 
-                        case 21:
+                        case 22:
                             secureKey = _context.sent;
 
-                        case 22:
-                            _context.next = 24;
+                        case 23:
+                            _context.next = 25;
                             return new Promise(function (resolve, reject) {
                                 utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase.crypto(secureKey.password, {
                                     ignore: ['_attachments', '_deleted'],
@@ -137,31 +140,31 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     } });
                             });
 
-                        case 24:
-                            _context.next = 29;
+                        case 25:
+                            _context.next = 30;
                             break;
 
-                        case 26:
-                            _context.prev = 26;
-                            _context.t1 = _context['catch'](7);
+                        case 27:
+                            _context.prev = 27;
+                            _context.t1 = _context['catch'](8);
 
                             console.log("APP LOADING ERROR", _context.t1);
 
-                        case 29:
-                            _context.prev = 29;
+                        case 30:
+                            _context.prev = 30;
 
                             // set status bar color
                             StatusBar.backgroundColorByHexString("#363E7C");
                             navigator.splashscreen.hide(); // hide the splashscreen
                             utopiasoftware[utopiasoftware_app_namespace].model.isAppReady = true; // flag that app is fully loaded and ready
-                            return _context.finish(29);
+                            return _context.finish(30);
 
-                        case 34:
+                        case 35:
                         case 'end':
                             return _context.stop();
                     }
                 }
-            }, _callee, this, [[7, 26, 29, 34], [11, 17]]);
+            }, _callee, this, [[8, 27, 30, 35], [12, 18]]);
         }))); // end of ons.ready()
     },
 
@@ -1674,7 +1677,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                                             "search": searchValue });
                                                                         utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.displayPageContent(searchResultsArray[0]);
                                                                     } catch (err) {
-                                                                        //
+                                                                        //todo
                                                                     }
 
                                                                 case 2:
@@ -1760,7 +1763,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when the device back button is clicked OR a similar action is triggered
          */
         backButtonClicked: function backButtonClicked() {
-
+            // hide the search-input popover
+            $('#search-page-search-input-popover').get(0).hide();
             // go to the "Categories" page (tab)
             $('#app-main-tabbar').get(0).setActiveTab(1);
         },

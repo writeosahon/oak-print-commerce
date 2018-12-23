@@ -25,6 +25,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // does nothing for now!!
             });
 
+            // disable the default back button handler for the 'search-page-search-input-popover'
+            $('#search-page-search-input-popover').get(0).onDeviceBackButton.disable();
+
             // displaying prepping message
             $('#loader-modal-message').html("Loading App...");
             $('#loader-modal').get(0).show(); // show loader
@@ -1459,7 +1462,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     displayPageContent(searchResultsArray[0]);
                                 }
                                 catch(err){
-                                    //
+                                    //todo
                                 }
                             }, 0);
                             console.log("AUTOCOMPLETE CHANGED");
@@ -1512,7 +1515,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when the device back button is clicked OR a similar action is triggered
          */
         backButtonClicked(){
-
+            // hide the search-input popover
+            $('#search-page-search-input-popover').get(0).hide();
             // go to the "Categories" page (tab)
             $('#app-main-tabbar').get(0).setActiveTab(1);
         },
