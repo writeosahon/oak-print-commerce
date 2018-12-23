@@ -1656,10 +1656,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     for(let index = 0; index < productsArray.length; index++){
 
                         productsContent +=
-                            `<ons-list-item modifier="nodivider" lock-on-drag="true">
+                            `<ons-list-item modifier="nodivider" tappable lock-on-drag="true">
                                 <div class="left">
-                                    <div class="search-img" style='background-image: url("${productsArray[index].images[0].src}"); 
-                                                            width: 2em; height: 2em'></div>
+                                    <div class="search-result-image" style="background-image: url('${productsArray[index].images[0].src}'); 
+                                                            width: 2em; height: 2em"></div>
                                 </div>
                                 <div class="center">
                                     <div style="text-align: center;">
@@ -1674,7 +1674,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         `<ons-list-item modifier="nodivider" lock-on-drag="true">
                                 <div class="center">
                                     <div style="text-align: center; width: 100%;">
-                                        Tap 'Search' key to begin search
+                                        Load More...
                                     </div>
                                 </div>
                             </ons-list-item>`;
