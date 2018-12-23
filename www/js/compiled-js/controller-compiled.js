@@ -1961,7 +1961,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         }
 
                                         // append the "Load More" search item
-                                        productsContent += '<ons-list-item modifier="nodivider" lock-on-drag="true">\n                                <div class="center">\n                                    <div style="text-align: center; width: 100%;">\n                                        Load More...\n                                    </div>\n                                </div>\n                            </ons-list-item>';
+                                        productsContent += '<ons-list-item modifier="nodivider" lock-on-drag="true">\n                                <div class="center">\n                                    <div style="text-align: center; width: 100%; font-weight: bold;">\n                                        Load More...\n                                    </div>\n                                </div>\n                            </ons-list-item>';
                                         // attach the new search results to the search popover
                                         $('#search-page-search-input-popover #search-input-popover-list').html(productsContent);
 

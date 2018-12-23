@@ -337,7 +337,7 @@
     min-height: auto !important;
     max-height: 60vh;
 }
-#search-page .search-result-image {
+#search-page-search-input-popover .search-result-image {
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;

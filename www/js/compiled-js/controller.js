@@ -1673,7 +1673,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     productsContent +=
                         `<ons-list-item modifier="nodivider" lock-on-drag="true">
                                 <div class="center">
-                                    <div style="text-align: center; width: 100%;">
+                                    <div style="text-align: center; width: 100%; font-weight: bold;">
                                         Load More...
                                     </div>
                                 </div>
