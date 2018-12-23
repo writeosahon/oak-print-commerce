@@ -1664,7 +1664,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                                 // run the actual search in a different event queue
                                                 window.setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee17() {
-                                                    var searchResultsArray;
+                                                    var searchResultsArray, toast;
                                                     return regeneratorRuntime.wrap(function _callee17$(_context17) {
                                                         while (1) {
                                                             switch (_context17.prev = _context17.next) {
@@ -1682,14 +1682,29 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                                     return utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.displayPageContent(searchResultsArray[0]);
 
                                                                 case 7:
-                                                                    _context17.next = 11;
+                                                                    _context17.next = 21;
                                                                     break;
 
                                                                 case 9:
                                                                     _context17.prev = 9;
                                                                     _context17.t0 = _context17['catch'](1);
 
-                                                                case 11:
+                                                                    console.log("PRODUCT SEARCH", _context17.t0);
+                                                                    // remove the focus from the search autocomplete component
+                                                                    $('#search-page #search-page-input').get(0).ej2_instances[0].focusOut();
+                                                                    // hide all previously displayed ej2 toast
+                                                                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                                                                    $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                                                                    // display toast to show that an error
+                                                                    toast = $('.timed-page-toast').get(0).ej2_instances[0];
+
+                                                                    toast.cssClass = 'error-ej2-toast';
+                                                                    toast.timeOut = 3000;
+                                                                    toast.content = 'Sorry, a search error occurred.' + (navigator.connection.type === Connection.NONE ? " Connect to the Internet." : "");
+                                                                    toast.dataBind();
+                                                                    toast.show();
+
+                                                                case 21:
                                                                 case 'end':
                                                                     return _context17.stop();
                                                             }

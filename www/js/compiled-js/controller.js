@@ -1462,7 +1462,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     displayPageContent(searchResultsArray[0]);
                                 }
                                 catch(err){
-                                    //todo
+                                    console.log("PRODUCT SEARCH", err);
+                                    // remove the focus from the search autocomplete component
+                                    $('#search-page #search-page-input').get(0).ej2_instances[0].focusOut();
+                                    // hide all previously displayed ej2 toast
+                                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                                    $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                                    // display toast to show that an error
+                                    let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                                    toast.cssClass = 'error-ej2-toast';
+                                    toast.timeOut = 3000;
+                                    toast.content = `Sorry, a search error occurred.${navigator.connection.type === Connection.NONE ? " Connect to the Internet." : ""}`;
+                                    toast.dataBind();
+                                    toast.show();
                                 }
                             }, 0);
                             console.log("AUTOCOMPLETE CHANGED");
