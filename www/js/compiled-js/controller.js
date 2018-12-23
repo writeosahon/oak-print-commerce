@@ -1454,11 +1454,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             window.setTimeout(async function() {
                                 var searchResultsArray = [];
                                 try{
-                                    searchResultsArray = utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.
+                                    searchResultsArray = await utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.
                                     loadProducts({"order": "desc", "orderby": "date", "status": "publish",
                                         "type": "variable", "stock_status": "instock", "page": 1, "per_page": 20,
                                         "search": searchValue});
-                                    utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.
+                                    await utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.
                                     displayPageContent(searchResultsArray[0]);
                                 }
                                 catch(err){

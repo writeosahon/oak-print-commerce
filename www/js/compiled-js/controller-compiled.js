@@ -1670,22 +1670,31 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                             switch (_context17.prev = _context17.next) {
                                                                 case 0:
                                                                     searchResultsArray = [];
+                                                                    _context17.prev = 1;
+                                                                    _context17.next = 4;
+                                                                    return utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.loadProducts({ "order": "desc", "orderby": "date", "status": "publish",
+                                                                        "type": "variable", "stock_status": "instock", "page": 1, "per_page": 20,
+                                                                        "search": searchValue });
 
-                                                                    try {
-                                                                        searchResultsArray = utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.loadProducts({ "order": "desc", "orderby": "date", "status": "publish",
-                                                                            "type": "variable", "stock_status": "instock", "page": 1, "per_page": 20,
-                                                                            "search": searchValue });
-                                                                        utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.displayPageContent(searchResultsArray[0]);
-                                                                    } catch (err) {
-                                                                        //todo
-                                                                    }
+                                                                case 4:
+                                                                    searchResultsArray = _context17.sent;
+                                                                    _context17.next = 7;
+                                                                    return utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.displayPageContent(searchResultsArray[0]);
 
-                                                                case 2:
+                                                                case 7:
+                                                                    _context17.next = 11;
+                                                                    break;
+
+                                                                case 9:
+                                                                    _context17.prev = 9;
+                                                                    _context17.t0 = _context17['catch'](1);
+
+                                                                case 11:
                                                                 case 'end':
                                                                     return _context17.stop();
                                                             }
                                                         }
-                                                    }, _callee17, this);
+                                                    }, _callee17, this, [[1, 9]]);
                                                 })), 0);
                                                 console.log("AUTOCOMPLETE CHANGED");
                                             }
