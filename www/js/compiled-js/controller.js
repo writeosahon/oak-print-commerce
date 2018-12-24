@@ -1591,10 +1591,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         async saveRecentSearchItem(product){
             var recentSearchesResultArray = []; // holds the recent searches array
+
             try{
                 // get the recent searches collection
                 recentSearchesResultArray = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
                 loadData("recent-searches", utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)).products;
+            }
+            catch(err){}
+
+            try{
                 // add the received 'product' parameter to the top of the recent searches array
                 recentSearchesResultArray.unshift(product);
                 // ensure the array is NOT greater than 5 items in length

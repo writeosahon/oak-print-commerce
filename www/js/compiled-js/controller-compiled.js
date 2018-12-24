@@ -1893,35 +1893,44 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 4:
                                 recentSearchesResultArray = _context21.sent.products;
+                                _context21.next = 9;
+                                break;
+
+                            case 7:
+                                _context21.prev = 7;
+                                _context21.t0 = _context21['catch'](1);
+
+                            case 9:
+                                _context21.prev = 9;
 
                                 // add the received 'product' parameter to the top of the recent searches array
                                 recentSearchesResultArray.unshift(product);
                                 // ensure the array is NOT greater than 5 items in length
                                 recentSearchesResultArray = recentSearchesResultArray.slice(0, 5);
                                 // save the updated recent searches array  to the cached data collection of "Recent Searches"
-                                _context21.next = 9;
+                                _context21.next = 14;
                                 return utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData({ _id: "recent-searches", docType: "RECENT_SEARCHES", products: recentSearchesResultArray }, utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
 
-                            case 9:
-                                _context21.next = 11;
+                            case 14:
+                                _context21.next = 16;
                                 return utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.displayRecentSearches();
 
-                            case 11:
-                                _context21.next = 16;
+                            case 16:
+                                _context21.next = 21;
                                 break;
 
-                            case 13:
-                                _context21.prev = 13;
-                                _context21.t0 = _context21['catch'](1);
+                            case 18:
+                                _context21.prev = 18;
+                                _context21.t1 = _context21['catch'](9);
 
-                                console.log("SAVE RECENT SEARCH", _context21.t0);
+                                console.log("SAVE RECENT SEARCH", _context21.t1);
 
-                            case 16:
+                            case 21:
                             case 'end':
                                 return _context21.stop();
                         }
                     }
-                }, _callee21, this, [[1, 13]]);
+                }, _callee21, this, [[1, 7], [9, 18]]);
             }));
 
             function saveRecentSearchItem(_x8) {
