@@ -1391,22 +1391,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         suggestionCount: 20, // specified how many items will be in the popup
                         dataSource: [],
                         noRecordsTemplate: `Tap 'Search' key to begin search`,
-                        focus: function(){ // track when the component has focus
-                            // inform user on how to initiate search
-                            $('#search-page-search-input-popover #search-input-popover-list').
-                            html(`
-                            <ons-list-item modifier="nodivider" lock-on-drag="true">
-                                <div class="center">
-                                    <div style="text-align: center; width: 100%;">
-                                        Tap 'Search' key to begin search
-                                    </div>
-                                </div>
-                            </ons-list-item>`);
-                            // display the popover
-                            $('#search-page-search-input-popover').get(0).
-                            show(document.getElementById('search-page-input'));
-                            console.log("AUTOCOMPLETE FOCUS");
-                        },
                         blur: function(){ // track when the component has lost focus
                             this._allowRemoteSearch = false; // set that remote search is NOT allowed
                             // hide the popover
@@ -1683,10 +1667,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                     // append the "Load More" search item
                     productsContent +=
-                        `<ons-list-item modifier="nodivider" lock-on-drag="true">
+                        `<ons-list-item modifier="nodivider" tappable lock-on-drag="true" 
+                          onclick="utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.findMoreClicked();">
                                 <div class="center">
                                     <div style="text-align: center; width: 100%; font-weight: bold;">
-                                        Load More...
+                                        Find More...
                                     </div>
                                 </div>
                             </ons-list-item>`;
@@ -1700,6 +1685,43 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             return displayCompletedPromise; // return the promise object ot indicate if the display has been completed or not
 
+        },
+
+        /**
+         * method is triggered when the "Find More" option is
+         * tapped within the search input popover
+         *
+         * @returns {Promise<void>}
+         */
+        async findMoreClicked(){
+            // load the products page in a separate event queue
+            window.setTimeout(async function(){
+                try{
+                    // navigate to the products page
+                    await $('#app-main-tabbar').get(0).setActiveTab(4, {animation: 'none'});
+                    // request for products using the user's search term
+                    let productArray = await utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.
+                    loadProducts({"order": "desc", "orderby": "date", "status": "publish",
+                        "type": "variable", "stock_status": "instock", "page": 1, "per_page": 20, "search":
+                            $('#search-page #search-page-input').get(0).ej2_instances[0].value.trim()});
+                    await utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.displayPageContent(productArray[0]);
+                }
+                catch(err){
+                    console.log("PRODUCTS PAGE", err);
+                    // hide all previously displayed ej2 toast
+                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                    // display toast to show that an error
+                    let toast = $('.page-toast').get(0).ej2_instances[0];
+                    toast.cssClass = 'error-ej2-toast';
+                    toast.content = `Sorry, an error occurred.${navigator.connection.type === Connection.NONE ? " Connect to the Internet." : ""} Pull down to refresh and try again`;
+                    toast.dataBind();
+                    toast.show();
+                }
+                finally{
+                    // hide the preloader for the products page
+                    $('#products-page .page-preloader').css("display", "none");
+                }
+            }, 0);
         }
     },
 
