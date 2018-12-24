@@ -1490,6 +1490,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // listen for when the device has Internet connection
             document.addEventListener("online",
                 utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.deviceOnlineListener, false);
+
+            // load the recent searches list
+            utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.displayRecentSearches();
         },
 
 
@@ -1548,17 +1551,63 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         },
 
         /**
-         * method is used to display the "Recent Searches" list on the Search page
+         * method is used to display the "Recent Searches" list on the Search page.
+         * Recent Searches are gotten from the cached collection
          */
         async displayRecentSearches(){
             try{
                 // load the recent search from the device database cache
                 let recentSearchData = await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
                 loadData("recent-searches", utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
-                //todo
+
+                let displayContent = "<ons-list-title>Recent Searches</ons-list-title>"; // holds the content of the list to be created
+                // create the Recent Searches list
+                for(let index = 0; index < recentSearchData.products.length; index++){
+                    displayContent += `
+                    <ons-list-item modifier="longdivider" tappable lock-on-drag="true"
+                       onclick="">
+                        <div class="center">
+                            <span class="list-item__subtitle">${recentSearchData.products[index].name}</span>
+                        </div>
+                        <div class="right" prevent-tap 
+                        onclickk="">
+                            <ons-icon icon="md-close-circle" style="color: lavender; font-size: 16px;"></ons-icon>
+                        </div>
+                    </ons-list-item>`;
+                }
+                // attach the displayContent to the list
+                $('#search-page #search-list').html(displayContent);
             }
             catch(err){
+                // do nothing
+            }
+        },
 
+        /**
+         * method is used to save a search item i.e. a product to the cached "Recent Searches"
+         *
+         * @param product {Object} the product to include to the "Recent Searches" cache
+         * @returns {Promise<void>}
+         */
+        async saveRecentSearchItem(product){
+            var recentSearchesResultArray = []; // holds the recent searches array
+            try{
+                // get the recent searches collection
+                recentSearchesResultArray = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                loadData("recent-searches", utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)).products;
+                // add the received 'product' parameter to the top of the recent searches array
+                recentSearchesResultArray.unshift(product);
+                // ensure the array is NOT greater than 5 items in length
+                recentSearchesResultArray = recentSearchesResultArray.slice(0, 5);
+                // save the updated recent searches array  to the cached data collection of "Recent Searches"
+                await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
+                    {_id: "recent-searches", docType: "RECENT_SEARCHES", products: recentSearchesResultArray},
+                    utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
+                // display the updated recent searches to the user
+                await utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.displayRecentSearches();
+            }
+            catch(err){
+                // do nothing
             }
         },
 
