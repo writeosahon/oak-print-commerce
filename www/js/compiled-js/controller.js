@@ -1358,6 +1358,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
     searchPageViewModel: {
 
         /**
+         * holds the array of products for the search result that was just run by the user
+         */
+        currentSearchResultsArray: null,
+
+        /**
          * event is triggered when page is initialised
          */
         pageInit: function(event){
@@ -1498,12 +1503,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // remove listener for when the device has Internet connection
             document.removeEventListener("online",
                 utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.deviceOnlineListener, false);
+            // destroy the current search result array
+            utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.currentSearchResultsArray = null;
         },
 
         /**
          * method is triggered when page is destroyed
          */
         pageDestroy: function(){
+            // destroy the search input autocomplete component
+            $('#search-page #search-page-input').get(0).ej2_instances[0].destroy();
 
         },
 
@@ -1536,6 +1545,21 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         deviceOnlineListener(){
             // hide all previously displayed ej2 toast
             $('.page-toast').get(0).ej2_instances[0].hide('All');
+        },
+
+        /**
+         * method is used to display the "Recent Searches" list on the Search page
+         */
+        async displayRecentSearches(){
+            try{
+                // load the recent search from the device database cache
+                let recentSearchData = await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                loadData("recent-searches", utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
+                //todo
+            }
+            catch(err){
+
+            }
         },
 
         /**
@@ -1603,6 +1627,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             data: queryParam
                         }
                     )).then(function(productsArray){
+                        // check if the productsArray contains products
+                        if(productsArray.length > 0){ // there are products
+                            // update the current search results array with the productsArray
+                            utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.
+                                currentSearchResultsArray = productsArray;
+                        }
 
                         resolve(productsArray); // resolve the parent promise with the data gotten from the server
 
