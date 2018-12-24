@@ -1571,7 +1571,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         </div>
                         <div class="right" prevent-tap 
                         onclickk="">
-                            <ons-icon icon="md-close-circle" style="color: lavender; font-size: 16px;"></ons-icon>
+                            <ons-icon icon="md-close-circle" style="color: lavender; font-size: 18px;"></ons-icon>
                         </div>
                     </ons-list-item>`;
                 }

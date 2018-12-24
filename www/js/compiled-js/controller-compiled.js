@@ -1843,7 +1843,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 // create the Recent Searches list
 
                                 for (index = 0; index < recentSearchData.products.length; index++) {
-                                    displayContent += '\n                    <ons-list-item modifier="longdivider" tappable lock-on-drag="true"\n                       onclick="">\n                        <div class="center">\n                            <span class="list-item__subtitle">' + recentSearchData.products[index].name + '</span>\n                        </div>\n                        <div class="right" prevent-tap \n                        onclickk="">\n                            <ons-icon icon="md-close-circle" style="color: lavender; font-size: 16px;"></ons-icon>\n                        </div>\n                    </ons-list-item>';
+                                    displayContent += '\n                    <ons-list-item modifier="longdivider" tappable lock-on-drag="true"\n                       onclick="">\n                        <div class="center">\n                            <span class="list-item__subtitle">' + recentSearchData.products[index].name + '</span>\n                        </div>\n                        <div class="right" prevent-tap \n                        onclickk="">\n                            <ons-icon icon="md-close-circle" style="color: lavender; font-size: 18px;"></ons-icon>\n                        </div>\n                    </ons-list-item>';
                                 }
                                 // attach the displayContent to the list
                                 $('#search-page #search-list').html(displayContent);
