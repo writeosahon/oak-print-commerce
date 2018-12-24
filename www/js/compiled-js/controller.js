@@ -1731,7 +1731,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     for(let index = 0; index < productsArray.length; index++){
 
                         productsContent +=
-                            `<ons-list-item modifier="nodivider" tappable lock-on-drag="true">
+                            `<ons-list-item modifier="nodivider" tappable lock-on-drag="true" 
+                              onclick="utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.
+                              searchAutocompletePopOverItemClicked(${index})">
                                 <div class="left">
                                     <div class="search-result-image" style="background-image: url('${productsArray[index].images[0].src}'); 
                                                             width: 2em; height: 2em"></div>
@@ -1764,6 +1766,28 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             return displayCompletedPromise; // return the promise object ot indicate if the display has been completed or not
 
+        },
+
+        /**
+         * method is triggered when the user clicks an item from the search autocomplete popover
+         *
+         * @param productIndex {Integer} holds the index position for
+         * @returns {Promise<void>}
+         */
+        async searchAutocompletePopOverItemClicked(productIndex){
+            // get the product the user clicked on from the search autocomplete popover
+            var selectedProduct = utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.
+                currentSearchResultsArray[productIndex];
+            window.setTimeout(async function(){
+                try{
+                    // save the selected product in recent products app cache
+                    await utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.
+                    saveRecentSearchItem(selectedProduct);
+                    // update the recent search display
+                    await utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.displayRecentSearches();
+                }
+                catch(err){}
+            }, 0);
         },
 
         /**
