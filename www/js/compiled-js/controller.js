@@ -1579,7 +1579,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $('#search-page #search-list').html(displayContent);
             }
             catch(err){
-                // do nothing
+                console.log("DISPLAY RECENT SEARCHES", err);
             }
         },
 
@@ -1607,7 +1607,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 await utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.displayRecentSearches();
             }
             catch(err){
-                // do nothing
+                console.log("SAVE RECENT SEARCH", err);
             }
         },
 
@@ -1783,10 +1783,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     // save the selected product in recent products app cache
                     await utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.
                     saveRecentSearchItem(selectedProduct);
-                    // update the recent search display
-                    await utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.displayRecentSearches();
                 }
-                catch(err){}
+                catch(err){
+                    console.log("SEARCH AUTOCOMPLETE", err);
+                }
             }, 0);
         },
 

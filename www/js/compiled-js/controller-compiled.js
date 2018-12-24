@@ -1847,14 +1847,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 }
                                 // attach the displayContent to the list
                                 $('#search-page #search-list').html(displayContent);
-                                _context20.next = 11;
+                                _context20.next = 12;
                                 break;
 
                             case 9:
                                 _context20.prev = 9;
                                 _context20.t0 = _context20['catch'](0);
 
-                            case 11:
+                                console.log("DISPLAY RECENT SEARCHES", _context20.t0);
+
+                            case 12:
                             case 'end':
                                 return _context20.stop();
                         }
@@ -1905,14 +1907,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 return utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.displayRecentSearches();
 
                             case 11:
-                                _context21.next = 15;
+                                _context21.next = 16;
                                 break;
 
                             case 13:
                                 _context21.prev = 13;
                                 _context21.t0 = _context21['catch'](1);
 
-                            case 15:
+                                console.log("SAVE RECENT SEARCH", _context21.t0);
+
+                            case 16:
                             case 'end':
                                 return _context21.stop();
                         }
@@ -2144,23 +2148,21 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                     return utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.saveRecentSearchItem(selectedProduct);
 
                                                 case 3:
-                                                    _context25.next = 5;
-                                                    return utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.displayRecentSearches();
-
-                                                case 5:
-                                                    _context25.next = 9;
+                                                    _context25.next = 8;
                                                     break;
 
-                                                case 7:
-                                                    _context25.prev = 7;
+                                                case 5:
+                                                    _context25.prev = 5;
                                                     _context25.t0 = _context25['catch'](0);
 
-                                                case 9:
+                                                    console.log("SEARCH AUTOCOMPLETE", _context25.t0);
+
+                                                case 8:
                                                 case 'end':
                                                     return _context25.stop();
                                             }
                                         }
-                                    }, _callee25, this, [[0, 7]]);
+                                    }, _callee25, this, [[0, 5]]);
                                 })), 0);
 
                             case 2:
