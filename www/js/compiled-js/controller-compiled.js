@@ -2157,21 +2157,25 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                     return utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.saveRecentSearchItem(selectedProduct);
 
                                                 case 3:
-                                                    _context25.next = 8;
+
+                                                    // update the value of the search autocomplete input to that which the user clicked on from the popover
+                                                    $('#search-page #search-page-input').val(selectedProduct.name);
+
+                                                    _context25.next = 9;
                                                     break;
 
-                                                case 5:
-                                                    _context25.prev = 5;
+                                                case 6:
+                                                    _context25.prev = 6;
                                                     _context25.t0 = _context25['catch'](0);
 
                                                     console.log("SEARCH AUTOCOMPLETE", _context25.t0);
 
-                                                case 8:
+                                                case 9:
                                                 case 'end':
                                                     return _context25.stop();
                                             }
                                         }
-                                    }, _callee25, this, [[0, 5]]);
+                                    }, _callee25, this, [[0, 6]]);
                                 })), 0);
 
                             case 2:

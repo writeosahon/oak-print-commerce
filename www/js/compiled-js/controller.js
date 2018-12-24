@@ -1788,6 +1788,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     // save the selected product in recent products app cache
                     await utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.
                     saveRecentSearchItem(selectedProduct);
+
+                    // update the value of the search autocomplete input to that which the user clicked on from the popover
+                    $('#search-page #search-page-input').val(selectedProduct.name);
+
                 }
                 catch(err){
                     console.log("SEARCH AUTOCOMPLETE", err);
