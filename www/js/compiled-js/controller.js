@@ -1651,8 +1651,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
                     // hide the list-item belonging to the clicked element from the displayed list
                     let $listItem = $(clickedElement).closest('ons-list-item');
-                    await kendo.fx($listItem).expand("vertical").duration(300).play();
-                    // remove the list-item belonging to the clicked element from the sisplayed lisr
+                    await kendo.fx($listItem).expand("vertical").duration(300).reverse();
+                    // remove the list-item belonging to the clicked element from the displayed list
                     $listItem.remove();
                 }
                 catch(err){

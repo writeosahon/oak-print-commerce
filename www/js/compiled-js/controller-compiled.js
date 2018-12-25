@@ -1993,10 +1993,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                     // hide the list-item belonging to the clicked element from the displayed list
                                                     $listItem = $(clickedElement).closest('ons-list-item');
                                                     _context22.next = 16;
-                                                    return kendo.fx($listItem).expand("vertical").duration(300).play();
+                                                    return kendo.fx($listItem).expand("vertical").duration(300).reverse();
 
                                                 case 16:
-                                                    // remove the list-item belonging to the clicked element from the sisplayed lisr
+                                                    // remove the list-item belonging to the clicked element from the displayed list
                                                     $listItem.remove();
                                                     _context22.next = 22;
                                                     break;
