@@ -1652,8 +1652,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     // hide the list-item belonging to the clicked element from the displayed list
                     let $listItem = $(clickedElement).closest('ons-list-item');
                     await kendo.fx($listItem).expand("vertical").duration(300).reverse();
-                    // remove the list-item belonging to the clicked element from the displayed list
-                    $listItem.remove();
+                    // display the updated recent searches to the user
+                    await utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.displayRecentSearches();
                 }
                 catch(err){
                     console.log("REMOVE RECENT SEARCH", err);

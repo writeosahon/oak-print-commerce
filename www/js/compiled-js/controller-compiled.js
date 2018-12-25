@@ -1996,23 +1996,25 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                     return kendo.fx($listItem).expand("vertical").duration(300).reverse();
 
                                                 case 16:
-                                                    // remove the list-item belonging to the clicked element from the displayed list
-                                                    $listItem.remove();
-                                                    _context22.next = 22;
+                                                    _context22.next = 18;
+                                                    return utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.displayRecentSearches();
+
+                                                case 18:
+                                                    _context22.next = 23;
                                                     break;
 
-                                                case 19:
-                                                    _context22.prev = 19;
+                                                case 20:
+                                                    _context22.prev = 20;
                                                     _context22.t1 = _context22['catch'](9);
 
                                                     console.log("REMOVE RECENT SEARCH", _context22.t1);
 
-                                                case 22:
+                                                case 23:
                                                 case 'end':
                                                     return _context22.stop();
                                             }
                                         }
-                                    }, _callee22, this, [[1, 7], [9, 19]]);
+                                    }, _callee22, this, [[1, 7], [9, 20]]);
                                 })), 0);
 
                             case 1:
