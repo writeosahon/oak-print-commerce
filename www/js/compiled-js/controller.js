@@ -1564,13 +1564,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // create the Recent Searches list
                 for(let index = 0; index < recentSearchData.products.length; index++){
                     displayContent += `
-                    <ons-list-item modifier="longdivider" tappable lock-on-drag="true"
-                       onclick="">
+                    <ons-list-item modifier="longdivider" tappable lock-on-drag="true">
                         <div class="center">
-                            <span class="list-item__subtitle">${recentSearchData.products[index].name}</span>
+                            <div style="width: 100%;" 
+                            onclick="">
+                                <span class="list-item__subtitle">${recentSearchData.products[index].name}</span>
+                            </div>
                         </div>
                         <div class="right" prevent-tap 
-                        onclickk="">
+                        onclick="utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.
+                                    removeRecentSearchItem(${index}, this);">
                             <ons-icon icon="md-close-circle" style="color: lavender; font-size: 18px;"></ons-icon>
                         </div>
                     </ons-list-item>`;
@@ -1614,6 +1617,48 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             catch(err){
                 console.log("SAVE RECENT SEARCH", err);
             }
+        },
+
+        /**
+         * method is used to remove a search item i.e. a product from the cached "Recent Searches"
+         *
+         * @param productIndex {Integer} holds the index position for the product that was clicked.
+         * The index position is gotten from the array of cached recent searches
+         *
+         * @param clickedElement {Element} the element that was clicked in order to trigger the product removal
+         *
+         * @returns {Promise<void>}
+         */
+        async removeRecentSearchItem(productIndex, clickedElement){
+
+            // execute the method is a different event queue
+            window.setTimeout(async function(){
+                var recentSearchesResultArray = []; // holds the recent searches array
+
+                try{
+                    // get the recent searches collection
+                    recentSearchesResultArray = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                    loadData("recent-searches", utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)).products;
+                }
+                catch(err){}
+
+                try{
+                    // remove the received 'product' parameter index from the recent searches array
+                    recentSearchesResultArray.splice(productIndex, 1);
+                    // save the updated recent searches array  to the cached data collection of "Recent Searches"
+                    await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
+                        {_id: "recent-searches", docType: "RECENT_SEARCHES", products: recentSearchesResultArray},
+                        utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
+                    // hide the list-item belonging to the clicked element from the displayed list
+                    let $listItem = $(clickedElement).closest('ons-list-item');
+                    await kendo.fx($listItem).expand("vertical").duration(300).play();
+                    // remove the list-item belonging to the clicked element from the sisplayed lisr
+                    $listItem.remove();
+                }
+                catch(err){
+                    console.log("REMOVE RECENT SEARCH", err);
+                }
+            }, 0)
         },
 
         /**
@@ -1776,7 +1821,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         /**
          * method is triggered when the user clicks an item from the search autocomplete popover
          *
-         * @param productIndex {Integer} holds the index position for
+         * @param productIndex {Integer} holds the index position for the product that was clicked.
+         * The index position is gotten from the array returned by the product search
+         *
          * @returns {Promise<void>}
          */
         async searchAutocompletePopOverItemClicked(productIndex){
