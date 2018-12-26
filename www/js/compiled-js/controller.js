@@ -2929,6 +2929,20 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.backButtonClicked;
 
                 try{
+                    let quantityButton = new ej.inputs.NumericTextBox({
+                        currency: null,
+                        decimals: 0,
+                        floatLabelType: 'Auto',
+                        format: 'n',
+                        min: 1,
+                        max: 10,
+                        placeholder: 'Quantity',
+                        step: 1,
+                        strictMode: true,
+                        // sets value to the NumericTextBox
+                        value: 1
+                    }).appendTo('#product-details-quantity');
+
                     let addToCartButton = new ej.buttons.Button({
                         iconCss: "zmdi zmdi-shopping-cart-add utopiasoftware-icon-zoom-one-point-two",
                         iconPosition: "Left"

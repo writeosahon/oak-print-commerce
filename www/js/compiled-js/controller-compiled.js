@@ -3642,7 +3642,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             //function is used to initialise the page if the app is fully ready for execution
             var loadPageOnAppReady = function () {
                 var _ref46 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee46() {
-                    var addToCartButton, customiseProductButton, wishListButton, compareButton, reviewButton, shareButton;
+                    var quantityButton, addToCartButton, customiseProductButton, wishListButton, compareButton, reviewButton, shareButton;
                     return regeneratorRuntime.wrap(function _callee46$(_context46) {
                         while (1) {
                             switch (_context46.prev = _context46.next) {
@@ -3661,6 +3661,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     $('#app-main-navigator').get(0).topPage.onDeviceBackButton = utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.backButtonClicked;
 
                                     try {
+                                        quantityButton = new ej.inputs.NumericTextBox({
+                                            currency: null,
+                                            decimals: 0,
+                                            floatLabelType: 'Auto',
+                                            format: 'n',
+                                            min: 1,
+                                            max: 10,
+                                            placeholder: 'Quantity',
+                                            step: 1,
+                                            strictMode: true,
+                                            // sets value to the NumericTextBox
+                                            value: 1
+                                        }).appendTo('#product-details-quantity');
                                         addToCartButton = new ej.buttons.Button({
                                             iconCss: "zmdi zmdi-shopping-cart-add utopiasoftware-icon-zoom-one-point-two",
                                             iconPosition: "Left"

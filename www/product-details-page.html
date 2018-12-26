@@ -1,8 +1,9 @@
 <!-- product-details page -->
 <ons-page id="product-details-page">
 
-    <ons-toolbar style="background-color: #ffffff !important; color: #3f51b5 !important; box-shadow: none !important;"
-                 static>
+    <ons-toolbar style="background-color: #ffffff !important; color: #3f51b5 !important;
+    box-shadow: none !important; border-bottom: lightgray 1px solid"
+                 static modifier="noshadow">
         <div class="left" style="background-color: #ffffff !important; color: #3f51b5 !important;">
             <ons-toolbar-button style="background-color: #ffffff !important; color: #3f51b5 !important;"
                  onclick="utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.backButtonClicked();">
@@ -13,7 +14,7 @@
             Product Details
         </div>
 
-        <div class="right" style="background-color: #3f51b5 !important; color: #ffffff !important;">
+        <div class="right" style="background-color: #ffffff !important; color: #3f51b5 !important;">
             <!--<ons-toolbar-button style="background-color: #3f51b5 !important; color: #d70000 !important;"-->
                                 <!--icon="md-favorite"></ons-toolbar-button>-->
 
@@ -36,15 +37,9 @@
         </div>
         <div class="e-card-header">
             <div class="e-card-header-caption"  style="padding-left: 3px; padding-right: 5px">
-                <div class="e-card-title" style="text-align: center; white-space: normal">
-                    <img src="css/app-images/1-13.jpg" alt="" style="height: 1.5em; width: auto; margin-right: 0.5em;">
-                    <img src="css/app-images/1-13.jpg" alt="" style="height: 1.5em; width: auto; margin-right: 0.5em;">
-                    <img src="css/app-images/1-13.jpg" alt="" style="height: 1.5em; width: auto; margin-right: 0.5em;">
-                </div>
-                <div class="e-card-title" style="text-align: left; white-space: normal; margin-top: 0.5em">
+                <div class="e-card-title" style="text-align: center;
+                white-space: normal; margin-top: 0.5em; border-bottom: lightgray 1px solid">
                     Women Plaid Sequins Summer
-                </div>
-                <div class="e-card-separator">
                 </div>
             </div>
         </div>
@@ -56,8 +51,19 @@
                        onclick="">
             <div class="center">
                 <span class="list-item__title" style="color: #3F51B5;">Price</span>
-                <span class="list-item__subtitle">&#x20a6;160,000.00</span>
+                <span class="list-item__subtitle">&#x20a6;40,000.00</span>
                 <span class="list-item__subtitle" style="text-decoration: line-through">&#x20a6;80,000.00</span>
+            </div>
+        </ons-list-item>
+
+        <ons-list-item modifier="nodivider" lock-on-drag="true"
+                       onclick="">
+            <div class="center row">
+                <div class="col-xs-3"></div>
+                <div class="col-xs-6">
+                    <input id="product-details-quantity" type="number">
+                </div>
+                <div class="col-xs-3"></div>
             </div>
         </ons-list-item>
 
