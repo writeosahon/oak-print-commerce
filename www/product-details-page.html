@@ -29,7 +29,7 @@
     </ons-toolbar>
 
     <div class="e-card" style="box-shadow: none; border: none">
-        <div class="e-card-image" style="min-height: 160px; background-image: url('css/app-images/1-13.jpg');">
+        <div class="e-card-image" style="min-height: 120px; background-image: url('css/app-images/1-13.jpg');">
                     <span class="e-badge e-badge-danger" style="background-color: transparent; color: #d64113;
                     border: 1px #d64113 solid; font-size: 0.8em; float: right; clear: both;">
                                     50% OFF
@@ -38,7 +38,7 @@
         <div class="e-card-header">
             <div class="e-card-header-caption"  style="padding-left: 3px; padding-right: 5px">
                 <div class="e-card-title" style="text-align: center;
-                white-space: normal; margin-top: 0.5em; border-bottom: lightgray 1px solid">
+                white-space: normal; margin-top: 0.5em;">
                     Women Plaid Sequins Summer
                 </div>
             </div>
@@ -50,9 +50,9 @@
         <ons-list-item modifier="longdivider" lock-on-drag="true"
                        onclick="">
             <div class="center">
-                <span class="list-item__title" style="color: #3F51B5;">Price</span>
-                <span class="list-item__subtitle">&#x20a6;40,000.00</span>
-                <span class="list-item__subtitle" style="text-decoration: line-through">&#x20a6;80,000.00</span>
+                <span class="list-item__title" style="color: #3F51B5; width: 100%; text-align: center">Price</span>
+                <span class="list-item__subtitle" style="width: 100%; text-align: center;">&#x20a6;40,000.00</span>
+                <span class="list-item__subtitle" style="width: 100%; text-align: center; text-decoration: line-through">&#x20a6;80,000.00</span>
             </div>
         </ons-list-item>
 
@@ -67,11 +67,21 @@
             </div>
         </ons-list-item>
 
+        <ons-list-item modifier="longdivider" lock-on-drag="true" expandable
+                       onclick="">
+            <div class="center">
+                <span class="list-item__title" style="color: #3F51B5; width: 100%; text-align: center;">Description</span>
+            </div>
+            <div class="expandable-content" style="white-space: normal; text-align: center">
+                Lorem ipsum dolor sit amet, feugiat delicata liberavisse id cum
+            </div>
+        </ons-list-item>
+
         <ons-list-item modifier="longdivider" lock-on-drag="true"
                        onclick="">
             <div class="center">
-                <span class="list-item__title" style="color: #3F51B5;">Rating</span>
-                <div style="color: gold; font-size: 0.9em !important;">
+                <span class="list-item__title" style="color: #3F51B5; width: 100%; text-align: center;">Rating</span>
+                <div style="color: gold; font-size: 0.9em !important; width: 100%; text-align: center;">
                     <ons-icon icon="md-star" fixed-width></ons-icon>
                     <ons-icon icon="md-star" fixed-width></ons-icon>
                     <ons-icon icon="md-star" fixed-width></ons-icon>
@@ -79,6 +89,23 @@
                     <ons-icon icon="md-star" fixed-width></ons-icon>
                     <span style="display: inline-block; color: gray;">(5,000)</span>
                 </div>
+            </div>
+        </ons-list-item>
+
+        <ons-list-item modifier="longdivider" lock-on-drag="true" expandable
+                       onclick="">
+            <div class="center">
+                <span class="list-item__title" style="color: #3F51B5; width: 100%; text-align: center;">More Details</span>
+            </div>
+            <div class="expandable-content" style="white-space: normal; text-align: center">
+                Lorem ipsum dolor sit amet, feugiat delicata liberavisse id cum,
+                no quo maiorum intellegebat, liber regione eu sit. Mea cu case ludus
+                Lorem ipsum dolor sit amet, feugiat delicata liberavisse id cum,
+                no quo maiorum intellegebat, liber regione eu sit. Mea cu case ludus
+                Lorem ipsum dolor sit amet, feugiat delicata liberavisse id cum,
+                no quo maiorum intellegebat, liber regione eu sit. Mea cu case ludus
+                Lorem ipsum dolor sit amet, feugiat delicata liberavisse id cum,
+                no quo maiorum intellegebat, liber regione eu sit. Mea cu case ludus
             </div>
         </ons-list-item>
 
@@ -106,56 +133,6 @@
                         <ons-ripple></ons-ripple>
                         Share</button>
                 </div>
-            </div>
-        </ons-list-item>
-
-        <ons-list-item modifier="longdivider" lock-on-drag="true" expandable
-                       onclick="">
-            <div class="center">
-                <span class="list-item__title" style="color: #3F51B5;">Description</span>
-            </div>
-            <div class="expandable-content" style="white-space: normal">
-                Lorem ipsum dolor sit amet, feugiat delicata liberavisse id cum,
-                no quo maiorum intellegebat, liber regione eu sit. Mea cu case ludus
-            </div>
-        </ons-list-item>
-
-        <ons-list-item modifier="longdivider" lock-on-drag="true"
-                       onclick="">
-            <div class="center">
-                <span class="list-item__title" style="color: #3F51B5;">Category</span>
-                <div style="width: 100%">
-                    <span class="e-badge e-badge-pill"
-                          style="display: inline-block; background-color: grey; color: white; font-size: 0.78em;">
-                                    t-shirts
-                     </span>
-                </div>
-            </div>
-        </ons-list-item>
-
-        <ons-list-item modifier="longdivider" lock-on-drag="true"
-                       onclick="">
-            <div class="center">
-                <span class="list-item__title" style="color: #3F51B5;">Featured Product
-                    <ons-icon icon="md-check-all" fixed-width style="color: green"></ons-icon>
-                </span>
-            </div>
-        </ons-list-item>
-
-        <ons-list-item modifier="longdivider" lock-on-drag="true" expandable
-                       onclick="">
-            <div class="center">
-                <span class="list-item__title" style="color: #3F51B5;">More Details</span>
-            </div>
-            <div class="expandable-content" style="white-space: normal">
-                Lorem ipsum dolor sit amet, feugiat delicata liberavisse id cum,
-                no quo maiorum intellegebat, liber regione eu sit. Mea cu case ludus
-                Lorem ipsum dolor sit amet, feugiat delicata liberavisse id cum,
-                no quo maiorum intellegebat, liber regione eu sit. Mea cu case ludus
-                Lorem ipsum dolor sit amet, feugiat delicata liberavisse id cum,
-                no quo maiorum intellegebat, liber regione eu sit. Mea cu case ludus
-                Lorem ipsum dolor sit amet, feugiat delicata liberavisse id cum,
-                no quo maiorum intellegebat, liber regione eu sit. Mea cu case ludus
             </div>
         </ons-list-item>
 

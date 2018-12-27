@@ -2930,6 +2930,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 try{
                     let quantityButton = new ej.inputs.NumericTextBox({
+                        cssClass: 'product-details-quantity-class',
                         currency: null,
                         decimals: 0,
                         floatLabelType: 'Auto',
