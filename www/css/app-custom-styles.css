@@ -3,7 +3,7 @@
 .parsley-errors-list {
     display: none !important;
 }
-/** STYLE FOR VALIDATION TOOLTIP (HINT.CSS) **/
+/** STYLE FOR VALIDATION TOOLTIP **/
 .utopiasoftware-ej2-validation-tooltip {
     font-size: 0.75em !important;
     background-color: #000000 !important;
@@ -61,7 +61,7 @@
     border-radius: 0;
 }
 .progress-bar--default-page-preloader__secondary {
-    background-color: #548ba7;
+    background-color: #ff0000;
     z-index: 0;
 }
 .progress-bar--default-page-preloader.progress-bar--indeterminate:before {
@@ -392,6 +392,20 @@
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
+}
+/** style for quantity numeric input **/
+#product-details-page .product-details-quantity-class.e-control-wrapper.e-numeric #label_product-details-quantity {
+    color: #3F51B5;
+}
+#product-details-page .product-details-quantity-class.e-float-input.e-input-group:not(.e-float-icon-left) .e-float-line::before,
+#product-details-page .product-details-quantity-class.e-float-input.e-input-group:not(.e-float-icon-left) .e-float-line::after,
+#product-details-page .product-details-quantity-class.e-float-input.e-input-group.e-float-icon-left .e-input-in-wrap .e-float-line::before,
+#product-details-page .product-details-quantity-class.e-float-input.e-input-group.e-float-icon-left .e-input-in-wrap .e-float-line::after,
+#product-details-page .product-details-quantity-class.e-float-input.e-control-wrapper.e-input-group:not(.e-float-icon-left) .e-float-line::before,
+#product-details-page .product-details-quantity-class.e-float-input.e-control-wrapper.e-input-group:not(.e-float-icon-left) .e-float-line::after,
+#product-details-page .product-details-quantity-class.e-float-input.e-control-wrapper.e-input-group.e-float-icon-left .e-input-in-wrap .e-float-line::before,
+#product-details-page .product-details-quantity-class.e-float-input.e-control-wrapper.e-input-group.e-float-icon-left .e-input-in-wrap .e-float-line::after {
+    background: #3F51B5;
 }
 /** STYLE FOR PRODUCT DETAILS PAGE ENDS **/
 

@@ -27,6 +27,16 @@
             </ons-toolbar-button>
         </div>
     </ons-toolbar>
+    <!-- page pull hook -->
+    <ons-pull-hook id="product-details-page-pull-hook" threshold-height="120px" fixed-content style="text-align: center">
+        <ons-fab id="product-details-page-pull-hook-fab" modifier="mini" style="background-color: #ffffff; color: #ff0000;
+        box-shadow: none; border: 1px #ff0000 solid">
+            <ons-icon icon="md-long-arrow-down" size="24px" style="color: #363E7C"></ons-icon>
+        </ons-fab>
+    </ons-pull-hook>
+    <!-- page preloader -->
+    <ons-progress-bar class="page-preloader" indeterminate modifier="default-page-preloader"
+                      style="position: fixed; z-index: 2; width: 100%; display: block;"></ons-progress-bar>
 
     <div class="e-card" style="box-shadow: none; border: none">
         <div class="e-card-image" style="min-height: 120px; background-image: url('css/app-images/1-13.jpg');">
@@ -67,21 +77,21 @@
             </div>
         </ons-list-item>
 
-        <ons-list-item modifier="longdivider" lock-on-drag="true" expandable
+        <ons-list-item modifier="nodivider" lock-on-drag="true" expandable
                        onclick="">
             <div class="center">
-                <span class="list-item__title" style="color: #3F51B5; width: 100%; text-align: center;">Description</span>
+                <span class="list-item__title" style="color: #3F51B5;">Description</span>
             </div>
-            <div class="expandable-content" style="white-space: normal; text-align: center">
+            <div class="expandable-content" style="white-space: normal;">
                 Lorem ipsum dolor sit amet, feugiat delicata liberavisse id cum
             </div>
         </ons-list-item>
 
-        <ons-list-item modifier="longdivider" lock-on-drag="true"
+        <ons-list-item modifier="nodivider" lock-on-drag="true"
                        onclick="">
             <div class="center">
-                <span class="list-item__title" style="color: #3F51B5; width: 100%; text-align: center;">Rating</span>
-                <div style="color: gold; font-size: 0.9em !important; width: 100%; text-align: center;">
+                <span class="list-item__title" style="color: #3F51B5;">Rating</span>
+                <div style="color: gold; font-size: 0.9em !important;">
                     <ons-icon icon="md-star" fixed-width></ons-icon>
                     <ons-icon icon="md-star" fixed-width></ons-icon>
                     <ons-icon icon="md-star" fixed-width></ons-icon>
@@ -92,12 +102,12 @@
             </div>
         </ons-list-item>
 
-        <ons-list-item modifier="longdivider" lock-on-drag="true" expandable
+        <ons-list-item modifier="nodivider" lock-on-drag="true" expandable
                        onclick="">
             <div class="center">
-                <span class="list-item__title" style="color: #3F51B5; width: 100%; text-align: center;">More Details</span>
+                <span class="list-item__title" style="color: #3F51B5;">More Details</span>
             </div>
-            <div class="expandable-content" style="white-space: normal; text-align: center">
+            <div class="expandable-content" style="white-space: normal;">
                 Lorem ipsum dolor sit amet, feugiat delicata liberavisse id cum,
                 no quo maiorum intellegebat, liber regione eu sit. Mea cu case ludus
                 Lorem ipsum dolor sit amet, feugiat delicata liberavisse id cum,
@@ -109,19 +119,10 @@
             </div>
         </ons-list-item>
 
-        <ons-list-item modifier="longdivider" lock-on-drag="true"
+        <ons-list-item modifier="nodivider" lock-on-drag="true"
                        onclick="">
             <div class="center" style="text-align: center">
                 <div style="width: 100%; display: block;">
-                    <button id="product-details-wish-list" type="button" style="color: red;
-                border-color: red; box-shadow: none; margin-right: 1em; margin-bottom:0.5em">
-                        <ons-ripple></ons-ripple>
-                        Wish List</button>
-
-                    <button id="product-details-compare" type="button" style="color: #3F51B5;
-                border-color: #3F51B5; box-shadow: none; margin-right: 1em; margin-bottom:0.5em">
-                        <ons-ripple></ons-ripple>
-                        Compare</button>
 
                     <button id="product-details-review" type="button" style="color: #eac300;
                 border-color: #eac300; box-shadow: none; margin-right: 1em; margin-bottom:0.5em">
@@ -136,7 +137,7 @@
             </div>
         </ons-list-item>
 
-        <ons-list-item modifier="longdivider" lock-on-drag="true" expandable
+        <ons-list-item modifier="nodivider" lock-on-drag="true" expandable
                        onclick="">
             <div class="center">
                 <span class="list-item__title" style="color: #3F51B5;">Dimensions</span>
@@ -148,7 +149,7 @@
             </div>
         </ons-list-item>
 
-        <ons-list-item modifier="longdivider" lock-on-drag="true"
+        <ons-list-item modifier="nodivider" lock-on-drag="true"
                        onclick="">
             <div class="center">
                 <span class="list-item__title" style="color: #3F51B5;">Weight</span>
