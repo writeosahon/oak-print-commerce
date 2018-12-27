@@ -3820,12 +3820,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         loadProduct: function () {
             var _ref48 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee48() {
-                var productPromisesArray, toast;
+                var productPromisesArray, toast, aProduct;
                 return regeneratorRuntime.wrap(function _callee48$(_context48) {
                     while (1) {
                         switch (_context48.prev = _context48.next) {
                             case 0:
-                                //todo
                                 productPromisesArray = []; // holds the array for the promises used to load the product
 
                                 // check if there is Internet connection
@@ -3847,7 +3846,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 // check if all the product details were provided to the page
                                 if ($('#app-main-navigator').get(0).topPage.data.product) {
                                     // all product details were provided
-                                    productPromisesArray.push(Promise.resolve($('#app-main-navigator').get(0).topPage.data.product));
+                                    aProduct = $('#app-main-navigator').get(0).topPage.data.product; // get the product details
+
+                                    if (!aProduct.regular_price || aProduct.regular_price == "") {
+                                        // regular price was NOT set, so set it
+                                        aProduct.regular_price = "0.00";
+                                    }
+
+                                    productPromisesArray.push(Promise.resolve(aProduct)); // resolve the promise with the product details
                                 } else {
                                     // at least the product id was provided
                                     // load the requested products list from the server
@@ -3863,11 +3869,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             timeout: 240000, // wait for 4 minutes before timeout of request
                                             processData: true
                                         })).then(function (product) {
-
+                                            if (!product.regular_price || product.regular_price == "") {
+                                                // regular price was NOT set, so set it
+                                                product.regular_price = "0.00";
+                                            }
                                             resolve(product); // resolve the parent promise with the data gotten from the server
                                         }).catch(function (err) {
                                             // an error occurred
-                                            console.log("LOAD SEARCH PRODUCTS", err);
+                                            console.log("LOAD PRODUCT DETAILS", err);
                                             reject(err); // reject the parent promise with the error
                                         });
                                     }));
@@ -3888,6 +3897,67 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             }
 
             return loadProduct;
+        }(),
+
+
+        /**
+         * method is used to display the product details on the page
+         *
+         * @param productDetails {Object} the product object to be displayed
+         *
+         * @returns {Promise<void>}
+         */
+        displayProductDetails: function () {
+            var _ref49 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee49(productDetails) {
+                return regeneratorRuntime.wrap(function _callee49$(_context49) {
+                    while (1) {
+                        switch (_context49.prev = _context49.next) {
+                            case 0:
+                                // update the product details image
+                                $('#product-details-page .e-card-image').css("background-image", 'url("' + productDetails.images[0].src + '")');
+
+                                // check if the product is on-sale
+                                if (productDetails.on_sale === true) {
+                                    // product is on-sale
+                                    $('#product-details-page .e-card-image').html('\n                <span class="e-badge e-badge-danger" style="float: right; clear: both; \n                                                    background-color: transparent; color: #d64113;\n                                                    border: 1px #d64113 solid; font-size: 0.6em;">\n                                                    ' + Math.ceil(Math.abs(kendo.parseFloat(productDetails.price) - kendo.parseFloat(productDetails.regular_price)) / kendo.parseFloat(productDetails.regular_price === "0.00" ? productDetails.price : productDetails.regular_price) * 100) + '% OFF\n                 </span>');
+                                }
+
+                                // update the product title/name
+                                $('#product-details-page .e-card-title').html('' + productDetails.name);
+                                // update product price
+                                $('#product-details-page .product-details-price').html('&#x20a6;' + productDetails.price);
+
+                                // check if product is on-sale
+                                if (productDetails.on_sale === true) {
+                                    // product is on-sale
+                                    // update the regular price
+                                    $('#product-details-page .product-details-regular-price').html('&#x20a6;' + productDetails.regular_price);
+                                    // make the regular price visible
+                                    $('#product-details-page .product-details-regular-price').css("visibility", "visible");
+                                } else {
+                                    // product is NOT on-sale
+                                    // make the regular price invisible
+                                    $('#product-details-page .product-details-regular-price').css("visibility", "collapse");
+                                }
+
+                                // update the product details description
+                                $('#product-details-page .product-details-description').html('' + productDetails.short_description);
+
+                                // update the rating for the product details
+
+                            case 6:
+                            case 'end':
+                                return _context49.stop();
+                        }
+                    }
+                }, _callee49, this);
+            }));
+
+            function displayProductDetails(_x26) {
+                return _ref49.apply(this, arguments);
+            }
+
+            return displayProductDetails;
         }()
     }
 };
