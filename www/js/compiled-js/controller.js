@@ -3163,7 +3163,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             $('#product-details-page .product-details-description').html(`${productDetails.short_description}`);
 
             // update the rating for the product details
-            $('#product-details-page .product-details-rating').html(``);
+            $('#product-details-page .product-details-rating').
+            html(`
+            ${Math.floor(kendo.parseFloat(productDetails.average_rating)) > 0 ?
+                '<ons-icon icon="md-star" fixed-width></ons-icon>'.
+                repeat(Math.floor(kendo.parseFloat(productDetails.average_rating))) :
+                '<ons-icon icon="md-star-outline" style="color: lightgray" fixed-width></ons-icon>'.repeat(5)}`);
         }
     }
 };
