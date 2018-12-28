@@ -3665,7 +3665,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     $('#app-main-navigator').get(0).topPage.onDeviceBackButton = utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.backButtonClicked;
 
                                     // add method to handle the loading action of the pull-to-refresh widget
-                                    $('#products-page-pull-hook', $thisPage).get(0).onAction = utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.pagePullHookAction;
+                                    /*$('#products-page-pull-hook', $thisPage).get(0).onAction =
+                                        utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.pagePullHookAction;*/
 
                                     // register listener for the pull-to-refresh widget
                                     $('#product-details-page-pull-hook', $thisPage).on("changestate", function (event) {
@@ -3689,7 +3690,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         }
                                     });
 
-                                    _context46.prev = 6;
+                                    _context46.prev = 5;
                                     quantityButton = new ej.inputs.NumericTextBox({
                                         cssClass: 'product-details-quantity-class',
                                         currency: null,
@@ -3735,21 +3736,21 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     shareButton.appendTo('#product-details-share');
 
                                     // load product details
-                                    _context46.next = 18;
+                                    _context46.next = 17;
                                     return utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.loadProduct();
 
-                                case 18:
+                                case 17:
                                     productDetailsArray = _context46.sent;
-                                    _context46.next = 21;
+                                    _context46.next = 20;
                                     return utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.displayProductDetails(productDetailsArray[0]);
 
-                                case 21:
-                                    _context46.next = 32;
+                                case 20:
+                                    _context46.next = 31;
                                     break;
 
-                                case 23:
-                                    _context46.prev = 23;
-                                    _context46.t0 = _context46['catch'](6);
+                                case 22:
+                                    _context46.prev = 22;
+                                    _context46.t0 = _context46['catch'](5);
 
                                     console.log("CATEGORIES PAGE", _context46.t0);
                                     // hide all previously displayed ej2 toast
@@ -3762,19 +3763,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     toast.dataBind();
                                     toast.show();
 
-                                case 32:
-                                    _context46.prev = 32;
+                                case 31:
+                                    _context46.prev = 31;
 
                                     // hide the preloader
                                     $('#product-details-page .page-preloader').css("display", "none");
-                                    return _context46.finish(32);
+                                    return _context46.finish(31);
 
-                                case 35:
+                                case 34:
                                 case 'end':
                                     return _context46.stop();
                             }
                         }
-                    }, _callee46, this, [[6, 23, 32, 35]]);
+                    }, _callee46, this, [[5, 22, 31, 34]]);
                 }));
 
                 return function loadPageOnAppReady() {

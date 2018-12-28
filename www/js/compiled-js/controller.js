@@ -2933,8 +2933,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.backButtonClicked;
 
                 // add method to handle the loading action of the pull-to-refresh widget
-                $('#products-page-pull-hook', $thisPage).get(0).onAction =
-                    utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.pagePullHookAction;
+                /*$('#products-page-pull-hook', $thisPage).get(0).onAction =
+                    utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.pagePullHookAction;*/
 
                 // register listener for the pull-to-refresh widget
                 $('#product-details-page-pull-hook', $thisPage).on("changestate", function(event){
