@@ -3944,8 +3944,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 $('#product-details-page .product-details-description').html('' + productDetails.short_description);
 
                                 // update the rating for the product details
+                                $('#product-details-page .product-details-rating').html('');
 
-                            case 6:
+                            case 7:
                             case 'end':
                                 return _context49.stop();
                         }

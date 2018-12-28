@@ -3163,7 +3163,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             $('#product-details-page .product-details-description').html(`${productDetails.short_description}`);
 
             // update the rating for the product details
-
+            $('#product-details-page .product-details-rating').html(``);
         }
     }
 };
