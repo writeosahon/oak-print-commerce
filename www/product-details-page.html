@@ -39,7 +39,7 @@
                       style="position: fixed; z-index: 2; width: 100%; display: block;"></ons-progress-bar>
 
     <div class="e-card" style="box-shadow: none; border: none">
-        <div class="e-card-image" style="min-height: 120px; background-image: url('css/app-images/1-13.jpg');">
+        <div class="e-card-image" style="min-height: 120px;">
                     <!--<span class="e-badge e-badge-danger" style="background-color: transparent; color: #d64113;
                     border: 1px #d64113 solid; font-size: 0.8em; float: right; clear: both;">
                                     50% OFF
@@ -84,7 +84,6 @@
                 <span class="list-item__title" style="color: #3F51B5;">Description</span>
             </div>
             <div class="expandable-content product-details-description" style="white-space: normal;">
-                Lorem ipsum dolor sit amet, feugiat delicata liberavisse id cum
             </div>
         </ons-list-item>
 
@@ -93,12 +92,7 @@
             <div class="center">
                 <span class="list-item__title" style="color: #3F51B5;">Rating</span>
                 <div class="product-details-rating" style="color: gold; font-size: 0.9em !important;">
-                    <ons-icon icon="md-star" fixed-width></ons-icon>
-                    <ons-icon icon="md-star" fixed-width></ons-icon>
-                    <ons-icon icon="md-star" fixed-width></ons-icon>
-                    <ons-icon icon="md-star" fixed-width></ons-icon>
-                    <ons-icon icon="md-star" fixed-width></ons-icon>
-                    <span style="display: inline-block; color: gray;">(5,000)</span>
+
                 </div>
             </div>
         </ons-list-item>
@@ -108,15 +102,7 @@
             <div class="center">
                 <span class="list-item__title" style="color: #3F51B5;">More Details</span>
             </div>
-            <div class="expandable-content" style="white-space: normal;">
-                Lorem ipsum dolor sit amet, feugiat delicata liberavisse id cum,
-                no quo maiorum intellegebat, liber regione eu sit. Mea cu case ludus
-                Lorem ipsum dolor sit amet, feugiat delicata liberavisse id cum,
-                no quo maiorum intellegebat, liber regione eu sit. Mea cu case ludus
-                Lorem ipsum dolor sit amet, feugiat delicata liberavisse id cum,
-                no quo maiorum intellegebat, liber regione eu sit. Mea cu case ludus
-                Lorem ipsum dolor sit amet, feugiat delicata liberavisse id cum,
-                no quo maiorum intellegebat, liber regione eu sit. Mea cu case ludus
+            <div class="expandable-content product-details-more-description" style="white-space: normal;">
             </div>
         </ons-list-item>
 
@@ -124,7 +110,6 @@
                        onclick="">
             <div class="center" style="text-align: center">
                 <div style="width: 100%; display: block;">
-
                     <button id="product-details-review" type="button" style="color: #eac300;
                 border-color: #eac300; box-shadow: none; margin-right: 1em; margin-bottom:0.5em">
                         <ons-ripple></ons-ripple>
@@ -143,8 +128,9 @@
             <div class="center">
                 <span class="list-item__title" style="color: #3F51B5;">Dimensions</span>
             </div>
-            <div class="expandable-content" style="white-space: normal">
-                <span class="list-item__subtitle" style="display: block">length - 12cm</span>
+            <div class="expandable-content product-details-dimensions" style="white-space: normal">
+                <span class="list-item__subtitle" style="display: block">length - ${!productDetails.dimensions.length ||
+                    productDetails.dimensions.length == "" ? ""}</span>
                 <span class="list-item__subtitle" style="display: block">width - 10cm</span>
                 <span class="list-item__subtitle" style="display: block">height - (Not Available)</span>
             </div>

@@ -3944,9 +3944,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 $('#product-details-page .product-details-description').html('' + productDetails.short_description);
 
                                 // update the rating for the product details
-                                $('#product-details-page .product-details-rating').html('');
+                                $('#product-details-page .product-details-rating').html('\n            ' + (Math.floor(kendo.parseFloat(productDetails.average_rating)) > 0 ? '<ons-icon icon="md-star" fixed-width></ons-icon>'.repeat(Math.floor(kendo.parseFloat(productDetails.average_rating))) : '<ons-icon icon="md-star-outline" style="color: lightgray" fixed-width></ons-icon>'.repeat(5)) + '\n                <span style="display: inline-block; color: gray;">\n                ' + (Math.floor(kendo.parseFloat(productDetails.average_rating)) > 0 ? '(' + productDetails.rating_count + ')' : "") + '\n                </span>\n            ');
 
-                            case 7:
+                                // update the extra/more details for the product
+                                $('#product-details-page .product-details-more-description').html('\n            ' + productDetails.description);
+
+                                // update the dimensions for the product details
+                                $('#product-details-page .product-details-dimensions').html('\n            <span class="list-item__subtitle" style="display: block">length - ' + (!productDetails.dimensions.length || productDetails.dimensions.length == "" ? "(Not Available)" : '' + productDetails.dimensions.length) + '</span>\n            ');
+
+                            case 9:
                             case 'end':
                                 return _context49.stop();
                         }

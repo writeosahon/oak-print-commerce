@@ -3168,7 +3168,23 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             ${Math.floor(kendo.parseFloat(productDetails.average_rating)) > 0 ?
                 '<ons-icon icon="md-star" fixed-width></ons-icon>'.
                 repeat(Math.floor(kendo.parseFloat(productDetails.average_rating))) :
-                '<ons-icon icon="md-star-outline" style="color: lightgray" fixed-width></ons-icon>'.repeat(5)}`);
+                '<ons-icon icon="md-star-outline" style="color: lightgray" fixed-width></ons-icon>'.repeat(5)}
+                <span style="display: inline-block; color: gray;">
+                ${Math.floor(kendo.parseFloat(productDetails.average_rating)) > 0 ? 
+                `(${productDetails.rating_count})` : ""}
+                </span>
+            `);
+
+            // update the extra/more details for the product
+            $('#product-details-page .product-details-more-description').html(`
+            ${productDetails.description}`);
+
+            // update the dimensions for the product details
+            $('#product-details-page .product-details-dimensions').html(`
+            <span class="list-item__subtitle" style="display: block">length - ${!productDetails.dimensions.length ||
+            productDetails.dimensions.length == "" ? "(Not Available)" : `${productDetails.dimensions.length}`}</span>
+            `);
         }
+
     }
 };
