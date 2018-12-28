@@ -3950,13 +3950,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 // update the product title/name
                                 $('#product-details-page .e-card-title').html('' + productDetails.name);
                                 // update product price
-                                $('#product-details-page .product-details-price').html('&#x20a6;' + productDetails.price);
+                                $('#product-details-page .product-details-price').html('&#x20a6;' + kendo.toString(kendo.parseFloat(productDetails.price), "n2"));
 
                                 // check if product is on-sale
                                 if (productDetails.on_sale === true) {
                                     // product is on-sale
                                     // update the regular price
-                                    $('#product-details-page .product-details-regular-price').html('&#x20a6;' + productDetails.regular_price);
+                                    $('#product-details-page .product-details-regular-price').html('&#x20a6;' + kendo.toString(kendo.parseFloat(productDetails.regular_price), "n2"));
                                     // make the regular price visible
                                     $('#product-details-page .product-details-regular-price').css("visibility", "visible");
                                 } else {
