@@ -1832,6 +1832,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 currentSearchResultsArray[productIndex];
             window.setTimeout(async function(){
                 try{
+                    // display the products details page using the selected product
+                    await $('#app-main-navigator').get(0).pushPage("product-details-page.html",
+                        {animation: "lift", data: {product : selectedProduct}});
+
                     // save the selected product in recent products app cache
                     await utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.
                     saveRecentSearchItem(selectedProduct);
@@ -2998,6 +3002,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         iconPosition: "Left"
                     });
                     shareButton.appendTo('#product-details-share');
+
+                    // load product details
+                    let productDetailsArray = await utopiasoftware[utopiasoftware_app_namespace].controller.
+                    productDetailsPageViewModel.loadProduct();
+                    // display the loaded product details
+                    await utopiasoftware[utopiasoftware_app_namespace].controller.
+                        productDetailsPageViewModel.displayProductDetails(productDetailsArray[0]);
+
                 }
                 catch(err){
                     console.log("CATEGORIES PAGE", err);
@@ -3183,7 +3195,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             $('#product-details-page .product-details-dimensions').html(`
             <span class="list-item__subtitle" style="display: block">length - ${!productDetails.dimensions.length ||
             productDetails.dimensions.length == "" ? "(Not Available)" : `${productDetails.dimensions.length}`}</span>
-            `);
+            <span class="list-item__subtitle" style="display: block">width - ${!productDetails.dimensions.width ||
+            productDetails.dimensions.width == "" ? "(Not Available)" : `${productDetails.dimensions.width}`}</span>
+            <span class="list-item__subtitle" style="display: block">height - ${!productDetails.dimensions.height ||
+            productDetails.dimensions.height == "" ? "(Not Available)" : `${productDetails.dimensions.height}`}</span>`);
+
+            // update the weight for the product
+            $('#product-details-page .product-details-weight').html(`${!productDetails.weight ||
+            productDetails.weight == "" ? "(Not Available)" : `${productDetails.weight}`}`);
         }
 
     }

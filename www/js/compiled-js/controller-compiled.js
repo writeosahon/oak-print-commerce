@@ -2248,28 +2248,32 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                 case 0:
                                                     _context27.prev = 0;
                                                     _context27.next = 3;
-                                                    return utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.saveRecentSearchItem(selectedProduct);
+                                                    return $('#app-main-navigator').get(0).pushPage("product-details-page.html", { animation: "lift", data: { product: selectedProduct } });
 
                                                 case 3:
+                                                    _context27.next = 5;
+                                                    return utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.saveRecentSearchItem(selectedProduct);
+
+                                                case 5:
 
                                                     // update the value of the search autocomplete input to that which the user clicked on from the popover
                                                     $('#search-page #search-page-input').val(selectedProduct.name);
 
-                                                    _context27.next = 9;
+                                                    _context27.next = 11;
                                                     break;
 
-                                                case 6:
-                                                    _context27.prev = 6;
+                                                case 8:
+                                                    _context27.prev = 8;
                                                     _context27.t0 = _context27['catch'](0);
 
                                                     console.log("SEARCH AUTOCOMPLETE", _context27.t0);
 
-                                                case 9:
+                                                case 11:
                                                 case 'end':
                                                     return _context27.stop();
                                             }
                                         }
-                                    }, _callee27, this, [[0, 6]]);
+                                    }, _callee27, this, [[0, 8]]);
                                 })), 0);
 
                             case 2:
@@ -3642,7 +3646,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             //function is used to initialise the page if the app is fully ready for execution
             var loadPageOnAppReady = function () {
                 var _ref46 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee46() {
-                    var quantityButton, addToCartButton, customiseProductButton, reviewButton, shareButton, toast;
+                    var quantityButton, addToCartButton, customiseProductButton, reviewButton, shareButton, productDetailsArray, toast;
                     return regeneratorRuntime.wrap(function _callee46$(_context46) {
                         while (1) {
                             switch (_context46.prev = _context46.next) {
@@ -3685,72 +3689,92 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         }
                                     });
 
-                                    try {
-                                        quantityButton = new ej.inputs.NumericTextBox({
-                                            cssClass: 'product-details-quantity-class',
-                                            currency: null,
-                                            decimals: 0,
-                                            floatLabelType: 'Auto',
-                                            format: 'n',
-                                            min: 1,
-                                            max: 10,
-                                            placeholder: 'Quantity',
-                                            step: 1,
-                                            strictMode: true,
-                                            // sets value to the NumericTextBox
-                                            value: 1
-                                        }).appendTo('#product-details-quantity');
-                                        addToCartButton = new ej.buttons.Button({
-                                            iconCss: "zmdi zmdi-shopping-cart-add utopiasoftware-icon-zoom-one-point-two",
-                                            iconPosition: "Left"
-                                        });
+                                    _context46.prev = 6;
+                                    quantityButton = new ej.inputs.NumericTextBox({
+                                        cssClass: 'product-details-quantity-class',
+                                        currency: null,
+                                        decimals: 0,
+                                        floatLabelType: 'Auto',
+                                        format: 'n',
+                                        min: 1,
+                                        max: 10,
+                                        placeholder: 'Quantity',
+                                        step: 1,
+                                        strictMode: true,
+                                        // sets value to the NumericTextBox
+                                        value: 1
+                                    }).appendTo('#product-details-quantity');
+                                    addToCartButton = new ej.buttons.Button({
+                                        iconCss: "zmdi zmdi-shopping-cart-add utopiasoftware-icon-zoom-one-point-two",
+                                        iconPosition: "Left"
+                                    });
 
-                                        addToCartButton.appendTo('#product-details-add-to-cart');
+                                    addToCartButton.appendTo('#product-details-add-to-cart');
 
-                                        customiseProductButton = new ej.buttons.Button({
-                                            iconCss: "zmdi zmdi-brush utopiasoftware-icon-zoom-one-point-two",
-                                            iconPosition: "Left"
-                                        });
+                                    customiseProductButton = new ej.buttons.Button({
+                                        iconCss: "zmdi zmdi-brush utopiasoftware-icon-zoom-one-point-two",
+                                        iconPosition: "Left"
+                                    });
 
-                                        customiseProductButton.appendTo('#product-details-customise-product');
+                                    customiseProductButton.appendTo('#product-details-customise-product');
 
-                                        reviewButton = new ej.buttons.Button({
-                                            cssClass: 'e-outline e-small',
-                                            iconCss: "zmdi zmdi-star-outline",
-                                            iconPosition: "Left"
-                                        });
+                                    reviewButton = new ej.buttons.Button({
+                                        cssClass: 'e-outline e-small',
+                                        iconCss: "zmdi zmdi-star-outline",
+                                        iconPosition: "Left"
+                                    });
 
-                                        reviewButton.appendTo('#product-details-review');
+                                    reviewButton.appendTo('#product-details-review');
 
-                                        shareButton = new ej.buttons.Button({
-                                            cssClass: 'e-outline e-small',
-                                            iconCss: "zmdi zmdi-share",
-                                            iconPosition: "Left"
-                                        });
+                                    shareButton = new ej.buttons.Button({
+                                        cssClass: 'e-outline e-small',
+                                        iconCss: "zmdi zmdi-share",
+                                        iconPosition: "Left"
+                                    });
 
-                                        shareButton.appendTo('#product-details-share');
-                                    } catch (err) {
-                                        console.log("CATEGORIES PAGE", err);
-                                        // hide all previously displayed ej2 toast
-                                        $('.page-toast').get(0).ej2_instances[0].hide('All');
-                                        // display toast to show that an error
-                                        toast = $('.page-toast').get(0).ej2_instances[0];
+                                    shareButton.appendTo('#product-details-share');
 
-                                        toast.cssClass = 'error-ej2-toast';
-                                        toast.content = 'Sorry, an error occurred.' + (navigator.connection.type === Connection.NONE ? " Connect to the Internet." : "") + ' Pull down to refresh and try again';
-                                        toast.dataBind();
-                                        toast.show();
-                                    } finally {
-                                        // hide the preloader
-                                        $('#product-details-page .page-preloader').css("display", "none");
-                                    }
+                                    // load product details
+                                    _context46.next = 18;
+                                    return utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.loadProduct();
 
-                                case 7:
+                                case 18:
+                                    productDetailsArray = _context46.sent;
+                                    _context46.next = 21;
+                                    return utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.displayProductDetails(productDetailsArray[0]);
+
+                                case 21:
+                                    _context46.next = 32;
+                                    break;
+
+                                case 23:
+                                    _context46.prev = 23;
+                                    _context46.t0 = _context46['catch'](6);
+
+                                    console.log("CATEGORIES PAGE", _context46.t0);
+                                    // hide all previously displayed ej2 toast
+                                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                                    // display toast to show that an error
+                                    toast = $('.page-toast').get(0).ej2_instances[0];
+
+                                    toast.cssClass = 'error-ej2-toast';
+                                    toast.content = 'Sorry, an error occurred.' + (navigator.connection.type === Connection.NONE ? " Connect to the Internet." : "") + ' Pull down to refresh and try again';
+                                    toast.dataBind();
+                                    toast.show();
+
+                                case 32:
+                                    _context46.prev = 32;
+
+                                    // hide the preloader
+                                    $('#product-details-page .page-preloader').css("display", "none");
+                                    return _context46.finish(32);
+
+                                case 35:
                                 case 'end':
                                     return _context46.stop();
                             }
                         }
-                    }, _callee46, this);
+                    }, _callee46, this, [[6, 23, 32, 35]]);
                 }));
 
                 return function loadPageOnAppReady() {
@@ -3950,9 +3974,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 $('#product-details-page .product-details-more-description').html('\n            ' + productDetails.description);
 
                                 // update the dimensions for the product details
-                                $('#product-details-page .product-details-dimensions').html('\n            <span class="list-item__subtitle" style="display: block">length - ' + (!productDetails.dimensions.length || productDetails.dimensions.length == "" ? "(Not Available)" : '' + productDetails.dimensions.length) + '</span>\n            ');
+                                $('#product-details-page .product-details-dimensions').html('\n            <span class="list-item__subtitle" style="display: block">length - ' + (!productDetails.dimensions.length || productDetails.dimensions.length == "" ? "(Not Available)" : '' + productDetails.dimensions.length) + '</span>\n            <span class="list-item__subtitle" style="display: block">width - ' + (!productDetails.dimensions.width || productDetails.dimensions.width == "" ? "(Not Available)" : '' + productDetails.dimensions.width) + '</span>\n            <span class="list-item__subtitle" style="display: block">height - ' + (!productDetails.dimensions.height || productDetails.dimensions.height == "" ? "(Not Available)" : '' + productDetails.dimensions.height) + '</span>');
 
-                            case 9:
+                                // update the weight for the product
+                                $('#product-details-page .product-details-weight').html('' + (!productDetails.weight || productDetails.weight == "" ? "(Not Available)" : '' + productDetails.weight));
+
+                            case 10:
                             case 'end':
                                 return _context49.stop();
                         }
