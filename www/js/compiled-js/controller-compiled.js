@@ -3639,6 +3639,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
     productDetailsPageViewModel: {
 
         /**
+         * holds the production variations array
+         */
+        productVariationsArray: null,
+
+        /**
          * event is triggered when page is initialised
          */
         pageInit: function pageInit(event) {
@@ -3752,7 +3757,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     _context46.prev = 22;
                                     _context46.t0 = _context46['catch'](5);
 
-                                    console.log("CATEGORIES PAGE", _context46.t0);
+                                    console.log("PRODUCT DETAILS PAGE", _context46.t0);
                                     // hide all previously displayed ej2 toast
                                     $('.page-toast').get(0).ej2_instances[0].hide('All');
                                     // display toast to show that an error
