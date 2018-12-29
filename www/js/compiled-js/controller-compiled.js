@@ -3712,14 +3712,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     }).appendTo('#product-details-quantity');
                                     addToCartButton = new ej.buttons.Button({
                                         //iconCss: "zmdi zmdi-shopping-cart-add utopiasoftware-icon-zoom-one-point-two",
-                                        iconPosition: "Left"
+                                        //iconPosition: "Left"
                                     });
 
                                     addToCartButton.appendTo('#product-details-add-to-cart');
 
                                     customiseProductButton = new ej.buttons.Button({
                                         //iconCss: "zmdi zmdi-brush utopiasoftware-icon-zoom-one-point-two",
-                                        iconPosition: "Left"
+                                        //iconPosition: "Left"
                                     });
 
                                     customiseProductButton.appendTo('#product-details-customise-product');
