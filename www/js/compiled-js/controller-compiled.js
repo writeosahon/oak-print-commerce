@@ -3702,10 +3702,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         decimals: 0,
                                         floatLabelType: 'Auto',
                                         format: 'n',
-                                        showSpinButton: true,
+                                        showSpinButton: false,
                                         min: 1,
                                         max: 10,
-                                        placeholder: 'Quantity',
+                                        placeholder: 'Pick Quantity',
                                         step: 1,
                                         strictMode: true,
                                         // sets value to the NumericTextBox
