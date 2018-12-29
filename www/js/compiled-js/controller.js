@@ -3185,7 +3185,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             let variationContent = ''; // holds the product details variation content
             for(let index = 0; index < productDetails.attributes.length; index++){
                 // create the product details variations
-                variationContent += `<div class="col-xs-4">
+                variationContent += `<div class="col-xs-4" style="padding-right: 5px; padding-left: 5px;">
                     <select name="${productDetails.attributes[index].name}" class="product-details-variation-option">
                         ${productDetails.attributes[index].options.map(function(arrayElem){
                             return `<option value="${arrayElem}">${arrayElem}</option>`;
@@ -3198,7 +3198,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             // create the dropdown list from the select input
             $('#product-details-page .product-details-variation-option').each(function(index, element){
-                new ej.dropdowns.DropDownList().appendTo(element);
+                new ej.dropdowns.DropDownList(
+                    {
+                        placeholder: productDetails.attributes[index].name,
+                        floatLabelType: 'Always'
+                    }).appendTo(element);
             });
 
             // update the rating for the product details
