@@ -2976,7 +2976,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         showSpinButton: false,
                         min: 1,
                         max: 10,
-                        placeholder: 'Quantity',
+                        placeholder: null,
                         step: 1,
                         strictMode: true,
                         // sets value to the NumericTextBox

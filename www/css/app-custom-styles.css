@@ -396,7 +396,6 @@
 /** style for quantity numeric input **/
 #product-details-page .product-details-quantity-class.e-control-wrapper.e-numeric #label_product-details-quantity {
     color: #3F51B5;
-    font-size: 1em;
 }
 #product-details-page .product-details-quantity-class.e-float-input.e-control-wrapper {
     border-color: transparent;
