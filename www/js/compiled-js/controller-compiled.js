@@ -3999,7 +3999,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     if (productDetails.default_attributes.length > 0) {
                                         // there are default attributes
                                         // set those default attributes for the variations
-                                        $('option[name="' + productDetails.default_attributes[index].option + '"]', element).attr("selected", true);
+                                        $('option[value="' + productDetails.default_attributes[index].option + '"]', element).attr("selected", true);
                                     }
                                     // create the dropdown list from the select input
                                     new ej.dropdowns.DropDownList({
