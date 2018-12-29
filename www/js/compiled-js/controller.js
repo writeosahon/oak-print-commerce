@@ -3173,10 +3173,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 html(`&#x20a6;${kendo.toString(kendo.parseFloat(productDetails.regular_price), "n2")}`);
                 // make the regular price visible
                 $('#product-details-page .product-details-regular-price').css("visibility", "visible");
+                // add 'sales' class to the quantity component
+                $('#product-details-quantity').get(0).ej2_instances[0].cssClass = "product-details-quantity-class sales";
+                $('#product-details-quantity').get(0).ej2_instances[0].dataBind();
             }
             else{ // product is NOT on-sale
                 // make the regular price invisible
                 $('#product-details-page .product-details-regular-price').css("visibility", "collapse");
+                // remove 'sales' class to the quantity component
+                $('#product-details-quantity').get(0).ej2_instances[0].cssClass = "product-details-quantity-class";
+                $('#product-details-quantity').get(0).ej2_instances[0].dataBind();
             }
 
             // update the product details description

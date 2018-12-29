@@ -398,6 +398,13 @@
     color: #3F51B5;
     font-size: 15px;
     line-height: 1;
+    margin-top: 5px
+}
+#product-details-page .product-details-quantity-class.sales.e-control-wrapper.e-numeric #label_product-details-quantity {
+    color: #3F51B5;
+    font-size: 15px;
+    line-height: 1;
+    margin-top: -3px
 }
 #product-details-page .product-details-quantity-class.e-float-input.e-control-wrapper {
     border-color: transparent;
