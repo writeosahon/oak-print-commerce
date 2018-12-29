@@ -3702,7 +3702,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         decimals: 0,
                                         floatLabelType: 'Auto',
                                         format: 'n',
-                                        showSpinButton: false,
+                                        showSpinButton: true,
                                         min: 1,
                                         max: 10,
                                         placeholder: 'Quantity',
@@ -3993,8 +3993,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 // insert the created Select inputs to the page
                                 $('#product-details-page .product-details-variations').html(variationContent);
 
-                                // create the dropdown list from the select input
+                                // create the dropdown list from each of the select input
                                 $('#product-details-page .product-details-variation-option').each(function (index, element) {
+                                    // check if this product details has default attributes set
+                                    if (productDetails.default_attributes.length > 0) {
+                                        // there are default attributes
+                                        // set those default attributes for the variations
+                                        $('option[name="' + productDetails.default_attributes[index].option + '"]', element).attr("selected", true);
+                                    }
+                                    // create the dropdown list from the select input
                                     new ej.dropdowns.DropDownList({
                                         placeholder: productDetails.attributes[index].name,
                                         floatLabelType: 'Always'
