@@ -3939,6 +3939,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         displayProductDetails: function () {
             var _ref49 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee49(productDetails) {
+                var variationContent, index;
                 return regeneratorRuntime.wrap(function _callee49$(_context49) {
                     while (1) {
                         switch (_context49.prev = _context49.next) {
@@ -3973,6 +3974,23 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 // update the product details description
                                 $('#product-details-page .product-details-description').html('' + productDetails.short_description);
 
+                                // add/update product details variation
+                                variationContent = ''; // holds the product details variation content
+
+                                for (index = 0; index < productDetails.attributes.length; index++) {
+                                    // create the product details variations
+                                    variationContent += '<div class="col-xs-4">\n                    <select name="' + productDetails.attributes[index].name + '" class="product-details-variation-option">\n                        ' + productDetails.attributes[index].options.map(function (arrayElem) {
+                                        return '<option value="' + arrayElem + '">' + arrayElem + '</option>';
+                                    }).join("") + '\n                    </select>\n                </div>';
+                                }
+                                // insert the created Select inputs to the page
+                                $('#product-details-page .product-details-variations').html(variationContent);
+
+                                // create the dropdown list from the select input
+                                $('#product-details-page .product-details-variation-option').each(function (index, element) {
+                                    new ej.dropdowns.DropDownList().appendTo(element);
+                                });
+
                                 // update the rating for the product details
                                 $('#product-details-page .product-details-rating').html('\n            ' + (Math.floor(kendo.parseFloat(productDetails.average_rating)) > 0 ? '<ons-icon icon="md-star" fixed-width></ons-icon>'.repeat(Math.floor(kendo.parseFloat(productDetails.average_rating))) : '<ons-icon icon="md-star-outline" style="color: lightgray" fixed-width></ons-icon>'.repeat(5)) + '\n                <span style="display: inline-block; color: gray;">\n                ' + (Math.floor(kendo.parseFloat(productDetails.average_rating)) > 0 ? '(' + productDetails.rating_count + ')' : "") + '\n                </span>\n            ');
 
@@ -3985,7 +4003,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 // update the weight for the product
                                 $('#product-details-page .product-details-weight').html('' + (!productDetails.weight || productDetails.weight == "" ? "(Not Available)" : '' + productDetails.weight));
 
-                            case 10:
+                            case 14:
                             case 'end':
                                 return _context49.stop();
                         }
