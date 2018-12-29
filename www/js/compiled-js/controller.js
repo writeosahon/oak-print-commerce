@@ -2967,7 +2967,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 });
 
                 try{
-                    let quantityButton = new ej.inputs.NumericTextBox({
+                    // create the "Pick Quantity" button
+                    new ej.inputs.NumericTextBox({
                         cssClass: 'product-details-quantity-class',
                         currency: null,
                         decimals: 0,
@@ -2983,32 +2984,35 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         value: 1
                     }).appendTo('#product-details-quantity');
 
-                    let addToCartButton = new ej.buttons.Button({
+                    // create the "Add To Cart" button
+                    new ej.buttons.Button({
                         //iconCss: "zmdi zmdi-shopping-cart-add utopiasoftware-icon-zoom-one-point-two",
                         //iconPosition: "Left"
-                    });
-                    addToCartButton.appendTo('#product-details-add-to-cart');
+                    }).appendTo('#product-details-add-to-cart');
 
-                    let customiseProductButton = new ej.buttons.Button({
+                    // create the "Customise" button
+                    new ej.buttons.Button({
                         //iconCss: "zmdi zmdi-brush utopiasoftware-icon-zoom-one-point-two",
                         //iconPosition: "Left"
-                    });
-                    customiseProductButton.appendTo('#product-details-customise-product');
+                    }).appendTo('#product-details-customise-product');
 
-                    let reviewButton = new ej.buttons.Button({
+                    // create the "Review" button
+                    new ej.buttons.Button({
                         cssClass: 'e-outline e-small',
                         iconCss: "zmdi zmdi-star-outline",
                         iconPosition: "Left"
-                    });
-                    reviewButton.appendTo('#product-details-review');
+                    }).appendTo('#product-details-review');
 
-                    let shareButton = new ej.buttons.Button({
+                    // create the "Share" button
+                    new ej.buttons.Button({
                         cssClass: 'e-outline e-small',
                         iconCss: "zmdi zmdi-share",
                         iconPosition: "Left"
-                    });
-                    shareButton.appendTo('#product-details-share');
+                    }).appendTo('#product-details-share');
 
+                    // load product variations asynchronously without waiting for the response
+                    utopiasoftware[utopiasoftware_app_namespace].controller.
+                        productDetailsPageViewModel.loadProductVariations();
                     // load product details
                     let productDetailsArray = await utopiasoftware[utopiasoftware_app_namespace].controller.
                     productDetailsPageViewModel.loadProduct();
@@ -3135,6 +3139,72 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         },
 
         /**
+         * method is used to load a particular product variations.
+         *
+         * The product variations to be loaded is gotten from the product directly passed to the page OR
+         * the prduct id passed to the page
+         *
+         * @returns {Promise<void>}
+         */
+        async loadProductVariations(){
+            var productPromisesArray = []; // holds the array for the promises used to load the product
+            var productId = null; // holds the product id
+
+            // check if all the product details were provided to the page
+            if($('#app-main-navigator').get(0).topPage.data.product){ // all product details were provided
+                // save the product id
+                productId = $('#app-main-navigator').get(0).topPage.data.product.id;
+
+            }
+            else{ // at least the product id was provided
+                // save the product id
+                productId = jQuery('#app-main-navigator').get(0).topPage.data.productId;
+            }
+
+            // load the requested products variations from the server
+            productPromisesArray.push(new Promise(function(resolve, reject){
+                Promise.resolve($.ajax(
+                    {
+                        url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + `/wp-json/wc/v3/products/${productId}/variations`,
+                        type: "get",
+                        //contentType: "application/x-www-form-urlencoded",
+                        beforeSend: function(jqxhr) {
+                            jqxhr.setRequestHeader("Authorization", "Basic " +
+                                utopiasoftware[utopiasoftware_app_namespace].accessor);
+                        },
+                        dataType: "json",
+                        timeout: 240000, // wait for 4 minutes before timeout of request
+                        processData: true,
+                        data: {page: 1, per_page: 99}
+                    }
+                )).then(function(productVariations){
+                    // map the retrieved variations and save the unique value for the variation.
+                    // The unique value is used to uniquely identify the variation
+                    productVariations = productVariations.map(function(currentElement, index){
+                        // join all options from the variation attributes to create a unique value
+                        currentElement._variationValue = currentElement.attributes.map(function(attribute){
+                            return attribute.option;
+                        }).join("");
+
+                        return currentElement;
+                    });
+
+                    // save the retrieved production variations
+                    utopiasoftware[utopiasoftware_app_namespace].controller.
+                        productDetailsPageViewModel.productVariationsArray = productVariations;
+
+                    resolve(productVariations); // resolve the parent promise with the data gotten from the server
+
+                }).catch(function(err){ // an error occurred
+                    console.log("LOAD PRODUCT VARIATIONS", err);
+                    reject(err); // reject the parent promise with the error
+                });
+            }));
+
+            return Promise.all(productPromisesArray); // return a Promise which resolves when all promises resolve
+        },
+
+        /**
          * method is used to display the product details on the page
          *
          * @param productDetails {Object} the product object to be displayed
@@ -3180,7 +3250,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             else{ // product is NOT on-sale
                 // make the regular price invisible
                 $('#product-details-page .product-details-regular-price').css("visibility", "collapse");
-                // remove 'sales' class to the quantity component
+                // remove 'sales' class from the quantity component
                 $('#product-details-quantity').get(0).ej2_instances[0].cssClass = "product-details-quantity-class";
                 $('#product-details-quantity').get(0).ej2_instances[0].dataBind();
             }
@@ -3189,6 +3259,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             $('#product-details-page .product-details-description').html(`${productDetails.short_description}`);
 
             // add/update product details variation
+            // expand the variations content
+            $('#product-details-page .product-details-variations').removeClass('expandable-content');
             let variationContent = ''; // holds the product details variation content
             for(let index = 0; index < productDetails.attributes.length; index++){
                 // create the product details variations
@@ -3217,6 +3289,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         floatLabelType: 'Always'
                     }).appendTo(element);
             });
+            // collapse the variations content
+            $('#product-details-page .product-details-variations').addClass('expandable-content');
 
             // update the rating for the product details
             $('#product-details-page .product-details-rating').
