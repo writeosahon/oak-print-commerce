@@ -34,6 +34,15 @@
 .e-btn:focus, .e-btn:hover, .e-btn.e-outline:focus, .e-btn.e-outline:hover {
     background-color: transparent;
 }
+
+/** STYLE FOR THE EJ2 DROPDOWN LIST POPOVER **/
+.e-dropdownbase .e-list-item.e-active, .e-dropdownbase .e-list-item.e-active.e-hover {
+    background-color: #eee;
+    border-color: #fff;
+    color: #3F51B5;
+}
+
+
 /** STYLE TO INCREASE FONT SIZE BY 1.2EM **/
 .utopiasoftware-icon-zoom-one-point-two {
     font-size: 1.2em !important;
