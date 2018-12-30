@@ -2938,8 +2938,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.backButtonClicked;
 
                 // add method to handle the loading action of the pull-to-refresh widget
-                /*$('#products-page-pull-hook', $thisPage).get(0).onAction =
-                    utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.pagePullHookAction;*/
+                $('#products-page-pull-hook', $thisPage).get(0).onAction =
+                    utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.pagePullHookAction;
 
                 // register listener for the pull-to-refresh widget
                 $('#product-details-page-pull-hook', $thisPage).on("changestate", function(event){
@@ -2998,14 +2998,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                     // create the "Review" button
                     new ej.buttons.Button({
-                        cssClass: 'e-outline e-small',
+                        cssClass: 'e-flat e-small',
                         iconCss: "zmdi zmdi-star-outline",
                         iconPosition: "Left"
                     }).appendTo('#product-details-review');
 
                     // create the "Share" button
                     new ej.buttons.Button({
-                        cssClass: 'e-outline e-small',
+                        cssClass: 'e-flat e-small',
                         iconCss: "zmdi zmdi-share",
                         iconPosition: "Left"
                     }).appendTo('#product-details-share');
@@ -3068,6 +3068,46 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             // get back to the previous page on the app-main navigator stack
             $('#app-main-navigator').get(0).popPage();
+        },
+
+        /**
+         * method is triggered when the pull-hook on the page is active
+         *
+         * @param doneCallBack
+         * @returns {Promise<void>}
+         */
+        async pagePullHookAction(doneCallBack = function(){}){
+            // disable pull-to-refresh widget till loading is done
+            $('#product-details-page #product-details-page-pull-hook').attr("disabled", true);
+            // hide all previously displayed ej2 toast
+            $('.page-toast').get(0).ej2_instances[0].hide('All');
+
+            try{
+                // load product variations asynchronously without waiting for the response
+                utopiasoftware[utopiasoftware_app_namespace].controller.
+                productDetailsPageViewModel.loadProductVariations();
+                // load product details
+                let productDetailsArray = await utopiasoftware[utopiasoftware_app_namespace].controller.
+                productDetailsPageViewModel.loadProduct();
+                // display the loaded product details
+                await utopiasoftware[utopiasoftware_app_namespace].controller.
+                productDetailsPageViewModel.displayProductDetails(productDetailsArray[0]);
+            }
+            catch(err){ // an error occurred
+                console.log("PROJECT DETAILS REFRESH ERROR", err);
+                // display toast to show that error
+                let toast = $('.page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.content = "Sorry, an error occurred. Refresh to try again";
+                toast.dataBind();
+                toast.show();
+            }
+            finally{
+                // enable pull-to-refresh widget till loading is done
+                $('#product-details-page #product-details-page-pull-hook').removeAttr("disabled");
+                // signal that loading is done
+                doneCallBack();
+            }
         },
 
         /**
@@ -3257,6 +3297,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             // update the product details description
             $('#product-details-page .product-details-description').html(`${productDetails.short_description}`);
+
+            // destroy an previous product variation dropdown list that may previously exist before creating the new ones
+            $('#product-details-page .product-details-variation-option').each(function(index, element){
+                element.ej2_instances[0].destroy(); // destroy the dropdown list component
+            });
 
             // add/update product details variation
             // expand the variations content

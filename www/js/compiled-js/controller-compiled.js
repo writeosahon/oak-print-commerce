@@ -3670,8 +3670,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     $('#app-main-navigator').get(0).topPage.onDeviceBackButton = utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.backButtonClicked;
 
                                     // add method to handle the loading action of the pull-to-refresh widget
-                                    /*$('#products-page-pull-hook', $thisPage).get(0).onAction =
-                                        utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.pagePullHookAction;*/
+                                    $('#products-page-pull-hook', $thisPage).get(0).onAction = utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.pagePullHookAction;
 
                                     // register listener for the pull-to-refresh widget
                                     $('#product-details-page-pull-hook', $thisPage).on("changestate", function (event) {
@@ -3695,7 +3694,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         }
                                     });
 
-                                    _context46.prev = 5;
+                                    _context46.prev = 6;
 
                                     // create the "Pick Quantity" button
                                     new ej.inputs.NumericTextBox({
@@ -3728,14 +3727,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                     // create the "Review" button
                                     new ej.buttons.Button({
-                                        cssClass: 'e-outline e-small',
+                                        cssClass: 'e-flat e-small',
                                         iconCss: "zmdi zmdi-star-outline",
                                         iconPosition: "Left"
                                     }).appendTo('#product-details-review');
 
                                     // create the "Share" button
                                     new ej.buttons.Button({
-                                        cssClass: 'e-outline e-small',
+                                        cssClass: 'e-flat e-small',
                                         iconCss: "zmdi zmdi-share",
                                         iconPosition: "Left"
                                     }).appendTo('#product-details-share');
@@ -3743,21 +3742,21 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // load product variations asynchronously without waiting for the response
                                     utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.loadProductVariations();
                                     // load product details
-                                    _context46.next = 14;
+                                    _context46.next = 15;
                                     return utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.loadProduct();
 
-                                case 14:
+                                case 15:
                                     productDetailsArray = _context46.sent;
-                                    _context46.next = 17;
+                                    _context46.next = 18;
                                     return utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.displayProductDetails(productDetailsArray[0]);
 
-                                case 17:
-                                    _context46.next = 28;
+                                case 18:
+                                    _context46.next = 29;
                                     break;
 
-                                case 19:
-                                    _context46.prev = 19;
-                                    _context46.t0 = _context46['catch'](5);
+                                case 20:
+                                    _context46.prev = 20;
+                                    _context46.t0 = _context46['catch'](6);
 
                                     console.log("PRODUCT DETAILS PAGE", _context46.t0);
                                     // hide all previously displayed ej2 toast
@@ -3770,19 +3769,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     toast.dataBind();
                                     toast.show();
 
-                                case 28:
-                                    _context46.prev = 28;
+                                case 29:
+                                    _context46.prev = 29;
 
                                     // hide the preloader
                                     $('#product-details-page .page-preloader').css("display", "none");
-                                    return _context46.finish(28);
+                                    return _context46.finish(29);
 
-                                case 31:
+                                case 32:
                                 case 'end':
                                     return _context46.stop();
                             }
                         }
-                    }, _callee46, this, [[5, 19, 28, 31]]);
+                    }, _callee46, this, [[6, 20, 29, 32]]);
                 }));
 
                 return function loadPageOnAppReady() {
@@ -3842,6 +3841,80 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
 
         /**
+         * method is triggered when the pull-hook on the page is active
+         *
+         * @param doneCallBack
+         * @returns {Promise<void>}
+         */
+        pagePullHookAction: function () {
+            var _ref48 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee48() {
+                var doneCallBack = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : function () {};
+                var productDetailsArray, toast;
+                return regeneratorRuntime.wrap(function _callee48$(_context48) {
+                    while (1) {
+                        switch (_context48.prev = _context48.next) {
+                            case 0:
+                                // disable pull-to-refresh widget till loading is done
+                                $('#product-details-page #product-details-page-pull-hook').attr("disabled", true);
+                                // hide all previously displayed ej2 toast
+                                $('.page-toast').get(0).ej2_instances[0].hide('All');
+
+                                _context48.prev = 2;
+
+                                // load product variations asynchronously without waiting for the response
+                                utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.loadProductVariations();
+                                // load product details
+                                _context48.next = 6;
+                                return utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.loadProduct();
+
+                            case 6:
+                                productDetailsArray = _context48.sent;
+                                _context48.next = 9;
+                                return utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.displayProductDetails(productDetailsArray[0]);
+
+                            case 9:
+                                _context48.next = 19;
+                                break;
+
+                            case 11:
+                                _context48.prev = 11;
+                                _context48.t0 = _context48['catch'](2);
+                                // an error occurred
+                                console.log("PROJECT DETAILS REFRESH ERROR", _context48.t0);
+                                // display toast to show that error
+                                toast = $('.page-toast').get(0).ej2_instances[0];
+
+                                toast.cssClass = 'error-ej2-toast';
+                                toast.content = "Sorry, an error occurred. Refresh to try again";
+                                toast.dataBind();
+                                toast.show();
+
+                            case 19:
+                                _context48.prev = 19;
+
+                                // enable pull-to-refresh widget till loading is done
+                                $('#product-details-page #product-details-page-pull-hook').removeAttr("disabled");
+                                // signal that loading is done
+                                doneCallBack();
+                                return _context48.finish(19);
+
+                            case 23:
+                            case 'end':
+                                return _context48.stop();
+                        }
+                    }
+                }, _callee48, this, [[2, 11, 19, 23]]);
+            }));
+
+            function pagePullHookAction() {
+                return _ref48.apply(this, arguments);
+            }
+
+            return pagePullHookAction;
+        }(),
+
+
+        /**
          * method is used to load a particular product detail.
          *
          * The product to be loaded can be directly passed to the page for loading OR
@@ -3851,11 +3924,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         loadProduct: function () {
-            var _ref48 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee48() {
+            var _ref49 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee49() {
                 var productPromisesArray, toast, aProduct;
-                return regeneratorRuntime.wrap(function _callee48$(_context48) {
+                return regeneratorRuntime.wrap(function _callee49$(_context49) {
                     while (1) {
-                        switch (_context48.prev = _context48.next) {
+                        switch (_context49.prev = _context49.next) {
                             case 0:
                                 productPromisesArray = []; // holds the array for the promises used to load the product
 
@@ -3914,18 +3987,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     }));
                                 }
 
-                                return _context48.abrupt('return', Promise.all(productPromisesArray));
+                                return _context49.abrupt('return', Promise.all(productPromisesArray));
 
                             case 4:
                             case 'end':
-                                return _context48.stop();
+                                return _context49.stop();
                         }
                     }
-                }, _callee48, this);
+                }, _callee49, this);
             }));
 
             function loadProduct() {
-                return _ref48.apply(this, arguments);
+                return _ref49.apply(this, arguments);
             }
 
             return loadProduct;
@@ -3941,11 +4014,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         loadProductVariations: function () {
-            var _ref49 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee49() {
+            var _ref50 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee50() {
                 var productPromisesArray, productId;
-                return regeneratorRuntime.wrap(function _callee49$(_context49) {
+                return regeneratorRuntime.wrap(function _callee50$(_context50) {
                     while (1) {
-                        switch (_context49.prev = _context49.next) {
+                        switch (_context50.prev = _context50.next) {
                             case 0:
                                 productPromisesArray = []; // holds the array for the promises used to load the product
 
@@ -3999,18 +4072,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     });
                                 }));
 
-                                return _context49.abrupt('return', Promise.all(productPromisesArray));
+                                return _context50.abrupt('return', Promise.all(productPromisesArray));
 
                             case 5:
                             case 'end':
-                                return _context49.stop();
+                                return _context50.stop();
                         }
                     }
-                }, _callee49, this);
+                }, _callee50, this);
             }));
 
             function loadProductVariations() {
-                return _ref49.apply(this, arguments);
+                return _ref50.apply(this, arguments);
             }
 
             return loadProductVariations;
@@ -4025,11 +4098,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         displayProductDetails: function () {
-            var _ref50 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee50(productDetails) {
+            var _ref51 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee51(productDetails) {
                 var variationContent, index;
-                return regeneratorRuntime.wrap(function _callee50$(_context50) {
+                return regeneratorRuntime.wrap(function _callee51$(_context51) {
                     while (1) {
-                        switch (_context50.prev = _context50.next) {
+                        switch (_context51.prev = _context51.next) {
                             case 0:
                                 // update the product details image
                                 $('#product-details-page .e-card-image').css("background-image", 'url("' + productDetails.images[0].src + '")');
@@ -4066,6 +4139,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 // update the product details description
                                 $('#product-details-page .product-details-description').html('' + productDetails.short_description);
+
+                                // destroy an previous product variation dropdown list that may previously exist before creating the new ones
+                                $('#product-details-page .product-details-variation-option').each(function (index, element) {
+                                    element.ej2_instances[0].destroy(); // destroy the dropdown list component
+                                });
 
                                 // add/update product details variation
                                 // expand the variations content
@@ -4111,16 +4189,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 // update the weight for the product
                                 $('#product-details-page .product-details-weight').html('' + (!productDetails.weight || productDetails.weight == "" ? "(Not Available)" : '' + productDetails.weight));
 
-                            case 16:
+                            case 17:
                             case 'end':
-                                return _context50.stop();
+                                return _context51.stop();
                         }
                     }
-                }, _callee50, this);
+                }, _callee51, this);
             }));
 
-            function displayProductDetails(_x26) {
-                return _ref50.apply(this, arguments);
+            function displayProductDetails(_x27) {
+                return _ref51.apply(this, arguments);
             }
 
             return displayProductDetails;
