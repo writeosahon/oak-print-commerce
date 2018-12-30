@@ -3670,7 +3670,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     $('#app-main-navigator').get(0).topPage.onDeviceBackButton = utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.backButtonClicked;
 
                                     // add method to handle the loading action of the pull-to-refresh widget
-                                    $('#product-details-page-pull-hoo', $thisPage).get(0).onAction = utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.pagePullHookAction;
+                                    $('#product-details-page-pull-hook', $thisPage).get(0).onAction = utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.pagePullHookAction;
 
                                     // register listener for the pull-to-refresh widget
                                     $('#product-details-page-pull-hook', $thisPage).on("changestate", function (event) {
