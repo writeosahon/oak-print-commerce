@@ -4091,6 +4091,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     }
                                     // create the dropdown list from the select input
                                     new ej.dropdowns.DropDownList({
+                                        cssClass: "product-details-variation-class",
                                         placeholder: productDetails.attributes[index].name,
                                         floatLabelType: 'Always'
                                     }).appendTo(element);
