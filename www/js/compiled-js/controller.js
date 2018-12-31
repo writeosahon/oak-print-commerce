@@ -1671,9 +1671,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         async recentSearchesItemClicked(productIndex){
-            // get the product the user clicked on from the search autocomplete popover
-            var selectedProduct = utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.
-                currentSearchResultsArray[productIndex];
+            // handle the function task in a different event queue
             window.setTimeout(async function(){
                 try{
                     // get the recent searches collection

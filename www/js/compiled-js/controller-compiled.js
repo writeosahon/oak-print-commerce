@@ -2044,14 +2044,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         recentSearchesItemClicked: function () {
             var _ref24 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee25(productIndex) {
-                var selectedProduct;
                 return regeneratorRuntime.wrap(function _callee25$(_context25) {
                     while (1) {
                         switch (_context25.prev = _context25.next) {
                             case 0:
-                                // get the product the user clicked on from the search autocomplete popover
-                                selectedProduct = utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.currentSearchResultsArray[productIndex];
-
+                                // handle the function task in a different event queue
                                 window.setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee24() {
                                     var recentSearchesResultArray;
                                     return regeneratorRuntime.wrap(function _callee24$(_context24) {
@@ -2085,7 +2082,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     }, _callee24, this, [[0, 7]]);
                                 })), 0);
 
-                            case 2:
+                            case 1:
                             case 'end':
                                 return _context25.stop();
                         }
