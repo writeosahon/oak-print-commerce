@@ -3272,8 +3272,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         console.log("TAB CHANGED", utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.lastActiveNavTab);
                                     });
 
-                                    // listen for when a product card is clicked
-                                    $thisPage.on("click", ".e-card > *:not(.e-card-actions)", function () {
+                                    // LISTEN FOR WHEN A PRODUCT CARD IS CLICKED
+                                    $thisPage.on("click", ".e-card", function () {
+                                        console.log("CLICKED CARD", this);
                                         // call the method to load the product details page based on the product item clicked
                                         utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.productItemClicked(window.parseInt($(this).attr('data-product')), window.parseInt($(this).attr('data-page')));
                                     });

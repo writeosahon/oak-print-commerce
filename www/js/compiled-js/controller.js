@@ -2591,6 +2591,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 // LISTEN FOR WHEN A PRODUCT CARD IS CLICKED
                 $thisPage.on("click", ".e-card", function(){
+                    console.log("CLICKED CARD", this);
                     // call the method to load the product details page based on the product item clicked
                     utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.
                     productItemClicked(window.parseInt($(this).attr('data-product')),
