@@ -2591,8 +2591,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 // listen for when a product card is clicked
                 $thisPage.on("click", ".e-card > *:not(.e-card-actions)", function(){
-                    // load the product-details page
-                    //$('#app-main-navigator').get(0).pushPage("product-details-page.html", {animation: "lift"});
+                    // call the method to load the product details page based on the product item clicked
+                    utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.
+                    productItemClicked(window.parseInt($(this).attr('data-product')),
+                        window.parseInt($(this).attr('data-page')));
                 });
 
                 try{
@@ -2915,7 +2917,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         }
                         productsContent += `
                         <ons-ripple background="rgba(63, 81, 181, 0.3)"></ons-ripple>
-                        <div class="e-card">
+                        <div class="e-card" 
+                        data-product="${index}" 
+                        data-page="${utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.currentPage}">
                             <div class="e-card-image" style="min-height: 100px; 
                             background-image: url('${productsArray[index].images[0].src}');">
                             ${productsArray[index].on_sale === true ? `
@@ -2986,6 +2990,37 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         async scrollPageToTop(){
             window.setTimeout(function(){
                 $('#products-page .page__content').animate({ scrollTop: 0 }, 400);
+            }, 0);
+        },
+
+        /**
+         * method is triggered when the user clicks any product item from the products collection
+         *
+         * @param productIndex {Integer} holds the index position for the product that was clicked.
+         * The index position is gotten from the 'appropriate' cached array of product items
+         *
+         * @param productPage {Integer} specifies which query page/collection from the cached products
+         * the clicked product item belongs to.
+         *
+         * @returns {Promise<void>}
+         */
+        async productItemClicked(productIndex, productPage){
+            // handle the function task in a different event queue
+            window.setTimeout(async function(){
+
+                try{
+                    // get the product items collection
+                    let productItemsArray = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                    loadData(("" + productPage).padStart(7, "0") + "products",
+                        utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)).products;
+
+                    // display the products details page using the selected product
+                    $('#app-main-navigator').get(0).pushPage("product-details-page.html",
+                        {animation: "lift", data: {product : productItemsArray[productIndex]}});
+                }
+                catch(err){
+                    console.log("PRODUCT ITEM CLICKED", err);
+                }
             }, 0);
         }
     },
