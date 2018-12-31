@@ -2071,7 +2071,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                     _context24.prev = 7;
                                                     _context24.t0 = _context24['catch'](0);
 
-                                                    console.log("SEARCH AUTOCOMPLETE", _context24.t0);
+                                                    console.log("RECENT SEARCHES CLICKED", _context24.t0);
 
                                                 case 10:
                                                 case 'end':

@@ -1683,7 +1683,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         {animation: "lift", data: {product : recentSearchesResultArray[productIndex]}});
                 }
                 catch(err){
-                    console.log("SEARCH AUTOCOMPLETE", err);
+                    console.log("RECENT SEARCHES CLICKED", err);
                 }
             }, 0);
         },
