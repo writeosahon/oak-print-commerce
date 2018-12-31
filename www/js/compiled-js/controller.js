@@ -1680,7 +1680,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                     // display the products details page using the selected product
                     $('#app-main-navigator').get(0).pushPage("product-details-page.html",
-                        {animation: "lift", data: {product : recentSearchesResultArray[index]}});
+                        {animation: "lift", data: {product : recentSearchesResultArray[productIndex]}});
                 }
                 catch(err){
                     console.log("SEARCH AUTOCOMPLETE", err);
