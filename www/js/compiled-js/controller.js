@@ -974,7 +974,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     console.log("PRODUCT ITEM CLICKED", err);
                 }
             }, 0);
-        },
+        }
 
     },
 
