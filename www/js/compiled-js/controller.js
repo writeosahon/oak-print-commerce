@@ -1567,7 +1567,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     <ons-list-item modifier="longdivider" tappable lock-on-drag="true">
                         <div class="center">
                             <div style="width: 100%;" 
-                            onclick="">
+                            onclick="utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.
+                              recentSearchesItemClicked(${index})">
                                 <span class="list-item__subtitle">${recentSearchData.products[index].name}</span>
                             </div>
                         </div>
@@ -1659,6 +1660,34 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     console.log("REMOVE RECENT SEARCH", err);
                 }
             }, 0)
+        },
+
+        /**
+         * method is triggered when the user clicks an item from the Recent Searches List
+         *
+         * @param productIndex {Integer} holds the index position for the product that was clicked.
+         * The index position is gotten from the array returned of recent searches
+         *
+         * @returns {Promise<void>}
+         */
+        async recentSearchesItemClicked(productIndex){
+            // get the product the user clicked on from the search autocomplete popover
+            var selectedProduct = utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.
+                currentSearchResultsArray[productIndex];
+            window.setTimeout(async function(){
+                try{
+                    // get the recent searches collection
+                    let recentSearchesResultArray = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                    loadData("recent-searches", utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)).products;
+
+                    // display the products details page using the selected product
+                    $('#app-main-navigator').get(0).pushPage("product-details-page.html",
+                        {animation: "lift", data: {product : recentSearchesResultArray[index]}});
+                }
+                catch(err){
+                    console.log("SEARCH AUTOCOMPLETE", err);
+                }
+            }, 0);
         },
 
         /**
