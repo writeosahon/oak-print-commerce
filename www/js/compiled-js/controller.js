@@ -143,12 +143,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
     homePageViewModel: {
 
         /**
-         * object is used as the carousel Flickity object for "New Products"
+         * object is used as the carousel Flickity object for "New Products"/ Banner Ads
          */
         newProductsCarousel: null,
 
         /**
-         * object is used as the carousel Flickity object for "Featured Products"
+         * object is used as the carousel Flickity object for "Featured / Popular Products"
          */
         featuredProductsCarousel: null,
 
@@ -284,11 +284,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     featuredProductsCarousel.on("staticClick", function(event, pointer, cellElement, cellIndex){
                         // check if it was a cell that was clicked
                         if(! cellElement){ // it was not a slider cell that was clicked
-                            // clear the timer
+                            // do nothing
                             return;
                         }
-                        // a cell was clicked, so load the product-details page
-                        $('#app-main-navigator').get(0).pushPage("product-details-page.html", {animation: "lift"});
+
+                        // call the method to load the product details page based on the product item clicked
+                        utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.
+                        productItemClicked(window.parseInt($(cellElement).attr('data-product')),
+                            $(cellElement).attr('data-segment'));
                     });
                     // assign the "Featured Products" carousel to the appropriate object
                     utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.featuredProductsCarousel =
@@ -324,11 +327,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     salesProductsCarousel.on("staticClick", function(event, pointer, cellElement, cellIndex){
                         // check if it was a cell that was clicked
                         if(! cellElement){ // it was not a slider cell that was clicked
-                            // clear the timer
+                            // do nothing
                             return;
                         }
-                        // a cell was clicked, so load the product-details page
-                        $('#app-main-navigator').get(0).pushPage("product-details-page.html", {animation: "lift"});
+                        // call the method to load the product details page based on the product item clicked
+                        utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.
+                        productItemClicked(window.parseInt($(cellElement).attr('data-product')),
+                            $(cellElement).attr('data-segment'));
                     });
                     // assign the "Sales Products" carousel to the appropriate object
                     utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.salesProductsCarousel =
@@ -558,11 +563,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 "type": "variable", "stock_status": "instock", "page": 1, "per_page": 5, "featured": true}
                         }
                     )).then(function(productsArray){
+
+                        // save the retrieved data to app database as cache
+                        utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
+                            {_id: "popular-products", docType: "POPULAR_PRODUCTS", products: productsArray},
+                            utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
+
                         if(productsArray.length > 0){
-                            // save the retrieved data to app database as cache
-                            utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
-                                {_id: "popular-products", docType: "POPULAR_PRODUCTS", products: productsArray},
-                                utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
                             // show the "Products" segment
                             $('#home-page #home-featured-design-block').css({"opacity": "1", "display": "block"});
                             // remove the previously slides from the carousel
@@ -578,7 +585,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         // attach the products to the page
                         for(let index = 0; index < productsArray.length; index++){
                             let columnContent =
-                                `<div class="col-xs-7" style="margin-left: 20.5%; margin-right: 20.5%;">
+                                `<div class="col-xs-7" style="margin-left: 20.5%; margin-right: 20.5%;" 
+                                 data-product="${index}" data-segment="featured">
                                     <div class="e-card" style="min-height: 34vh;">
                                         <div class="e-card-image" style="height: 60%; 
                                         background-image: url('${productsArray[index].images[0].src}');">
@@ -623,11 +631,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 "type": "variable", "stock_status": "instock", "page": 1, "per_page": 5, "on_sale": true}
                         }
                     )).then(function(productsArray){
+
+                        // save the retrieved data to app database as cache
+                        utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
+                            {_id: "sales-products", docType: "SALES_PRODUCTS", products: productsArray},
+                            utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
+
                         if(productsArray.length > 0){
-                            // save the retrieved data to app database as cache
-                            utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
-                                {_id: "sales-products", docType: "SALES_PRODUCTS", products: productsArray},
-                                utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
                             // show the "Products" segment
                             $('#home-page #home-sales-design-block').css({"opacity": "1", "display": "block"});
                             // remove the previously slides from the carousel
@@ -646,7 +656,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 productsArray[index].regular_price = "0.00";
                             }
                             let columnContent =
-                                `<div class="col-xs-7" style="margin-left: 20.5%; margin-right: 20.5%;">
+                                `<div class="col-xs-7" style="margin-left: 20.5%; margin-right: 20.5%;" 
+                                    data-product="${index}" data-segment="sales">
                                     <div class="e-card" style="min-height: 34vh;">
                                         <div class="e-card-image" style="height: 60%; 
                                         background-image: url('${productsArray[index].images[0].src}');">
@@ -753,7 +764,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         // attach the products to the page
                         for(let index = 0; index < productsArray.length; index++){
                             let columnContent =
-                                `<div class="col-xs-7" style="margin-left: 20.5%; margin-right: 20.5%;">
+                                `<div class="col-xs-7" style="margin-left: 20.5%; margin-right: 20.5%;" 
+                                    data-product="${index}" data-segment="featured">
                                     <div class="e-card" style="min-height: 34vh;">
                                         <div class="e-card-image" style="height: 60%; 
                                         background-image: url('${productsArray[index].images[0].src}');">
@@ -806,7 +818,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 productsArray[index].regular_price = "0.00";
                             }
                             let columnContent =
-                                `<div class="col-xs-7" style="margin-left: 20.5%; margin-right: 20.5%;">
+                                `<div class="col-xs-7" style="margin-left: 20.5%; margin-right: 20.5%;" 
+                                  data-product="${index}" data-segment="sales">
                                     <div class="e-card" style="min-height: 34vh;">
                                         <div class="e-card-image" style="height: 60%; 
                                         background-image: url('${productsArray[index].images[0].src}');">
@@ -916,7 +929,52 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     $('#products-page .page-preloader').css("display", "none");
                 }
             }, 0);
-        }
+        },
+
+        /**
+         * method is triggered when the user clicks any product item from the Feature/Popular OR
+         * Sales segments
+         *
+         * @param productIndex {Integer} holds the index position for the product that was clicked.
+         * The index position is gotten from the 'appropriate' cached array of product items
+         *
+         * @param segmentType {String} specifies which segment the clicked product item belongs to.
+         * Possible options are: 'featured', 'sales'
+         *
+         * @returns {Promise<void>}
+         */
+        async productItemClicked(productIndex, segmentType){
+            // handle the function task in a different event queue
+            window.setTimeout(async function(){
+                var productItemsArray = []; // holds the array of 'appropriate' product items
+
+                try{
+                    // find out what segment type the clicked product belongs to
+                    switch (segmentType) {
+                        case "featured": // Featured/popular product
+                            // get the 'appropriate' product items collection
+                            productItemsArray = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                            loadData("popular-products",
+                                utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)).products;
+                            break;
+
+                        case "sales": // Sales product
+                            // get the 'appropriate' product items collection
+                            productItemsArray = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                            loadData("sales-products",
+                                utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)).products;
+                            break;
+                    }
+
+                    // display the products details page using the selected product
+                    $('#app-main-navigator').get(0).pushPage("product-details-page.html",
+                        {animation: "lift", data: {product : productItemsArray[productIndex]}});
+                }
+                catch(err){
+                    console.log("PRODUCT ITEM CLICKED", err);
+                }
+            }, 0);
+        },
 
     },
 

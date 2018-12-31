@@ -174,12 +174,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
     homePageViewModel: {
 
         /**
-         * object is used as the carousel Flickity object for "New Products"
+         * object is used as the carousel Flickity object for "New Products"/ Banner Ads
          */
         newProductsCarousel: null,
 
         /**
-         * object is used as the carousel Flickity object for "Featured Products"
+         * object is used as the carousel Flickity object for "Featured / Popular Products"
          */
         featuredProductsCarousel: null,
 
@@ -320,11 +320,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         // check if it was a cell that was clicked
                                         if (!cellElement) {
                                             // it was not a slider cell that was clicked
-                                            // clear the timer
+                                            // do nothing
                                             return;
                                         }
-                                        // a cell was clicked, so load the product-details page
-                                        $('#app-main-navigator').get(0).pushPage("product-details-page.html", { animation: "lift" });
+
+                                        // call the method to load the product details page based on the product item clicked
+                                        utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.productItemClicked(window.parseInt($(cellElement).attr('data-product')), $(cellElement).attr('data-segment'));
                                     });
                                     // assign the "Featured Products" carousel to the appropriate object
                                     utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.featuredProductsCarousel = featuredProductsCarousel;
@@ -362,11 +363,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         // check if it was a cell that was clicked
                                         if (!cellElement) {
                                             // it was not a slider cell that was clicked
-                                            // clear the timer
+                                            // do nothing
                                             return;
                                         }
-                                        // a cell was clicked, so load the product-details page
-                                        $('#app-main-navigator').get(0).pushPage("product-details-page.html", { animation: "lift" });
+                                        // call the method to load the product details page based on the product item clicked
+                                        utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.productItemClicked(window.parseInt($(cellElement).attr('data-product')), $(cellElement).attr('data-segment'));
                                     });
                                     // assign the "Sales Products" carousel to the appropriate object
                                     utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.salesProductsCarousel = salesProductsCarousel;
@@ -655,9 +656,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             data: { "order": "desc", "orderby": "date", "status": "publish",
                                                 "type": "variable", "stock_status": "instock", "page": 1, "per_page": 5, "featured": true }
                                         })).then(function (productsArray) {
+
+                                            // save the retrieved data to app database as cache
+                                            utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData({ _id: "popular-products", docType: "POPULAR_PRODUCTS", products: productsArray }, utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
+
                                             if (productsArray.length > 0) {
-                                                // save the retrieved data to app database as cache
-                                                utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData({ _id: "popular-products", docType: "POPULAR_PRODUCTS", products: productsArray }, utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
                                                 // show the "Products" segment
                                                 $('#home-page #home-featured-design-block').css({ "opacity": "1", "display": "block" });
                                                 // remove the previously slides from the carousel
@@ -669,7 +672,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                             // attach the products to the page
                                             for (var index = 0; index < productsArray.length; index++) {
-                                                var columnContent = '<div class="col-xs-7" style="margin-left: 20.5%; margin-right: 20.5%;">\n                                    <div class="e-card" style="min-height: 34vh;">\n                                        <div class="e-card-image" style="height: 60%; \n                                        background-image: url(\'' + productsArray[index].images[0].src + '\');">\n                                        </div>\n                                        <div class="e-card-header">\n                                            <div class="e-card-header-caption">\n                                                <div class="e-card-sub-title" style="color: #000000; text-align: center; font-size: 14px; text-transform: capitalize">\n                                                    ' + productsArray[index].name + '\n                                                </div>\n                                                <div class="e-card-sub-title" style="text-align: center;">\n                                                &#x20a6;' + kendo.toString(kendo.parseFloat(productsArray[index].price), "n2") + '</div>\n                                            </div>\n                                        </div>\n                                    </div>\n                                </div>';
+                                                var columnContent = '<div class="col-xs-7" style="margin-left: 20.5%; margin-right: 20.5%;" \n                                 data-product="' + index + '" data-segment="featured">\n                                    <div class="e-card" style="min-height: 34vh;">\n                                        <div class="e-card-image" style="height: 60%; \n                                        background-image: url(\'' + productsArray[index].images[0].src + '\');">\n                                        </div>\n                                        <div class="e-card-header">\n                                            <div class="e-card-header-caption">\n                                                <div class="e-card-sub-title" style="color: #000000; text-align: center; font-size: 14px; text-transform: capitalize">\n                                                    ' + productsArray[index].name + '\n                                                </div>\n                                                <div class="e-card-sub-title" style="text-align: center;">\n                                                &#x20a6;' + kendo.toString(kendo.parseFloat(productsArray[index].price), "n2") + '</div>\n                                            </div>\n                                        </div>\n                                    </div>\n                                </div>';
                                                 // append the content
                                                 utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.featuredProductsCarousel.append($(columnContent));
                                             }
@@ -695,9 +698,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             data: { "order": "desc", "orderby": "date", "status": "publish",
                                                 "type": "variable", "stock_status": "instock", "page": 1, "per_page": 5, "on_sale": true }
                                         })).then(function (productsArray) {
+
+                                            // save the retrieved data to app database as cache
+                                            utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData({ _id: "sales-products", docType: "SALES_PRODUCTS", products: productsArray }, utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
+
                                             if (productsArray.length > 0) {
-                                                // save the retrieved data to app database as cache
-                                                utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData({ _id: "sales-products", docType: "SALES_PRODUCTS", products: productsArray }, utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
                                                 // show the "Products" segment
                                                 $('#home-page #home-sales-design-block').css({ "opacity": "1", "display": "block" });
                                                 // remove the previously slides from the carousel
@@ -713,7 +718,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                     // regular price was NOT set, so set it
                                                     productsArray[index].regular_price = "0.00";
                                                 }
-                                                var columnContent = '<div class="col-xs-7" style="margin-left: 20.5%; margin-right: 20.5%;">\n                                    <div class="e-card" style="min-height: 34vh;">\n                                        <div class="e-card-image" style="height: 60%; \n                                        background-image: url(\'' + productsArray[index].images[0].src + '\');">\n                                        <span class="e-badge e-badge-danger" style="float: right; clear: both; \n                                                    background-color: transparent; color: #d64113;\n                                                    border: 1px #d64113 solid; font-size: 0.6em;">\n                                                    ' + Math.ceil(Math.abs(kendo.parseFloat(productsArray[index].price) - kendo.parseFloat(productsArray[index].regular_price)) / kendo.parseFloat(productsArray[index].regular_price === "0.00" ? productsArray[index].price : productsArray[index].regular_price) * 100) + '% OFF\n                                                    </span>\n                                        </div>\n                                        <div class="e-card-header">\n                                            <div class="e-card-header-caption">\n                                                <div class="e-card-sub-title" style="color: #000000; text-align: center; font-size: 14px; text-transform: capitalize">\n                                                    ' + productsArray[index].name + '\n                                                </div>\n                                                <div class="e-card-sub-title" style="text-align: center; text-decoration: line-through">\n                                                &#x20a6;' + kendo.toString(kendo.parseFloat(productsArray[index].regular_price), "n2") + '\n                                                </div>\n                                                <div class="e-card-sub-title" style="text-align: center;">\n                                                &#x20a6;' + kendo.toString(kendo.parseFloat(productsArray[index].price), "n2") + '\n                                                </div>\n                                            </div>\n                                        </div>\n                                    </div>\n                                </div>';
+                                                var columnContent = '<div class="col-xs-7" style="margin-left: 20.5%; margin-right: 20.5%;" \n                                    data-product="' + index + '" data-segment="sales">\n                                    <div class="e-card" style="min-height: 34vh;">\n                                        <div class="e-card-image" style="height: 60%; \n                                        background-image: url(\'' + productsArray[index].images[0].src + '\');">\n                                        <span class="e-badge e-badge-danger" style="float: right; clear: both; \n                                                    background-color: transparent; color: #d64113;\n                                                    border: 1px #d64113 solid; font-size: 0.6em;">\n                                                    ' + Math.ceil(Math.abs(kendo.parseFloat(productsArray[index].price) - kendo.parseFloat(productsArray[index].regular_price)) / kendo.parseFloat(productsArray[index].regular_price === "0.00" ? productsArray[index].price : productsArray[index].regular_price) * 100) + '% OFF\n                                                    </span>\n                                        </div>\n                                        <div class="e-card-header">\n                                            <div class="e-card-header-caption">\n                                                <div class="e-card-sub-title" style="color: #000000; text-align: center; font-size: 14px; text-transform: capitalize">\n                                                    ' + productsArray[index].name + '\n                                                </div>\n                                                <div class="e-card-sub-title" style="text-align: center; text-decoration: line-through">\n                                                &#x20a6;' + kendo.toString(kendo.parseFloat(productsArray[index].regular_price), "n2") + '\n                                                </div>\n                                                <div class="e-card-sub-title" style="text-align: center;">\n                                                &#x20a6;' + kendo.toString(kendo.parseFloat(productsArray[index].price), "n2") + '\n                                                </div>\n                                            </div>\n                                        </div>\n                                    </div>\n                                </div>';
                                                 // append the content
                                                 utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.salesProductsCarousel.append($(columnContent));
                                             }
@@ -774,7 +779,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                                 // attach the products to the page
                                                 for (var index = 0; index < productsArray.length; index++) {
-                                                    var columnContent = '<div class="col-xs-7" style="margin-left: 20.5%; margin-right: 20.5%;">\n                                    <div class="e-card" style="min-height: 34vh;">\n                                        <div class="e-card-image" style="height: 60%; \n                                        background-image: url(\'' + productsArray[index].images[0].src + '\');">\n                                        </div>\n                                        <div class="e-card-header">\n                                            <div class="e-card-header-caption">\n                                                <div class="e-card-sub-title" style="color: #000000; text-align: center; font-size: 14px; text-transform: capitalize">\n                                                    ' + productsArray[index].name + '\n                                                </div>\n                                                <div class="e-card-sub-title" style="text-align: center;">\n                                                &#x20a6;' + kendo.toString(kendo.parseFloat(productsArray[index].price), "n2") + '</div>\n                                            </div>\n                                        </div>\n                                    </div>\n                                </div>';
+                                                    var columnContent = '<div class="col-xs-7" style="margin-left: 20.5%; margin-right: 20.5%;" \n                                    data-product="' + index + '" data-segment="featured">\n                                    <div class="e-card" style="min-height: 34vh;">\n                                        <div class="e-card-image" style="height: 60%; \n                                        background-image: url(\'' + productsArray[index].images[0].src + '\');">\n                                        </div>\n                                        <div class="e-card-header">\n                                            <div class="e-card-header-caption">\n                                                <div class="e-card-sub-title" style="color: #000000; text-align: center; font-size: 14px; text-transform: capitalize">\n                                                    ' + productsArray[index].name + '\n                                                </div>\n                                                <div class="e-card-sub-title" style="text-align: center;">\n                                                &#x20a6;' + kendo.toString(kendo.parseFloat(productsArray[index].price), "n2") + '</div>\n                                            </div>\n                                        </div>\n                                    </div>\n                                </div>';
                                                     // append the content
                                                     utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.featuredProductsCarousel.append($(columnContent));
                                                 }
@@ -806,7 +811,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                         // regular price was NOT set, so set it
                                                         productsArray[index].regular_price = "0.00";
                                                     }
-                                                    var columnContent = '<div class="col-xs-7" style="margin-left: 20.5%; margin-right: 20.5%;">\n                                    <div class="e-card" style="min-height: 34vh;">\n                                        <div class="e-card-image" style="height: 60%; \n                                        background-image: url(\'' + productsArray[index].images[0].src + '\');">\n                                        <span class="e-badge e-badge-danger" style="float: right; clear: both; \n                                                    background-color: transparent; color: #d64113;\n                                                    border: 1px #d64113 solid; font-size: 0.6em;">\n                                                    ' + Math.ceil(Math.abs(kendo.parseFloat(productsArray[index].price) - kendo.parseFloat(productsArray[index].regular_price)) / kendo.parseFloat(productsArray[index].regular_price === "0.00" ? productsArray[index].price : productsArray[index].regular_price) * 100) + '% OFF\n                                                    </span>\n                                        </div>\n                                        <div class="e-card-header">\n                                            <div class="e-card-header-caption">\n                                                <div class="e-card-sub-title" style="color: #000000; text-align: center; font-size: 14px; text-transform: capitalize">\n                                                    ' + productsArray[index].name + '\n                                                </div>\n                                                <div class="e-card-sub-title" style="text-align: center; text-decoration: line-through">\n                                                &#x20a6;' + kendo.toString(kendo.parseFloat(productsArray[index].regular_price), "n2") + '\n                                                </div>\n                                                <div class="e-card-sub-title" style="text-align: center;">\n                                                &#x20a6;' + kendo.toString(kendo.parseFloat(productsArray[index].price), "n2") + '\n                                                </div>\n                                            </div>\n                                        </div>\n                                    </div>\n                                </div>';
+                                                    var columnContent = '<div class="col-xs-7" style="margin-left: 20.5%; margin-right: 20.5%;" \n                                  data-product="' + index + '" data-segment="sales">\n                                    <div class="e-card" style="min-height: 34vh;">\n                                        <div class="e-card-image" style="height: 60%; \n                                        background-image: url(\'' + productsArray[index].images[0].src + '\');">\n                                        <span class="e-badge e-badge-danger" style="float: right; clear: both; \n                                                    background-color: transparent; color: #d64113;\n                                                    border: 1px #d64113 solid; font-size: 0.6em;">\n                                                    ' + Math.ceil(Math.abs(kendo.parseFloat(productsArray[index].price) - kendo.parseFloat(productsArray[index].regular_price)) / kendo.parseFloat(productsArray[index].regular_price === "0.00" ? productsArray[index].price : productsArray[index].regular_price) * 100) + '% OFF\n                                                    </span>\n                                        </div>\n                                        <div class="e-card-header">\n                                            <div class="e-card-header-caption">\n                                                <div class="e-card-sub-title" style="color: #000000; text-align: center; font-size: 14px; text-transform: capitalize">\n                                                    ' + productsArray[index].name + '\n                                                </div>\n                                                <div class="e-card-sub-title" style="text-align: center; text-decoration: line-through">\n                                                &#x20a6;' + kendo.toString(kendo.parseFloat(productsArray[index].regular_price), "n2") + '\n                                                </div>\n                                                <div class="e-card-sub-title" style="text-align: center;">\n                                                &#x20a6;' + kendo.toString(kendo.parseFloat(productsArray[index].price), "n2") + '\n                                                </div>\n                                            </div>\n                                        </div>\n                                    </div>\n                                </div>';
                                                     // append the content
                                                     utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.salesProductsCarousel.append($(columnContent));
                                                 }
@@ -995,6 +1000,91 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             }
 
             return showMoreSalesProducts;
+        }(),
+
+
+        /**
+         * method is triggered when the user clicks any product item from the Feature/Popular OR
+         * Sales segments
+         *
+         * @param productIndex {Integer} holds the index position for the product that was clicked.
+         * The index position is gotten from the 'appropriate' cached array of product items
+         *
+         * @param segmentType {String} specifies which segment the clicked product item belongs to.
+         * Possible options are: 'featured', 'sales'
+         *
+         * @returns {Promise<void>}
+         */
+        productItemClicked: function () {
+            var _ref10 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee11(productIndex, segmentType) {
+                return regeneratorRuntime.wrap(function _callee11$(_context11) {
+                    while (1) {
+                        switch (_context11.prev = _context11.next) {
+                            case 0:
+                                // handle the function task in a different event queue
+                                window.setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10() {
+                                    var productItemsArray;
+                                    return regeneratorRuntime.wrap(function _callee10$(_context10) {
+                                        while (1) {
+                                            switch (_context10.prev = _context10.next) {
+                                                case 0:
+                                                    productItemsArray = []; // holds the array of 'appropriate' product items
+
+                                                    _context10.prev = 1;
+                                                    _context10.t0 = segmentType;
+                                                    _context10.next = _context10.t0 === "featured" ? 5 : _context10.t0 === "sales" ? 9 : 13;
+                                                    break;
+
+                                                case 5:
+                                                    _context10.next = 7;
+                                                    return utopiasoftware[utopiasoftware_app_namespace].databaseOperations.loadData("popular-products", utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
+
+                                                case 7:
+                                                    productItemsArray = _context10.sent.products;
+                                                    return _context10.abrupt('break', 13);
+
+                                                case 9:
+                                                    _context10.next = 11;
+                                                    return utopiasoftware[utopiasoftware_app_namespace].databaseOperations.loadData("sales-products", utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
+
+                                                case 11:
+                                                    productItemsArray = _context10.sent.products;
+                                                    return _context10.abrupt('break', 13);
+
+                                                case 13:
+
+                                                    // display the products details page using the selected product
+                                                    $('#app-main-navigator').get(0).pushPage("product-details-page.html", { animation: "lift", data: { product: productItemsArray[productIndex] } });
+                                                    _context10.next = 19;
+                                                    break;
+
+                                                case 16:
+                                                    _context10.prev = 16;
+                                                    _context10.t1 = _context10['catch'](1);
+
+                                                    console.log("PRODUCT ITEM CLICKED", _context10.t1);
+
+                                                case 19:
+                                                case 'end':
+                                                    return _context10.stop();
+                                            }
+                                        }
+                                    }, _callee10, this, [[1, 16]]);
+                                })), 0);
+
+                            case 1:
+                            case 'end':
+                                return _context11.stop();
+                        }
+                    }
+                }, _callee11, this);
+            }));
+
+            function productItemClicked(_x2, _x3) {
+                return _ref10.apply(this, arguments);
+            }
+
+            return productItemClicked;
         }()
     },
 
@@ -1025,19 +1115,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             //function is used to initialise the page if the app is fully ready for execution
             var loadPageOnAppReady = function () {
-                var _ref10 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee11() {
+                var _ref12 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee13() {
                     var categoryArray, toast;
-                    return regeneratorRuntime.wrap(function _callee11$(_context11) {
+                    return regeneratorRuntime.wrap(function _callee13$(_context13) {
                         while (1) {
-                            switch (_context11.prev = _context11.next) {
+                            switch (_context13.prev = _context13.next) {
                                 case 0:
                                     if (!(!ons.isReady() || utopiasoftware[utopiasoftware_app_namespace].model.isAppReady === false)) {
-                                        _context11.next = 3;
+                                        _context13.next = 3;
                                         break;
                                     }
 
                                     setTimeout(loadPageOnAppReady, 500); // call this function again after half a second
-                                    return _context11.abrupt('return');
+                                    return _context13.abrupt('return');
 
                                 case 3:
 
@@ -1096,36 +1186,36 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // listen for when a category card is clicked
                                     $thisPage.on("click", ".e-card", function (clickEvent) {
                                         // load the products page in a separate event queue
-                                        window.setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10() {
+                                        window.setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee12() {
                                             var productArray, toast;
-                                            return regeneratorRuntime.wrap(function _callee10$(_context10) {
+                                            return regeneratorRuntime.wrap(function _callee12$(_context12) {
                                                 while (1) {
-                                                    switch (_context10.prev = _context10.next) {
+                                                    switch (_context12.prev = _context12.next) {
                                                         case 0:
-                                                            _context10.prev = 0;
-                                                            _context10.next = 3;
+                                                            _context12.prev = 0;
+                                                            _context12.next = 3;
                                                             return $('#app-main-tabbar').get(0).setActiveTab(4, { animation: 'none' });
 
                                                         case 3:
-                                                            _context10.next = 5;
+                                                            _context12.next = 5;
                                                             return utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.loadProducts({ "order": "desc", "orderby": "date", "status": "publish",
                                                                 "type": "variable", "stock_status": "instock", "page": 1, "per_page": 20,
                                                                 "category": $(clickEvent.currentTarget).attr("data-category-id") });
 
                                                         case 5:
-                                                            productArray = _context10.sent;
-                                                            _context10.next = 8;
+                                                            productArray = _context12.sent;
+                                                            _context12.next = 8;
                                                             return utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.displayPageContent(productArray[0]);
 
                                                         case 8:
-                                                            _context10.next = 19;
+                                                            _context12.next = 19;
                                                             break;
 
                                                         case 10:
-                                                            _context10.prev = 10;
-                                                            _context10.t0 = _context10['catch'](0);
+                                                            _context12.prev = 10;
+                                                            _context12.t0 = _context12['catch'](0);
 
-                                                            console.log("PRODUCTS PAGE", _context10.t0);
+                                                            console.log("PRODUCTS PAGE", _context12.t0);
                                                             // hide all previously displayed ej2 toast
                                                             $('.page-toast').get(0).ej2_instances[0].hide('All');
                                                             // display toast to show that an error
@@ -1137,39 +1227,39 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                             toast.show();
 
                                                         case 19:
-                                                            _context10.prev = 19;
+                                                            _context12.prev = 19;
 
                                                             // hide the preloader for the products page
                                                             $('#products-page .page-preloader').css("display", "none");
-                                                            return _context10.finish(19);
+                                                            return _context12.finish(19);
 
                                                         case 22:
                                                         case 'end':
-                                                            return _context10.stop();
+                                                            return _context12.stop();
                                                     }
                                                 }
-                                            }, _callee10, this, [[0, 10, 19, 22]]);
+                                            }, _callee12, this, [[0, 10, 19, 22]]);
                                         })), 0);
                                     });
 
-                                    _context11.prev = 10;
-                                    _context11.next = 13;
+                                    _context13.prev = 10;
+                                    _context13.next = 13;
                                     return utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.loadCategories();
 
                                 case 13:
-                                    categoryArray = _context11.sent;
-                                    _context11.next = 16;
+                                    categoryArray = _context13.sent;
+                                    _context13.next = 16;
                                     return utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.displayPageContent(categoryArray[0]);
 
                                 case 16:
-                                    _context11.next = 27;
+                                    _context13.next = 27;
                                     break;
 
                                 case 18:
-                                    _context11.prev = 18;
-                                    _context11.t0 = _context11['catch'](10);
+                                    _context13.prev = 18;
+                                    _context13.t0 = _context13['catch'](10);
 
-                                    console.log("CATEGORIES PAGE", _context11.t0);
+                                    console.log("CATEGORIES PAGE", _context13.t0);
                                     // hide all previously displayed ej2 toast
                                     $('.page-toast').get(0).ej2_instances[0].hide('All');
                                     // display toast to show that an error
@@ -1181,22 +1271,22 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     toast.show();
 
                                 case 27:
-                                    _context11.prev = 27;
+                                    _context13.prev = 27;
 
                                     // hide the preloader
                                     $('#categories-page .page-preloader').css("display", "none");
-                                    return _context11.finish(27);
+                                    return _context13.finish(27);
 
                                 case 30:
                                 case 'end':
-                                    return _context11.stop();
+                                    return _context13.stop();
                             }
                         }
-                    }, _callee11, this, [[10, 18, 27, 30]]);
+                    }, _callee13, this, [[10, 18, 27, 30]]);
                 }));
 
                 return function loadPageOnAppReady() {
-                    return _ref10.apply(this, arguments);
+                    return _ref12.apply(this, arguments);
                 };
             }();
 
@@ -1226,10 +1316,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is hidden
          */
         pageHide: function () {
-            var _ref12 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee12() {
-                return regeneratorRuntime.wrap(function _callee12$(_context12) {
+            var _ref14 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee14() {
+                return regeneratorRuntime.wrap(function _callee14$(_context14) {
                     while (1) {
-                        switch (_context12.prev = _context12.next) {
+                        switch (_context14.prev = _context14.next) {
                             case 0:
 
                                 // remove listener for when the device does not have Internet connection
@@ -1239,14 +1329,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 2:
                             case 'end':
-                                return _context12.stop();
+                                return _context14.stop();
                         }
                     }
-                }, _callee12, this);
+                }, _callee14, this);
             }));
 
             function pageHide() {
-                return _ref12.apply(this, arguments);
+                return _ref14.apply(this, arguments);
             }
 
             return pageHide;
@@ -1296,34 +1386,34 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         pagePullHookAction: function () {
-            var _ref13 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee13() {
+            var _ref15 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee15() {
                 var doneCallBack = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : function () {};
                 var categoryArray, toast;
-                return regeneratorRuntime.wrap(function _callee13$(_context13) {
+                return regeneratorRuntime.wrap(function _callee15$(_context15) {
                     while (1) {
-                        switch (_context13.prev = _context13.next) {
+                        switch (_context15.prev = _context15.next) {
                             case 0:
                                 // disable pull-to-refresh widget till loading is done
                                 $('#categories-page #categories-page-pull-hook').attr("disabled", true);
                                 // hide all previously displayed ej2 toast
                                 $('.page-toast').get(0).ej2_instances[0].hide('All');
 
-                                _context13.prev = 2;
-                                _context13.next = 5;
+                                _context15.prev = 2;
+                                _context15.next = 5;
                                 return utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.loadCategories(1, utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.pageSize);
 
                             case 5:
-                                categoryArray = _context13.sent;
-                                _context13.next = 8;
+                                categoryArray = _context15.sent;
+                                _context15.next = 8;
                                 return utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.displayPageContent(categoryArray[0]);
 
                             case 8:
-                                _context13.next = 17;
+                                _context15.next = 17;
                                 break;
 
                             case 10:
-                                _context13.prev = 10;
-                                _context13.t0 = _context13['catch'](2);
+                                _context15.prev = 10;
+                                _context15.t0 = _context15['catch'](2);
                                 // an error occurred
                                 // display toast to show that error
                                 toast = $('.page-toast').get(0).ej2_instances[0];
@@ -1334,24 +1424,24 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 toast.show();
 
                             case 17:
-                                _context13.prev = 17;
+                                _context15.prev = 17;
 
                                 // enable pull-to-refresh widget till loading is done
                                 $('#categories-page #categories-page-pull-hook').removeAttr("disabled");
                                 // signal that loading is done
                                 doneCallBack();
-                                return _context13.finish(17);
+                                return _context15.finish(17);
 
                             case 21:
                             case 'end':
-                                return _context13.stop();
+                                return _context15.stop();
                         }
                     }
-                }, _callee13, this, [[2, 10, 17, 21]]);
+                }, _callee15, this, [[2, 10, 17, 21]]);
             }));
 
             function pagePullHookAction() {
-                return _ref13.apply(this, arguments);
+                return _ref15.apply(this, arguments);
             }
 
             return pagePullHookAction;
@@ -1368,13 +1458,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         loadCategories: function () {
-            var _ref14 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee14() {
+            var _ref16 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee16() {
                 var pageToAccess = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.currentPage + 1;
                 var pageSize = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.pageSize;
                 var categoryPromisesArray, toast;
-                return regeneratorRuntime.wrap(function _callee14$(_context14) {
+                return regeneratorRuntime.wrap(function _callee16$(_context16) {
                     while (1) {
-                        switch (_context14.prev = _context14.next) {
+                        switch (_context16.prev = _context16.next) {
                             case 0:
                                 categoryPromisesArray = []; // holds the array for the promises used to load the product categories
 
@@ -1444,18 +1534,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         }));
                                     }
 
-                                return _context14.abrupt('return', Promise.all(categoryPromisesArray));
+                                return _context16.abrupt('return', Promise.all(categoryPromisesArray));
 
                             case 3:
                             case 'end':
-                                return _context14.stop();
+                                return _context16.stop();
                         }
                     }
-                }, _callee14, this);
+                }, _callee16, this);
             }));
 
             function loadCategories() {
-                return _ref14.apply(this, arguments);
+                return _ref16.apply(this, arguments);
             }
 
             return loadCategories;
@@ -1476,13 +1566,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         displayPageContent: function () {
-            var _ref15 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee15(categoriesArray) {
+            var _ref17 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee17(categoriesArray) {
                 var appendContent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
                 var overwriteContent = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
                 var displayCompletedPromise;
-                return regeneratorRuntime.wrap(function _callee15$(_context15) {
+                return regeneratorRuntime.wrap(function _callee17$(_context17) {
                     while (1) {
-                        switch (_context15.prev = _context15.next) {
+                        switch (_context17.prev = _context17.next) {
                             case 0:
                                 /*for(let index = 0; index < 4; index++){ // REMOVE THIS LATER JUST FOR TEST TODO
                                     categoriesArray.push(...categoriesArray);
@@ -1529,18 +1619,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         resolve(categoriesArray.length); // resolve the promise with length of the categoriesArray
                                     }
                                 });
-                                return _context15.abrupt('return', displayCompletedPromise);
+                                return _context17.abrupt('return', displayCompletedPromise);
 
                             case 2:
                             case 'end':
-                                return _context15.stop();
+                                return _context17.stop();
                         }
                     }
-                }, _callee15, this);
+                }, _callee17, this);
             }));
 
-            function displayPageContent(_x7) {
-                return _ref15.apply(this, arguments);
+            function displayPageContent(_x9) {
+                return _ref17.apply(this, arguments);
             }
 
             return displayPageContent;
@@ -1552,10 +1642,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         scrollPageToTop: function () {
-            var _ref16 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee16() {
-                return regeneratorRuntime.wrap(function _callee16$(_context16) {
+            var _ref18 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee18() {
+                return regeneratorRuntime.wrap(function _callee18$(_context18) {
                     while (1) {
-                        switch (_context16.prev = _context16.next) {
+                        switch (_context18.prev = _context18.next) {
                             case 0:
                                 window.setTimeout(function () {
                                     $('#categories-page .page__content').animate({ scrollTop: 0 }, 400);
@@ -1563,14 +1653,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 1:
                             case 'end':
-                                return _context16.stop();
+                                return _context18.stop();
                         }
                     }
-                }, _callee16, this);
+                }, _callee18, this);
             }));
 
             function scrollPageToTop() {
-                return _ref16.apply(this, arguments);
+                return _ref18.apply(this, arguments);
             }
 
             return scrollPageToTop;
@@ -1594,19 +1684,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             //function is used to initialise the page if the app is fully ready for execution
             var loadPageOnAppReady = function () {
-                var _ref17 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee18() {
+                var _ref19 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee20() {
                     var searchAutoComplete;
-                    return regeneratorRuntime.wrap(function _callee18$(_context18) {
+                    return regeneratorRuntime.wrap(function _callee20$(_context20) {
                         while (1) {
-                            switch (_context18.prev = _context18.next) {
+                            switch (_context20.prev = _context20.next) {
                                 case 0:
                                     if (!(!ons.isReady() || utopiasoftware[utopiasoftware_app_namespace].model.isAppReady === false)) {
-                                        _context18.next = 3;
+                                        _context20.next = 3;
                                         break;
                                     }
 
                                     setTimeout(loadPageOnAppReady, 500); // call this function again after half a second
-                                    return _context18.abrupt('return');
+                                    return _context20.abrupt('return');
 
                                 case 3:
 
@@ -1660,33 +1750,33 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                 $('#search-page-search-input-popover').get(0).show(document.getElementById('search-page-input'));
 
                                                 // run the actual search in a different event queue
-                                                window.setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee17() {
+                                                window.setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee19() {
                                                     var searchResultsArray, toast;
-                                                    return regeneratorRuntime.wrap(function _callee17$(_context17) {
+                                                    return regeneratorRuntime.wrap(function _callee19$(_context19) {
                                                         while (1) {
-                                                            switch (_context17.prev = _context17.next) {
+                                                            switch (_context19.prev = _context19.next) {
                                                                 case 0:
                                                                     searchResultsArray = [];
-                                                                    _context17.prev = 1;
-                                                                    _context17.next = 4;
+                                                                    _context19.prev = 1;
+                                                                    _context19.next = 4;
                                                                     return utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.loadProducts({ "order": "desc", "orderby": "date", "status": "publish",
                                                                         "type": "variable", "stock_status": "instock", "page": 1, "per_page": 3,
                                                                         "search": searchValue });
 
                                                                 case 4:
-                                                                    searchResultsArray = _context17.sent;
-                                                                    _context17.next = 7;
+                                                                    searchResultsArray = _context19.sent;
+                                                                    _context19.next = 7;
                                                                     return utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.displayPageContent(searchResultsArray[0]);
 
                                                                 case 7:
-                                                                    _context17.next = 21;
+                                                                    _context19.next = 21;
                                                                     break;
 
                                                                 case 9:
-                                                                    _context17.prev = 9;
-                                                                    _context17.t0 = _context17['catch'](1);
+                                                                    _context19.prev = 9;
+                                                                    _context19.t0 = _context19['catch'](1);
 
-                                                                    console.log("PRODUCT SEARCH", _context17.t0);
+                                                                    console.log("PRODUCT SEARCH", _context19.t0);
                                                                     // remove the focus from the search autocomplete component
                                                                     $('#search-page #search-page-input').get(0).ej2_instances[0].focusOut();
                                                                     // hide all previously displayed ej2 toast
@@ -1703,10 +1793,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                                                 case 21:
                                                                 case 'end':
-                                                                    return _context17.stop();
+                                                                    return _context19.stop();
                                                             }
                                                         }
-                                                    }, _callee17, this, [[1, 9]]);
+                                                    }, _callee19, this, [[1, 9]]);
                                                 })), 0);
                                                 console.log("AUTOCOMPLETE CHANGED");
                                             }
@@ -1715,14 +1805,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 case 5:
                                 case 'end':
-                                    return _context18.stop();
+                                    return _context20.stop();
                             }
                         }
-                    }, _callee18, this);
+                    }, _callee20, this);
                 }));
 
                 return function loadPageOnAppReady() {
-                    return _ref17.apply(this, arguments);
+                    return _ref19.apply(this, arguments);
                 };
             }();
 
@@ -1753,10 +1843,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is hidden
          */
         pageHide: function () {
-            var _ref19 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee19() {
-                return regeneratorRuntime.wrap(function _callee19$(_context19) {
+            var _ref21 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee21() {
+                return regeneratorRuntime.wrap(function _callee21$(_context21) {
                     while (1) {
-                        switch (_context19.prev = _context19.next) {
+                        switch (_context21.prev = _context21.next) {
                             case 0:
                                 // remove listener for when the device does not have Internet connection
                                 document.removeEventListener("offline", utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.deviceOfflineListener, false);
@@ -1767,14 +1857,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 3:
                             case 'end':
-                                return _context19.stop();
+                                return _context21.stop();
                         }
                     }
-                }, _callee19, this);
+                }, _callee21, this);
             }));
 
             function pageHide() {
-                return _ref19.apply(this, arguments);
+                return _ref21.apply(this, arguments);
             }
 
             return pageHide;
@@ -1827,18 +1917,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * Recent Searches are gotten from the cached collection
          */
         displayRecentSearches: function () {
-            var _ref20 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee20() {
+            var _ref22 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee22() {
                 var recentSearchData, displayContent, index;
-                return regeneratorRuntime.wrap(function _callee20$(_context20) {
+                return regeneratorRuntime.wrap(function _callee22$(_context22) {
                     while (1) {
-                        switch (_context20.prev = _context20.next) {
+                        switch (_context22.prev = _context22.next) {
                             case 0:
-                                _context20.prev = 0;
-                                _context20.next = 3;
+                                _context22.prev = 0;
+                                _context22.next = 3;
                                 return utopiasoftware[utopiasoftware_app_namespace].databaseOperations.loadData("recent-searches", utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
 
                             case 3:
-                                recentSearchData = _context20.sent;
+                                recentSearchData = _context22.sent;
                                 displayContent = "<ons-list-title>Recent Searches</ons-list-title>"; // holds the content of the list to be created
                                 // create the Recent Searches list
 
@@ -1847,25 +1937,25 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 }
                                 // attach the displayContent to the list
                                 $('#search-page #search-list').html(displayContent);
-                                _context20.next = 12;
+                                _context22.next = 12;
                                 break;
 
                             case 9:
-                                _context20.prev = 9;
-                                _context20.t0 = _context20['catch'](0);
+                                _context22.prev = 9;
+                                _context22.t0 = _context22['catch'](0);
 
-                                console.log("DISPLAY RECENT SEARCHES", _context20.t0);
+                                console.log("DISPLAY RECENT SEARCHES", _context22.t0);
 
                             case 12:
                             case 'end':
-                                return _context20.stop();
+                                return _context22.stop();
                         }
                     }
-                }, _callee20, this, [[0, 9]]);
+                }, _callee22, this, [[0, 9]]);
             }));
 
             function displayRecentSearches() {
-                return _ref20.apply(this, arguments);
+                return _ref22.apply(this, arguments);
             }
 
             return displayRecentSearches;
@@ -1879,62 +1969,62 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         saveRecentSearchItem: function () {
-            var _ref21 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee21(product) {
+            var _ref23 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee23(product) {
                 var recentSearchesResultArray;
-                return regeneratorRuntime.wrap(function _callee21$(_context21) {
+                return regeneratorRuntime.wrap(function _callee23$(_context23) {
                     while (1) {
-                        switch (_context21.prev = _context21.next) {
+                        switch (_context23.prev = _context23.next) {
                             case 0:
                                 recentSearchesResultArray = []; // holds the recent searches array
 
-                                _context21.prev = 1;
-                                _context21.next = 4;
+                                _context23.prev = 1;
+                                _context23.next = 4;
                                 return utopiasoftware[utopiasoftware_app_namespace].databaseOperations.loadData("recent-searches", utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
 
                             case 4:
-                                recentSearchesResultArray = _context21.sent.products;
-                                _context21.next = 9;
+                                recentSearchesResultArray = _context23.sent.products;
+                                _context23.next = 9;
                                 break;
 
                             case 7:
-                                _context21.prev = 7;
-                                _context21.t0 = _context21['catch'](1);
+                                _context23.prev = 7;
+                                _context23.t0 = _context23['catch'](1);
 
                             case 9:
-                                _context21.prev = 9;
+                                _context23.prev = 9;
 
                                 // add the received 'product' parameter to the top of the recent searches array
                                 recentSearchesResultArray.unshift(product);
                                 // ensure the array is NOT greater than 5 items in length
                                 recentSearchesResultArray = recentSearchesResultArray.slice(0, 5);
                                 // save the updated recent searches array  to the cached data collection of "Recent Searches"
-                                _context21.next = 14;
+                                _context23.next = 14;
                                 return utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData({ _id: "recent-searches", docType: "RECENT_SEARCHES", products: recentSearchesResultArray }, utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
 
                             case 14:
-                                _context21.next = 16;
+                                _context23.next = 16;
                                 return utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.displayRecentSearches();
 
                             case 16:
-                                _context21.next = 21;
+                                _context23.next = 21;
                                 break;
 
                             case 18:
-                                _context21.prev = 18;
-                                _context21.t1 = _context21['catch'](9);
+                                _context23.prev = 18;
+                                _context23.t1 = _context23['catch'](9);
 
-                                console.log("SAVE RECENT SEARCH", _context21.t1);
+                                console.log("SAVE RECENT SEARCH", _context23.t1);
 
                             case 21:
                             case 'end':
-                                return _context21.stop();
+                                return _context23.stop();
                         }
                     }
-                }, _callee21, this, [[1, 7], [9, 18]]);
+                }, _callee23, this, [[1, 7], [9, 18]]);
             }));
 
-            function saveRecentSearchItem(_x8) {
-                return _ref21.apply(this, arguments);
+            function saveRecentSearchItem(_x10) {
+                return _ref23.apply(this, arguments);
             }
 
             return saveRecentSearchItem;
@@ -1952,81 +2042,81 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         removeRecentSearchItem: function () {
-            var _ref22 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee23(productIndex, clickedElement) {
-                return regeneratorRuntime.wrap(function _callee23$(_context23) {
+            var _ref24 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee25(productIndex, clickedElement) {
+                return regeneratorRuntime.wrap(function _callee25$(_context25) {
                     while (1) {
-                        switch (_context23.prev = _context23.next) {
+                        switch (_context25.prev = _context25.next) {
                             case 0:
 
                                 // execute the method is a different event queue
-                                window.setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee22() {
+                                window.setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee24() {
                                     var recentSearchesResultArray, $listItem;
-                                    return regeneratorRuntime.wrap(function _callee22$(_context22) {
+                                    return regeneratorRuntime.wrap(function _callee24$(_context24) {
                                         while (1) {
-                                            switch (_context22.prev = _context22.next) {
+                                            switch (_context24.prev = _context24.next) {
                                                 case 0:
                                                     recentSearchesResultArray = []; // holds the recent searches array
 
-                                                    _context22.prev = 1;
-                                                    _context22.next = 4;
+                                                    _context24.prev = 1;
+                                                    _context24.next = 4;
                                                     return utopiasoftware[utopiasoftware_app_namespace].databaseOperations.loadData("recent-searches", utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
 
                                                 case 4:
-                                                    recentSearchesResultArray = _context22.sent.products;
-                                                    _context22.next = 9;
+                                                    recentSearchesResultArray = _context24.sent.products;
+                                                    _context24.next = 9;
                                                     break;
 
                                                 case 7:
-                                                    _context22.prev = 7;
-                                                    _context22.t0 = _context22['catch'](1);
+                                                    _context24.prev = 7;
+                                                    _context24.t0 = _context24['catch'](1);
 
                                                 case 9:
-                                                    _context22.prev = 9;
+                                                    _context24.prev = 9;
 
                                                     // remove the received 'product' parameter index from the recent searches array
                                                     recentSearchesResultArray.splice(productIndex, 1);
                                                     // save the updated recent searches array  to the cached data collection of "Recent Searches"
-                                                    _context22.next = 13;
+                                                    _context24.next = 13;
                                                     return utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData({ _id: "recent-searches", docType: "RECENT_SEARCHES", products: recentSearchesResultArray }, utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
 
                                                 case 13:
                                                     // hide the list-item belonging to the clicked element from the displayed list
                                                     $listItem = $(clickedElement).closest('ons-list-item');
-                                                    _context22.next = 16;
+                                                    _context24.next = 16;
                                                     return kendo.fx($listItem).expand("vertical").duration(300).reverse();
 
                                                 case 16:
-                                                    _context22.next = 18;
+                                                    _context24.next = 18;
                                                     return utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.displayRecentSearches();
 
                                                 case 18:
-                                                    _context22.next = 23;
+                                                    _context24.next = 23;
                                                     break;
 
                                                 case 20:
-                                                    _context22.prev = 20;
-                                                    _context22.t1 = _context22['catch'](9);
+                                                    _context24.prev = 20;
+                                                    _context24.t1 = _context24['catch'](9);
 
-                                                    console.log("REMOVE RECENT SEARCH", _context22.t1);
+                                                    console.log("REMOVE RECENT SEARCH", _context24.t1);
 
                                                 case 23:
                                                 case 'end':
-                                                    return _context22.stop();
+                                                    return _context24.stop();
                                             }
                                         }
-                                    }, _callee22, this, [[1, 7], [9, 20]]);
+                                    }, _callee24, this, [[1, 7], [9, 20]]);
                                 })), 0);
 
                             case 1:
                             case 'end':
-                                return _context23.stop();
+                                return _context25.stop();
                         }
                     }
-                }, _callee23, this);
+                }, _callee25, this);
             }));
 
-            function removeRecentSearchItem(_x9, _x10) {
-                return _ref22.apply(this, arguments);
+            function removeRecentSearchItem(_x11, _x12) {
+                return _ref24.apply(this, arguments);
             }
 
             return removeRecentSearchItem;
@@ -2042,55 +2132,55 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         recentSearchesItemClicked: function () {
-            var _ref24 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee25(productIndex) {
-                return regeneratorRuntime.wrap(function _callee25$(_context25) {
+            var _ref26 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee27(productIndex) {
+                return regeneratorRuntime.wrap(function _callee27$(_context27) {
                     while (1) {
-                        switch (_context25.prev = _context25.next) {
+                        switch (_context27.prev = _context27.next) {
                             case 0:
                                 // handle the function task in a different event queue
-                                window.setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee24() {
+                                window.setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee26() {
                                     var recentSearchesResultArray;
-                                    return regeneratorRuntime.wrap(function _callee24$(_context24) {
+                                    return regeneratorRuntime.wrap(function _callee26$(_context26) {
                                         while (1) {
-                                            switch (_context24.prev = _context24.next) {
+                                            switch (_context26.prev = _context26.next) {
                                                 case 0:
-                                                    _context24.prev = 0;
-                                                    _context24.next = 3;
+                                                    _context26.prev = 0;
+                                                    _context26.next = 3;
                                                     return utopiasoftware[utopiasoftware_app_namespace].databaseOperations.loadData("recent-searches", utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
 
                                                 case 3:
-                                                    recentSearchesResultArray = _context24.sent.products;
+                                                    recentSearchesResultArray = _context26.sent.products;
 
 
                                                     // display the products details page using the selected product
                                                     $('#app-main-navigator').get(0).pushPage("product-details-page.html", { animation: "lift", data: { product: recentSearchesResultArray[productIndex] } });
-                                                    _context24.next = 10;
+                                                    _context26.next = 10;
                                                     break;
 
                                                 case 7:
-                                                    _context24.prev = 7;
-                                                    _context24.t0 = _context24['catch'](0);
+                                                    _context26.prev = 7;
+                                                    _context26.t0 = _context26['catch'](0);
 
-                                                    console.log("RECENT SEARCHES CLICKED", _context24.t0);
+                                                    console.log("RECENT SEARCHES CLICKED", _context26.t0);
 
                                                 case 10:
                                                 case 'end':
-                                                    return _context24.stop();
+                                                    return _context26.stop();
                                             }
                                         }
-                                    }, _callee24, this, [[0, 7]]);
+                                    }, _callee26, this, [[0, 7]]);
                                 })), 0);
 
                             case 1:
                             case 'end':
-                                return _context25.stop();
+                                return _context27.stop();
                         }
                     }
-                }, _callee25, this);
+                }, _callee27, this);
             }));
 
-            function recentSearchesItemClicked(_x11) {
-                return _ref24.apply(this, arguments);
+            function recentSearchesItemClicked(_x13) {
+                return _ref26.apply(this, arguments);
             }
 
             return recentSearchesItemClicked;
@@ -2104,11 +2194,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         enterButtonClicked: function () {
-            var _ref26 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee26(keyEvent) {
+            var _ref28 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee28(keyEvent) {
                 var searchAutoComplete;
-                return regeneratorRuntime.wrap(function _callee26$(_context26) {
+                return regeneratorRuntime.wrap(function _callee28$(_context28) {
                     while (1) {
-                        switch (_context26.prev = _context26.next) {
+                        switch (_context28.prev = _context28.next) {
                             case 0:
                                 // check which key was pressed
                                 if (keyEvent.which === kendo.keys.ENTER) // if the enter key was pressed
@@ -2132,14 +2222,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 1:
                             case 'end':
-                                return _context26.stop();
+                                return _context28.stop();
                         }
                     }
-                }, _callee26, this);
+                }, _callee28, this);
             }));
 
-            function enterButtonClicked(_x12) {
-                return _ref26.apply(this, arguments);
+            function enterButtonClicked(_x14) {
+                return _ref28.apply(this, arguments);
             }
 
             return enterButtonClicked;
@@ -2159,13 +2249,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         loadProducts: function () {
-            var _ref27 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee27(queryParam) {
+            var _ref29 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee29(queryParam) {
                 var pageToAccess = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : queryParam.page || 1;
                 var pageSize = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : queryParam.per_page || 3;
                 var productPromisesArray;
-                return regeneratorRuntime.wrap(function _callee27$(_context27) {
+                return regeneratorRuntime.wrap(function _callee29$(_context29) {
                     while (1) {
-                        switch (_context27.prev = _context27.next) {
+                        switch (_context29.prev = _context29.next) {
                             case 0:
                                 queryParam.page = pageToAccess;
                                 queryParam.per_page = pageSize;
@@ -2210,18 +2300,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         productPromisesArray.push(Promise.reject("no internet connection"));
                                     }
 
-                                return _context27.abrupt('return', Promise.all(productPromisesArray));
+                                return _context29.abrupt('return', Promise.all(productPromisesArray));
 
                             case 5:
                             case 'end':
-                                return _context27.stop();
+                                return _context29.stop();
                         }
                     }
-                }, _callee27, this);
+                }, _callee29, this);
             }));
 
-            function loadProducts(_x15) {
-                return _ref27.apply(this, arguments);
+            function loadProducts(_x17) {
+                return _ref29.apply(this, arguments);
             }
 
             return loadProducts;
@@ -2236,11 +2326,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         displayPageContent: function () {
-            var _ref28 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee28(productsArray) {
+            var _ref30 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee30(productsArray) {
                 var displayCompletedPromise;
-                return regeneratorRuntime.wrap(function _callee28$(_context28) {
+                return regeneratorRuntime.wrap(function _callee30$(_context30) {
                     while (1) {
-                        switch (_context28.prev = _context28.next) {
+                        switch (_context30.prev = _context30.next) {
                             case 0:
                                 displayCompletedPromise = new Promise(function (resolve, reject) {
 
@@ -2269,18 +2359,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         resolve(productsArray.length); // resolve the promise with length of the productsArray
                                     }
                                 });
-                                return _context28.abrupt('return', displayCompletedPromise);
+                                return _context30.abrupt('return', displayCompletedPromise);
 
                             case 2:
                             case 'end':
-                                return _context28.stop();
+                                return _context30.stop();
                         }
                     }
-                }, _callee28, this);
+                }, _callee30, this);
             }));
 
-            function displayPageContent(_x16) {
-                return _ref28.apply(this, arguments);
+            function displayPageContent(_x18) {
+                return _ref30.apply(this, arguments);
             }
 
             return displayPageContent;
@@ -2296,26 +2386,26 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         searchAutocompletePopOverItemClicked: function () {
-            var _ref29 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee30(productIndex) {
+            var _ref31 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee32(productIndex) {
                 var selectedProduct;
-                return regeneratorRuntime.wrap(function _callee30$(_context30) {
+                return regeneratorRuntime.wrap(function _callee32$(_context32) {
                     while (1) {
-                        switch (_context30.prev = _context30.next) {
+                        switch (_context32.prev = _context32.next) {
                             case 0:
                                 // get the product the user clicked on from the search autocomplete popover
                                 selectedProduct = utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.currentSearchResultsArray[productIndex];
 
-                                window.setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee29() {
-                                    return regeneratorRuntime.wrap(function _callee29$(_context29) {
+                                window.setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee31() {
+                                    return regeneratorRuntime.wrap(function _callee31$(_context31) {
                                         while (1) {
-                                            switch (_context29.prev = _context29.next) {
+                                            switch (_context31.prev = _context31.next) {
                                                 case 0:
-                                                    _context29.prev = 0;
-                                                    _context29.next = 3;
+                                                    _context31.prev = 0;
+                                                    _context31.next = 3;
                                                     return $('#app-main-navigator').get(0).pushPage("product-details-page.html", { animation: "lift", data: { product: selectedProduct } });
 
                                                 case 3:
-                                                    _context29.next = 5;
+                                                    _context31.next = 5;
                                                     return utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.saveRecentSearchItem(selectedProduct);
 
                                                 case 5:
@@ -2323,33 +2413,33 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                     // update the value of the search autocomplete input to that which the user clicked on from the popover
                                                     $('#search-page #search-page-input').val(selectedProduct.name);
 
-                                                    _context29.next = 11;
+                                                    _context31.next = 11;
                                                     break;
 
                                                 case 8:
-                                                    _context29.prev = 8;
-                                                    _context29.t0 = _context29['catch'](0);
+                                                    _context31.prev = 8;
+                                                    _context31.t0 = _context31['catch'](0);
 
-                                                    console.log("SEARCH AUTOCOMPLETE", _context29.t0);
+                                                    console.log("SEARCH AUTOCOMPLETE", _context31.t0);
 
                                                 case 11:
                                                 case 'end':
-                                                    return _context29.stop();
+                                                    return _context31.stop();
                                             }
                                         }
-                                    }, _callee29, this, [[0, 8]]);
+                                    }, _callee31, this, [[0, 8]]);
                                 })), 0);
 
                             case 2:
                             case 'end':
-                                return _context30.stop();
+                                return _context32.stop();
                         }
                     }
-                }, _callee30, this);
+                }, _callee32, this);
             }));
 
-            function searchAutocompletePopOverItemClicked(_x17) {
-                return _ref29.apply(this, arguments);
+            function searchAutocompletePopOverItemClicked(_x19) {
+                return _ref31.apply(this, arguments);
             }
 
             return searchAutocompletePopOverItemClicked;
@@ -2363,41 +2453,41 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         findMoreClicked: function () {
-            var _ref31 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee32() {
-                return regeneratorRuntime.wrap(function _callee32$(_context32) {
+            var _ref33 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee34() {
+                return regeneratorRuntime.wrap(function _callee34$(_context34) {
                     while (1) {
-                        switch (_context32.prev = _context32.next) {
+                        switch (_context34.prev = _context34.next) {
                             case 0:
                                 // load the products page in a separate event queue
-                                window.setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee31() {
+                                window.setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee33() {
                                     var productArray, toast;
-                                    return regeneratorRuntime.wrap(function _callee31$(_context31) {
+                                    return regeneratorRuntime.wrap(function _callee33$(_context33) {
                                         while (1) {
-                                            switch (_context31.prev = _context31.next) {
+                                            switch (_context33.prev = _context33.next) {
                                                 case 0:
-                                                    _context31.prev = 0;
-                                                    _context31.next = 3;
+                                                    _context33.prev = 0;
+                                                    _context33.next = 3;
                                                     return $('#app-main-tabbar').get(0).setActiveTab(4, { animation: 'none' });
 
                                                 case 3:
-                                                    _context31.next = 5;
+                                                    _context33.next = 5;
                                                     return utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.loadProducts({ "order": "desc", "orderby": "date", "status": "publish",
                                                         "type": "variable", "stock_status": "instock", "page": 1, "per_page": 20, "search": $('#search-page #search-page-input').get(0).ej2_instances[0].value.trim() });
 
                                                 case 5:
-                                                    productArray = _context31.sent;
-                                                    _context31.next = 8;
+                                                    productArray = _context33.sent;
+                                                    _context33.next = 8;
                                                     return utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.displayPageContent(productArray[0]);
 
                                                 case 8:
-                                                    _context31.next = 19;
+                                                    _context33.next = 19;
                                                     break;
 
                                                 case 10:
-                                                    _context31.prev = 10;
-                                                    _context31.t0 = _context31['catch'](0);
+                                                    _context33.prev = 10;
+                                                    _context33.t0 = _context33['catch'](0);
 
-                                                    console.log("PRODUCTS PAGE", _context31.t0);
+                                                    console.log("PRODUCTS PAGE", _context33.t0);
                                                     // hide all previously displayed ej2 toast
                                                     $('.page-toast').get(0).ej2_instances[0].hide('All');
                                                     // display toast to show that an error
@@ -2409,30 +2499,30 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                     toast.show();
 
                                                 case 19:
-                                                    _context31.prev = 19;
+                                                    _context33.prev = 19;
 
                                                     // hide the preloader for the products page
                                                     $('#products-page .page-preloader').css("display", "none");
-                                                    return _context31.finish(19);
+                                                    return _context33.finish(19);
 
                                                 case 22:
                                                 case 'end':
-                                                    return _context31.stop();
+                                                    return _context33.stop();
                                             }
                                         }
-                                    }, _callee31, this, [[0, 10, 19, 22]]);
+                                    }, _callee33, this, [[0, 10, 19, 22]]);
                                 })), 0);
 
                             case 1:
                             case 'end':
-                                return _context32.stop();
+                                return _context34.stop();
                         }
                     }
-                }, _callee32, this);
+                }, _callee34, this);
             }));
 
             function findMoreClicked() {
-                return _ref31.apply(this, arguments);
+                return _ref33.apply(this, arguments);
             }
 
             return findMoreClicked;
@@ -2451,19 +2541,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             //function is used to initialise the page if the app is fully ready for execution
             var loadPageOnAppReady = function () {
-                var _ref33 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee33() {
+                var _ref35 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee35() {
                     var accordion;
-                    return regeneratorRuntime.wrap(function _callee33$(_context33) {
+                    return regeneratorRuntime.wrap(function _callee35$(_context35) {
                         while (1) {
-                            switch (_context33.prev = _context33.next) {
+                            switch (_context35.prev = _context35.next) {
                                 case 0:
                                     if (!(!ons.isReady() || utopiasoftware[utopiasoftware_app_namespace].model.isAppReady === false)) {
-                                        _context33.next = 3;
+                                        _context35.next = 3;
                                         break;
                                     }
 
                                     setTimeout(loadPageOnAppReady, 500); // call this function again after half a second
-                                    return _context33.abrupt('return');
+                                    return _context35.abrupt('return');
 
                                 case 3:
 
@@ -2481,14 +2571,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 case 5:
                                 case 'end':
-                                    return _context33.stop();
+                                    return _context35.stop();
                             }
                         }
-                    }, _callee33, this);
+                    }, _callee35, this);
                 }));
 
                 return function loadPageOnAppReady() {
-                    return _ref33.apply(this, arguments);
+                    return _ref35.apply(this, arguments);
                 };
             }();
 
@@ -2510,20 +2600,20 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is hidden
          */
         pageHide: function () {
-            var _ref34 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee34() {
-                return regeneratorRuntime.wrap(function _callee34$(_context34) {
+            var _ref36 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee36() {
+                return regeneratorRuntime.wrap(function _callee36$(_context36) {
                     while (1) {
-                        switch (_context34.prev = _context34.next) {
+                        switch (_context36.prev = _context36.next) {
                             case 0:
                             case 'end':
-                                return _context34.stop();
+                                return _context36.stop();
                         }
                     }
-                }, _callee34, this);
+                }, _callee36, this);
             }));
 
             function pageHide() {
-                return _ref34.apply(this, arguments);
+                return _ref36.apply(this, arguments);
             }
 
             return pageHide;
@@ -2565,18 +2655,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             //function is used to initialise the page if the app is fully ready for execution
             var loadPageOnAppReady = function () {
-                var _ref35 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee35() {
-                    return regeneratorRuntime.wrap(function _callee35$(_context35) {
+                var _ref37 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee37() {
+                    return regeneratorRuntime.wrap(function _callee37$(_context37) {
                         while (1) {
-                            switch (_context35.prev = _context35.next) {
+                            switch (_context37.prev = _context37.next) {
                                 case 0:
                                     if (!(!ons.isReady() || utopiasoftware[utopiasoftware_app_namespace].model.isAppReady === false)) {
-                                        _context35.next = 3;
+                                        _context37.next = 3;
                                         break;
                                     }
 
                                     setTimeout(loadPageOnAppReady, 500); // call this function again after half a second
-                                    return _context35.abrupt('return');
+                                    return _context37.abrupt('return');
 
                                 case 3:
 
@@ -2697,14 +2787,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 case 16:
                                 case 'end':
-                                    return _context35.stop();
+                                    return _context37.stop();
                             }
                         }
-                    }, _callee35, this);
+                    }, _callee37, this);
                 }));
 
                 return function loadPageOnAppReady() {
-                    return _ref35.apply(this, arguments);
+                    return _ref37.apply(this, arguments);
                 };
             }();
 
@@ -2728,10 +2818,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is hidden
          */
         pageHide: function () {
-            var _ref36 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee36() {
-                return regeneratorRuntime.wrap(function _callee36$(_context36) {
+            var _ref38 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee38() {
+                return regeneratorRuntime.wrap(function _callee38$(_context38) {
                     while (1) {
-                        switch (_context36.prev = _context36.next) {
+                        switch (_context38.prev = _context38.next) {
                             case 0:
 
                                 // remove listener for when the device keyboard is shown
@@ -2755,14 +2845,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 5:
                             case 'end':
-                                return _context36.stop();
+                                return _context38.stop();
                         }
                     }
-                }, _callee36, this);
+                }, _callee38, this);
             }));
 
             function pageHide() {
-                return _ref36.apply(this, arguments);
+                return _ref38.apply(this, arguments);
             }
 
             return pageHide;
@@ -2955,10 +3045,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         signinButtonClicked: function () {
-            var _ref37 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee37() {
-                return regeneratorRuntime.wrap(function _callee37$(_context37) {
+            var _ref39 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee39() {
+                return regeneratorRuntime.wrap(function _callee39$(_context39) {
                     while (1) {
-                        switch (_context37.prev = _context37.next) {
+                        switch (_context39.prev = _context39.next) {
                             case 0:
 
                                 // run the validation method for the sign-in form
@@ -2966,14 +3056,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 1:
                             case 'end':
-                                return _context37.stop();
+                                return _context39.stop();
                         }
                     }
-                }, _callee37, this);
+                }, _callee39, this);
             }));
 
             function signinButtonClicked() {
-                return _ref37.apply(this, arguments);
+                return _ref39.apply(this, arguments);
             }
 
             return signinButtonClicked;
@@ -2986,10 +3076,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         signupButtonClicked: function () {
-            var _ref38 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee38() {
-                return regeneratorRuntime.wrap(function _callee38$(_context38) {
+            var _ref40 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee40() {
+                return regeneratorRuntime.wrap(function _callee40$(_context40) {
                     while (1) {
-                        switch (_context38.prev = _context38.next) {
+                        switch (_context40.prev = _context40.next) {
                             case 0:
 
                                 // run the validation method for the sign-in form
@@ -2997,14 +3087,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 1:
                             case 'end':
-                                return _context38.stop();
+                                return _context40.stop();
                         }
                     }
-                }, _callee38, this);
+                }, _callee40, this);
             }));
 
             function signupButtonClicked() {
-                return _ref38.apply(this, arguments);
+                return _ref40.apply(this, arguments);
             }
 
             return signupButtonClicked;
@@ -3017,20 +3107,20 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         loginFormValidated: function () {
-            var _ref39 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee39() {
-                return regeneratorRuntime.wrap(function _callee39$(_context39) {
+            var _ref41 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee41() {
+                return regeneratorRuntime.wrap(function _callee41$(_context41) {
                     while (1) {
-                        switch (_context39.prev = _context39.next) {
+                        switch (_context41.prev = _context41.next) {
                             case 0:
                             case 'end':
-                                return _context39.stop();
+                                return _context41.stop();
                         }
                     }
-                }, _callee39, this);
+                }, _callee41, this);
             }));
 
             function loginFormValidated() {
-                return _ref39.apply(this, arguments);
+                return _ref41.apply(this, arguments);
             }
 
             return loginFormValidated;
@@ -3043,20 +3133,20 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         signupFormValidated: function () {
-            var _ref40 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee40() {
-                return regeneratorRuntime.wrap(function _callee40$(_context40) {
+            var _ref42 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee42() {
+                return regeneratorRuntime.wrap(function _callee42$(_context42) {
                     while (1) {
-                        switch (_context40.prev = _context40.next) {
+                        switch (_context42.prev = _context42.next) {
                             case 0:
                             case 'end':
-                                return _context40.stop();
+                                return _context42.stop();
                         }
                     }
-                }, _callee40, this);
+                }, _callee42, this);
             }));
 
             function signupFormValidated() {
-                return _ref40.apply(this, arguments);
+                return _ref42.apply(this, arguments);
             }
 
             return signupFormValidated;
@@ -3101,18 +3191,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             //function is used to initialise the page if the app is fully ready for execution
             var loadPageOnAppReady = function () {
-                var _ref41 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee41() {
-                    return regeneratorRuntime.wrap(function _callee41$(_context41) {
+                var _ref43 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee43() {
+                    return regeneratorRuntime.wrap(function _callee43$(_context43) {
                         while (1) {
-                            switch (_context41.prev = _context41.next) {
+                            switch (_context43.prev = _context43.next) {
                                 case 0:
                                     if (!(!ons.isReady() || utopiasoftware[utopiasoftware_app_namespace].model.isAppReady === false)) {
-                                        _context41.next = 3;
+                                        _context43.next = 3;
                                         break;
                                     }
 
                                     setTimeout(loadPageOnAppReady, 500); // call this function again after half a second
-                                    return _context41.abrupt('return');
+                                    return _context43.abrupt('return');
 
                                 case 3:
 
@@ -3192,14 +3282,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 case 13:
                                 case 'end':
-                                    return _context41.stop();
+                                    return _context43.stop();
                             }
                         }
-                    }, _callee41, this);
+                    }, _callee43, this);
                 }));
 
                 return function loadPageOnAppReady() {
-                    return _ref41.apply(this, arguments);
+                    return _ref43.apply(this, arguments);
                 };
             }();
 
@@ -3237,10 +3327,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is hidden
          */
         pageHide: function () {
-            var _ref42 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee42(event) {
-                return regeneratorRuntime.wrap(function _callee42$(_context42) {
+            var _ref44 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee44(event) {
+                return regeneratorRuntime.wrap(function _callee44$(_context44) {
                     while (1) {
-                        switch (_context42.prev = _context42.next) {
+                        switch (_context44.prev = _context44.next) {
                             case 0:
                                 // flag that page infinite scroll should NOT be allowed
                                 event.target._allowInfinitePageScroll = false;
@@ -3257,14 +3347,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 5:
                             case 'end':
-                                return _context42.stop();
+                                return _context44.stop();
                         }
                     }
-                }, _callee42, this);
+                }, _callee44, this);
             }));
 
-            function pageHide(_x18) {
-                return _ref42.apply(this, arguments);
+            function pageHide(_x20) {
+                return _ref44.apply(this, arguments);
             }
 
             return pageHide;
@@ -3314,36 +3404,36 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         pagePullHookAction: function () {
-            var _ref43 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee43() {
+            var _ref45 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee45() {
                 var doneCallBack = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : function () {};
                 var productArray, toast;
-                return regeneratorRuntime.wrap(function _callee43$(_context43) {
+                return regeneratorRuntime.wrap(function _callee45$(_context45) {
                     while (1) {
-                        switch (_context43.prev = _context43.next) {
+                        switch (_context45.prev = _context45.next) {
                             case 0:
                                 // disable pull-to-refresh widget till loading is done
                                 $('#products-page #products-page-pull-hook').attr("disabled", true);
                                 // hide all previously displayed ej2 toast
                                 $('.page-toast').get(0).ej2_instances[0].hide('All');
 
-                                _context43.prev = 2;
-                                _context43.next = 5;
+                                _context45.prev = 2;
+                                _context45.next = 5;
                                 return utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.loadProducts(utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.currentQueryParam, 1);
 
                             case 5:
-                                productArray = _context43.sent;
-                                _context43.next = 8;
+                                productArray = _context45.sent;
+                                _context45.next = 8;
                                 return utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.displayPageContent(productArray[0]);
 
                             case 8:
-                                _context43.next = 18;
+                                _context45.next = 18;
                                 break;
 
                             case 10:
-                                _context43.prev = 10;
-                                _context43.t0 = _context43['catch'](2);
+                                _context45.prev = 10;
+                                _context45.t0 = _context45['catch'](2);
                                 // an error occurred
-                                console.log("PROJECT REFRESH ERROR", _context43.t0);
+                                console.log("PROJECT REFRESH ERROR", _context45.t0);
                                 // display toast to show that error
                                 toast = $('.page-toast').get(0).ej2_instances[0];
 
@@ -3353,24 +3443,24 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 toast.show();
 
                             case 18:
-                                _context43.prev = 18;
+                                _context45.prev = 18;
 
                                 // enable pull-to-refresh widget till loading is done
                                 $('#products-page #products-page-pull-hook').removeAttr("disabled");
                                 // signal that loading is done
                                 doneCallBack();
-                                return _context43.finish(18);
+                                return _context45.finish(18);
 
                             case 22:
                             case 'end':
-                                return _context43.stop();
+                                return _context45.stop();
                         }
                     }
-                }, _callee43, this, [[2, 10, 18, 22]]);
+                }, _callee45, this, [[2, 10, 18, 22]]);
             }));
 
             function pagePullHookAction() {
-                return _ref43.apply(this, arguments);
+                return _ref45.apply(this, arguments);
             }
 
             return pagePullHookAction;
@@ -3384,21 +3474,21 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         pageInfiniteScroll: function () {
-            var _ref44 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee44() {
+            var _ref46 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee46() {
                 var doneCallBack = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : function () {};
                 var productArray, toast;
-                return regeneratorRuntime.wrap(function _callee44$(_context44) {
+                return regeneratorRuntime.wrap(function _callee46$(_context46) {
                     while (1) {
-                        switch (_context44.prev = _context44.next) {
+                        switch (_context46.prev = _context46.next) {
                             case 0:
                                 if (!($('#products-page').get(0)._allowInfinitePageScroll === false)) {
-                                    _context44.next = 3;
+                                    _context46.next = 3;
                                     break;
                                 }
 
                                 // page infinite scroll is NOT allowed
                                 doneCallBack();
-                                return _context44.abrupt('return');
+                                return _context46.abrupt('return');
 
                             case 3:
                                 console.log("PRODUCT PULL-HOOK CALLED");
@@ -3409,22 +3499,22 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 productArray = []; // holds the array of products retrieved for display
 
-                                _context44.prev = 7;
-                                _context44.next = 10;
+                                _context46.prev = 7;
+                                _context46.next = 10;
                                 return utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.loadProducts(utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.currentQueryParam, utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.currentPage + 1);
 
                             case 10:
-                                productArray = _context44.sent;
-                                _context44.next = 13;
+                                productArray = _context46.sent;
+                                _context46.next = 13;
                                 return utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.displayPageContent(productArray[0], true, false);
 
                             case 13:
-                                _context44.next = 22;
+                                _context46.next = 22;
                                 break;
 
                             case 15:
-                                _context44.prev = 15;
-                                _context44.t0 = _context44['catch'](7);
+                                _context46.prev = 15;
+                                _context46.t0 = _context46['catch'](7);
                                 // an error occurred
                                 // display toast to show that error
                                 toast = $('.page-toast').get(0).ej2_instances[0];
@@ -3435,7 +3525,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 toast.show();
 
                             case 22:
-                                _context44.prev = 22;
+                                _context46.prev = 22;
 
                                 // check if any new products were retrieved
                                 if (productArray && productArray[0].length > 0) {
@@ -3449,18 +3539,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 }
                                 // signal that loading is done
                                 doneCallBack();
-                                return _context44.finish(22);
+                                return _context46.finish(22);
 
                             case 26:
                             case 'end':
-                                return _context44.stop();
+                                return _context46.stop();
                         }
                     }
-                }, _callee44, this, [[7, 15, 22, 26]]);
+                }, _callee46, this, [[7, 15, 22, 26]]);
             }));
 
             function pageInfiniteScroll() {
-                return _ref44.apply(this, arguments);
+                return _ref46.apply(this, arguments);
             }
 
             return pageInfiniteScroll;
@@ -3480,13 +3570,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         loadProducts: function () {
-            var _ref45 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee45(queryParam) {
+            var _ref47 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee47(queryParam) {
                 var pageToAccess = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : queryParam.page || utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.currentPage + 1;
                 var pageSize = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : queryParam.per_page || utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.pageSize;
                 var productPromisesArray, toast;
-                return regeneratorRuntime.wrap(function _callee45$(_context45) {
+                return regeneratorRuntime.wrap(function _callee47$(_context47) {
                     while (1) {
-                        switch (_context45.prev = _context45.next) {
+                        switch (_context47.prev = _context47.next) {
                             case 0:
                                 queryParam.page = pageToAccess;
                                 queryParam.per_page = pageSize;
@@ -3556,18 +3646,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         }));
                                     }
 
-                                return _context45.abrupt('return', Promise.all(productPromisesArray));
+                                return _context47.abrupt('return', Promise.all(productPromisesArray));
 
                             case 5:
                             case 'end':
-                                return _context45.stop();
+                                return _context47.stop();
                         }
                     }
-                }, _callee45, this);
+                }, _callee47, this);
             }));
 
-            function loadProducts(_x23) {
-                return _ref45.apply(this, arguments);
+            function loadProducts(_x25) {
+                return _ref47.apply(this, arguments);
             }
 
             return loadProducts;
@@ -3588,13 +3678,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         displayPageContent: function () {
-            var _ref46 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee46(productsArray) {
+            var _ref48 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee48(productsArray) {
                 var appendContent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
                 var overwriteContent = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
                 var index, displayCompletedPromise;
-                return regeneratorRuntime.wrap(function _callee46$(_context46) {
+                return regeneratorRuntime.wrap(function _callee48$(_context48) {
                     while (1) {
-                        switch (_context46.prev = _context46.next) {
+                        switch (_context48.prev = _context48.next) {
                             case 0:
                                 for (index = 0; index < 4; index++) {
                                     // REMOVE THIS LATER JUST FOR TEST TODO
@@ -3649,18 +3739,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         resolve(productsArray.length); // resolve the promise with length of the productsArray
                                     }
                                 });
-                                return _context46.abrupt('return', displayCompletedPromise);
+                                return _context48.abrupt('return', displayCompletedPromise);
 
                             case 3:
                             case 'end':
-                                return _context46.stop();
+                                return _context48.stop();
                         }
                     }
-                }, _callee46, this);
+                }, _callee48, this);
             }));
 
-            function displayPageContent(_x26) {
-                return _ref46.apply(this, arguments);
+            function displayPageContent(_x28) {
+                return _ref48.apply(this, arguments);
             }
 
             return displayPageContent;
@@ -3672,10 +3762,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         scrollPageToTop: function () {
-            var _ref47 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee47() {
-                return regeneratorRuntime.wrap(function _callee47$(_context47) {
+            var _ref49 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee49() {
+                return regeneratorRuntime.wrap(function _callee49$(_context49) {
                     while (1) {
-                        switch (_context47.prev = _context47.next) {
+                        switch (_context49.prev = _context49.next) {
                             case 0:
                                 window.setTimeout(function () {
                                     $('#products-page .page__content').animate({ scrollTop: 0 }, 400);
@@ -3683,14 +3773,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 1:
                             case 'end':
-                                return _context47.stop();
+                                return _context49.stop();
                         }
                     }
-                }, _callee47, this);
+                }, _callee49, this);
             }));
 
             function scrollPageToTop() {
-                return _ref47.apply(this, arguments);
+                return _ref49.apply(this, arguments);
             }
 
             return scrollPageToTop;
@@ -3714,19 +3804,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             //function is used to initialise the page if the app is fully ready for execution
             var loadPageOnAppReady = function () {
-                var _ref48 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee48() {
+                var _ref50 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee50() {
                     var productDetailsArray, toast;
-                    return regeneratorRuntime.wrap(function _callee48$(_context48) {
+                    return regeneratorRuntime.wrap(function _callee50$(_context50) {
                         while (1) {
-                            switch (_context48.prev = _context48.next) {
+                            switch (_context50.prev = _context50.next) {
                                 case 0:
                                     if (!(!ons.isReady() || utopiasoftware[utopiasoftware_app_namespace].model.isAppReady === false)) {
-                                        _context48.next = 3;
+                                        _context50.next = 3;
                                         break;
                                     }
 
                                     setTimeout(loadPageOnAppReady, 500); // call this function again after half a second
-                                    return _context48.abrupt('return');
+                                    return _context50.abrupt('return');
 
                                 case 3:
 
@@ -3758,7 +3848,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         }
                                     });
 
-                                    _context48.prev = 6;
+                                    _context50.prev = 6;
 
                                     // create the "Pick Quantity" button
                                     new ej.inputs.NumericTextBox({
@@ -3806,23 +3896,23 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // load product variations asynchronously without waiting for the response
                                     utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.loadProductVariations();
                                     // load product details
-                                    _context48.next = 15;
+                                    _context50.next = 15;
                                     return utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.loadProduct();
 
                                 case 15:
-                                    productDetailsArray = _context48.sent;
-                                    _context48.next = 18;
+                                    productDetailsArray = _context50.sent;
+                                    _context50.next = 18;
                                     return utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.displayProductDetails(productDetailsArray[0]);
 
                                 case 18:
-                                    _context48.next = 29;
+                                    _context50.next = 29;
                                     break;
 
                                 case 20:
-                                    _context48.prev = 20;
-                                    _context48.t0 = _context48['catch'](6);
+                                    _context50.prev = 20;
+                                    _context50.t0 = _context50['catch'](6);
 
-                                    console.log("PRODUCT DETAILS PAGE", _context48.t0);
+                                    console.log("PRODUCT DETAILS PAGE", _context50.t0);
                                     // hide all previously displayed ej2 toast
                                     $('.page-toast').get(0).ej2_instances[0].hide('All');
                                     // display toast to show that an error
@@ -3834,22 +3924,22 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     toast.show();
 
                                 case 29:
-                                    _context48.prev = 29;
+                                    _context50.prev = 29;
 
                                     // hide the preloader
                                     $('#product-details-page .page-preloader').css("display", "none");
-                                    return _context48.finish(29);
+                                    return _context50.finish(29);
 
                                 case 32:
                                 case 'end':
-                                    return _context48.stop();
+                                    return _context50.stop();
                             }
                         }
-                    }, _callee48, this, [[6, 20, 29, 32]]);
+                    }, _callee50, this, [[6, 20, 29, 32]]);
                 }));
 
                 return function loadPageOnAppReady() {
-                    return _ref48.apply(this, arguments);
+                    return _ref50.apply(this, arguments);
                 };
             }();
 
@@ -3870,20 +3960,20 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is hidden
          */
         pageHide: function () {
-            var _ref49 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee49() {
-                return regeneratorRuntime.wrap(function _callee49$(_context49) {
+            var _ref51 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee51() {
+                return regeneratorRuntime.wrap(function _callee51$(_context51) {
                     while (1) {
-                        switch (_context49.prev = _context49.next) {
+                        switch (_context51.prev = _context51.next) {
                             case 0:
                             case 'end':
-                                return _context49.stop();
+                                return _context51.stop();
                         }
                     }
-                }, _callee49, this);
+                }, _callee51, this);
             }));
 
             function pageHide() {
-                return _ref49.apply(this, arguments);
+                return _ref51.apply(this, arguments);
             }
 
             return pageHide;
@@ -3911,40 +4001,40 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         pagePullHookAction: function () {
-            var _ref50 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee50() {
+            var _ref52 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee52() {
                 var doneCallBack = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : function () {};
                 var productDetailsArray, toast;
-                return regeneratorRuntime.wrap(function _callee50$(_context50) {
+                return regeneratorRuntime.wrap(function _callee52$(_context52) {
                     while (1) {
-                        switch (_context50.prev = _context50.next) {
+                        switch (_context52.prev = _context52.next) {
                             case 0:
                                 // disable pull-to-refresh widget till loading is done
                                 $('#product-details-page #product-details-page-pull-hook').attr("disabled", true);
                                 // hide all previously displayed ej2 toast
                                 $('.page-toast').get(0).ej2_instances[0].hide('All');
 
-                                _context50.prev = 2;
+                                _context52.prev = 2;
 
                                 // load product variations asynchronously without waiting for the response
                                 utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.loadProductVariations();
                                 // load product details
-                                _context50.next = 6;
+                                _context52.next = 6;
                                 return utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.loadProduct();
 
                             case 6:
-                                productDetailsArray = _context50.sent;
-                                _context50.next = 9;
+                                productDetailsArray = _context52.sent;
+                                _context52.next = 9;
                                 return utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.displayProductDetails(productDetailsArray[0]);
 
                             case 9:
-                                _context50.next = 19;
+                                _context52.next = 19;
                                 break;
 
                             case 11:
-                                _context50.prev = 11;
-                                _context50.t0 = _context50['catch'](2);
+                                _context52.prev = 11;
+                                _context52.t0 = _context52['catch'](2);
                                 // an error occurred
-                                console.log("PROJECT DETAILS REFRESH ERROR", _context50.t0);
+                                console.log("PROJECT DETAILS REFRESH ERROR", _context52.t0);
                                 // display toast to show that error
                                 toast = $('.page-toast').get(0).ej2_instances[0];
 
@@ -3954,24 +4044,24 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 toast.show();
 
                             case 19:
-                                _context50.prev = 19;
+                                _context52.prev = 19;
 
                                 // enable pull-to-refresh widget till loading is done
                                 $('#product-details-page #product-details-page-pull-hook').removeAttr("disabled");
                                 // signal that loading is done
                                 doneCallBack();
-                                return _context50.finish(19);
+                                return _context52.finish(19);
 
                             case 23:
                             case 'end':
-                                return _context50.stop();
+                                return _context52.stop();
                         }
                     }
-                }, _callee50, this, [[2, 11, 19, 23]]);
+                }, _callee52, this, [[2, 11, 19, 23]]);
             }));
 
             function pagePullHookAction() {
-                return _ref50.apply(this, arguments);
+                return _ref52.apply(this, arguments);
             }
 
             return pagePullHookAction;
@@ -3988,11 +4078,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         loadProduct: function () {
-            var _ref51 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee51() {
+            var _ref53 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee53() {
                 var productPromisesArray, toast, aProduct;
-                return regeneratorRuntime.wrap(function _callee51$(_context51) {
+                return regeneratorRuntime.wrap(function _callee53$(_context53) {
                     while (1) {
-                        switch (_context51.prev = _context51.next) {
+                        switch (_context53.prev = _context53.next) {
                             case 0:
                                 productPromisesArray = []; // holds the array for the promises used to load the product
 
@@ -4051,18 +4141,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     }));
                                 }
 
-                                return _context51.abrupt('return', Promise.all(productPromisesArray));
+                                return _context53.abrupt('return', Promise.all(productPromisesArray));
 
                             case 4:
                             case 'end':
-                                return _context51.stop();
+                                return _context53.stop();
                         }
                     }
-                }, _callee51, this);
+                }, _callee53, this);
             }));
 
             function loadProduct() {
-                return _ref51.apply(this, arguments);
+                return _ref53.apply(this, arguments);
             }
 
             return loadProduct;
@@ -4078,11 +4168,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         loadProductVariations: function () {
-            var _ref52 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee52() {
+            var _ref54 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee54() {
                 var productPromisesArray, productId;
-                return regeneratorRuntime.wrap(function _callee52$(_context52) {
+                return regeneratorRuntime.wrap(function _callee54$(_context54) {
                     while (1) {
-                        switch (_context52.prev = _context52.next) {
+                        switch (_context54.prev = _context54.next) {
                             case 0:
                                 productPromisesArray = []; // holds the array for the promises used to load the product
 
@@ -4136,18 +4226,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     });
                                 }));
 
-                                return _context52.abrupt('return', Promise.all(productPromisesArray));
+                                return _context54.abrupt('return', Promise.all(productPromisesArray));
 
                             case 5:
                             case 'end':
-                                return _context52.stop();
+                                return _context54.stop();
                         }
                     }
-                }, _callee52, this);
+                }, _callee54, this);
             }));
 
             function loadProductVariations() {
-                return _ref52.apply(this, arguments);
+                return _ref54.apply(this, arguments);
             }
 
             return loadProductVariations;
@@ -4162,11 +4252,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         displayProductDetails: function () {
-            var _ref53 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee53(productDetails) {
+            var _ref55 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee55(productDetails) {
                 var variationContent, index;
-                return regeneratorRuntime.wrap(function _callee53$(_context53) {
+                return regeneratorRuntime.wrap(function _callee55$(_context55) {
                     while (1) {
-                        switch (_context53.prev = _context53.next) {
+                        switch (_context55.prev = _context55.next) {
                             case 0:
                                 // update the product details image
                                 $('#product-details-page .e-card-image').css("background-image", 'url("' + productDetails.images[0].src + '")');
@@ -4255,14 +4345,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 17:
                             case 'end':
-                                return _context53.stop();
+                                return _context55.stop();
                         }
                     }
-                }, _callee53, this);
+                }, _callee55, this);
             }));
 
-            function displayProductDetails(_x28) {
-                return _ref53.apply(this, arguments);
+            function displayProductDetails(_x30) {
+                return _ref55.apply(this, arguments);
             }
 
             return displayProductDetails;
