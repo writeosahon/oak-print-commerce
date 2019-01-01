@@ -3274,7 +3274,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                     // LISTEN FOR WHEN A PRODUCT CARD IS CLICKED
                                     $thisPage.on("click", ".e-card", function (event) {
-                                        console.log("CLICKED CARD", this);
                                         // call the method to load the product details page based on the product item clicked
                                         utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.productItemClicked(window.parseInt($(event.currentTarget).attr('data-product')), window.parseInt($(event.currentTarget).attr('data-page')));
                                     });
@@ -3446,18 +3445,20 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             case 18:
                                 _context45.prev = 18;
 
+                                // hide the page preloader
+                                $('#products-page .page-preloader').css("display", "none");
                                 // enable pull-to-refresh widget till loading is done
                                 $('#products-page #products-page-pull-hook').removeAttr("disabled");
                                 // signal that loading is done
                                 doneCallBack();
                                 return _context45.finish(18);
 
-                            case 22:
+                            case 23:
                             case 'end':
                                 return _context45.stop();
                         }
                     }
-                }, _callee45, this, [[2, 10, 18, 22]]);
+                }, _callee45, this, [[2, 10, 18, 23]]);
             }));
 
             function pagePullHookAction() {

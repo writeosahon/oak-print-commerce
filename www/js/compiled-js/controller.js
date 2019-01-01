@@ -2591,7 +2591,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 // LISTEN FOR WHEN A PRODUCT CARD IS CLICKED
                 $thisPage.on("click", ".e-card", function(event){
-                    console.log("CLICKED CARD", this);
                     // call the method to load the product details page based on the product item clicked
                     utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.
                     productItemClicked(window.parseInt($(event.currentTarget).attr('data-product')),
@@ -2719,6 +2718,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 toast.show();
             }
             finally{
+                // hide the page preloader
+                $('#products-page .page-preloader').css("display", "none");
                 // enable pull-to-refresh widget till loading is done
                 $('#products-page #products-page-pull-hook').removeAttr("disabled");
                 // signal that loading is done
