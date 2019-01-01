@@ -3337,6 +3337,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             case 0:
                                 // flag that page infinite scroll should NOT be allowed
                                 event.target._allowInfinitePageScroll = false;
+                                $('#app-main-navigator').get(0).topPage.data = null;
 
                                 console.log("PAGE HIDE");
 
@@ -3348,7 +3349,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 // remove all the infinite load indicator from the bottom of the page (if any exist)
                                 $('#products-page .page__content .infinite-load-container').remove();
 
-                            case 5:
+                            case 6:
                             case 'end':
                                 return _context44.stop();
                         }

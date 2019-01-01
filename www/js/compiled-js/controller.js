@@ -2642,6 +2642,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         pageHide: async function(event){
             // flag that page infinite scroll should NOT be allowed
             event.target._allowInfinitePageScroll = false;
+            $('#app-main-navigator').get(0).topPage.data = null;
 
             console.log("PAGE HIDE");
 
