@@ -3273,10 +3273,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     });
 
                                     // LISTEN FOR WHEN A PRODUCT CARD IS CLICKED
-                                    $thisPage.on("click", ".e-card", function () {
+                                    $thisPage.on("click", ".e-card", function (event) {
                                         console.log("CLICKED CARD", this);
                                         // call the method to load the product details page based on the product item clicked
-                                        utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.productItemClicked(window.parseInt($(this).attr('data-product')), window.parseInt($(this).attr('data-page')));
+                                        utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.productItemClicked(window.parseInt($(event.currentTarget).attr('data-product')), window.parseInt($(event.currentTarget).attr('data-page')));
                                     });
 
                                     try {} catch (err) {}
