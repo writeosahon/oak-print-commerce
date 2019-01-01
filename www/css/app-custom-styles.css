@@ -31,7 +31,9 @@
 }
 
 /** STYLE TO PREVENT ALL EJ2 BUTTONS FROM HAVING A BACKGROUND COLOR WHEN FOCUSED **/
-.e-btn:focus, .e-btn:hover, .e-btn.e-outline:focus, .e-btn.e-outline:hover {
+.e-btn:focus, .e-btn:hover,
+.e-btn.e-outline:focus, .e-btn.e-outline:hover,
+.e-btn.e-flat:focus, .e-btn.e-flat:hover{
     background-color: transparent;
 }
 
