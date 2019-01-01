@@ -4073,15 +4073,17 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // get the pages stack from the app main navigator
             var pagesStackArray = $('#app-main-navigator').get(0).pages;
 
+            console.log("PAGE STACKS", pagesStackArray);
+
             if (pagesStackArray.length > 1) {
                 // there is more than 1 page in the page stack
                 // get the previous Page in stack before this one
-                var previousPage = pagesStackArray[pagesStackArray.length - 2];
+                var previousPage = $(pagesStackArray[pagesStackArray.length - 2]).get(0);
                 console.log("PREVIOUS PAGE", previousPage);
 
                 // check which page has is being displayed AFTER a page was popped
                 switch (previousPage.id) {
-                    case "products-page":
+                    case "app-main-page":
                         // the page that is being displayed is the "Products" page
                         // get back to the previous page on the app-main navigator stack
                         // and set the 'resetPageDisplay' to false

@@ -3204,6 +3204,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // get the pages stack from the app main navigator
             var pagesStackArray = $('#app-main-navigator').get(0).pages;
 
+            console.log("PAGE STACKS", pagesStackArray);
+
             if(pagesStackArray.length > 1){ // there is more than 1 page in the page stack
                 // get the previous Page in stack before this one
                 let previousPage = $(pagesStackArray[pagesStackArray.length - 2]).get(0);
