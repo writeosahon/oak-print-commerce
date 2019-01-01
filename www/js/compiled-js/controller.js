@@ -3063,6 +3063,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $('#product-details-page-pull-hook', $thisPage).get(0).onAction =
                     utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.pagePullHookAction;
 
+                // listen for when a page is popped from the app-main-navigator
+                $('#app-main-navigator').on("postpop", utopiasoftware[utopiasoftware_app_namespace].controller.
+                    productDetailsPageViewModel.appMainNavigatorPostPopListener);
+
                 // register listener for the pull-to-refresh widget
                 $('#product-details-page-pull-hook', $thisPage).on("changestate", function(event){
 
@@ -3180,7 +3184,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is destroyed
          */
         pageDestroy: function(){
+            // destroy the product variations array
+            utopiasoftware[utopiasoftware_app_namespace].controller.
+                productDetailsPageViewModel.productVariationsArray = null;
 
+            // remove listener for when a page is popped from the app-main-navigator
+            $('#app-main-navigator').off("postpop", utopiasoftware[utopiasoftware_app_namespace].controller.
+                productDetailsPageViewModel.appMainNavigatorPostPopListener);
         },
 
         /**
@@ -3191,6 +3201,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // get back to the previous page on the app-main navigator stack
             $('#app-main-navigator').get(0).popPage();
         },
+
+        /**
+         * method is used to listen for after a page has been popped from the app's main navigator
+         * @param event
+         */
+        appMainNavigatorPostPopListener(event){},
 
         /**
          * method is triggered when the pull-hook on the page is active

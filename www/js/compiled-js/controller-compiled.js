@@ -3895,6 +3895,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // add method to handle the loading action of the pull-to-refresh widget
                                     $('#product-details-page-pull-hook', $thisPage).get(0).onAction = utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.pagePullHookAction;
 
+                                    // listen for when a page is popped from the app-main-navigator
+                                    $('#app-main-navigator').on("postpop", utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.appMainNavigatorPostPopListener);
+
                                     // register listener for the pull-to-refresh widget
                                     $('#product-details-page-pull-hook', $thisPage).on("changestate", function (event) {
 
@@ -3917,7 +3920,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         }
                                     });
 
-                                    _context52.prev = 6;
+                                    _context52.prev = 7;
 
                                     // create the "Pick Quantity" button
                                     new ej.inputs.NumericTextBox({
@@ -3965,21 +3968,21 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // load product variations asynchronously without waiting for the response
                                     utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.loadProductVariations();
                                     // load product details
-                                    _context52.next = 15;
+                                    _context52.next = 16;
                                     return utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.loadProduct();
 
-                                case 15:
+                                case 16:
                                     productDetailsArray = _context52.sent;
-                                    _context52.next = 18;
+                                    _context52.next = 19;
                                     return utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.displayProductDetails(productDetailsArray[0]);
 
-                                case 18:
-                                    _context52.next = 29;
+                                case 19:
+                                    _context52.next = 30;
                                     break;
 
-                                case 20:
-                                    _context52.prev = 20;
-                                    _context52.t0 = _context52['catch'](6);
+                                case 21:
+                                    _context52.prev = 21;
+                                    _context52.t0 = _context52['catch'](7);
 
                                     console.log("PRODUCT DETAILS PAGE", _context52.t0);
                                     // hide all previously displayed ej2 toast
@@ -3992,19 +3995,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     toast.dataBind();
                                     toast.show();
 
-                                case 29:
-                                    _context52.prev = 29;
+                                case 30:
+                                    _context52.prev = 30;
 
                                     // hide the preloader
                                     $('#product-details-page .page-preloader').css("display", "none");
-                                    return _context52.finish(29);
+                                    return _context52.finish(30);
 
-                                case 32:
+                                case 33:
                                 case 'end':
                                     return _context52.stop();
                             }
                         }
-                    }, _callee52, this, [[6, 20, 29, 32]]);
+                    }, _callee52, this, [[7, 21, 30, 33]]);
                 }));
 
                 return function loadPageOnAppReady() {
@@ -4051,7 +4054,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         /**
          * method is triggered when page is destroyed
          */
-        pageDestroy: function pageDestroy() {},
+        pageDestroy: function pageDestroy() {
+            // destroy the product variations array
+            utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.productVariationsArray = null;
+
+            // remove listener for when a page is popped from the app-main-navigator
+            $('#app-main-navigator').off("postpop", utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.appMainNavigatorPostPopListener);
+        },
 
         /**
          * method is triggered when the device back button is clicked OR a similar action is triggered
@@ -4061,6 +4070,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // get back to the previous page on the app-main navigator stack
             $('#app-main-navigator').get(0).popPage();
         },
+
+
+        /**
+         * method is used to listen for after a page has been popped from the app's main navigator
+         * @param event
+         */
+        appMainNavigatorPostPopListener: function appMainNavigatorPostPopListener(event) {},
 
 
         /**
