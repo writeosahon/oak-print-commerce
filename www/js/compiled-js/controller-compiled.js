@@ -3306,12 +3306,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // flag that page infinite scroll should NOT be allowed
             event.target._allowInfinitePageScroll = false;
             $('#app-main-page ons-toolbar div.title-bar').html("Products"); // change the title of the screen
-            // show the preloader
-            $('#products-page .page-preloader').css("display", "block");
-            // empty the content of the page
-            $('#products-page #products-contents-container').html('');
-            // hide the page scroll fab
-            $('#products-page #products-page-scroll-top-fab').css({ "display": "none" });
+            // check if the page content should be reset
+            if ($('#app-main-navigator').get(0).topPage.data.resetPageDisplay !== false) {
+                // show the preloader
+                $('#products-page .page-preloader').css("display", "block");
+                // empty the content of the page
+                $('#products-page #products-contents-container').html('');
+                // hide the page scroll fab
+                $('#products-page #products-page-scroll-top-fab').css({ "display": "none" });
+            }
 
             console.log("PAGE SHOW");
 
@@ -4067,16 +4070,64 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         backButtonClicked: function backButtonClicked() {
 
-            // get back to the previous page on the app-main navigator stack
-            $('#app-main-navigator').get(0).popPage();
+            // get the pages stack from the app main navigator
+            var pagesStackArray = $('#app-main-navigator').get(0).pages;
+
+            if (pagesStackArray.length > 1) {
+                // there is more than 1 page in the page stack
+                // get the previous Page in stack before this one
+                var previousPage = pagesStackArray[pagesStackArray.length - 2];
+                console.log("PREVIOUS PAGE", previousPage);
+
+                // check which page has is being displayed AFTER a page was popped
+                switch (previousPage.id) {
+                    case "products-page":
+                        // the page that is being displayed is the "Products" page
+                        // get back to the previous page on the app-main navigator stack
+                        // and set the 'resetPageDisplay' to false
+                        if ($('#app-main-tabbar').get(0).getActiveTabIndex() === 4) {
+                            $('#app-main-navigator').get(0).popPage({ data: { resetPageDisplay: false } });
+                        } else {
+                            // get back to the previous page on the app-main navigator stack
+                            $('#app-main-navigator').get(0).popPage();
+                        }
+                        break;
+                    default:
+                        // get back to the previous page on the app-main navigator stack
+                        $('#app-main-navigator').get(0).popPage();
+                        break;
+                }
+            } else {// there is only 1 page in the stack
+
+            }
         },
 
 
         /**
-         * method is used to listen for after a page has been popped from the app's main navigator
+         * method is used to listen for after a page has been
+         * popped from the app's main navigator
+         *
          * @param event
          */
-        appMainNavigatorPostPopListener: function appMainNavigatorPostPopListener(event) {},
+        appMainNavigatorPostPopListener: function () {
+            var _ref54 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee54(event) {
+                return regeneratorRuntime.wrap(function _callee54$(_context54) {
+                    while (1) {
+                        switch (_context54.prev = _context54.next) {
+                            case 0:
+                            case 'end':
+                                return _context54.stop();
+                        }
+                    }
+                }, _callee54, this);
+            }));
+
+            function appMainNavigatorPostPopListener(_x31) {
+                return _ref54.apply(this, arguments);
+            }
+
+            return appMainNavigatorPostPopListener;
+        }(),
 
 
         /**
@@ -4086,40 +4137,40 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         pagePullHookAction: function () {
-            var _ref54 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee54() {
+            var _ref55 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee55() {
                 var doneCallBack = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : function () {};
                 var productDetailsArray, toast;
-                return regeneratorRuntime.wrap(function _callee54$(_context54) {
+                return regeneratorRuntime.wrap(function _callee55$(_context55) {
                     while (1) {
-                        switch (_context54.prev = _context54.next) {
+                        switch (_context55.prev = _context55.next) {
                             case 0:
                                 // disable pull-to-refresh widget till loading is done
                                 $('#product-details-page #product-details-page-pull-hook').attr("disabled", true);
                                 // hide all previously displayed ej2 toast
                                 $('.page-toast').get(0).ej2_instances[0].hide('All');
 
-                                _context54.prev = 2;
+                                _context55.prev = 2;
 
                                 // load product variations asynchronously without waiting for the response
                                 utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.loadProductVariations();
                                 // load product details
-                                _context54.next = 6;
+                                _context55.next = 6;
                                 return utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.loadProduct();
 
                             case 6:
-                                productDetailsArray = _context54.sent;
-                                _context54.next = 9;
+                                productDetailsArray = _context55.sent;
+                                _context55.next = 9;
                                 return utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.displayProductDetails(productDetailsArray[0]);
 
                             case 9:
-                                _context54.next = 19;
+                                _context55.next = 19;
                                 break;
 
                             case 11:
-                                _context54.prev = 11;
-                                _context54.t0 = _context54['catch'](2);
+                                _context55.prev = 11;
+                                _context55.t0 = _context55['catch'](2);
                                 // an error occurred
-                                console.log("PROJECT DETAILS REFRESH ERROR", _context54.t0);
+                                console.log("PROJECT DETAILS REFRESH ERROR", _context55.t0);
                                 // display toast to show that error
                                 toast = $('.page-toast').get(0).ej2_instances[0];
 
@@ -4129,24 +4180,24 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 toast.show();
 
                             case 19:
-                                _context54.prev = 19;
+                                _context55.prev = 19;
 
                                 // enable pull-to-refresh widget till loading is done
                                 $('#product-details-page #product-details-page-pull-hook').removeAttr("disabled");
                                 // signal that loading is done
                                 doneCallBack();
-                                return _context54.finish(19);
+                                return _context55.finish(19);
 
                             case 23:
                             case 'end':
-                                return _context54.stop();
+                                return _context55.stop();
                         }
                     }
-                }, _callee54, this, [[2, 11, 19, 23]]);
+                }, _callee55, this, [[2, 11, 19, 23]]);
             }));
 
             function pagePullHookAction() {
-                return _ref54.apply(this, arguments);
+                return _ref55.apply(this, arguments);
             }
 
             return pagePullHookAction;
@@ -4163,11 +4214,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         loadProduct: function () {
-            var _ref55 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee55() {
+            var _ref56 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee56() {
                 var productPromisesArray, toast, aProduct;
-                return regeneratorRuntime.wrap(function _callee55$(_context55) {
+                return regeneratorRuntime.wrap(function _callee56$(_context56) {
                     while (1) {
-                        switch (_context55.prev = _context55.next) {
+                        switch (_context56.prev = _context56.next) {
                             case 0:
                                 productPromisesArray = []; // holds the array for the promises used to load the product
 
@@ -4226,18 +4277,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     }));
                                 }
 
-                                return _context55.abrupt('return', Promise.all(productPromisesArray));
+                                return _context56.abrupt('return', Promise.all(productPromisesArray));
 
                             case 4:
                             case 'end':
-                                return _context55.stop();
+                                return _context56.stop();
                         }
                     }
-                }, _callee55, this);
+                }, _callee56, this);
             }));
 
             function loadProduct() {
-                return _ref55.apply(this, arguments);
+                return _ref56.apply(this, arguments);
             }
 
             return loadProduct;
@@ -4253,11 +4304,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         loadProductVariations: function () {
-            var _ref56 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee56() {
+            var _ref57 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee57() {
                 var productPromisesArray, productId;
-                return regeneratorRuntime.wrap(function _callee56$(_context56) {
+                return regeneratorRuntime.wrap(function _callee57$(_context57) {
                     while (1) {
-                        switch (_context56.prev = _context56.next) {
+                        switch (_context57.prev = _context57.next) {
                             case 0:
                                 productPromisesArray = []; // holds the array for the promises used to load the product
 
@@ -4311,18 +4362,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     });
                                 }));
 
-                                return _context56.abrupt('return', Promise.all(productPromisesArray));
+                                return _context57.abrupt('return', Promise.all(productPromisesArray));
 
                             case 5:
                             case 'end':
-                                return _context56.stop();
+                                return _context57.stop();
                         }
                     }
-                }, _callee56, this);
+                }, _callee57, this);
             }));
 
             function loadProductVariations() {
-                return _ref56.apply(this, arguments);
+                return _ref57.apply(this, arguments);
             }
 
             return loadProductVariations;
@@ -4337,11 +4388,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         displayProductDetails: function () {
-            var _ref57 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee57(productDetails) {
+            var _ref58 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee58(productDetails) {
                 var variationContent, index;
-                return regeneratorRuntime.wrap(function _callee57$(_context57) {
+                return regeneratorRuntime.wrap(function _callee58$(_context58) {
                     while (1) {
-                        switch (_context57.prev = _context57.next) {
+                        switch (_context58.prev = _context58.next) {
                             case 0:
                                 // update the product details image
                                 $('#product-details-page .e-card-image').css("background-image", 'url("' + productDetails.images[0].src + '")');
@@ -4430,14 +4481,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             case 17:
                             case 'end':
-                                return _context57.stop();
+                                return _context58.stop();
                         }
                     }
-                }, _callee57, this);
+                }, _callee58, this);
             }));
 
-            function displayProductDetails(_x32) {
-                return _ref57.apply(this, arguments);
+            function displayProductDetails(_x33) {
+                return _ref58.apply(this, arguments);
             }
 
             return displayProductDetails;

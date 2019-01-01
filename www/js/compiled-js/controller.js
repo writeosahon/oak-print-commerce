@@ -2612,12 +2612,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // flag that page infinite scroll should NOT be allowed
             event.target._allowInfinitePageScroll = false;
             $('#app-main-page ons-toolbar div.title-bar').html("Products"); // change the title of the screen
-            // show the preloader
-            $('#products-page .page-preloader').css("display", "block");
-            // empty the content of the page
-            $('#products-page #products-contents-container').html('');
-            // hide the page scroll fab
-            $('#products-page #products-page-scroll-top-fab').css({"display": "none"});
+            // check if the page content should be reset
+            if($('#app-main-navigator').get(0).topPage.data.resetPageDisplay !== false){
+                // show the preloader
+                $('#products-page .page-preloader').css("display", "block");
+                // empty the content of the page
+                $('#products-page #products-contents-container').html('');
+                // hide the page scroll fab
+                $('#products-page #products-page-scroll-top-fab').css({"display": "none"});
+            }
 
             console.log("PAGE SHOW");
 
@@ -3198,15 +3201,47 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         backButtonClicked(){
 
-            // get back to the previous page on the app-main navigator stack
-            $('#app-main-navigator').get(0).popPage();
+            // get the pages stack from the app main navigator
+            var pagesStackArray = $('#app-main-navigator').get(0).pages;
+
+            if(pagesStackArray.length > 1){ // there is more than 1 page in the page stack
+                // get the previous Page in stack before this one
+                let previousPage = pagesStackArray[pagesStackArray.length - 2];
+                console.log("PREVIOUS PAGE", previousPage);
+
+                // check which page has is being displayed AFTER a page was popped
+                switch(previousPage.id){
+                    case "products-page": // the page that is being displayed is the "Products" page
+                        // get back to the previous page on the app-main navigator stack
+                        // and set the 'resetPageDisplay' to false
+                        if($('#app-main-tabbar').get(0).getActiveTabIndex() === 4){
+                            $('#app-main-navigator').get(0).popPage({data: {resetPageDisplay: false}});
+                        }
+                        else{
+                            // get back to the previous page on the app-main navigator stack
+                            $('#app-main-navigator').get(0).popPage();
+                        }
+                        break;
+                    default:
+                        // get back to the previous page on the app-main navigator stack
+                        $('#app-main-navigator').get(0).popPage();
+                        break
+                }
+            }
+            else{ // there is only 1 page in the stack
+
+            }
         },
 
         /**
-         * method is used to listen for after a page has been popped from the app's main navigator
+         * method is used to listen for after a page has been
+         * popped from the app's main navigator
+         *
          * @param event
          */
-        appMainNavigatorPostPopListener(event){},
+        async appMainNavigatorPostPopListener(event){
+
+        },
 
         /**
          * method is triggered when the pull-hook on the page is active
