@@ -4093,6 +4093,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             // get back to the previous page on the app-main navigator stack
                             // and set the 'resetPageDisplay' to false
                             $('#app-main-navigator').get(0)._resetPageDisplay = false;
+                            $('#app-main-navigator').get(0).popPage();
                         } else {
                             // get back to the previous page on the app-main navigator stack
                             $('#app-main-navigator').get(0).popPage();
