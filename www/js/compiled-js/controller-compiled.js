@@ -3307,7 +3307,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             event.target._allowInfinitePageScroll = false;
             $('#app-main-page ons-toolbar div.title-bar').html("Products"); // change the title of the screen
             // check if the page content should be reset
-            if ($('#app-main-navigator').get(0).topPage.data && $('#app-main-navigator').get(0).topPage.data.resetPageDisplay !== false) {
+            if ($('#app-main-navigator').get(0)._resetPageDisplay !== false) {
                 // show the preloader
                 $('#products-page .page-preloader').css("display", "block");
                 // empty the content of the page
@@ -3337,7 +3337,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             case 0:
                                 // flag that page infinite scroll should NOT be allowed
                                 event.target._allowInfinitePageScroll = false;
-                                $('#app-main-navigator').get(0).topPage.data = null;
+                                delete $('#app-main-navigator').get(0)._resetPageDisplay;
 
                                 console.log("PAGE HIDE");
 
@@ -4085,11 +4085,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // check which page has is being displayed AFTER a page was popped
                 switch (previousPage.id) {
                     case "app-main-page":
-                        // the page that is being displayed is the "Products" page
-                        // get back to the previous page on the app-main navigator stack
-                        // and set the 'resetPageDisplay' to false
+                        // the page that is being displayed is the "App-Main" page
+                        // check which page on the app-main tab is visible
                         if ($('#app-main-tabbar').get(0).getActiveTabIndex() === 4) {
-                            $('#app-main-navigator').get(0).popPage({ data: { resetPageDisplay: false } });
+                            // the "Products" page is visible
+                            // get back to the previous page on the app-main navigator stack
+                            // and set the 'resetPageDisplay' to false
+                            $('#app-main-navigator').get(0)._resetPageDisplay = false;
                         } else {
                             // get back to the previous page on the app-main navigator stack
                             $('#app-main-navigator').get(0).popPage();
