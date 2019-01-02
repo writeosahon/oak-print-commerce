@@ -3221,6 +3221,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             // get back to the previous page on the app-main navigator stack
                             // and set the 'resetPageDisplay' to false
                             $('#app-main-navigator').get(0)._resetPageDisplay = false;
+                            // allow infinite page scroll to be triggered on the "Products" page
+                            $('#products-page').get(0)._allowInfinitePageScroll = true;
                             $('#app-main-navigator').get(0).popPage();
                         }
                         else{
