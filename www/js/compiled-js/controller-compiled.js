@@ -635,7 +635,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             $('#home-page #home-latest-design-block').css("opacity", "1"); // show the "Products" segment
                                             resolve(); // resolve the parent promise
                                         }).catch(function (err) {
-                                            console.log("LOAD PRODUCT", err);
+
                                             $('#home-page #home-latest-design-block').css("opacity", "1"); // show the "Products" segment
                                             reject(); // reject the parent promise
                                         });
@@ -678,7 +678,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             }
                                             resolve(); // resolve the parent promise
                                         }).catch(function (err) {
-                                            console.log("LOAD PRODUCT", err);
+
                                             reject(); // reject the parent promise
                                         });
                                     }));
@@ -724,7 +724,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             }
                                             resolve(); // resolve the parent promise
                                         }).catch(function (err) {
-                                            console.log("LOAD PRODUCT", err);
+
                                             reject(); // reject the parent promise
                                         });
                                     }));
@@ -756,7 +756,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                 $('#home-page #home-latest-design-block').css("opacity", "1"); // show the "Products" segment
                                                 resolve(); // resolve the parent promise
                                             }).catch(function (err) {
-                                                console.log("LOAD PRODUCT", err);
+
                                                 $('#home-page #home-latest-design-block').css("opacity", "1"); // show the "Products" segment
                                                 reject(); // reject the parent promise
                                             });
@@ -785,7 +785,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                 }
                                                 resolve(); // resolve the parent promise
                                             }).catch(function (err) {
-                                                console.log("LOAD PRODUCT", err);
+
                                                 reject(); // reject the parent promise
                                             });
                                         }));
@@ -817,7 +817,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                 }
                                                 resolve(); // resolve the parent promise
                                             }).catch(function (err) {
-                                                console.log("LOAD PRODUCT", err);
+
                                                 reject(); // reject the parent promise
                                             });
                                         }));
@@ -873,14 +873,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                     return utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.displayPageContent(productArray[0]);
 
                                                 case 8:
-                                                    _context6.next = 19;
+                                                    _context6.next = 18;
                                                     break;
 
                                                 case 10:
                                                     _context6.prev = 10;
                                                     _context6.t0 = _context6['catch'](0);
 
-                                                    console.log("PRODUCTS PAGE", _context6.t0);
+
                                                     // hide all previously displayed ej2 toast
                                                     $('.page-toast').get(0).ej2_instances[0].hide('All');
                                                     // display toast to show that an error
@@ -891,19 +891,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                     toast.dataBind();
                                                     toast.show();
 
-                                                case 19:
-                                                    _context6.prev = 19;
+                                                case 18:
+                                                    _context6.prev = 18;
 
                                                     // hide the preloader for the products page
                                                     $('#products-page .page-preloader').css("display", "none");
-                                                    return _context6.finish(19);
+                                                    return _context6.finish(18);
 
-                                                case 22:
+                                                case 21:
                                                 case 'end':
                                                     return _context6.stop();
                                             }
                                         }
-                                    }, _callee6, this, [[0, 10, 19, 22]]);
+                                    }, _callee6, this, [[0, 10, 18, 21]]);
                                 })), 0);
 
                             case 1:
@@ -954,14 +954,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                     return utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.displayPageContent(productArray[0]);
 
                                                 case 8:
-                                                    _context8.next = 19;
+                                                    _context8.next = 18;
                                                     break;
 
                                                 case 10:
                                                     _context8.prev = 10;
                                                     _context8.t0 = _context8['catch'](0);
 
-                                                    console.log("PRODUCTS PAGE", _context8.t0);
+
                                                     // hide all previously displayed ej2 toast
                                                     $('.page-toast').get(0).ej2_instances[0].hide('All');
                                                     // display toast to show that an error
@@ -972,19 +972,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                     toast.dataBind();
                                                     toast.show();
 
-                                                case 19:
-                                                    _context8.prev = 19;
+                                                case 18:
+                                                    _context8.prev = 18;
 
                                                     // hide the preloader for the products page
                                                     $('#products-page .page-preloader').css("display", "none");
-                                                    return _context8.finish(19);
+                                                    return _context8.finish(18);
 
-                                                case 22:
+                                                case 21:
                                                 case 'end':
                                                     return _context8.stop();
                                             }
                                         }
-                                    }, _callee8, this, [[0, 10, 19, 22]]);
+                                    }, _callee8, this, [[0, 10, 18, 21]]);
                                 })), 0);
 
                             case 1:
@@ -1055,16 +1055,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                                     // display the products details page using the selected product
                                                     $('#app-main-navigator').get(0).pushPage("product-details-page.html", { animation: "lift", data: { product: productItemsArray[productIndex] } });
-                                                    _context10.next = 19;
+                                                    _context10.next = 18;
                                                     break;
 
                                                 case 16:
                                                     _context10.prev = 16;
                                                     _context10.t1 = _context10['catch'](1);
 
-                                                    console.log("PRODUCT ITEM CLICKED", _context10.t1);
-
-                                                case 19:
+                                                case 18:
                                                 case 'end':
                                                     return _context10.stop();
                                             }
@@ -1161,7 +1159,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                     // get the height of the view content container
                                     utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.viewContentHeight = Math.floor($('#categories-page .page__content').height());
-                                    console.log("CONTENT HEIGHT", utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.viewContentHeight);
 
                                     // listen for the scroll event on the page
                                     $('#categories-page .page__content').on("scroll", function () {
@@ -1169,7 +1166,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         window.setTimeout(function () {
                                             // get the scrollTop position of the view content
                                             var scrollTop = Math.floor($('#categories-page .page__content').scrollTop());
-                                            console.log("SCROLL TOP", scrollTop);
+
                                             // get the percentage of scroll that has taken place from the top position
                                             var percentageScroll = scrollTop / utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.viewContentHeight * 100;
                                             if (percentageScroll >= 50) {
@@ -1208,14 +1205,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                             return utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.displayPageContent(productArray[0]);
 
                                                         case 8:
-                                                            _context12.next = 19;
+                                                            _context12.next = 18;
                                                             break;
 
                                                         case 10:
                                                             _context12.prev = 10;
                                                             _context12.t0 = _context12['catch'](0);
 
-                                                            console.log("PRODUCTS PAGE", _context12.t0);
+
                                                             // hide all previously displayed ej2 toast
                                                             $('.page-toast').get(0).ej2_instances[0].hide('All');
                                                             // display toast to show that an error
@@ -1226,40 +1223,40 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                             toast.dataBind();
                                                             toast.show();
 
-                                                        case 19:
-                                                            _context12.prev = 19;
+                                                        case 18:
+                                                            _context12.prev = 18;
 
                                                             // hide the preloader for the products page
                                                             $('#products-page .page-preloader').css("display", "none");
-                                                            return _context12.finish(19);
+                                                            return _context12.finish(18);
 
-                                                        case 22:
+                                                        case 21:
                                                         case 'end':
                                                             return _context12.stop();
                                                     }
                                                 }
-                                            }, _callee12, this, [[0, 10, 19, 22]]);
+                                            }, _callee12, this, [[0, 10, 18, 21]]);
                                         })), 0);
                                     });
 
-                                    _context13.prev = 10;
-                                    _context13.next = 13;
+                                    _context13.prev = 9;
+                                    _context13.next = 12;
                                     return utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.loadCategories();
 
-                                case 13:
+                                case 12:
                                     categoryArray = _context13.sent;
-                                    _context13.next = 16;
+                                    _context13.next = 15;
                                     return utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.displayPageContent(categoryArray[0]);
 
-                                case 16:
-                                    _context13.next = 27;
+                                case 15:
+                                    _context13.next = 25;
                                     break;
 
-                                case 18:
-                                    _context13.prev = 18;
-                                    _context13.t0 = _context13['catch'](10);
+                                case 17:
+                                    _context13.prev = 17;
+                                    _context13.t0 = _context13['catch'](9);
 
-                                    console.log("CATEGORIES PAGE", _context13.t0);
+
                                     // hide all previously displayed ej2 toast
                                     $('.page-toast').get(0).ej2_instances[0].hide('All');
                                     // display toast to show that an error
@@ -1270,19 +1267,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     toast.dataBind();
                                     toast.show();
 
-                                case 27:
-                                    _context13.prev = 27;
+                                case 25:
+                                    _context13.prev = 25;
 
                                     // hide the preloader
                                     $('#categories-page .page-preloader').css("display", "none");
-                                    return _context13.finish(27);
+                                    return _context13.finish(25);
 
-                                case 30:
+                                case 28:
                                 case 'end':
                                     return _context13.stop();
                             }
                         }
-                    }, _callee13, this, [[10, 18, 27, 30]]);
+                    }, _callee13, this, [[9, 17, 25, 28]]);
                 }));
 
                 return function loadPageOnAppReady() {
@@ -1505,7 +1502,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             resolve(categoriesArray); // resolve the parent promise with the data gotten from the server
                                         }).catch(function (err) {
                                             // an error occurred
-                                            console.log("LOAD CATEGORY", err);
+
                                             reject(err); // reject the parent promise with the error
                                         });
                                     }));
@@ -1528,7 +1525,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                 resolve(cachedCategoriesData.categories); // resolve the parent promise with the cached categories data
                                             }).catch(function (err) {
                                                 // an error occurred
-                                                console.log("LOAD CATEGORY", err);
+
                                                 reject(err); // reject the parent promise with the error
                                             });
                                         }));
@@ -1720,7 +1717,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                 this._allowRemoteSearch = false; // set that remote search is NOT allowed
                                                 // hide the popover
                                                 $('#search-page-search-input-popover').get(0).hide();
-                                                console.log("AUTOCOMPLETE BLUR");
                                             },
                                             change: function change() {
                                                 // track when the component's value has changed
@@ -1769,14 +1765,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                                     return utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.displayPageContent(searchResultsArray[0]);
 
                                                                 case 7:
-                                                                    _context19.next = 21;
+                                                                    _context19.next = 20;
                                                                     break;
 
                                                                 case 9:
                                                                     _context19.prev = 9;
                                                                     _context19.t0 = _context19['catch'](1);
 
-                                                                    console.log("PRODUCT SEARCH", _context19.t0);
+
                                                                     // remove the focus from the search autocomplete component
                                                                     $('#search-page #search-page-input').get(0).ej2_instances[0].focusOut();
                                                                     // hide all previously displayed ej2 toast
@@ -1791,14 +1787,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                                     toast.dataBind();
                                                                     toast.show();
 
-                                                                case 21:
+                                                                case 20:
                                                                 case 'end':
                                                                     return _context19.stop();
                                                             }
                                                         }
                                                     }, _callee19, this, [[1, 9]]);
                                                 })), 0);
-                                                console.log("AUTOCOMPLETE CHANGED");
                                             }
                                         }).appendTo('#search-page-input');
                                     } catch (err) {}
@@ -1937,16 +1932,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 }
                                 // attach the displayContent to the list
                                 $('#search-page #search-list').html(displayContent);
-                                _context22.next = 12;
+                                _context22.next = 11;
                                 break;
 
                             case 9:
                                 _context22.prev = 9;
                                 _context22.t0 = _context22['catch'](0);
 
-                                console.log("DISPLAY RECENT SEARCHES", _context22.t0);
-
-                            case 12:
+                            case 11:
                             case 'end':
                                 return _context22.stop();
                         }
@@ -2006,16 +1999,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 return utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.displayRecentSearches();
 
                             case 16:
-                                _context23.next = 21;
+                                _context23.next = 20;
                                 break;
 
                             case 18:
                                 _context23.prev = 18;
                                 _context23.t1 = _context23['catch'](9);
 
-                                console.log("SAVE RECENT SEARCH", _context23.t1);
-
-                            case 21:
+                            case 20:
                             case 'end':
                                 return _context23.stop();
                         }
@@ -2090,16 +2081,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                     return utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.displayRecentSearches();
 
                                                 case 18:
-                                                    _context24.next = 23;
+                                                    _context24.next = 22;
                                                     break;
 
                                                 case 20:
                                                     _context24.prev = 20;
                                                     _context24.t1 = _context24['catch'](9);
 
-                                                    console.log("REMOVE RECENT SEARCH", _context24.t1);
-
-                                                case 23:
+                                                case 22:
                                                 case 'end':
                                                     return _context24.stop();
                                             }
@@ -2154,16 +2143,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                                     // display the products details page using the selected product
                                                     $('#app-main-navigator').get(0).pushPage("product-details-page.html", { animation: "lift", data: { product: recentSearchesResultArray[productIndex] } });
-                                                    _context26.next = 10;
+                                                    _context26.next = 9;
                                                     break;
 
                                                 case 7:
                                                     _context26.prev = 7;
                                                     _context26.t0 = _context26['catch'](0);
 
-                                                    console.log("RECENT SEARCHES CLICKED", _context26.t0);
-
-                                                case 10:
+                                                case 9:
                                                 case 'end':
                                                     return _context26.stop();
                                             }
@@ -2290,7 +2277,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             resolve(productsArray); // resolve the parent promise with the data gotten from the server
                                         }).catch(function (err) {
                                             // an error occurred
-                                            console.log("LOAD SEARCH PRODUCTS", err);
+
                                             reject(err); // reject the parent promise with the error
                                         });
                                     }));
@@ -2413,16 +2400,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                     // update the value of the search autocomplete input to that which the user clicked on from the popover
                                                     $('#search-page #search-page-input').val(selectedProduct.name);
 
-                                                    _context31.next = 11;
+                                                    _context31.next = 10;
                                                     break;
 
                                                 case 8:
                                                     _context31.prev = 8;
                                                     _context31.t0 = _context31['catch'](0);
 
-                                                    console.log("SEARCH AUTOCOMPLETE", _context31.t0);
-
-                                                case 11:
+                                                case 10:
                                                 case 'end':
                                                     return _context31.stop();
                                             }
@@ -2480,14 +2465,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                     return utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.displayPageContent(productArray[0]);
 
                                                 case 8:
-                                                    _context33.next = 19;
+                                                    _context33.next = 18;
                                                     break;
 
                                                 case 10:
                                                     _context33.prev = 10;
                                                     _context33.t0 = _context33['catch'](0);
 
-                                                    console.log("PRODUCTS PAGE", _context33.t0);
+
                                                     // hide all previously displayed ej2 toast
                                                     $('.page-toast').get(0).ej2_instances[0].hide('All');
                                                     // display toast to show that an error
@@ -2498,19 +2483,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                     toast.dataBind();
                                                     toast.show();
 
-                                                case 19:
-                                                    _context33.prev = 19;
+                                                case 18:
+                                                    _context33.prev = 18;
 
                                                     // hide the preloader for the products page
                                                     $('#products-page .page-preloader').css("display", "none");
-                                                    return _context33.finish(19);
+                                                    return _context33.finish(18);
 
-                                                case 22:
+                                                case 21:
                                                 case 'end':
                                                     return _context33.stop();
                                             }
                                         }
-                                    }, _callee33, this, [[0, 10, 19, 22]]);
+                                    }, _callee33, this, [[0, 10, 18, 21]]);
                                 })), 0);
 
                             case 1:
@@ -2730,7 +2715,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                         // place function execution in the event queue to be executed ASAP
                                         window.setTimeout(function () {
-                                            console.log("CAROUSEL SCROLL");
+
                                             switch ($('#login-page #login-carousel').get(0).getActiveIndex()) {// get the active carousel item
                                                 case 0:
                                                     // first carousel item is active, so adjust the input elements on the login form
@@ -3239,7 +3224,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                     // get the height of the view content container
                                     utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.viewContentHeight = Math.floor($('#products-page .page__content').height());
-                                    console.log("CONTENT HEIGHT", utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.viewContentHeight);
 
                                     // listen for the scroll event on the page
                                     $('#products-page .page__content').on("scroll", function () {
@@ -3247,7 +3231,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         window.setTimeout(function () {
                                             // get the scrollTop position of the view content
                                             var scrollTop = Math.floor($('#products-page .page__content').scrollTop());
-                                            console.log("SCROLL TOP", scrollTop);
+
                                             // get the percentage of scroll that has taken place from the top position
                                             var percentageScroll = scrollTop / utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.viewContentHeight * 100;
                                             if (percentageScroll >= 50) {
@@ -3269,7 +3253,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         }
 
                                         utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.lastActiveNavTab = event.originalEvent.index;
-                                        console.log("TAB CHANGED", utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.lastActiveNavTab);
                                     });
 
                                     // LISTEN FOR WHEN A PRODUCT CARD IS CLICKED
@@ -3280,7 +3263,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                     try {} catch (err) {}
 
-                                case 13:
+                                case 12:
                                 case 'end':
                                     return _context43.stop();
                             }
@@ -3317,8 +3300,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $('#products-page #products-page-scroll-top-fab').css({ "display": "none" });
             }
 
-            console.log("PAGE SHOW");
-
             window.SoftInputMode.set('adjustPan');
 
             // listen for when the device does not have Internet connection
@@ -3340,8 +3321,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 event.target._allowInfinitePageScroll = false;
                                 delete $('#app-main-navigator').get(0)._resetPageDisplay;
 
-                                console.log("PAGE HIDE");
-
                                 // remove listener for when the device does not have Internet connection
                                 document.removeEventListener("offline", utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.deviceOfflineListener, false);
                                 // remove listener for when the device has Internet connection
@@ -3350,7 +3329,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 // remove all the infinite load indicator from the bottom of the page (if any exist)
                                 $('#products-page .page__content .infinite-load-container').remove();
 
-                            case 6:
+                            case 5:
                             case 'end':
                                 return _context44.stop();
                         }
@@ -3431,14 +3410,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 return utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.displayPageContent(productArray[0]);
 
                             case 8:
-                                _context45.next = 18;
+                                _context45.next = 17;
                                 break;
 
                             case 10:
                                 _context45.prev = 10;
                                 _context45.t0 = _context45['catch'](2);
                                 // an error occurred
-                                console.log("PROJECT REFRESH ERROR", _context45.t0);
+
                                 // display toast to show that error
                                 toast = $('.page-toast').get(0).ej2_instances[0];
 
@@ -3447,8 +3426,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 toast.dataBind();
                                 toast.show();
 
-                            case 18:
-                                _context45.prev = 18;
+                            case 17:
+                                _context45.prev = 17;
 
                                 // hide the page preloader
                                 $('#products-page .page-preloader').css("display", "none");
@@ -3456,14 +3435,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 $('#products-page #products-page-pull-hook').removeAttr("disabled");
                                 // signal that loading is done
                                 doneCallBack();
-                                return _context45.finish(18);
+                                return _context45.finish(17);
 
-                            case 23:
+                            case 22:
                             case 'end':
                                 return _context45.stop();
                         }
                     }
-                }, _callee45, this, [[2, 10, 18, 23]]);
+                }, _callee45, this, [[2, 10, 17, 22]]);
             }));
 
             function pagePullHookAction() {
@@ -3498,7 +3477,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 return _context46.abrupt('return');
 
                             case 3:
-                                console.log("PRODUCT PULL-HOOK CALLED");
+
                                 // append an infinite load indicator to the bottom of the page
                                 $('#products-page .page__content').append('<div class="infinite-load-container" style="text-align: center">\n                        <ons-progress-circular indeterminate modifier="pull-hook"></ons-progress-circular>\n                    </div>');
                                 // hide all previously displayed ej2 toast
@@ -3506,22 +3485,22 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 productArray = []; // holds the array of products retrieved for display
 
-                                _context46.prev = 7;
-                                _context46.next = 10;
+                                _context46.prev = 6;
+                                _context46.next = 9;
                                 return utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.loadProducts(utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.currentQueryParam, utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.currentPage + 1);
 
-                            case 10:
+                            case 9:
                                 productArray = _context46.sent;
-                                _context46.next = 13;
+                                _context46.next = 12;
                                 return utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.displayPageContent(productArray[0], true, false);
 
-                            case 13:
-                                _context46.next = 22;
+                            case 12:
+                                _context46.next = 21;
                                 break;
 
-                            case 15:
-                                _context46.prev = 15;
-                                _context46.t0 = _context46['catch'](7);
+                            case 14:
+                                _context46.prev = 14;
+                                _context46.t0 = _context46['catch'](6);
                                 // an error occurred
                                 // display toast to show that error
                                 toast = $('.page-toast').get(0).ej2_instances[0];
@@ -3531,8 +3510,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 toast.dataBind();
                                 toast.show();
 
-                            case 22:
-                                _context46.prev = 22;
+                            case 21:
+                                _context46.prev = 21;
 
                                 // check if any new products were retrieved
                                 if (productArray && productArray[0].length > 0) {
@@ -3546,14 +3525,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 }
                                 // signal that loading is done
                                 doneCallBack();
-                                return _context46.finish(22);
+                                return _context46.finish(21);
 
-                            case 26:
+                            case 25:
                             case 'end':
                                 return _context46.stop();
                         }
                     }
-                }, _callee46, this, [[7, 15, 22, 26]]);
+                }, _callee46, this, [[6, 14, 21, 25]]);
             }));
 
             function pageInfiniteScroll() {
@@ -3624,7 +3603,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             resolve(productsArray); // resolve the parent promise with the data gotten from the server
                                         }).catch(function (err) {
                                             // an error occurred
-                                            console.log("LOAD PRODUCTS", err);
+
                                             reject(err); // reject the parent promise with the error
                                         });
                                     }));
@@ -3647,7 +3626,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                 resolve(cachedProductsData.products); // resolve the parent promise with the cached products data
                                             }).catch(function (err) {
                                                 // an error occurred
-                                                console.log("LOAD PRODUCTS", err);
+
                                                 reject(err); // reject the parent promise with the error
                                             });
                                         }));
@@ -3828,16 +3807,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                                     // display the products details page using the selected product
                                                     $('#app-main-navigator').get(0).pushPage("product-details-page.html", { animation: "lift", data: { product: productItemsArray[productIndex] } });
-                                                    _context50.next = 10;
+                                                    _context50.next = 9;
                                                     break;
 
                                                 case 7:
                                                     _context50.prev = 7;
                                                     _context50.t0 = _context50['catch'](0);
 
-                                                    console.log("PRODUCT ITEM CLICKED", _context50.t0);
-
-                                                case 10:
+                                                case 9:
                                                 case 'end':
                                                     return _context50.stop();
                                             }
@@ -3982,14 +3959,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     return utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.displayProductDetails(productDetailsArray[0]);
 
                                 case 19:
-                                    _context52.next = 30;
+                                    _context52.next = 29;
                                     break;
 
                                 case 21:
                                     _context52.prev = 21;
                                     _context52.t0 = _context52['catch'](7);
 
-                                    console.log("PRODUCT DETAILS PAGE", _context52.t0);
+
                                     // hide all previously displayed ej2 toast
                                     $('.page-toast').get(0).ej2_instances[0].hide('All');
                                     // display toast to show that an error
@@ -4000,19 +3977,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     toast.dataBind();
                                     toast.show();
 
-                                case 30:
-                                    _context52.prev = 30;
+                                case 29:
+                                    _context52.prev = 29;
 
                                     // hide the preloader
                                     $('#product-details-page .page-preloader').css("display", "none");
-                                    return _context52.finish(30);
+                                    return _context52.finish(29);
 
-                                case 33:
+                                case 32:
                                 case 'end':
                                     return _context52.stop();
                             }
                         }
-                    }, _callee52, this, [[7, 21, 30, 33]]);
+                    }, _callee52, this, [[7, 21, 29, 32]]);
                 }));
 
                 return function loadPageOnAppReady() {
@@ -4075,14 +4052,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // get the pages stack from the app main navigator
             var pagesStackArray = $('#app-main-navigator').get(0).pages;
 
-            console.log("PAGE STACKS", pagesStackArray);
-
             if (pagesStackArray.length > 1) {
                 // there is more than 1 page in the page stack
                 // get the previous Page in stack before this one
                 var previousPage = $(pagesStackArray[pagesStackArray.length - 2]).get(0);
-                console.log("PREVIOUS PAGE", previousPage);
-                console.log("PAGE ID", previousPage.id);
 
                 // check which page has is being displayed AFTER a page was popped
                 switch (previousPage.id) {
@@ -4107,9 +4080,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         $('#app-main-navigator').get(0).popPage();
                         break;
                 }
-            } else {
-                // there is only 1 page in the stack
-                console.log("DO NOTHING");
+            } else {// there is only 1 page in the stack
+
             }
         },
 
@@ -4174,14 +4146,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 return utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.displayProductDetails(productDetailsArray[0]);
 
                             case 9:
-                                _context55.next = 19;
+                                _context55.next = 18;
                                 break;
 
                             case 11:
                                 _context55.prev = 11;
                                 _context55.t0 = _context55['catch'](2);
                                 // an error occurred
-                                console.log("PROJECT DETAILS REFRESH ERROR", _context55.t0);
+
                                 // display toast to show that error
                                 toast = $('.page-toast').get(0).ej2_instances[0];
 
@@ -4190,21 +4162,21 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 toast.dataBind();
                                 toast.show();
 
-                            case 19:
-                                _context55.prev = 19;
+                            case 18:
+                                _context55.prev = 18;
 
                                 // enable pull-to-refresh widget till loading is done
                                 $('#product-details-page #product-details-page-pull-hook').removeAttr("disabled");
                                 // signal that loading is done
                                 doneCallBack();
-                                return _context55.finish(19);
+                                return _context55.finish(18);
 
-                            case 23:
+                            case 22:
                             case 'end':
                                 return _context55.stop();
                         }
                     }
-                }, _callee55, this, [[2, 11, 19, 23]]);
+                }, _callee55, this, [[2, 11, 18, 22]]);
             }));
 
             function pagePullHookAction() {
@@ -4282,7 +4254,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             resolve(product); // resolve the parent promise with the data gotten from the server
                                         }).catch(function (err) {
                                             // an error occurred
-                                            console.log("LOAD PRODUCT DETAILS", err);
+
                                             reject(err); // reject the parent promise with the error
                                         });
                                     }));
@@ -4368,7 +4340,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         resolve(productVariations); // resolve the parent promise with the data gotten from the server
                                     }).catch(function (err) {
                                         // an error occurred
-                                        console.log("LOAD PRODUCT VARIATIONS", err);
+
                                         reject(err); // reject the parent promise with the error
                                     });
                                 }));
