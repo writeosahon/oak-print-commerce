@@ -2609,11 +2609,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is shown
          */
         pageShow: function(event){
-            // flag that page infinite scroll should NOT be allowed
-            event.target._allowInfinitePageScroll = false;
             $('#app-main-page ons-toolbar div.title-bar').html("Products"); // change the title of the screen
             // check if the page content should be reset
-            if($('#app-main-navigator').get(0)._resetPageDisplay !== false){
+            if($('#app-main-navigator').get(0)._resetPageDisplay !== false){ // page content can be refreshed
+                // flag that page infinite scroll should NOT be allowed
+                event.target._allowInfinitePageScroll = false;
                 // show the preloader
                 $('#products-page .page-preloader').css("display", "block");
                 // empty the content of the page
