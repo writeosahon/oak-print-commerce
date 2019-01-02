@@ -1571,9 +1571,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     while (1) {
                         switch (_context17.prev = _context17.next) {
                             case 0:
-                                /*for(let index = 0; index < 4; index++){ // REMOVE THIS LATER JUST FOR TEST TODO
-                                    categoriesArray.push(...categoriesArray);
-                                }*/
                                 displayCompletedPromise = new Promise(function (resolve, reject) {
 
                                     var categoriesContent = ""; // holds the contents for the categories
