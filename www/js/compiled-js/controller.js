@@ -3211,6 +3211,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // get the previous Page in stack before this one
                 let previousPage = $(pagesStackArray[pagesStackArray.length - 2]).get(0);
                 console.log("PREVIOUS PAGE", previousPage);
+                console.log("PAGE ID", previousPage.id);
 
                 // check which page has is being displayed AFTER a page was popped
                 switch(previousPage.id){
@@ -3233,7 +3234,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 }
             }
             else{ // there is only 1 page in the stack
-
+                console.log("DO NOTHING");
             }
         },
 
