@@ -3281,7 +3281,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             styling: {
                                 cornerRadius: 0,
                                 opacity: 1,
-                                backgroundColor: '#3F51B5', //red
+                                backgroundColor: '#3F51B5',
                                 textColor: '#FFFFFF',
                                 textSize: 14
                             }
