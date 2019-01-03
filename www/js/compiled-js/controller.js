@@ -3269,11 +3269,26 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     shareOptions.files = [utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
                         currentProductDetails.images[0].src];
                 }
-                // open the device share dialog
-                window.plugins.socialsharing.shareWithOptions(shareOptions, function(){}, function(){});
 
                 // also copy the text to clipboard
-
+                cordova.plugins.clipboard.copy(`${shareOptions.message} | ${shareOptions.url}`,
+                    function(){
+                        // inform the user that message has been copied to clipboard
+                        window.plugins.toast.showWithOptions({
+                            message: "shared message copied to clipboard",
+                            duration: 3000,
+                            position: "center",
+                            styling: {
+                                cornerRadius: 0,
+                                opacity: 1,
+                                backgroundColor: '#3F51B5', //red
+                                textColor: '#FFFFFF',
+                                textSize: 14
+                            }
+                        });
+                    }, function(){});
+                // open the device share dialog
+                window.plugins.socialsharing.shareWithOptions(shareOptions, function(){}, function(){});
             }, 0);
         },
 
