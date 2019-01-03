@@ -3257,10 +3257,17 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         productVariationsArray[productVariationIndex];
                     // update the url for the product
                     shareOptions.url = productVariation.permalink;
+                    // update the file/image of the product to be share
+                    shareOptions.files = [productVariation.image && productVariation.image !== ""? productVariation.image.src :
+                        utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
+                            currentProductDetails.images[0].src];
                 }
                 else{ // no product variation was selected, so use the default product details
                     shareOptions.url = utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
-                        currentProductDetails.permalink
+                        currentProductDetails.permalink;
+                    // update the file/image of the product to be share
+                    shareOptions.files = [utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
+                        currentProductDetails.images[0].src];
                 }
                 // open the device share dialog
                 window.plugins.socialsharing.shareWithOptions(shareOptions, function(){}, function(){});
