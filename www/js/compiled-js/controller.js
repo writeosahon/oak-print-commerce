@@ -3031,7 +3031,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
     productDetailsPageViewModel: {
 
         /**
-         * holds the production variations array
+         * holds the object which contains the current product and its details
+         */
+        currentProductDetails: null,
+
+        /**
+         * holds the index position (within the productVaritionsArray) of the
+         * current product variation selected by the user
+         */
+        currentProductVariationIndex: -1,
+
+        /**
+         * holds the product variations array
          */
         productVariationsArray: null,
 
@@ -3298,6 +3309,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     aProduct.regular_price = "0.00";
                 }
 
+                // set the current product to that which was provided to the page
+                utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
+                    currentProductDetails = aProduct;
+
                 productPromisesArray.push(Promise.resolve(aProduct)); // resolve the promise with the product details
             }
             else{ // at least the product id was provided
@@ -3320,6 +3335,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         if(!product.regular_price || product.regular_price == ""){ // regular price was NOT set, so set it
                             product.regular_price = "0.00";
                         }
+                        // set the current product to that which was retrieved from the server
+                        utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
+                            currentProductDetails = product;
                         resolve(product); // resolve the parent promise with the data gotten from the server
 
                     }).catch(function(err){ // an error occurred
@@ -3489,7 +3507,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         placeholder: productDetails.attributes[index].name,
                         floatLabelType: 'Always',
                         change: async function () { // listen for when dropdown list value changes
-                            // handle the change in a seperate event block
+                            // handle the change in a separate event block
                             window.setTimeout(async function(){
                                 let concatenatedVarationValue = ""; // holds the concatenated variation values
                                 // get the value from all the variation select-input/dropdown and concatenate them
@@ -3498,12 +3516,35 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 });
 
                                 // since the concatenated variation value, is also what is used to uniquely identify each varition,
-                                // check if there is any variation with the same unique value has the concatenated variation value
-                                let variationIndex = utopiasoftware[utopiasoftware_app_namespace].controller.
+                                // check if there is any variation with the same unique value has the concatenated variation value.
+                                // Also, assign the index position of the 'found' variation (if anty) to the current variation index property
+                                let variationIndexPosition =
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.
                                     productDetailsPageViewModel.productVariationsArray.findIndex(function(element3){
                                         return concatenatedVarationValue === element3._variationValue;
                                 });
-                                console.log("CUURENT VARIATION INDEX", variationIndex);
+                                utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
+                                    currentProductVariationIndex = variationIndexPosition;
+
+                                // check if there is a product variation that matches the user's selection
+                                if(utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
+                                    currentProductVariationIndex !== -1){ // there is a product variation
+                                    // get the product variation
+                                    let productVariation = utopiasoftware[utopiasoftware_app_namespace].controller.
+                                        productDetailsPageViewModel.productVariationsArray[variationIndexPosition];
+                                    // update the product details display image and price to that of the selected variation (if any)
+                                    if(productVariation.image && productVariation.image !== ""){
+                                        // update the product details image
+                                        $('#product-details-page .e-card-image').css("background-image",
+                                            `url("${productVariation.image.src}")`);
+                                    }
+                                    if(productVariation.price && productVariation.price !== ""){
+                                        // update product price
+                                        $('#product-details-page .product-details-price').
+                                        html(`&#x20a6;${kendo.toString(kendo.parseFloat(productVariation.price), "n2")}`);
+                                    }
+                                }
+
                             }, 0);
                         }
                     }).appendTo(element);

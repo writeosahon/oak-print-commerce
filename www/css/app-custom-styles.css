@@ -405,13 +405,13 @@
     background-position: center;
 }
 /** style for quantity numeric input **/
-#product-details-page .product-details-quantity-class.e-control-wrapper.e-numeric #label_product-details-quantity {
+#product-details-page .product-details-quantity-class.e-control-wrapper.e-numeric #label_product-details-quantity { /** for when the product is NOT on-sale **/
     color: #3F51B5;
     font-size: 15px;
     line-height: 1;
     margin-top: 5px
 }
-#product-details-page .product-details-quantity-class.sales.e-control-wrapper.e-numeric #label_product-details-quantity {
+#product-details-page .product-details-quantity-class.sales.e-control-wrapper.e-numeric #label_product-details-quantity { /** for when the product is on-sale **/
     color: #3F51B5;
     font-size: 15px;
     line-height: 1;

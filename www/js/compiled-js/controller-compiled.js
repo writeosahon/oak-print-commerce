@@ -3841,7 +3841,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
     productDetailsPageViewModel: {
 
         /**
-         * holds the production variations array
+         * holds the object which contains the current product and its details
+         */
+        currentProductDetails: null,
+
+        /**
+         * holds the index position (within the productVaritionsArray) of the
+         * current product variation selected by the user
+         */
+        currentProductVariationIndex: -1,
+
+        /**
+         * holds the product variations array
          */
         productVariationsArray: null,
 
@@ -4196,6 +4207,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         aProduct.regular_price = "0.00";
                                     }
 
+                                    // set the current product to that which was provided to the page
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.currentProductDetails = aProduct;
+
                                     productPromisesArray.push(Promise.resolve(aProduct)); // resolve the promise with the product details
                                 } else {
                                     // at least the product id was provided
@@ -4216,6 +4230,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                 // regular price was NOT set, so set it
                                                 product.regular_price = "0.00";
                                             }
+                                            // set the current product to that which was retrieved from the server
+                                            utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.currentProductDetails = product;
                                             resolve(product); // resolve the parent promise with the data gotten from the server
                                         }).catch(function (err) {
                                             // an error occurred
@@ -4417,9 +4433,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                         switch (_context58.prev = _context58.next) {
                                                             case 0:
                                                                 // listen for when dropdown list value changes
-                                                                // handle the change in a seperate event block
+                                                                // handle the change in a separate event block
                                                                 window.setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee57() {
-                                                                    var concatenatedVarationValue, variationIndex;
+                                                                    var concatenatedVarationValue, variationIndexPosition, productVariation;
                                                                     return regeneratorRuntime.wrap(function _callee57$(_context57) {
                                                                         while (1) {
                                                                             switch (_context57.prev = _context57.next) {
@@ -4432,14 +4448,32 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                                                     });
 
                                                                                     // since the concatenated variation value, is also what is used to uniquely identify each varition,
-                                                                                    // check if there is any variation with the same unique value has the concatenated variation value
-                                                                                    variationIndex = utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.productVariationsArray.findIndex(function (element3) {
+                                                                                    // check if there is any variation with the same unique value has the concatenated variation value.
+                                                                                    // Also, assign the index position of the 'found' variation (if anty) to the current variation index property
+                                                                                    variationIndexPosition = utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.productVariationsArray.findIndex(function (element3) {
                                                                                         return concatenatedVarationValue === element3._variationValue;
                                                                                     });
 
-                                                                                    console.log("CUURENT VARIATION INDEX", variationIndex);
+                                                                                    utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.currentProductVariationIndex = variationIndexPosition;
 
-                                                                                case 4:
+                                                                                    // check if there is a product variation that matches the user's selection
+                                                                                    if (utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.currentProductVariationIndex !== -1) {
+                                                                                        // there is a product variation
+                                                                                        // get the product variation
+                                                                                        productVariation = utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.productVariationsArray[variationIndexPosition];
+                                                                                        // update the product details display image and price to that of the selected variation (if any)
+
+                                                                                        if (productVariation.image && productVariation.image !== "") {
+                                                                                            // update the product details image
+                                                                                            $('#product-details-page .e-card-image').css("background-image", 'url("' + productVariation.image.src + '")');
+                                                                                        }
+                                                                                        if (productVariation.price && productVariation.price !== "") {
+                                                                                            // update product price
+                                                                                            $('#product-details-page .product-details-price').html('&#x20a6;' + kendo.toString(kendo.parseFloat(productVariation.price), "n2"));
+                                                                                        }
+                                                                                    }
+
+                                                                                case 5:
                                                                                 case 'end':
                                                                                     return _context57.stop();
                                                                             }
