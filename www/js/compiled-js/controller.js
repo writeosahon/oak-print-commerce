@@ -3271,6 +3271,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 }
                 // open the device share dialog
                 window.plugins.socialsharing.shareWithOptions(shareOptions, function(){}, function(){});
+
+                // also copy the text to clipboard
+
             }, 0);
         },
 
