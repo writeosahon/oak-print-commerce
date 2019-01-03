@@ -3236,6 +3236,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             }
         },
 
+        async shareButtonClicked(){
+
+        },
+
         /**
          * method is triggered when the pull-hook on the page is active
          *
@@ -3388,7 +3392,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         dataType: "json",
                         timeout: 240000, // wait for 4 minutes before timeout of request
                         processData: true,
-                        data: {page: 1, per_page: 99}
+                        data: {page: 1, per_page: 99, status: 'publish'}
                     }
                 )).then(function(productVariations){
                     // map the retrieved variations and save the unique value for the variation.
