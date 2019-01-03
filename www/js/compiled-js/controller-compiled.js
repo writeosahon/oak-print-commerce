@@ -4102,8 +4102,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             case 0:
                                 shareOptions = {}; // holds the options for sharing
 
-                                // handle the task in a separate event block
+                                shareOptions.message = "check out this #ShopOakExclusive product";
+                                shareOptions.chooserTitle = "share product with...";
 
+                                // handle the task in a separate event block
                                 window.setTimeout(function () {
                                     if (utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.currentProductVariationIndex !== -1) {
                                         // a product variation was selected
@@ -4113,10 +4115,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         var productVariation = utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.productVariationsArray[productVariationIndex];
                                         // update the url for the product
                                         shareOptions.url = productVariation.permalink;
+                                    } else {
+                                        // no product variation was selected, so use the default product details
+                                        shareOptions.url = utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.currentProductDetails.permalink;
                                     }
+                                    // open the device share dialog
+                                    window.plugins.socialsharing.shareWithOptions(shareOptions, function () {}, function () {});
                                 }, 0);
 
-                            case 2:
+                            case 4:
                             case 'end':
                                 return _context54.stop();
                         }

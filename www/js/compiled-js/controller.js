@@ -3242,6 +3242,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         async shareButtonClicked(){
             var shareOptions = {}; // holds the options for sharing
+            shareOptions.message = "check out this #ShopOakExclusive product";
+            shareOptions.chooserTitle = "share product with...";
 
             // handle the task in a separate event block
             window.setTimeout(function(){
@@ -3255,8 +3257,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         productVariationsArray[productVariationIndex];
                     // update the url for the product
                     shareOptions.url = productVariation.permalink;
-
                 }
+                else{ // no product variation was selected, so use the default product details
+                    shareOptions.url = utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
+                        currentProductDetails.permalink
+                }
+                // open the device share dialog
+                window.plugins.socialsharing.shareWithOptions(shareOptions, function(){}, function(){});
             }, 0);
         },
 
