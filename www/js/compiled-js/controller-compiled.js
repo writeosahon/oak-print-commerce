@@ -4087,12 +4087,36 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             }
         },
+
+
+        /**
+         * method is triggered when the "Share" button is clicked
+         * @returns {Promise<void>}
+         */
         shareButtonClicked: function () {
             var _ref54 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee54() {
+                var shareOptions;
                 return regeneratorRuntime.wrap(function _callee54$(_context54) {
                     while (1) {
                         switch (_context54.prev = _context54.next) {
                             case 0:
+                                shareOptions = {}; // holds the options for sharing
+
+                                // handle the task in a separate event block
+
+                                window.setTimeout(function () {
+                                    if (utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.currentProductVariationIndex !== -1) {
+                                        // a product variation was selected
+                                        // get the index of the currently selected variation
+                                        var productVariationIndex = utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.currentProductVariationIndex;
+                                        // get the currently selected product variation using the selected index
+                                        var productVariation = utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.productVariationsArray[productVariationIndex];
+                                        // update the url for the product
+                                        shareOptions.url = productVariation.permalink;
+                                    }
+                                }, 0);
+
+                            case 2:
                             case 'end':
                                 return _context54.stop();
                         }
