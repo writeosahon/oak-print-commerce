@@ -3061,10 +3061,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $('#product-details-page-pull-hook', $thisPage).get(0).onAction =
                     utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.pagePullHookAction;
 
-                // listen for when a page is popped from the app-main-navigator
-                $('#app-main-navigator').on("postpop", utopiasoftware[utopiasoftware_app_namespace].controller.
-                    productDetailsPageViewModel.appMainNavigatorPostPopListener);
-
                 // register listener for the pull-to-refresh widget
                 $('#product-details-page-pull-hook', $thisPage).on("changestate", function(event){
 
@@ -3186,9 +3182,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             utopiasoftware[utopiasoftware_app_namespace].controller.
                 productDetailsPageViewModel.productVariationsArray = null;
 
-            // remove listener for when a page is popped from the app-main-navigator
-            $('#app-main-navigator').off("postpop", utopiasoftware[utopiasoftware_app_namespace].controller.
-                productDetailsPageViewModel.appMainNavigatorPostPopListener);
         },
 
         /**
@@ -3199,7 +3192,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // get the pages stack from the app main navigator
             var pagesStackArray = $('#app-main-navigator').get(0).pages;
 
-
+            // check that there is more than 1 page in the stack
             if(pagesStackArray.length > 1){ // there is more than 1 page in the page stack
                 // get the previous Page in stack before this one
                 let previousPage = $(pagesStackArray[pagesStackArray.length - 2]).get(0);
@@ -3230,16 +3223,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             else{ // there is only 1 page in the stack
 
             }
-        },
-
-        /**
-         * method is used to listen for after a page has been
-         * popped from the app's main navigator
-         *
-         * @param event
-         */
-        async appMainNavigatorPostPopListener(event){
-
         },
 
         /**
@@ -3504,7 +3487,25 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     {
                         cssClass: "product-details-variation-class",
                         placeholder: productDetails.attributes[index].name,
-                        floatLabelType: 'Always'
+                        floatLabelType: 'Always',
+                        change: async function () { // listen for when dropdown list value changes
+                            // handle the change in a seperate event block
+                            window.setTimeout(async function(){
+                                let concatenatedVarationValue = null; // holds the concatenated variation values
+                                // get the value from all the variation select-input/dropdown and concatenate them
+                                $('#product-details-page .product-details-variation-option').each(function(index2, element2){
+                                    concatenatedVarationValue += element2.ej2_instances[0].value;
+                                });
+
+                                // since the concatenated variation value, is also what is used to uniquely identify each varition,
+                                // check if there is any variation with the same unique value has the concatenated variation value
+                                let variationIndex = utopiasoftware[utopiasoftware_app_namespace].controller.
+                                    productDetailsPageViewModel.productVariationsArray.findIndex(function(element3){
+                                        return concatenatedVarationValue === element3._variationValue;
+                                });
+                                console.log("CUURENT VARIATION INDEX", variationIndex);
+                            }, 0);
+                        }
                     }).appendTo(element);
             });
             // collapse the variations content
