@@ -3491,7 +3491,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         change: async function () { // listen for when dropdown list value changes
                             // handle the change in a seperate event block
                             window.setTimeout(async function(){
-                                let concatenatedVarationValue = null; // holds the concatenated variation values
+                                let concatenatedVarationValue = ""; // holds the concatenated variation values
                                 // get the value from all the variation select-input/dropdown and concatenate them
                                 $('#product-details-page .product-details-variation-option').each(function(index2, element2){
                                     concatenatedVarationValue += element2.ej2_instances[0].value;

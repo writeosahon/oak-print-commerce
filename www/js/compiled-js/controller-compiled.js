@@ -4424,7 +4424,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                                         while (1) {
                                                                             switch (_context57.prev = _context57.next) {
                                                                                 case 0:
-                                                                                    concatenatedVarationValue = null; // holds the concatenated variation values
+                                                                                    concatenatedVarationValue = ""; // holds the concatenated variation values
                                                                                     // get the value from all the variation select-input/dropdown and concatenate them
 
                                                                                     $('#product-details-page .product-details-variation-option').each(function (index2, element2) {
