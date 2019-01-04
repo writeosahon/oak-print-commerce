@@ -379,6 +379,17 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // listen for when the device has Internet connection
             document.addEventListener("online",
                 utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.deviceOnlineListener, false);
+
+
+            if(utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel){
+                utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.reloadCells();
+            }
+            if(utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.featuredProductsCarousel){
+                utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.featuredProductsCarousel.reloadCells();
+            }
+            if(utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.salesProductsCarousel){
+                utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.salesProductsCarousel.reloadCells();
+            }
         },
 
 
@@ -3637,6 +3648,32 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // update the weight for the product
             $('#product-details-page .product-details-weight').html(`${!productDetails.weight ||
             productDetails.weight == "" ? "(Not Available)" : `${productDetails.weight}`}`);
+        },
+
+        /**
+         * method is triggered when the customise button is clicked
+         *
+         * @returns {Promise<void>}
+         */
+        async customiseButtonClicked(){
+            // check if there is Internet connection
+            if(navigator.connection.type === Connection.NONE){ // there is no Internet connection
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast to show that an error
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.timeOut = 3500;
+                toast.content = `Please connect to the Internet to customise product`;
+                toast.dataBind();
+                toast.show();
+
+                return; // exit mwethod
+            }
+
+            // load the "Customise Product" page to the app-main-navigator
+            $('#app-main-navigator').get(0).pushPage("customise-product-page.html");
         }
 
     }

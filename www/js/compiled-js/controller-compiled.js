@@ -436,6 +436,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             document.addEventListener("offline", utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.deviceOfflineListener, false);
             // listen for when the device has Internet connection
             document.addEventListener("online", utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.deviceOnlineListener, false);
+
+            if (utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel) {
+                utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.reloadCells();
+            }
+            if (utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.featuredProductsCarousel) {
+                utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.featuredProductsCarousel.reloadCells();
+            }
+            if (utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.salesProductsCarousel) {
+                utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.salesProductsCarousel.reloadCells();
+            }
         },
 
         /**
@@ -4596,6 +4606,59 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             }
 
             return displayProductDetails;
+        }(),
+
+
+        /**
+         * method is triggered when the customise button is clicked
+         *
+         * @returns {Promise<void>}
+         */
+        customiseButtonClicked: function () {
+            var _ref61 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee61() {
+                var toast;
+                return regeneratorRuntime.wrap(function _callee61$(_context61) {
+                    while (1) {
+                        switch (_context61.prev = _context61.next) {
+                            case 0:
+                                if (!(navigator.connection.type === Connection.NONE)) {
+                                    _context61.next = 10;
+                                    break;
+                                }
+
+                                // there is no Internet connection
+                                // hide all previously displayed ej2 toast
+                                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                                // display toast to show that an error
+                                toast = $('.timed-page-toast').get(0).ej2_instances[0];
+
+                                toast.cssClass = 'error-ej2-toast';
+                                toast.timeOut = 3500;
+                                toast.content = 'Please connect to the Internet to customise product';
+                                toast.dataBind();
+                                toast.show();
+
+                                return _context61.abrupt('return');
+
+                            case 10:
+
+                                // load the "Customise Product" page to the app-main-navigator
+                                $('#app-main-navigator').get(0).pushPage("customise-product-page.html");
+
+                            case 11:
+                            case 'end':
+                                return _context61.stop();
+                        }
+                    }
+                }, _callee61, this);
+            }));
+
+            function customiseButtonClicked() {
+                return _ref61.apply(this, arguments);
+            }
+
+            return customiseButtonClicked;
         }()
     }
 };
