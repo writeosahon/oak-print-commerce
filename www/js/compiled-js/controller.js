@@ -3189,7 +3189,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             window.SoftInputMode.set('adjustPan');
         },
 
-
         /**
          * method is triggered when page is hidden
          */
@@ -3726,5 +3725,165 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
         }
 
+    },
+
+    /**
+     * this is the view-model/controller for the Customise Product page
+     */
+    customiseProductPageViewModel: {
+
+        /**
+         * event is triggered when page is initialised
+         */
+        pageInit: function(event){
+
+            var $thisPage = $(event.target); // get the current page shown
+
+            // call the function used to initialise the app page if the app is fully loaded
+            loadPageOnAppReady();
+
+            //function is used to initialise the page if the app is fully ready for execution
+            async function loadPageOnAppReady() {
+                // check to see if onsen is ready and if all app loading has been completed
+                if (!ons.isReady() || utopiasoftware[utopiasoftware_app_namespace].model.isAppReady === false) {
+                    setTimeout(loadPageOnAppReady, 500); // call this function again after half a second
+                    return;
+                }
+
+                // listen for the back button event
+                $('#app-main-navigator').get(0).topPage.onDeviceBackButton =
+                    utopiasoftware[utopiasoftware_app_namespace].controller.
+                        customiseProductPageViewModel.backButtonClicked;
+
+                /*
+                // add method to handle the loading action of the pull-to-refresh widget
+                $('#product-details-page-pull-hook', $thisPage).get(0).onAction =
+                    utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.pagePullHookAction;
+
+                // register listener for the pull-to-refresh widget
+                $('#product-details-page-pull-hook', $thisPage).on("changestate", function(event){
+
+                    // check the state of the pull-to-refresh widget
+                    switch (event.originalEvent.state){
+                        case 'initial':
+                            // update the displayed content
+                            $('#product-details-page-pull-hook-fab', event.originalEvent.pullHook).
+                            html('<ons-icon icon="md-long-arrow-down" size="24px" style="color: #363E7C"></ons-icon>');
+                            break;
+
+                        case 'preaction':
+                            // update the displayed content
+                            $('#product-details-page-pull-hook-fab', event.originalEvent.pullHook).
+                            html('<ons-icon icon="md-long-arrow-up" size="24px" style="color: #363E7C"></ons-icon>');
+                            break;
+
+                        case 'action':
+                            // update the displayed content
+                            $('#product-details-page-pull-hook-fab', event.originalEvent.pullHook).
+                            html('<ons-progress-circular indeterminate modifier="pull-hook"></ons-progress-circular>');
+                            break;
+                    }
+                });
+
+                try{
+                    // create the "Pick Quantity" button
+                    new ej.inputs.NumericTextBox({
+                        cssClass: 'product-details-quantity-class',
+                        currency: null,
+                        decimals: 0,
+                        floatLabelType: 'Auto',
+                        format: 'n',
+                        showSpinButton: false,
+                        min: 1,
+                        max: 10,
+                        placeholder: 'Pick Quantity',
+                        step: 1,
+                        strictMode: true,
+                        // sets value to the NumericTextBox
+                        value: 1
+                    }).appendTo('#product-details-quantity');
+
+                    // create the "Add To Cart" button
+                    new ej.buttons.Button({
+                        //iconCss: "zmdi zmdi-shopping-cart-add utopiasoftware-icon-zoom-one-point-two",
+                        //iconPosition: "Left"
+                    }).appendTo('#product-details-add-to-cart');
+
+                    // create the "Customise" button
+                    new ej.buttons.Button({
+                        //iconCss: "zmdi zmdi-brush utopiasoftware-icon-zoom-one-point-two",
+                        //iconPosition: "Left"
+                    }).appendTo('#product-details-customise-product');
+
+                    // create the "Review" button
+                    new ej.buttons.Button({
+                        cssClass: 'e-flat e-small',
+                        iconCss: "zmdi zmdi-star-outline",
+                        iconPosition: "Left"
+                    }).appendTo('#product-details-review');
+
+                    // create the "Share" button
+                    new ej.buttons.Button({
+                        cssClass: 'e-flat e-small',
+                        iconCss: "zmdi zmdi-share",
+                        iconPosition: "Left"
+                    }).appendTo('#product-details-share');
+
+                    // load product variations asynchronously without waiting for the response
+                    utopiasoftware[utopiasoftware_app_namespace].controller.
+                    productDetailsPageViewModel.loadProductVariations();
+                    // load product details
+                    let productDetailsArray = await utopiasoftware[utopiasoftware_app_namespace].controller.
+                    productDetailsPageViewModel.loadProduct();
+                    // display the loaded product details
+                    await utopiasoftware[utopiasoftware_app_namespace].controller.
+                    productDetailsPageViewModel.displayProductDetails(productDetailsArray[0]);
+
+                }
+                catch(err){
+
+                    // hide all previously displayed ej2 toast
+                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                    // display toast to show that an error
+                    let toast = $('.page-toast').get(0).ej2_instances[0];
+                    toast.cssClass = 'error-ej2-toast';
+                    toast.content = `Sorry, an error occurred.${navigator.connection.type === Connection.NONE ? " Connect to the Internet." : ""} Pull down to refresh and try again`;
+                    toast.dataBind();
+                    toast.show();
+                }
+                finally {
+                    // hide the preloader
+                    $('#product-details-page .page-preloader').css("display", "none");
+                }
+                */
+            }
+
+        },
+
+        /**
+         * method is triggered when page is shown
+         */
+        pageShow: function(){
+            window.SoftInputMode.set('adjustPan');
+        },
+
+        /**
+         * method is triggered when page is hidden
+         */
+        pageHide: async function(){
+        },
+
+        /**
+         * method is triggered when page is destroyed
+         */
+        pageDestroy: function(){},
+
+        /**
+         * method is triggered when the device back button is clicked OR a similar action is triggered
+         */
+        backButtonClicked(){
+            // get back to the previous page on the app-main navigator stack
+            $('#app-main-navigator').get(0).popPage();
+        }
     }
 };

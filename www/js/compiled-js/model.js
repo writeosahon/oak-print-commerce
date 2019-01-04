@@ -117,3 +117,15 @@ $(document).on("hide", "#product-details-page", utopiasoftware[utopiasoftware_ap
 
 // listen for when the PRODUCT DETAILS page is destroyed
 $(document).on("destroy", "#product-details-page", utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.pageDestroy);
+
+// listen for the initialisation of the CUSTOMISE PRODUCT page
+$(document).on("init", "#customise-product-page", utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.pageInit);
+
+// listen for when the CUSTOMISE PRODUCT page is shown
+$(document).on("show", "#customise-product-page", utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.pageShow);
+
+// listen for when the CUSTOMISE PRODUCT page is hidden
+$(document).on("hide", "#customise-product-page", utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.pageHide);
+
+// listen for when the CUSTOMISE PRODUCT page is destroyed
+$(document).on("destroy", "#customise-product-page", utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.pageDestroy);

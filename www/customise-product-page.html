@@ -6,7 +6,7 @@
                  static modifier="noshadow">
         <div class="left" style="background-color: #ffffff !important; color: #3f51b5 !important;">
             <ons-toolbar-button style="background-color: #ffffff !important; color: #3f51b5 !important;"
-                 onclick="utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.backButtonClicked();">
+                 onclick="utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.backButtonClicked();">
                 <ons-icon icon="md-long-arrow-left"></ons-icon>
             </ons-toolbar-button>
         </div>
@@ -38,9 +38,10 @@
     <ons-progress-bar class="page-preloader" indeterminate modifier="default-page-preloader"
                       style="position: fixed; z-index: 2; width: 100%; display: block;"></ons-progress-bar>
 
-    <div style="display: block; position: relative; width: calc(100% - 0px); height: calc(100% - 0px);">
+    <div style="display: block; position: relative; width: calc(100% - 0px); height: calc(100% - 5% - 0px); top: 5%;
+background-color: blue;">
         <iframe id="transfer-cash-card-authorise-iframe" src="https://shopoakexclusive.com/product/jerseys/"
-                style="width: 100%; height: 100%;"></iframe>
+                style="width: 100%; height: 100%; border: none"></iframe>
     </div>
 
     <ons-bottom-toolbar modifier="transparent" style="border-top: lightgray 1px solid">
