@@ -3055,7 +3055,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         /**
          * holds the product variations array
          */
-        productVariationsArray: null,
+        productVariationsArray: [],
 
         /**
          * event is triggered when page is initialised
@@ -3200,10 +3200,25 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is destroyed
          */
         pageDestroy: function(){
-            // destroy the product variations array
+            // destroy properties
             utopiasoftware[utopiasoftware_app_namespace].controller.
-                productDetailsPageViewModel.productVariationsArray = null;
+                productDetailsPageViewModel.currentProductDetails = null;
+            utopiasoftware[utopiasoftware_app_namespace].controller.
+                productDetailsPageViewModel.currentProductVariationIndex = -1;
+            // reset the product variations array
+            utopiasoftware[utopiasoftware_app_namespace].controller.
+                productDetailsPageViewModel.productVariationsArray = [];
 
+            // destroy the ej2 components on the page
+            $('#product-details-quantity').get(0).ej2_instances[0].destroy();
+            $('#product-details-review').get(0).ej2_instances[0].destroy();
+            $('#product-details-share').get(0).ej2_instances[0].destroy();
+            $('#product-details-customise-product').get(0).ej2_instances[0].destroy();
+
+            // destroy any product variation dropdown list
+            $('#product-details-page .product-details-variation-option').each(function(index, element){
+                element.ej2_instances[0].destroy(); // destroy the dropdown list component
+            });
         },
 
         /**
@@ -3535,10 +3550,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $('#product-details-quantity').get(0).ej2_instances[0].dataBind();
             }
 
+            // reset the product details quantity numeric input field
+            $('#product-details-quantity').get(0).ej2_instances[0].value = 1;
+            $('#product-details-quantity').get(0).ej2_instances[0].dataBind();
+
             // update the product details description
             $('#product-details-page .product-details-description').html(`${productDetails.short_description}`);
 
-            // destroy an previous product variation dropdown list that may previously exist before creating the new ones
+            // destroy any previous product variation dropdown list that may previously exist before creating the new ones
             $('#product-details-page .product-details-variation-option').each(function(index, element){
                 element.ej2_instances[0].destroy(); // destroy the dropdown list component
             });
@@ -3574,48 +3593,56 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         placeholder: productDetails.attributes[index].name,
                         floatLabelType: 'Always',
                         change: async function () { // listen for when dropdown list value changes
-                            // handle the change in a separate event block
-                            window.setTimeout(async function(){
-                                let concatenatedVarationValue = ""; // holds the concatenated variation values
-                                // get the value from all the variation select-input/dropdown and concatenate them
-                                $('#product-details-page .product-details-variation-option').each(function(index2, element2){
-                                    concatenatedVarationValue += element2.ej2_instances[0].value;
-                                });
+                            // return a Promise which resolves when the change is completed
+                            return new Promise(function(resolve2, reject2){
 
-                                // since the concatenated variation value, is also what is used to uniquely identify each varition,
-                                // check if there is any variation with the same unique value has the concatenated variation value.
-                                // Also, assign the index position of the 'found' variation (if anty) to the current variation index property
-                                let variationIndexPosition =
-                                    utopiasoftware[utopiasoftware_app_namespace].controller.
-                                    productDetailsPageViewModel.productVariationsArray.findIndex(function(element3){
-                                        return concatenatedVarationValue === element3._variationValue;
-                                });
-                                utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
-                                    currentProductVariationIndex = variationIndexPosition;
+                                // handle the change in a separate event block
+                                window.setTimeout(async function(){
+                                    let concatenatedVarationValue = ""; // holds the concatenated variation values
+                                    // get the value from all the variation select-input/dropdown and concatenate them
+                                    $('#product-details-page .product-details-variation-option').each(function(index2, element2){
+                                        concatenatedVarationValue += element2.ej2_instances[0].value;
+                                    });
 
-                                // check if there is a product variation that matches the user's selection
-                                if(utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
-                                    currentProductVariationIndex !== -1){ // there is a product variation
-                                    // get the product variation
-                                    let productVariation = utopiasoftware[utopiasoftware_app_namespace].controller.
-                                        productDetailsPageViewModel.productVariationsArray[variationIndexPosition];
-                                    // update the product details display image and price to that of the selected variation (if any)
-                                    if(productVariation.image && productVariation.image !== ""){
-                                        // update the product details image
-                                        $('#product-details-page .e-card-image').css("background-image",
-                                            `url("${productVariation.image.src}")`);
+                                    // since the concatenated variation value, is also what is used to uniquely identify each varition,
+                                    // check if there is any variation with the same unique value has the concatenated variation value.
+                                    // Also, assign the index position of the 'found' variation (if anty) to the current variation index property
+                                    let variationIndexPosition =
+                                        utopiasoftware[utopiasoftware_app_namespace].controller.
+                                        productDetailsPageViewModel.productVariationsArray.findIndex(function(element3){
+                                            return concatenatedVarationValue === element3._variationValue;
+                                        });
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
+                                        currentProductVariationIndex = variationIndexPosition;
+
+                                    // check if there is a product variation that matches the user's selection
+                                    if(utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
+                                        currentProductVariationIndex !== -1){ // there is a product variation
+                                        // get the product variation
+                                        let productVariation = utopiasoftware[utopiasoftware_app_namespace].controller.
+                                            productDetailsPageViewModel.productVariationsArray[variationIndexPosition];
+                                        // update the product details display image and price to that of the selected variation (if any)
+                                        if(productVariation.image && productVariation.image !== ""){
+                                            // update the product details image
+                                            $('#product-details-page .e-card-image').css("background-image",
+                                                `url("${productVariation.image.src}")`);
+                                        }
+                                        if(productVariation.price && productVariation.price !== ""){
+                                            // update product price
+                                            $('#product-details-page .product-details-price').
+                                            html(`&#x20a6;${kendo.toString(kendo.parseFloat(productVariation.price), "n2")}`);
+                                        }
                                     }
-                                    if(productVariation.price && productVariation.price !== ""){
-                                        // update product price
-                                        $('#product-details-page .product-details-price').
-                                        html(`&#x20a6;${kendo.toString(kendo.parseFloat(productVariation.price), "n2")}`);
-                                    }
-                                }
 
-                            }, 0);
+                                    // resolve the parent Promise object to signified that change is completed
+                                    resolve2();
+
+                                }, 0);
+                            });
                         }
                     }).appendTo(element);
             });
+
             // collapse the variations content
             $('#product-details-page .product-details-variations').addClass('expandable-content');
 
@@ -3669,11 +3696,34 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 toast.dataBind();
                 toast.show();
 
-                return; // exit mwethod
+                return; // exit method
             }
 
-            // load the "Customise Product" page to the app-main-navigator
-            $('#app-main-navigator').get(0).pushPage("customise-product-page.html");
+            // perform the method task in a separate event block
+            window.setTimeout(async function(){
+                var productUrl = ""; // holds the url for the product being customised
+
+                // check if the user has selected a product variation or if the default product is being customised
+                if(utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
+                    currentProductVariationIndex !== -1){ // a product variation was selected
+                    // get the index position of the selected variation
+                    let variationIndex = utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
+                        currentProductVariationIndex;
+                    // get the production variation object
+                    let productVariation = utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
+                        productVariationsArray[variationIndex];
+                    productUrl = productVariation.permalink; // set the product url
+                }
+                else{ // no product variation was selected, so use the default product details
+                    productUrl = utopiasoftware[utopiasoftware_app_namespace].controller.
+                        productDetailsPageViewModel.currentProductDetails.permalink; // set the product url
+                }
+
+                // load the "Customise Product" page to the app-main-navigator
+                await $('#app-main-navigator').get(0).pushPage("customise-product-page.html");
+
+            }, 0);
+
         }
 
     }

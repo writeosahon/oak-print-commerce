@@ -3864,7 +3864,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         /**
          * holds the product variations array
          */
-        productVariationsArray: null,
+        productVariationsArray: [],
 
         /**
          * event is triggered when page is initialised
@@ -4052,8 +4052,22 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is destroyed
          */
         pageDestroy: function pageDestroy() {
-            // destroy the product variations array
-            utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.productVariationsArray = null;
+            // destroy properties
+            utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.currentProductDetails = null;
+            utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.currentProductVariationIndex = -1;
+            // reset the product variations array
+            utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.productVariationsArray = [];
+
+            // destroy the ej2 components on the page
+            $('#product-details-quantity').get(0).ej2_instances[0].destroy();
+            $('#product-details-review').get(0).ej2_instances[0].destroy();
+            $('#product-details-share').get(0).ej2_instances[0].destroy();
+            $('#product-details-customise-product').get(0).ej2_instances[0].destroy();
+
+            // destroy any product variation dropdown list
+            $('#product-details-page .product-details-variation-option').each(function (index, element) {
+                element.ej2_instances[0].destroy(); // destroy the dropdown list component
+            });
         },
 
         /**
@@ -4472,10 +4486,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     $('#product-details-quantity').get(0).ej2_instances[0].dataBind();
                                 }
 
+                                // reset the product details quantity numeric input field
+                                $('#product-details-quantity').get(0).ej2_instances[0].value = 1;
+                                $('#product-details-quantity').get(0).ej2_instances[0].dataBind();
+
                                 // update the product details description
                                 $('#product-details-page .product-details-description').html('' + productDetails.short_description);
 
-                                // destroy an previous product variation dropdown list that may previously exist before creating the new ones
+                                // destroy any previous product variation dropdown list that may previously exist before creating the new ones
                                 $('#product-details-page .product-details-variation-option').each(function (index, element) {
                                     element.ej2_instances[0].destroy(); // destroy the dropdown list component
                                 });
@@ -4513,54 +4531,59 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                     while (1) {
                                                         switch (_context59.prev = _context59.next) {
                                                             case 0:
-                                                                // listen for when dropdown list value changes
-                                                                // handle the change in a separate event block
-                                                                window.setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee58() {
-                                                                    var concatenatedVarationValue, variationIndexPosition, productVariation;
-                                                                    return regeneratorRuntime.wrap(function _callee58$(_context58) {
-                                                                        while (1) {
-                                                                            switch (_context58.prev = _context58.next) {
-                                                                                case 0:
-                                                                                    concatenatedVarationValue = ""; // holds the concatenated variation values
-                                                                                    // get the value from all the variation select-input/dropdown and concatenate them
+                                                                return _context59.abrupt('return', new Promise(function (resolve2, reject2) {
 
-                                                                                    $('#product-details-page .product-details-variation-option').each(function (index2, element2) {
-                                                                                        concatenatedVarationValue += element2.ej2_instances[0].value;
-                                                                                    });
+                                                                    // handle the change in a separate event block
+                                                                    window.setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee58() {
+                                                                        var concatenatedVarationValue, variationIndexPosition, productVariation;
+                                                                        return regeneratorRuntime.wrap(function _callee58$(_context58) {
+                                                                            while (1) {
+                                                                                switch (_context58.prev = _context58.next) {
+                                                                                    case 0:
+                                                                                        concatenatedVarationValue = ""; // holds the concatenated variation values
+                                                                                        // get the value from all the variation select-input/dropdown and concatenate them
 
-                                                                                    // since the concatenated variation value, is also what is used to uniquely identify each varition,
-                                                                                    // check if there is any variation with the same unique value has the concatenated variation value.
-                                                                                    // Also, assign the index position of the 'found' variation (if anty) to the current variation index property
-                                                                                    variationIndexPosition = utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.productVariationsArray.findIndex(function (element3) {
-                                                                                        return concatenatedVarationValue === element3._variationValue;
-                                                                                    });
+                                                                                        $('#product-details-page .product-details-variation-option').each(function (index2, element2) {
+                                                                                            concatenatedVarationValue += element2.ej2_instances[0].value;
+                                                                                        });
 
-                                                                                    utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.currentProductVariationIndex = variationIndexPosition;
+                                                                                        // since the concatenated variation value, is also what is used to uniquely identify each varition,
+                                                                                        // check if there is any variation with the same unique value has the concatenated variation value.
+                                                                                        // Also, assign the index position of the 'found' variation (if anty) to the current variation index property
+                                                                                        variationIndexPosition = utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.productVariationsArray.findIndex(function (element3) {
+                                                                                            return concatenatedVarationValue === element3._variationValue;
+                                                                                        });
 
-                                                                                    // check if there is a product variation that matches the user's selection
-                                                                                    if (utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.currentProductVariationIndex !== -1) {
-                                                                                        // there is a product variation
-                                                                                        // get the product variation
-                                                                                        productVariation = utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.productVariationsArray[variationIndexPosition];
-                                                                                        // update the product details display image and price to that of the selected variation (if any)
+                                                                                        utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.currentProductVariationIndex = variationIndexPosition;
 
-                                                                                        if (productVariation.image && productVariation.image !== "") {
-                                                                                            // update the product details image
-                                                                                            $('#product-details-page .e-card-image').css("background-image", 'url("' + productVariation.image.src + '")');
+                                                                                        // check if there is a product variation that matches the user's selection
+                                                                                        if (utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.currentProductVariationIndex !== -1) {
+                                                                                            // there is a product variation
+                                                                                            // get the product variation
+                                                                                            productVariation = utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.productVariationsArray[variationIndexPosition];
+                                                                                            // update the product details display image and price to that of the selected variation (if any)
+
+                                                                                            if (productVariation.image && productVariation.image !== "") {
+                                                                                                // update the product details image
+                                                                                                $('#product-details-page .e-card-image').css("background-image", 'url("' + productVariation.image.src + '")');
+                                                                                            }
+                                                                                            if (productVariation.price && productVariation.price !== "") {
+                                                                                                // update product price
+                                                                                                $('#product-details-page .product-details-price').html('&#x20a6;' + kendo.toString(kendo.parseFloat(productVariation.price), "n2"));
+                                                                                            }
                                                                                         }
-                                                                                        if (productVariation.price && productVariation.price !== "") {
-                                                                                            // update product price
-                                                                                            $('#product-details-page .product-details-price').html('&#x20a6;' + kendo.toString(kendo.parseFloat(productVariation.price), "n2"));
-                                                                                        }
-                                                                                    }
 
-                                                                                case 5:
-                                                                                case 'end':
-                                                                                    return _context58.stop();
+                                                                                        // resolve the parent Promise object to signified that change is completed
+                                                                                        resolve2();
+
+                                                                                    case 6:
+                                                                                    case 'end':
+                                                                                        return _context58.stop();
+                                                                                }
                                                                             }
-                                                                        }
-                                                                    }, _callee58, this);
-                                                                })), 0);
+                                                                        }, _callee58, this);
+                                                                    })), 0);
+                                                                }));
 
                                                             case 1:
                                                             case 'end':
@@ -4578,6 +4601,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         }()
                                     }).appendTo(element);
                                 });
+
                                 // collapse the variations content
                                 $('#product-details-page .product-details-variations').addClass('expandable-content');
 
@@ -4593,7 +4617,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 // update the weight for the product
                                 $('#product-details-page .product-details-weight').html('' + (!productDetails.weight || productDetails.weight == "" ? "(Not Available)" : '' + productDetails.weight));
 
-                            case 17:
+                            case 19:
                             case 'end':
                                 return _context60.stop();
                         }
@@ -4615,14 +4639,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         customiseButtonClicked: function () {
-            var _ref61 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee61() {
+            var _ref61 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee62() {
                 var toast;
-                return regeneratorRuntime.wrap(function _callee61$(_context61) {
+                return regeneratorRuntime.wrap(function _callee62$(_context62) {
                     while (1) {
-                        switch (_context61.prev = _context61.next) {
+                        switch (_context62.prev = _context62.next) {
                             case 0:
                                 if (!(navigator.connection.type === Connection.NONE)) {
-                                    _context61.next = 10;
+                                    _context62.next = 10;
                                     break;
                                 }
 
@@ -4639,19 +4663,53 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 toast.dataBind();
                                 toast.show();
 
-                                return _context61.abrupt('return');
+                                return _context62.abrupt('return');
 
                             case 10:
 
-                                // load the "Customise Product" page to the app-main-navigator
-                                $('#app-main-navigator').get(0).pushPage("customise-product-page.html");
+                                // perform the method task in a separate event block
+                                window.setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee61() {
+                                    var productUrl, variationIndex, productVariation;
+                                    return regeneratorRuntime.wrap(function _callee61$(_context61) {
+                                        while (1) {
+                                            switch (_context61.prev = _context61.next) {
+                                                case 0:
+                                                    productUrl = ""; // holds the url for the product being customised
+
+                                                    // check if the user has selected a product variation or if the default product is being customised
+
+                                                    if (utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.currentProductVariationIndex !== -1) {
+                                                        // a product variation was selected
+                                                        // get the index position of the selected variation
+                                                        variationIndex = utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.currentProductVariationIndex;
+                                                        // get the production variation object
+
+                                                        productVariation = utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.productVariationsArray[variationIndex];
+
+                                                        productUrl = productVariation.permalink; // set the product url
+                                                    } else {
+                                                        // no product variation was selected, so use the default product details
+                                                        productUrl = utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.currentProductDetails.permalink; // set the product url
+                                                    }
+
+                                                    // load the "Customise Product" page to the app-main-navigator
+                                                    _context61.next = 4;
+                                                    return $('#app-main-navigator').get(0).pushPage("customise-product-page.html");
+
+                                                case 4:
+                                                case 'end':
+                                                    return _context61.stop();
+                                            }
+                                        }
+                                    }, _callee61, this);
+                                })), 0);
 
                             case 11:
                             case 'end':
-                                return _context61.stop();
+                                return _context62.stop();
                         }
                     }
-                }, _callee61, this);
+                }, _callee62, this);
             }));
 
             function customiseButtonClicked() {
