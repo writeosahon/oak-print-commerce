@@ -3720,6 +3720,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 // load the "Customise Product" page to the app-main-navigator
                 await $('#app-main-navigator').get(0).pushPage("customise-product-page.html");
+                // load the product customisation url
+                await utopiasoftware[utopiasoftware_app_namespace].controller.
+                    customiseProductPageViewModel.loadProductCustomisation(productUrl);
 
             }, 0);
 
@@ -3731,6 +3734,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
      * this is the view-model/controller for the Customise Product page
      */
     customiseProductPageViewModel: {
+
+        currentCustomisationUrl : "",
 
         /**
          * event is triggered when page is initialised
@@ -3755,36 +3760,37 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     utopiasoftware[utopiasoftware_app_namespace].controller.
                         customiseProductPageViewModel.backButtonClicked;
 
-                /*
                 // add method to handle the loading action of the pull-to-refresh widget
-                $('#product-details-page-pull-hook', $thisPage).get(0).onAction =
-                    utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.pagePullHookAction;
+                $('#customise-product-page-pull-hook', $thisPage).get(0).onAction =
+                    utopiasoftware[utopiasoftware_app_namespace].controller.
+                        customiseProductPageViewModel.pagePullHookAction;
 
                 // register listener for the pull-to-refresh widget
-                $('#product-details-page-pull-hook', $thisPage).on("changestate", function(event){
+                $('#customise-product-page-pull-hook', $thisPage).on("changestate", function(event){
 
                     // check the state of the pull-to-refresh widget
                     switch (event.originalEvent.state){
                         case 'initial':
                             // update the displayed content
-                            $('#product-details-page-pull-hook-fab', event.originalEvent.pullHook).
+                            $('#customise-product-page-pull-hook-fab', event.originalEvent.pullHook).
                             html('<ons-icon icon="md-long-arrow-down" size="24px" style="color: #363E7C"></ons-icon>');
                             break;
 
                         case 'preaction':
                             // update the displayed content
-                            $('#product-details-page-pull-hook-fab', event.originalEvent.pullHook).
+                            $('#customise-product-page-pull-hook-fab', event.originalEvent.pullHook).
                             html('<ons-icon icon="md-long-arrow-up" size="24px" style="color: #363E7C"></ons-icon>');
                             break;
 
                         case 'action':
                             // update the displayed content
-                            $('#product-details-page-pull-hook-fab', event.originalEvent.pullHook).
+                            $('#customise-product-page-pull-hook-fab', event.originalEvent.pullHook).
                             html('<ons-progress-circular indeterminate modifier="pull-hook"></ons-progress-circular>');
                             break;
                     }
                 });
 
+                /*
                 try{
                     // create the "Pick Quantity" button
                     new ej.inputs.NumericTextBox({
@@ -3865,12 +3871,26 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         pageShow: function(){
             window.SoftInputMode.set('adjustPan');
+
+            // listen for when the device does not have Internet connection
+            document.addEventListener("offline",
+                utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.deviceOfflineListener, false);
+            // listen for when the device has Internet connection
+            document.addEventListener("online",
+                utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.deviceOnlineListener, false);
         },
 
         /**
          * method is triggered when page is hidden
          */
         pageHide: async function(){
+
+            // remove listener for when the device does not have Internet connection
+            document.removeEventListener("offline",
+                utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.deviceOfflineListener, false);
+            // remove listener for when the device has Internet connection
+            document.removeEventListener("online",
+                utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.deviceOnlineListener, false);
         },
 
         /**
@@ -3884,6 +3904,100 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         backButtonClicked(){
             // get back to the previous page on the app-main navigator stack
             $('#app-main-navigator').get(0).popPage();
+        },
+
+        /**
+         * method is triggered whenever the user's device is offline
+         */
+        deviceOfflineListener(){
+            // hide all previously displayed ej2 toast
+            $('.page-toast').get(0).ej2_instances[0].hide('All');
+            $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+            // display toast to show that there is no internet connection
+            let toast = $('.page-toast').get(0).ej2_instances[0];
+            toast.cssClass = 'default-ej2-toast';
+            toast.content = "No Internet connection. Connect to the Internet to customise product";
+            toast.dataBind();
+            toast.show();// show ej2 toast
+        },
+
+        /**
+         * method is triggered whenever the user's device is online
+         */
+        deviceOnlineListener(){
+            // hide all previously displayed ej2 toast
+            $('.page-toast').get(0).ej2_instances[0].hide('All');
+        },
+
+        /**
+         * method is triggered when the pull-hook on the page is active
+         *
+         * @param doneCallBack
+         * @returns {Promise<void>}
+         */
+        async pagePullHookAction(doneCallBack = function(){}){
+            // disable pull-to-refresh widget till loading is done
+            $('#customise-product-page #customise-product-page-pull-hook').attr("disabled", true);
+            // hide all previously displayed ej2 toast
+            $('.page-toast').get(0).ej2_instances[0].hide('All');
+
+            try{
+                // reload the current product customisation url into the iframe
+                await utopiasoftware[utopiasoftware_app_namespace].controller.
+               customiseProductPageViewModel.loadProductCustomisation();
+            }
+            catch(err){ // an error occurred
+
+                // display toast to show that error
+                let toast = $('.page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.content = "Sorry, an error occurred. Refresh to try again";
+                toast.dataBind();
+                toast.show();
+            }
+            finally{
+                // enable pull-to-refresh widget till loading is done
+                $('#customise-product-page #customise-product-page-pull-hook').removeAttr("disabled");
+                // signal that loading is done
+                doneCallBack();
+            }
+        },
+
+        /**
+         * method is used to load a particular product/product variation customisation.
+         *
+         * @param customisationUrl {String} holds the url for the product to be customised
+         *
+         * @returns {Promise<void>}
+         */
+        async loadProductCustomisation(customisationUrl = utopiasoftware[utopiasoftware_app_namespace].
+            controller.customiseProductPageViewModel.currentCustomisationUrl){
+
+            // check if there is Internet connection
+            if(navigator.connection.type === Connection.NONE){ // there is no Internet connection
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast to show that an error
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'default-ej2-toast';
+                toast.timeOut = 3500;
+                toast.content = `Please connect to the Internet to customise product and Pull Down to refresh`;
+                toast.dataBind();
+                toast.show();
+            }
+
+            // load the specified url into the customisation iframe
+            $('#customise-product-page #customise-product-page-iframe').attr("src", customisationUrl);
+
+            // update the current customisation url
+            utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.
+                currentCustomisationUrl = customisationUrl;
+
+            // remove the page preloader
+            $('#customise-product-page .page-preloader').css("display", "none");
+
+            return true;
         }
     }
 };

@@ -445,6 +445,13 @@
 }
 /** STYLE FOR PRODUCT DETAILS PAGE ENDS **/
 
+/** STYLE FOR CUSTOMISE PRODUCT PAGE BEGINS **/
+#customise-product-page .page__background,
+#customise-product-page .page--material__background {
+    background-color: #ffffff;
+}
+/** STYLE FOR CUSTOMISE PRODUCT PAGE BEGINS **/
+
 /** STYLE FOR LOGIN PAGE BEGINS **/
 #login-page .page__background,
 #login-page .page--material__background {
