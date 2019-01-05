@@ -4759,6 +4759,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // add method to handle the loading action of the pull-to-refresh widget
                                     $('#customise-product-page-pull-hook', $thisPage).get(0).onAction = utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.pagePullHookAction;
 
+                                    // register listener for listening to messages from the parent site
+                                    window.addEventListener("message", utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.receiveMessageListener, false);
+
                                     // register listener for the pull-to-refresh widget
                                     $('#customise-product-page-pull-hook', $thisPage).on("changestate", function (event) {
 
@@ -4847,7 +4850,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     }
                                     */
 
-                                case 6:
+                                case 7:
                                 case 'end':
                                     return _context63.stop();
                             }
@@ -4911,7 +4914,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         /**
          * method is triggered when page is destroyed
          */
-        pageDestroy: function pageDestroy() {},
+        pageDestroy: function pageDestroy() {
+
+            // remove listener for listening to messages from the parent site
+            window.removeEventListener("message", utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.receiveMessageListener, false);
+        },
 
         /**
          * method is triggered when the device back button is clicked OR a similar action is triggered
@@ -4948,35 +4955,82 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
 
         /**
+         * method is used to handle the receipt of messages from the parent website
+         *
+         * @param receiveEvent {Event} this is the event object of the "Message" event
+         *
+         * @returns {Promise<void>}
+         */
+        receiveMessageListener: function () {
+            var _ref65 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee65(receiveEvent) {
+                return regeneratorRuntime.wrap(function _callee65$(_context65) {
+                    while (1) {
+                        switch (_context65.prev = _context65.next) {
+                            case 0:
+                                if (!(receiveEvent.origin !== "https://shopoakexclusive.com")) {
+                                    _context65.next = 2;
+                                    break;
+                                }
+
+                                return _context65.abrupt('return');
+
+                            case 2:
+                                if (!(receiveEvent.data === "page ready")) {
+                                    _context65.next = 5;
+                                    break;
+                                }
+
+                                // parent site is ready to work together
+                                // remove the page preloader
+                                $('#customise-product-page .page-preloader').css("display", "none");
+                                return _context65.abrupt('return');
+
+                            case 5:
+                            case 'end':
+                                return _context65.stop();
+                        }
+                    }
+                }, _callee65, this);
+            }));
+
+            function receiveMessageListener(_x33) {
+                return _ref65.apply(this, arguments);
+            }
+
+            return receiveMessageListener;
+        }(),
+
+
+        /**
          * method is triggered when the pull-hook on the page is active
          *
          * @param doneCallBack
          * @returns {Promise<void>}
          */
         pagePullHookAction: function () {
-            var _ref65 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee65() {
+            var _ref66 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee66() {
                 var doneCallBack = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : function () {};
                 var toast;
-                return regeneratorRuntime.wrap(function _callee65$(_context65) {
+                return regeneratorRuntime.wrap(function _callee66$(_context66) {
                     while (1) {
-                        switch (_context65.prev = _context65.next) {
+                        switch (_context66.prev = _context66.next) {
                             case 0:
                                 // disable pull-to-refresh widget till loading is done
                                 $('#customise-product-page #customise-product-page-pull-hook').attr("disabled", true);
                                 // hide all previously displayed ej2 toast
                                 $('.page-toast').get(0).ej2_instances[0].hide('All');
 
-                                _context65.prev = 2;
-                                _context65.next = 5;
+                                _context66.prev = 2;
+                                _context66.next = 5;
                                 return utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.loadProductCustomisation();
 
                             case 5:
-                                _context65.next = 14;
+                                _context66.next = 14;
                                 break;
 
                             case 7:
-                                _context65.prev = 7;
-                                _context65.t0 = _context65['catch'](2);
+                                _context66.prev = 7;
+                                _context66.t0 = _context66['catch'](2);
                                 // an error occurred
 
                                 // display toast to show that error
@@ -4988,24 +5042,27 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 toast.show();
 
                             case 14:
-                                _context65.prev = 14;
+                                _context66.prev = 14;
 
-                                // enable pull-to-refresh widget till loading is done
-                                $('#customise-product-page #customise-product-page-pull-hook').removeAttr("disabled");
-                                // signal that loading is done
-                                doneCallBack();
-                                return _context65.finish(14);
+                                window.setTimeout(function () {
+                                    // wait for 2 sec before declaring loading done
+                                    // enable pull-to-refresh widget till loading is done
+                                    $('#customise-product-page #customise-product-page-pull-hook').removeAttr("disabled");
+                                    // signal that loading is done
+                                    doneCallBack();
+                                }, 2000);
+                                return _context66.finish(14);
 
-                            case 18:
+                            case 17:
                             case 'end':
-                                return _context65.stop();
+                                return _context66.stop();
                         }
                     }
-                }, _callee65, this, [[2, 7, 14, 18]]);
+                }, _callee66, this, [[2, 7, 14, 17]]);
             }));
 
             function pagePullHookAction() {
-                return _ref65.apply(this, arguments);
+                return _ref66.apply(this, arguments);
             }
 
             return pagePullHookAction;
@@ -5020,12 +5077,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         loadProductCustomisation: function () {
-            var _ref66 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee66() {
+            var _ref67 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee67() {
                 var customisationUrl = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.currentCustomisationUrl;
                 var toast;
-                return regeneratorRuntime.wrap(function _callee66$(_context66) {
+                return regeneratorRuntime.wrap(function _callee67$(_context67) {
                     while (1) {
-                        switch (_context66.prev = _context66.next) {
+                        switch (_context67.prev = _context67.next) {
                             case 0:
 
                                 // check if there is Internet connection
@@ -5050,21 +5107,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 // update the current customisation url
                                 utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.currentCustomisationUrl = customisationUrl;
 
-                                // remove the page preloader
-                                $('#customise-product-page .page-preloader').css("display", "none");
+                                return _context67.abrupt('return', true);
 
-                                return _context66.abrupt('return', true);
-
-                            case 5:
+                            case 4:
                             case 'end':
-                                return _context66.stop();
+                                return _context67.stop();
                         }
                     }
-                }, _callee66, this);
+                }, _callee67, this);
             }));
 
             function loadProductCustomisation() {
-                return _ref66.apply(this, arguments);
+                return _ref67.apply(this, arguments);
             }
 
             return loadProductCustomisation;

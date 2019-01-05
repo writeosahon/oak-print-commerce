@@ -1,0 +1,53 @@
+
+/** STYLE FOR CUSTOMISING THE WEB APP DURING PRODUCT CUSTOMISATION FOR THE MOBILE APP **/
+html.utopiasoftware-mobile .navbar {
+    display: none !important;
+}
+html.utopiasoftware-mobile .page-banner-section {
+    display: none !important;
+}
+html.utopiasoftware-mobile .single-product-section {
+    padding-top: 0 !important;
+}
+html.utopiasoftware-mobile .single-product-section .product-desc {
+    display: none !important;
+}
+html.utopiasoftware-mobile .single-product-section .rating {
+    display: none !important;
+}
+html.utopiasoftware-mobile .single-product-section .price {
+    display: none !important;
+}
+html.utopiasoftware-mobile .single-product-section .woocommerce-variation {
+    display: block !important;
+}
+html.utopiasoftware-mobile .single-product-section .woocommerce-variation-price .price {
+    display: block !important;
+}
+html.utopiasoftware-mobile .single-product-section .woocommerce-variation-price .price * {
+    display: inline-block !important;
+}
+html.utopiasoftware-mobile .single-product-section .woocommerce-variation-description {
+    display: none !important;
+}
+html.utopiasoftware-mobile .product_meta {
+    display: none !important;
+}
+html.utopiasoftware-mobile .product-tabs {
+    display: none !important;
+}
+html.utopiasoftware-mobile .section-content.related-shop-section {
+    display: none !important;
+}
+html.utopiasoftware-mobile footer {
+    display: none !important;
+}
+html.utopiasoftware-mobile .variations_form.cart table.variations {
+    /*display: none !important;*/
+}
+html.utopiasoftware-mobile .variations_form.cart button[type="submit"].button { /* hidden the 'add to cart' button */
+    /*visibility: hidden !important;*/
+}
+html.utopiasoftware-mobile .woocommerce-notices-wrapper a.button { /* hidden the 'add to cart' button */
+    visibility: hidden !important;
+}

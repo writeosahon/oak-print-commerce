@@ -3765,6 +3765,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     utopiasoftware[utopiasoftware_app_namespace].controller.
                         customiseProductPageViewModel.pagePullHookAction;
 
+                // register listener for listening to messages from the parent site
+                window.addEventListener("message", utopiasoftware[utopiasoftware_app_namespace].controller.
+                    customiseProductPageViewModel.receiveMessageListener, false);
+
                 // register listener for the pull-to-refresh widget
                 $('#customise-product-page-pull-hook', $thisPage).on("changestate", function(event){
 
@@ -3896,7 +3900,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         /**
          * method is triggered when page is destroyed
          */
-        pageDestroy: function(){},
+        pageDestroy: function(){
+
+            // remove listener for listening to messages from the parent site
+            window.removeEventListener("message", utopiasoftware[utopiasoftware_app_namespace].controller.
+                customiseProductPageViewModel.receiveMessageListener, false);
+        },
 
         /**
          * method is triggered when the device back button is clicked OR a similar action is triggered
@@ -3929,6 +3938,28 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             $('.page-toast').get(0).ej2_instances[0].hide('All');
         },
 
+
+        /**
+         * method is used to handle the receipt of messages from the parent website
+         *
+         * @param receiveEvent {Event} this is the event object of the "Message" event
+         *
+         * @returns {Promise<void>}
+         */
+        async receiveMessageListener(receiveEvent){
+            // check where the message originated from
+            if(receiveEvent.origin !== "https://shopoakexclusive.com"){ // message is not from the parent website
+                return; // exit
+            }
+
+            // check the data that was sent
+            if(receiveEvent.data === "page ready"){ // parent site is ready to work together
+                // remove the page preloader
+                $('#customise-product-page .page-preloader').css("display", "none");
+                return;
+            }
+        },
+
         /**
          * method is triggered when the pull-hook on the page is active
          *
@@ -3956,10 +3987,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 toast.show();
             }
             finally{
-                // enable pull-to-refresh widget till loading is done
-                $('#customise-product-page #customise-product-page-pull-hook').removeAttr("disabled");
-                // signal that loading is done
-                doneCallBack();
+                window.setTimeout(function(){ // wait for 2 sec before declaring loading done
+                    // enable pull-to-refresh widget till loading is done
+                    $('#customise-product-page #customise-product-page-pull-hook').removeAttr("disabled");
+                    // signal that loading is done
+                    doneCallBack();
+                }, 2000);
             }
         },
 
@@ -3993,9 +4026,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // update the current customisation url
             utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.
                 currentCustomisationUrl = customisationUrl;
-
-            // remove the page preloader
-            $('#customise-product-page .page-preloader').css("display", "none");
 
             return true;
         }
