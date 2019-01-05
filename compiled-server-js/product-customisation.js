@@ -26,6 +26,6 @@ jQuery(document).ready(function(){
  *
  * @returns {Promise<void>}
  */
-async function utopiasoftware_receiveMessage(receiveEvent){
+async function dutopiasoftware_receiveMessage(receiveEvent){
 
 }

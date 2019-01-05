@@ -5015,22 +5015,24 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     while (1) {
                         switch (_context66.prev = _context66.next) {
                             case 0:
+                                // show the page preloader
+                                $('#customise-product-page .page-preloader').css("display", "block");
                                 // disable pull-to-refresh widget till loading is done
                                 $('#customise-product-page #customise-product-page-pull-hook').attr("disabled", true);
                                 // hide all previously displayed ej2 toast
                                 $('.page-toast').get(0).ej2_instances[0].hide('All');
 
-                                _context66.prev = 2;
-                                _context66.next = 5;
+                                _context66.prev = 3;
+                                _context66.next = 6;
                                 return utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.loadProductCustomisation();
 
-                            case 5:
-                                _context66.next = 14;
+                            case 6:
+                                _context66.next = 15;
                                 break;
 
-                            case 7:
-                                _context66.prev = 7;
-                                _context66.t0 = _context66['catch'](2);
+                            case 8:
+                                _context66.prev = 8;
+                                _context66.t0 = _context66['catch'](3);
                                 // an error occurred
 
                                 // display toast to show that error
@@ -5041,8 +5043,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 toast.dataBind();
                                 toast.show();
 
-                            case 14:
-                                _context66.prev = 14;
+                            case 15:
+                                _context66.prev = 15;
 
                                 window.setTimeout(function () {
                                     // wait for 2 sec before declaring loading done
@@ -5051,14 +5053,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // signal that loading is done
                                     doneCallBack();
                                 }, 2000);
-                                return _context66.finish(14);
+                                return _context66.finish(15);
 
-                            case 17:
+                            case 18:
                             case 'end':
                                 return _context66.stop();
                         }
                     }
-                }, _callee66, this, [[2, 7, 14, 17]]);
+                }, _callee66, this, [[3, 8, 15, 18]]);
             }));
 
             function pagePullHookAction() {
@@ -5084,22 +5086,27 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     while (1) {
                         switch (_context67.prev = _context67.next) {
                             case 0:
-
-                                // check if there is Internet connection
-                                if (navigator.connection.type === Connection.NONE) {
-                                    // there is no Internet connection
-                                    // hide all previously displayed ej2 toast
-                                    $('.page-toast').get(0).ej2_instances[0].hide('All');
-                                    $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
-                                    // display toast to show that an error
-                                    toast = $('.timed-page-toast').get(0).ej2_instances[0];
-
-                                    toast.cssClass = 'default-ej2-toast';
-                                    toast.timeOut = 3500;
-                                    toast.content = 'Please connect to the Internet to customise product and Pull Down to refresh';
-                                    toast.dataBind();
-                                    toast.show();
+                                if (!(navigator.connection.type === Connection.NONE)) {
+                                    _context67.next = 10;
+                                    break;
                                 }
+
+                                // there is no Internet connection
+                                // hide all previously displayed ej2 toast
+                                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                                // display toast to show that an error
+                                toast = $('.timed-page-toast').get(0).ej2_instances[0];
+
+                                toast.cssClass = 'default-ej2-toast';
+                                toast.timeOut = 3500;
+                                toast.content = 'Please connect to the Internet to customise product and Pull Down to refresh';
+                                toast.dataBind();
+                                toast.show();
+
+                                return _context67.abrupt('return');
+
+                            case 10:
 
                                 // load the specified url into the customisation iframe
                                 $('#customise-product-page #customise-product-page-iframe').attr("src", customisationUrl);
@@ -5109,7 +5116,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 return _context67.abrupt('return', true);
 
-                            case 4:
+                            case 13:
                             case 'end':
                                 return _context67.stop();
                         }

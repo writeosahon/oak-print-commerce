@@ -7,7 +7,7 @@
  *
  * @returns {Promise<void>}
  */
-var utopiasoftware_receiveMessage = function () {
+var dutopiasoftware_receiveMessage = function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(receiveEvent) {
         return regeneratorRuntime.wrap(function _callee$(_context) {
             while (1) {
@@ -20,7 +20,7 @@ var utopiasoftware_receiveMessage = function () {
         }, _callee, this);
     }));
 
-    return function utopiasoftware_receiveMessage(_x) {
+    return function dutopiasoftware_receiveMessage(_x) {
         return _ref.apply(this, arguments);
     };
 }();

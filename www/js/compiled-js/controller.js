@@ -3967,6 +3967,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         async pagePullHookAction(doneCallBack = function(){}){
+            // show the page preloader
+            $('#customise-product-page .page-preloader').css("display", "block");
             // disable pull-to-refresh widget till loading is done
             $('#customise-product-page #customise-product-page-pull-hook').attr("disabled", true);
             // hide all previously displayed ej2 toast
@@ -4018,6 +4020,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 toast.content = `Please connect to the Internet to customise product and Pull Down to refresh`;
                 toast.dataBind();
                 toast.show();
+
+                return; // exit method
             }
 
             // load the specified url into the customisation iframe
