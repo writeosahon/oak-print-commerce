@@ -3968,7 +3968,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         async pagePullHookAction(doneCallBack = function(){}){
             // show the page preloader
-            $('#customise-product-page .page-preloader').css("display", "block");
+            $('#customise-product-page .page-preloader').css("display", "block")
             // disable pull-to-refresh widget till loading is done
             $('#customise-product-page #customise-product-page-pull-hook').attr("disabled", true);
             // hide all previously displayed ej2 toast
