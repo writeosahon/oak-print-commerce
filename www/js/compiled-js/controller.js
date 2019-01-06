@@ -3806,8 +3806,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     new ej.splitbuttons.ProgressButton({
                         //iconCss: "zmdi zmdi-brush utopiasoftware-icon-zoom-one-point-two",
                         //iconPosition: "Left"
-                        duration: 60 * 60 * 1000, // set spinner/progress duration for 1 hr
-                        disabled: true // button is disabled by default until customisation iframe is ready
+                        duration: 60 * 60 * 1000 // set spinner/progress duration for 1 hr
                     }).appendTo('#customise-product-add-to-cart');
 
 
@@ -3909,8 +3908,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // remove the page preloader
                 $('#customise-product-page .page-preloader').css("display", "none");
                 // enable the "Add To Cart" button
-                $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].disabled = false;
-                $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].dataBind();
+                $('#customise-product-page #customise-product-add-to-cart').removeAttr("disabled");
+                //$('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].dataBind();
                 return;
             }
         },
