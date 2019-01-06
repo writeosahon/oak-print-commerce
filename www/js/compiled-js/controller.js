@@ -3794,78 +3794,28 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     }
                 });
 
-                /*
                 try{
-                    // create the "Pick Quantity" button
-                    new ej.inputs.NumericTextBox({
-                        cssClass: 'product-details-quantity-class',
-                        currency: null,
-                        decimals: 0,
-                        floatLabelType: 'Auto',
-                        format: 'n',
-                        showSpinButton: false,
-                        min: 1,
-                        max: 10,
-                        placeholder: 'Pick Quantity',
-                        step: 1,
-                        strictMode: true,
-                        // sets value to the NumericTextBox
-                        value: 1
-                    }).appendTo('#product-details-quantity');
 
-                    // create the "Add To Cart" button
+                    // create the "Cancel" button
                     new ej.buttons.Button({
                         //iconCss: "zmdi zmdi-shopping-cart-add utopiasoftware-icon-zoom-one-point-two",
                         //iconPosition: "Left"
-                    }).appendTo('#product-details-add-to-cart');
+                    }).appendTo('#customise-product-cancel');
 
-                    // create the "Customise" button
-                    new ej.buttons.Button({
+                    // create the "Add To Cart" button
+                    new ej.splitbuttons.ProgressButton({
                         //iconCss: "zmdi zmdi-brush utopiasoftware-icon-zoom-one-point-two",
                         //iconPosition: "Left"
-                    }).appendTo('#product-details-customise-product');
+                    }).appendTo('#customise-product-add-to-cart');
 
-                    // create the "Review" button
-                    new ej.buttons.Button({
-                        cssClass: 'e-flat e-small',
-                        iconCss: "zmdi zmdi-star-outline",
-                        iconPosition: "Left"
-                    }).appendTo('#product-details-review');
-
-                    // create the "Share" button
-                    new ej.buttons.Button({
-                        cssClass: 'e-flat e-small',
-                        iconCss: "zmdi zmdi-share",
-                        iconPosition: "Left"
-                    }).appendTo('#product-details-share');
-
-                    // load product variations asynchronously without waiting for the response
-                    utopiasoftware[utopiasoftware_app_namespace].controller.
-                    productDetailsPageViewModel.loadProductVariations();
-                    // load product details
-                    let productDetailsArray = await utopiasoftware[utopiasoftware_app_namespace].controller.
-                    productDetailsPageViewModel.loadProduct();
-                    // display the loaded product details
-                    await utopiasoftware[utopiasoftware_app_namespace].controller.
-                    productDetailsPageViewModel.displayProductDetails(productDetailsArray[0]);
 
                 }
                 catch(err){
 
-                    // hide all previously displayed ej2 toast
-                    $('.page-toast').get(0).ej2_instances[0].hide('All');
-                    // display toast to show that an error
-                    let toast = $('.page-toast').get(0).ej2_instances[0];
-                    toast.cssClass = 'error-ej2-toast';
-                    toast.content = `Sorry, an error occurred.${navigator.connection.type === Connection.NONE ? " Connect to the Internet." : ""} Pull down to refresh and try again`;
-                    toast.dataBind();
-                    toast.show();
                 }
                 finally {
-                    // hide the preloader
-                    $('#product-details-page .page-preloader').css("display", "none");
+
                 }
-                */
             }
 
         },
@@ -3874,7 +3824,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is shown
          */
         pageShow: function(){
-            window.SoftInputMode.set('adjustPan');
+            window.SoftInputMode.set('adjustResize');
 
             // listen for when the device does not have Internet connection
             document.addEventListener("offline",
