@@ -3911,7 +3911,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // enable the "Add To Cart" button
                 $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].disabled = false;
                 $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].dataBind();
-                $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].refresh();
                 return;
             }
         },
