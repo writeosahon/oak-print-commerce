@@ -42,8 +42,8 @@ function utopiasoftware_setUsage(usageKey){
     return new Promise(function(resolve, reject){
         Promise.resolve($.ajax(
             {
-                url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + "/wp-json/wc/v3/products",
-                type: "get",
+                url: "https://shopoakexclusive.com/wp-json/wc/v2/cart/add",
+                type: "post",
                 contentType: "application/json",
                 beforeSend: function(jqxhr) {
                     jqxhr.setRequestHeader("Authorization", "Basic " + usageKey);
