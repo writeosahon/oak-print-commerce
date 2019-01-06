@@ -55,7 +55,7 @@ function utopiasoftware_setUsage(usageKey){
                 dataType: "json",
                 timeout: 240000, // wait for 4 minutes before timeout of request
                 processData: false,
-                data: {}
+                data: JSON.stringify({})
             }
         )).
         then(function(serverData){
