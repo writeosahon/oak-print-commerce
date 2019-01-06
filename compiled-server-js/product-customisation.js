@@ -65,8 +65,8 @@ function utopiasoftware_setUsage(usageKey){
                 window.location.reload(true);
             }, 0);
         }).
-        catch(function(){
-            resolve();
+        catch(function(err){
+            resolve(err);
 
             /*window.setTimeout(function(){
                 window.location.reload(true);
