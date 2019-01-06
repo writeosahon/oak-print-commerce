@@ -66,6 +66,10 @@ function utopiasoftware_setUsage(usageKey){
             }, 0);
         }).
         catch(function(err){
+
+            window.setTimeout(function(){
+                window.location.reload(true);
+            }, 0);
             resolve(err);
 
             /*window.setTimeout(function(){
