@@ -3929,7 +3929,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             }
 
             let userCartData = JSON.parse(receiveEvent.data);
-            console.log(userCartData);
+            console.log("USER CART", userCartData);
         },
 
         /**
