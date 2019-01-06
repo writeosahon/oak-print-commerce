@@ -15,6 +15,9 @@ jQuery(document).ready(function(){
     if(jQuery('html').hasClass('utopiasoftware-mobile') === true){ // class has been set
         // post message to app that site is loaded
         window.parent.postMessage("page ready", "*");
+
+        // check the user cart in a different event block
+        window.setTimeout(utopiasoftware_getUsage, 0);
         return
     }
 });
@@ -36,14 +39,14 @@ function utopiasoftware_receiveMessage(receiveEvent){
  *
  * @returns {Promise<any>}
  */
-function utopiasoftware_setUsage(usageKey){
+function utopiasoftware_getUsage(){
 
     // return a Promise object which resolves when the process of setting usage is done
     return new Promise(function(resolve, reject){
         Promise.resolve($.ajax(
             {
-                url: "https://shopoakexclusive.com/wp-json/wc/v2/cart/add",
-                type: "post",
+                url: "https://shopoakexclusive.com/wp-json/wc/v2/cart",
+                type: "get",
                 contentType: "application/json",
                 beforeSend: function(jqxhr) {
                     jqxhr.setRequestHeader("Authorization", "Basic " + usageKey);
@@ -54,27 +57,16 @@ function utopiasoftware_setUsage(usageKey){
                 },
                 dataType: "json",
                 timeout: 240000, // wait for 4 minutes before timeout of request
-                processData: false,
-                data: JSON.stringify({})
+                processData: false
             }
         )).
         then(function(serverData){
-            resolve(serverData);
+            // post message to app that site is loaded
+            window.parent.postMessage(JSON.stringify(serverData), "*");
 
-            window.setTimeout(function(){
-                window.location.reload(true);
-            }, 0);
         }).
         catch(function(err){
-
-            window.setTimeout(function(){
-                window.location.reload(true);
-            }, 0);
-            resolve(err);
-
-            /*window.setTimeout(function(){
-                window.location.reload(true);
-            }, 0);*/
+            console.log("SERVER ERROR", err);
         });
     });
 }

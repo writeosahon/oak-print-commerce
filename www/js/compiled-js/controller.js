@@ -3925,22 +3925,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // enable the "Add To Cart" button
                 $('#customise-product-page #customise-product-add-to-cart').removeAttr("disabled");
 
-                if(utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.
-                    customisationPageLoadCount === 1){ // this is the 1st time customisation page is being loaded
-
-                    let promises = event.source.
-                    utopiasoftware_setUsage(utopiasoftware[utopiasoftware_app_namespace].accessor);
-                    console.log("TEST PROMISE", promises);
-                    promises.
-                    then(function(testData){
-                        console.log("TEST DATA", testData);
-                    }).catch(function(errData){
-                        console.log("ERROR DATA", errData);
-                    });
-                }
-
                 return;
             }
+
+            let userCartData = JSON.parse(receiveEvent.data);
+            console.log(userCartData);
         },
 
         /**
