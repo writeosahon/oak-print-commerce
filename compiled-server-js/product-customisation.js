@@ -24,11 +24,53 @@ jQuery(document).ready(function(){
  *
  * @param receiveEvent {Event} this is the event object of the "Message" event
  *
- * @returns {Promise<void>}
  */
 function utopiasoftware_receiveMessage(receiveEvent){
 }
 
-function setUsage(key){
-    console.log("USAGE KEY", key);
+
+/**
+ * method is used to set the currently logged in user
+ *
+ * @param usageKey {String} authorisation key for the current user
+ *
+ * @returns {Promise<any>}
+ */
+function utopiasoftware_setUsage(usageKey){
+
+    // return a Promise object which resolves when the process of setting usage is done
+    return new Promise(function(resolve, reject){
+        Promise.resolve($.ajax(
+            {
+                url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + "/wp-json/wc/v3/products",
+                type: "get",
+                contentType: "application/json",
+                beforeSend: function(jqxhr) {
+                    jqxhr.setRequestHeader("Authorization", "Basic " + usageKey);
+                },
+                crossDomain: true,
+                xhrFields: {
+                    withCredentials: true
+                },
+                dataType: "json",
+                timeout: 240000, // wait for 4 minutes before timeout of request
+                processData: false,
+                data: {}
+            }
+        )).
+        then(function(serverData){
+            resolve(serverData);
+
+            window.setTimeout(function(){
+                window.location.reload(true);
+            }, 0);
+        }).
+        catch(function(){
+            resolve();
+
+            /*window.setTimeout(function(){
+                window.location.reload(true);
+            }, 0);*/
+        });
+    });
 }

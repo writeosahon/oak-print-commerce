@@ -3735,7 +3735,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
      */
     customiseProductPageViewModel: {
 
+        /**
+         * holds the current customisation url that has been loaded
+         */
         currentCustomisationUrl : "",
+
+        /**
+         * holds the number of times the customisation page has been loaded from the parent server
+         */
+        customisationPageLoadCount: 0,
 
         /**
          * event is triggered when page is initialised
@@ -3852,6 +3860,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is destroyed
          */
         pageDestroy: function(){
+            // reset the current customisation url
+            utopiasoftware[utopiasoftware_app_namespace].controller.
+                customiseProductPageViewModel.currentCustomisationUrl = "";
 
             // remove listener for listening to messages from the parent site
             window.removeEventListener("message", utopiasoftware[utopiasoftware_app_namespace].controller.
@@ -3905,11 +3916,24 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             // check the data that was sent
             if(receiveEvent.data === "page ready"){ // parent site is ready to work together
+                // update the customisation page load count by 1
+                utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.
+                    customisationPageLoadCount += 1;
+
                 // remove the page preloader
                 $('#customise-product-page .page-preloader').css("display", "none");
                 // enable the "Add To Cart" button
                 $('#customise-product-page #customise-product-add-to-cart').removeAttr("disabled");
-                event.source.setUsage(utopiasoftware[utopiasoftware_app_namespace].accessor);
+
+                if(utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.
+                    customisationPageLoadCount === 1){ // this is the 1st time customisation page is being loaded
+
+                    let testData = await event.source.
+                    utopiasoftware_setUsage(utopiasoftware[utopiasoftware_app_namespace].accessor);
+
+                    console.log("TEST DATA", testData);
+                }
+
                 return;
             }
         },
