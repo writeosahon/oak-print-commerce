@@ -3807,7 +3807,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         //iconCss: "zmdi zmdi-brush utopiasoftware-icon-zoom-one-point-two",
                         //iconPosition: "Left"
                         duration: 60 * 60 * 1000, // set spinner/progress duration for 1 hr
-                        disabled: false // button is disabled by default until customisation iframe is ready
+                        disabled: true // button is disabled by default until customisation iframe is ready
                     }).appendTo('#customise-product-add-to-cart');
 
 
@@ -3911,6 +3911,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // enable the "Add To Cart" button
                 $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].disabled = false;
                 $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].dataBind();
+                $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].refresh();
                 return;
             }
         },
