@@ -3806,7 +3806,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     new ej.splitbuttons.ProgressButton({
                         //iconCss: "zmdi zmdi-brush utopiasoftware-icon-zoom-one-point-two",
                         //iconPosition: "Left"
-                        duration: 60 * 60 * 1000, // set spinner/progress duration for 1 hr
+                        //duration: 60 * 60 * 1000, // set spinner/progress duration for 1 hr
                         disabled: true // button is disabled by default until customisation iframe is ready
                     }).appendTo('#customise-product-add-to-cart');
 
