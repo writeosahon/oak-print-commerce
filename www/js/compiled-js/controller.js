@@ -3806,6 +3806,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     new ej.splitbuttons.ProgressButton({
                         //iconCss: "zmdi zmdi-brush utopiasoftware-icon-zoom-one-point-two",
                         //iconPosition: "Left"
+                        duration: 0
                     }).appendTo('#customise-product-add-to-cart');
 
 
