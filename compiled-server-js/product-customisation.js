@@ -27,5 +27,8 @@ jQuery(document).ready(function(){
  * @returns {Promise<void>}
  */
 function utopiasoftware_receiveMessage(receiveEvent){
+}
 
+function setUsage(key){
+    console.log("USAGE KEY", key);
 }

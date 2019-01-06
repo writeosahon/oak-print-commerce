@@ -3909,7 +3909,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $('#customise-product-page .page-preloader').css("display", "none");
                 // enable the "Add To Cart" button
                 $('#customise-product-page #customise-product-add-to-cart').removeAttr("disabled");
-                //$('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].dataBind();
+                event.source.setUsage(utopiasoftware[utopiasoftware_app_namespace].accessor);
                 return;
             }
         },
@@ -3923,6 +3923,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         async pagePullHookAction(doneCallBack = function(){}){
             // show the page preloader
             $('#customise-product-page .page-preloader').css("display", "block");
+            // disable the "Add To Cart" button
+            $('#customise-product-page #customise-product-add-to-cart').attr("disabled", true);
             // disable pull-to-refresh widget till loading is done
             $('#customise-product-page #customise-product-page-pull-hook').attr("disabled", true);
             // hide all previously displayed ej2 toast

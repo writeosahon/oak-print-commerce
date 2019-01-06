@@ -26,6 +26,9 @@ const utopiasoftware = {
          */
         randomisationEngine: Random.engines.browserCrypto,
 
+        /**
+         * holds the authorization Base64 encoded key
+         */
         accessor: "ZGV2ZWxvcGVyQHNob3BvYWtleGNsdXNpdmUuY29tOk9ha0RldmVsb3BlckAx",
 
         /**
