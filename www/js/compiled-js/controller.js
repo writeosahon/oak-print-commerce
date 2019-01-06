@@ -3909,7 +3909,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // remove the page preloader
                 $('#customise-product-page .page-preloader').css("display", "none");
                 // enable the "Add To Cart" button
-                $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].disabled = true;
+                $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].disabled = false;
                 $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].dataBind();
                 return;
             }
