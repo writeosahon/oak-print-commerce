@@ -44,7 +44,7 @@
     color: #3F51B5;
 }
 
-.e-progress-btn.e-hide-spinner {
+.e-progress-btn.e-hide-spinner .e-spinner{
     display: none;
 }
 
