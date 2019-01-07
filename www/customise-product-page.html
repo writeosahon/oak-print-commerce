@@ -48,14 +48,17 @@
         <div style="text-align: center; width: 100%; margin-top: 6px;">
             <button id="customise-product-cancel" type="button"
                     style="color: #d64113; background-color: #ffffff; box-shadow: none"
-            onclick="utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.backButtonClicked();">
+            onclick="utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.
+            backButtonClicked();">
                 <ons-ripple></ons-ripple>
                 Cancel
             </button>
 
             <!-- button is disabled by default -->
             <button id="customise-product-add-to-cart" type="button" disabled
-                    style="color: #363E7C; background-color: #ffffff; box-shadow: none">
+                    style="color: #363E7C; background-color: #ffffff; box-shadow: none"
+                    onclick="utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.
+                    addToCartButtonClicked()">
                 <ons-ripple></ons-ripple>
                 Add To Cart
             </button>
