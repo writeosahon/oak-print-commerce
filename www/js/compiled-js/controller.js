@@ -3756,8 +3756,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             // perform the task of including the product into the local cart in a separate event block
             window.setTimeout(async function(){
-                let localCart = []; // holds the local cart
-                let cartData = {}; // holds the data/product to be added to cart
+                let localCart = []; // holds the local cart collection
+                let utopiasoftwareCartObject = {cartData: {}}; // holds the object whose properties make up the cart item
 
                 // get the cached user cart
                 try{
@@ -3766,6 +3766,78 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 }
                 catch(err){}
 
+                // check if a product variation was selected
+                if(utopiasoftware[utopiasoftware_app_namespace].controller.
+                    productDetailsPageViewModel.currentProductVariationIndex !== -1){ // a product variation was selected
+                    // get the selected product variation index position and the accompanying variation object
+                    let variationIndex = utopiasoftware[utopiasoftware_app_namespace].controller.
+                        productDetailsPageViewModel.currentProductVariationIndex;
+                    let productVariation = utopiasoftware[utopiasoftware_app_namespace].controller.
+                        productDetailsPageViewModel.productVariationsArray[variationIndex];
+
+                    utopiasoftwareCartObject.cartData.variation_id = productVariation.id;
+
+                    // get the search parameters object from the product variation url
+                    let searchParams = new URLSearchParams(productVariation.permalink.split("?")[1]);
+                    // get the variation attributes from searchParams object and assign them in cartData object
+                    utopiasoftwareCartObject.cartData.variation = {};
+                    for(let [key, value] of searchParams){
+                        utopiasoftwareCartObject.cartData.variation[key] = value;
+                    }
+
+                    // store the product variation object as additional data just for the mobile app
+                    utopiasoftwareCartObject.productVariation = productVariation;
+                }
+                // set the other properties of the cart data
+                utopiasoftwareCartObject.cartData.product_id = utopiasoftware[utopiasoftware_app_namespace].controller.
+                    productDetailsPageViewModel.currentProductDetails.id;
+                utopiasoftwareCartObject.cartData.quantity = $('#product-details-quantity').get(0).ej2_instances[0].value;
+
+                // store the product object as additional data just for the mobile app
+                utopiasoftwareCartObject.product = utopiasoftware[utopiasoftware_app_namespace].controller.
+                    productDetailsPageViewModel.currentProductDetails;
+
+                try{
+                    // add the created 'utopiasoftwareCartObject' to the user cart collection
+                    localCart.push(utopiasoftwareCartObject);
+                    // save the updated cached user cart
+                    await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
+                        {_id: "user-cart", docType: "USER_CART", cart: localCart},
+                        utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
+
+                    // inform the user that the product has been added to cart
+                    // hide all previously displayed ej2 toast
+                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                    $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                    // display toast to show that an error
+                    let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                    toast.cssClass = 'success-ej2-toast';
+                    toast.timeOut = 2000;
+                    toast.content = `Product added to cart`;
+                    toast.dataBind();
+                    toast.show();
+
+                    // enable the "Add To Cart" button
+                    $('#product-details-page #product-details-add-to-cart').removeAttr("disabled");
+                    // hide the spinner from the 'Add To Cart'
+                    $('#product-details-page #product-details-add-to-cart').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
+                    $('#product-details-page #product-details-add-to-cart').get(0).ej2_instances[0].dataBind();
+                    $('#product-details-page #product-details-add-to-cart').get(0).ej2_instances[0].stop();
+
+                    console.log("USER CART OBJECT", utopiasoftwareCartObject);
+                }
+                catch(err){
+                    // hide all previously displayed ej2 toast
+                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                    $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                    // display toast to show that an error
+                    let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                    toast.cssClass = 'error-ej2-toast';
+                    toast.timeOut = 3500;
+                    toast.content = `Error adding product to cart. Try again`;
+                    toast.dataBind();
+                    toast.show();
+                }
 
             }, 0);
         }

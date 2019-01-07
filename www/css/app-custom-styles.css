@@ -45,7 +45,7 @@
 }
 
 /** STYLE FOR HIDING SPINNER ON EJ2 PROGRESS BUTTON **/
-.e-progress-btn.e-hide-spinner .e-spinner{
+.e-progress-btn.e-hide-spinner .e-spinner {
     display: none;
 }
 
@@ -118,6 +118,16 @@
 }
 .error-ej2-toast * {
     color: #FF0000 !important;
+    background-color: #ffffff !important;
+}
+.success-ej2-toast {
+    color: green !important;
+    background-color: #ffffff !important;
+    box-shadow: none !important;
+    border: 1px green solid !important;
+}
+.success-ej2-toast * {
+    color: green !important;
     background-color: #ffffff !important;
 }
 
