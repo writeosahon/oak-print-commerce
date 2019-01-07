@@ -3817,16 +3817,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     toast.dataBind();
                     toast.show();
 
-                    // enable the "Add To Cart" button
-                    $('#product-details-page #product-details-add-to-cart').removeAttr("disabled");
-                    // hide the spinner from the 'Add To Cart'
-                    $('#product-details-page #product-details-add-to-cart').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
-                    $('#product-details-page #product-details-add-to-cart').get(0).ej2_instances[0].dataBind();
-                    $('#product-details-page #product-details-add-to-cart').get(0).ej2_instances[0].stop();
-
                     console.log("USER CART OBJECT", utopiasoftwareCartObject);
                 }
                 catch(err){
+                    console.log("PRODUCT DETAILS ERROR", err);
                     // hide all previously displayed ej2 toast
                     $('.page-toast').get(0).ej2_instances[0].hide('All');
                     $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
@@ -3837,6 +3831,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     toast.content = `Error adding product to cart. Try again`;
                     toast.dataBind();
                     toast.show();
+                }
+                finally{
+                    // enable the "Add To Cart" button
+                    $('#product-details-page #product-details-add-to-cart').removeAttr("disabled");
+                    // hide the spinner from the 'Add To Cart'
+                    $('#product-details-page #product-details-add-to-cart').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
+                    $('#product-details-page #product-details-add-to-cart').get(0).ej2_instances[0].dataBind();
+                    $('#product-details-page #product-details-add-to-cart').get(0).ej2_instances[0].stop();
                 }
 
             }, 0);
