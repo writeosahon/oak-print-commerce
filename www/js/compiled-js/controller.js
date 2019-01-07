@@ -3812,9 +3812,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                     // create the "Add To Cart" button
                     new ej.splitbuttons.ProgressButton({
-                        //iconCss: "zmdi zmdi-brush utopiasoftware-icon-zoom-one-point-two",
-                        //iconPosition: "Left"
-                        duration: 60 * 60 * 1000 // set spinner/progress duration for 1 hr
+                        cssClass: 'e-hide-spinner',
+                        duration: 10 * 60 * 60 * 1000 // set spinner/progress duration for 10 hr
                     }).appendTo('#customise-product-add-to-cart');
 
 
@@ -3924,6 +3923,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $('#customise-product-page .page-preloader').css("display", "none");
                 // enable the "Add To Cart" button
                 $('#customise-product-page #customise-product-add-to-cart').removeAttr("disabled");
+                // hide the spinner on the 'Add To Cart'
+                $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
+                $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].dataBind();
 
                 return;
             }
@@ -3943,6 +3945,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             $('#customise-product-page .page-preloader').css("display", "block");
             // disable the "Add To Cart" button
             $('#customise-product-page #customise-product-add-to-cart').attr("disabled", true);
+            // remove the spinner from the 'Add To Cart'
+            $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
+            $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].dataBind();
+
             // disable pull-to-refresh widget till loading is done
             $('#customise-product-page #customise-product-page-pull-hook').attr("disabled", true);
             // hide all previously displayed ej2 toast
@@ -4014,6 +4020,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         async addToCartButtonClicked(){
+            // show the spinner on the 'Add To Cart' button to indicate process is ongoing
+            $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].cssClass = '';
+            $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].dataBind();
+
             // call the method to submit the product customisation form located in the iframe window
             $('#customise-product-page #customise-product-page-iframe').get(0).contentWindow.utopiasoftware_addUsage();
         }

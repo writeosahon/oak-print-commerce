@@ -20,6 +20,10 @@ jQuery(document).ready(function(){
 
     // check if the utopiasoftware-mobile class is set
     if(jQuery('html').hasClass('utopiasoftware-mobile') === true){ // class has been set
+
+        // scroll the window to the top
+        jQuery('html, body').scrollTop(0);
+
         // post message to app that site is loaded
         window.parent.postMessage("page ready", "*");
 
@@ -78,6 +82,6 @@ function utopiasoftware_getUsage(){
  * method is used to add the 'presently' customised product to the available cart
  */
 function utopiasoftware_addUsage(){
-    // trigger the submission of the customisation form
-    jQuery('.variations_form.cart').get(0).submit();
+    // trigger the submission of the customisation form by triggering a click on the submit button
+    jQuery('.variations_form.cart button[type="submit"].button').get(0).click();
 }

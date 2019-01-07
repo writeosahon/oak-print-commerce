@@ -46,7 +46,10 @@ html.utopiasoftware-mobile .variations_form.cart table.variations {
     /*display: none !important;*/
 }
 html.utopiasoftware-mobile .variations_form.cart button[type="submit"].button { /* hidden the 'add to cart' button */
-    /*visibility: hidden !important;*/
+    visibility: hidden !important;
+}
+html.utopiasoftware-mobile .woocommerce-notices-wrapper .woocommerce-message {
+    margin: 0 !important;
 }
 html.utopiasoftware-mobile .woocommerce-notices-wrapper a.button { /* hidden the 'add to cart' button */
     visibility: hidden !important;
