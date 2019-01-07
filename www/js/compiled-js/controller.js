@@ -4135,6 +4135,22 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         async addToCartButtonClicked(){
+
+            if(navigator.connection.type === Connection.NONE){ // there is no Internet connection
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast to show that an error
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'default-ej2-toast';
+                toast.timeOut = 3500;
+                toast.content = `Please connect to the Internet to add customised product to cart`;
+                toast.dataBind();
+                toast.show();
+
+                return; // exit method
+            }
+
             // show the spinner on the 'Add To Cart' button to indicate process is ongoing
             $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].cssClass = '';
             $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].dataBind();
