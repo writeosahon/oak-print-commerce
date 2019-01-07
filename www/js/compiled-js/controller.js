@@ -3127,9 +3127,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     }).appendTo('#product-details-quantity');
 
                     // create the "Add To Cart" button
-                    new ej.buttons.Button({
-                        //iconCss: "zmdi zmdi-shopping-cart-add utopiasoftware-icon-zoom-one-point-two",
-                        //iconPosition: "Left"
+                    new ej.splitbuttons.ProgressButton({
+                        cssClass: 'e-hide-spinner',
+                        duration: 10 * 60 * 60 * 1000 // set spinner/progress duration for 10 hr
                     }).appendTo('#product-details-add-to-cart');
 
                     // create the "Customise" button
@@ -3161,6 +3161,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     // display the loaded product details
                     await utopiasoftware[utopiasoftware_app_namespace].controller.
                         productDetailsPageViewModel.displayProductDetails(productDetailsArray[0]);
+                    // enable the "Add To Cart" button
+                    $('#product-details-page #product-details-add-to-cart').removeAttr("disabled");
 
                 }
                 catch(err){
@@ -3326,8 +3328,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         async pagePullHookAction(doneCallBack = function(){}){
             // disable pull-to-refresh widget till loading is done
             $('#product-details-page #product-details-page-pull-hook').attr("disabled", true);
+
             // hide all previously displayed ej2 toast
             $('.page-toast').get(0).ej2_instances[0].hide('All');
+
+            // disable the "Add To Cart" button
+            $('#product-details-page #product-details-add-to-cart').attr("disabled", true);
+            // remove the spinner from the 'Add To Cart'
+            $('#product-details-page #product-details-add-to-cart').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
+            $('#product-details-page #product-details-add-to-cart').get(0).ej2_instances[0].dataBind();
+            $('#product-details-page #product-details-add-to-cart').get(0).ej2_instances[0].stop();
 
             try{
                 // load product variations asynchronously without waiting for the response
@@ -3352,6 +3362,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             finally{
                 // enable pull-to-refresh widget till loading is done
                 $('#product-details-page #product-details-page-pull-hook').removeAttr("disabled");
+                // enable the "Add To Cart" button
+                $('#product-details-page #product-details-add-to-cart').removeAttr("disabled");
                 // signal that loading is done
                 doneCallBack();
             }
@@ -3726,6 +3738,36 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             }, 0);
 
+        },
+
+        /**
+         * method is triggered when the "Add To Cart" button is clicked
+         *
+         * @returns {Promise<void>}
+         */
+        async addToCartButtonClicked(){
+
+            // disable the "Add To Cart" button
+            $('#product-details-page #product-details-add-to-cart').attr("disabled", true);
+            // add the spinner from the 'Add To Cart'
+            $('#product-details-page #product-details-add-to-cart').get(0).ej2_instances[0].cssClass = '';
+            $('#product-details-page #product-details-add-to-cart').get(0).ej2_instances[0].dataBind();
+            $('#product-details-page #product-details-add-to-cart').get(0).ej2_instances[0].start();
+
+            // perform the task of including the product into the local cart in a separate event block
+            window.setTimeout(async function(){
+                let localCart = []; // holds the local cart
+                let cartData = {}; // holds the data/product to be added to cart
+
+                // get the cached user cart
+                try{
+                    localCart = await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.loadData("user-cart",
+                        utopiasoftware[utopiasoftware_app_namespace].model.appDatabase).cart;
+                }
+                catch(err){}
+
+
+            }, 0);
         }
 
     },

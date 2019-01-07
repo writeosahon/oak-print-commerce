@@ -44,6 +44,7 @@
     color: #3F51B5;
 }
 
+/** STYLE FOR HIDING SPINNER ON EJ2 PROGRESS BUTTON **/
 .e-progress-btn.e-hide-spinner .e-spinner{
     display: none;
 }
