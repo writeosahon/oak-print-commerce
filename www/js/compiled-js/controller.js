@@ -3813,7 +3813,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     let toast = $('.timed-page-toast').get(0).ej2_instances[0];
                     toast.cssClass = 'success-ej2-toast';
                     toast.timeOut = 2000;
-                    toast.content = `Product added to cart`;
+                    toast.content = `Product has been added to your cart`;
                     toast.dataBind();
                     toast.show();
 
@@ -3828,7 +3828,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     let toast = $('.timed-page-toast').get(0).ej2_instances[0];
                     toast.cssClass = 'error-ej2-toast';
                     toast.timeOut = 3500;
-                    toast.content = `Error adding product to cart. Try again`;
+                    toast.content = `Error adding product to your cart. Try again`;
                     toast.dataBind();
                     toast.show();
                 }
