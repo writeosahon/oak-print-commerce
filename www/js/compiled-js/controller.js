@@ -3926,7 +3926,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // hide the spinner on the 'Add To Cart'
                 $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
                 $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].dataBind();
-
+                $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].stop();
                 return;
             }
 
@@ -3948,6 +3948,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // remove the spinner from the 'Add To Cart'
             $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
             $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].dataBind();
+            $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].stop();
 
             // disable pull-to-refresh widget till loading is done
             $('#customise-product-page #customise-product-page-pull-hook').attr("disabled", true);
@@ -4023,6 +4024,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // show the spinner on the 'Add To Cart' button to indicate process is ongoing
             $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].cssClass = '';
             $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].dataBind();
+            $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].start();
 
             // call the method to submit the product customisation form located in the iframe window
             $('#customise-product-page #customise-product-page-iframe').get(0).contentWindow.utopiasoftware_addUsage();
