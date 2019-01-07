@@ -1,3 +1,10 @@
+/*
+var utopiasoftware_Cookies = Cookies.noConflict();
+console.log("COOKIES", utopiasoftware_Cookies.get());
+var localCookies = utopiasoftware_Cookies.get();
+for(let item in localCookies){
+    utopiasoftware_Cookies.remove(item);
+}*/
 
 // register a listener for receiving messages from the mobile app
 window.addEventListener("message", utopiasoftware_receiveMessage, false);
@@ -33,9 +40,7 @@ function utopiasoftware_receiveMessage(receiveEvent){
 
 
 /**
- * method is used to set the currently logged in user
- *
- * @param usageKey {String} authorisation key for the current user
+ * method is used to get the currently logged in user's cart
  *
  * @returns {Promise<any>}
  */
@@ -43,14 +48,11 @@ function utopiasoftware_getUsage(){
 
     // return a Promise object which resolves when the process of setting usage is done
     return new Promise(function(resolve, reject){
-        Promise.resolve($.ajax(
+        Promise.resolve(jQuery.ajax(
             {
                 url: "https://shopoakexclusive.com/wp-json/wc/v2/cart",
                 type: "get",
                 contentType: "application/json",
-                beforeSend: function(jqxhr) {
-                    jqxhr.setRequestHeader("Authorization", "Basic " + usageKey);
-                },
                 crossDomain: true,
                 xhrFields: {
                     withCredentials: true
@@ -69,4 +71,13 @@ function utopiasoftware_getUsage(){
             console.log("SERVER ERROR", err);
         });
     });
+}
+
+/**
+ *
+ * method is used to add the 'presently' customised product to the available cart
+ */
+function utopiasoftware_addUsage(){
+    // trigger the submission of the customisation form
+    jQuery('.variations_form.cart').get(0).submit();
 }

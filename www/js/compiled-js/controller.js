@@ -4006,6 +4006,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 currentCustomisationUrl = customisationUrl;
 
             return true;
+        },
+
+        /**
+         * method is triggered when the user clicks the "Add To Cart" button
+         *
+         * @returns {Promise<void>}
+         */
+        async addToCartButtonClicked(){
+            // call the method to submit the product customisation form located in the iframe window
+            $('#customise-product-page #customise-product-page-iframe').get(0).contentWindow.utopiasoftware_addUsage();
         }
     }
 };
