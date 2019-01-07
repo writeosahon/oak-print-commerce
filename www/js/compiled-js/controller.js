@@ -3813,7 +3813,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     // create the "Add To Cart" button
                     new ej.splitbuttons.ProgressButton({
                         cssClass: 'e-hide-spinner',
-                        duration: 1000 // set duration for 1 sec
+                        duration: 10 * 60 * 60 * 1000 // set spinner/progress duration for 10 hr
                     }).appendTo('#customise-product-add-to-cart');
 
 
@@ -3925,7 +3925,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $('#customise-product-page #customise-product-add-to-cart').removeAttr("disabled");
                 // hide the spinner on the 'Add To Cart'
                 $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
-                $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].duration = 1000; // set spinner/progress duration
                 $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].dataBind();
                 $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].stop();
                 return;
@@ -3948,7 +3947,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             $('#customise-product-page #customise-product-add-to-cart').attr("disabled", true);
             // remove the spinner from the 'Add To Cart'
             $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
-            $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].duration = 1000; // set spinner/progress duration
             $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].dataBind();
             $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].stop();
 
@@ -4025,7 +4023,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         async addToCartButtonClicked(){
             // show the spinner on the 'Add To Cart' button to indicate process is ongoing
             $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].cssClass = '';
-            $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].duration = 10 * 60 * 60 * 1000; // set spinner/progress duration for 10 hr
             $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].dataBind();
             $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].start();
 

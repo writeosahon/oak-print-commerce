@@ -44,6 +44,9 @@
     color: #3F51B5;
 }
 
+.e-progress-btn.e-hide-spinner {
+    display: none;
+}
 
 /** STYLE TO INCREASE FONT SIZE BY 1.2EM **/
 .utopiasoftware-icon-zoom-one-point-two {
