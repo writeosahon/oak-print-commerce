@@ -3761,8 +3761,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 // get the cached user cart
                 try{
-                    localCart = await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.loadData("user-cart",
-                        utopiasoftware[utopiasoftware_app_namespace].model.appDatabase).cart;
+                    localCart = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.loadData("user-cart",
+                        utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)).cart;
                 }
                 catch(err){}
 
