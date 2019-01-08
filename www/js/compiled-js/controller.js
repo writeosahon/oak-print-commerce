@@ -122,6 +122,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         }});
                 });
 
+                // load/set the initial number of items in the user's cart
+                try{
+                    utopiasoftware[utopiasoftware_app_namespace].model.cartCount =
+                        (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.loadData("user-cart",
+                        utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)).cart.length;
+                }
+                catch(err){}
+
             }
             catch(err){
                 console.log("APP LOADING ERROR", err);
@@ -370,7 +378,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is shown
          */
         pageShow: function(){
+            // update page title
             $('#app-main-page ons-toolbar div.title-bar').html("OAK");
+            // update cart count
+            $('#app-main-page .cart-count').html(utopiasoftware[utopiasoftware_app_namespace].model.cartCount);
+
             window.SoftInputMode.set('adjustPan');
 
             // listen for when the device does not have Internet connection
@@ -1146,6 +1158,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         pageShow: function(){
             $('#app-main-page ons-toolbar div.title-bar').html("Products"); // update the title of the page
+            // update cart count
+            $('#app-main-page .cart-count').html(utopiasoftware[utopiasoftware_app_namespace].model.cartCount);
             // hide the page scroll fab
             $('#categories-page #categories-page-scroll-top-fab').css({"display": "none"});
 
@@ -1547,6 +1561,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         pageShow: function(){
             $('#app-main-page ons-toolbar div.title-bar').html("Search"); // update the title of the page
+            // update cart count
+            $('#app-main-page .cart-count').html(utopiasoftware[utopiasoftware_app_namespace].model.cartCount);
 
             window.SoftInputMode.set('adjustPan');
 
@@ -2026,6 +2042,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         pageShow: function(){
             $('#app-main-page ons-toolbar div.title-bar').html("Account"); // update the title of the page
+            // update cart count
+            $('#app-main-page .cart-count').html(utopiasoftware[utopiasoftware_app_namespace].model.cartCount);
+
             window.SoftInputMode.set('adjustPan');
         },
 
@@ -2617,6 +2636,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         pageShow: function(event){
             $('#app-main-page ons-toolbar div.title-bar').html("Products"); // change the title of the screen
+            // update cart count
+            $('#app-main-page .cart-count').html(utopiasoftware[utopiasoftware_app_namespace].model.cartCount);
             // check if the page content should be reset
             if($('#app-main-navigator').get(0)._resetPageDisplay !== false){ // page content can be refreshed
                 // flag that page infinite scroll should NOT be allowed
@@ -3188,7 +3209,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is shown
          */
         pageShow: function(){
-            window.SoftInputMode.set('adjustPan');
+            // update cart count
+            $('#product-details-page .cart-count').html(utopiasoftware[utopiasoftware_app_namespace].model.cartCount);
+
+            window.SoftInputMode.set('adjustResize');
         },
 
         /**
@@ -3214,6 +3238,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             $('#product-details-quantity').get(0).ej2_instances[0].destroy();
             $('#product-details-review').get(0).ej2_instances[0].destroy();
             $('#product-details-share').get(0).ej2_instances[0].destroy();
+            $('#product-details-add-to-cart').get(0).ej2_instances[0].destroy();
             $('#product-details-customise-product').get(0).ej2_instances[0].destroy();
 
             // destroy any product variation dropdown list
@@ -3949,6 +3974,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         pageShow: function(){
             window.SoftInputMode.set('adjustResize');
+
+            // update cart count
+            $('#customise-product-page .cart-count').html(utopiasoftware[utopiasoftware_app_namespace].model.cartCount);
 
             // listen for when the device does not have Internet connection
             document.addEventListener("offline",

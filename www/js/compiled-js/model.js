@@ -28,6 +28,11 @@ utopiasoftware[utopiasoftware_app_namespace].model = {
      */
     appBaseUrl: "https://shopoakexclusive.com",
 
+    /**
+     * holds the total number of items in the local/cache user cart
+     */
+    cartCount: 0
+
 
 };
 
