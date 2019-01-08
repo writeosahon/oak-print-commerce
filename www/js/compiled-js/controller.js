@@ -56,15 +56,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 showCloseButton: true
             }).appendTo($('.timed-page-toast').get(0));
 
-            if(true){ // there is a previous logged in user
-                // load the app main page
-                $('ons-splitter').get(0).content.load("app-main-template");
-
-            }
-            else{ // there is no previously logged in user
-                // load the login page
-                $('ons-splitter').get(0).content.load("login-template");
-            }
 
             // START ALL CORDOVA PLUGINS CONFIGURATIONS
             try{
@@ -135,6 +126,17 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 console.log("APP LOADING ERROR", err);
             }
             finally{
+
+                // load the initial content of the app
+                if(true){ // there is a previous logged in user
+                    // load the app main page
+                    $('ons-splitter').get(0).content.load("app-main-template");
+                }
+                else{ // there is no previously logged in user
+                    // load the login page
+                    $('ons-splitter').get(0).content.load("login-template");
+                }
+
                 // set status bar color
                 StatusBar.backgroundColorByHexString("#363E7C");
                 navigator.splashscreen.hide(); // hide the splashscreen
