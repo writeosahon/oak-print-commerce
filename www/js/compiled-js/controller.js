@@ -121,6 +121,17 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 }
                 catch(err){}
 
+                //register the listener for app database changes
+                utopiasoftware[utopiasoftware_app_namespace].controller.appDatabaseChangesListenerViewModel.
+                    changesEventEmitter = utopiasoftware[utopiasoftware_app_namespace].model.appDatabase.
+                                                changes({
+                    live: true,
+                    include_docs: true,
+                    since: 'now',
+                    doc_ids: ['user-cart']
+                }).on("change", utopiasoftware[utopiasoftware_app_namespace].controller.
+                    appDatabaseChangesListenerViewModel.userCartChanged);
+
             }
             catch(err){
                 console.log("APP LOADING ERROR", err);
@@ -145,6 +156,43 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
         }); // end of ons.ready()
 
+    },
+
+    /**
+     * this view-model is used to house the listeners and data/properties which listen for
+     * changes in the app database
+     */
+    appDatabaseChangesListenerViewModel : {
+
+        /**
+         * property holds the Event Emitter object for the changes taking
+         * place in the database. This object can be used to cancel event listening at
+         * any time
+         */
+        changesEventEmitter: null,
+
+        /**
+         * methosd is used to listen for changes to the
+         * user-cart document i.e. when the local cached user cart is updated/modified
+         *
+         * @param changesInfo {Object} holds the object containing the changes made to the user cart
+         *
+         * @returns {Promise<void>}
+         */
+        async userCartChanged(changesInfo){
+            if(changesInfo.deleted === true){ // the user local cart was deleted
+                // reset the cartCount app model property to zero
+                utopiasoftware[utopiasoftware_app_namespace].model.cartCount = 0;
+            }
+            else{ // the user local cart was modified/updated
+                // update the cartCount app model property to indicate the number of items in cart (using the updated cart length)
+                utopiasoftware[utopiasoftware_app_namespace].model.cartCount =
+                    changesInfo.doc.cart.length;
+            }
+
+            // update the cart count being displayed on all current pages
+            $('.cart-count').html(utopiasoftware[utopiasoftware_app_namespace].model.cartCount);
+        }
     },
 
     /**
