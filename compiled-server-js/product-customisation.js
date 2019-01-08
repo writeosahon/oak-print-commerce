@@ -67,7 +67,7 @@ function utopiasoftware_getUsage(){
             }
         )).
         then(function(serverData){
-            // post message to app that site is loaded
+            // post message to mobile app containing the current cart in session
             window.parent.postMessage(JSON.stringify(serverData), "*");
 
         }).

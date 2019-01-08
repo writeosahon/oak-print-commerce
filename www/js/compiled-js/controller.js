@@ -3937,6 +3937,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         customisationPageLoadCount: 0,
 
         /**
+         * holds the fixed-length queue containing the previous cart object and the new/update cart object.
+         * The queue can only contain a max of 2 items. older items are pushed out first.
+         * The initial cart object is also gotten the first time this app page is loaded or refreshed
+         */
+        cartsQueue: [],
+
+        /**
          * event is triggered when page is initialised
          */
         pageInit: function(event){
@@ -4056,6 +4063,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // reset the current customisation url
             utopiasoftware[utopiasoftware_app_namespace].controller.
                 customiseProductPageViewModel.currentCustomisationUrl = "";
+            // reset the customisation page load count
+            utopiasoftware[utopiasoftware_app_namespace].controller.
+                customiseProductPageViewModel.customisationPageLoadCount = 0;
+            // reset the cartsQueue
+            utopiasoftware[utopiasoftware_app_namespace].controller.
+                customiseProductPageViewModel.cartsQueue = [];
 
             // remove listener for listening to messages from the parent site
             window.removeEventListener("message", utopiasoftware[utopiasoftware_app_namespace].controller.
@@ -4112,20 +4125,43 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // update the customisation page load count by 1
                 utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.
                     customisationPageLoadCount += 1;
-
                 // remove the page preloader
                 $('#customise-product-page .page-preloader').css("display", "none");
+                return;
+            }
+            else{ // the page sent cart data
+                // access the cart data
+                let cartData = JSON.parse(receiveEvent.data);
+                if(Array.isArray(cartData)){ // the cart data is an array, therefore it's empty
+                    // push an empty object into the cart queue property
+                    utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.cartsQueue.
+                    push({});
+                }
+                else{ // cart data is not an array
+                    // push the cart data into the cart queue
+                    utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.cartsQueue.
+                    push(cartData);
+                }
+
+                // check if the cartQueue property is greater than its maximum allowed length of 2
+                if(utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.
+                    cartsQueue.length > 2){ // cartQueue property is greater than 2 elements
+                    // remove the oldest element from the queue
+                    utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.
+                        cartsQueue.shift();
+                }
+
+                // save the customised product to local cart cache (do this in a separate event queue)
+                window.setTimeout(utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.
+                saveCustomisedProductToCart, 0);
+
                 // enable the "Add To Cart" button
                 $('#customise-product-page #customise-product-add-to-cart').removeAttr("disabled");
                 // hide the spinner on the 'Add To Cart'
                 $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
                 $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].dataBind();
                 $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].stop();
-                return;
             }
-
-            let userCartData = JSON.parse(receiveEvent.data);
-            console.log("USER CART", userCartData);
         },
 
         /**
@@ -4206,7 +4242,71 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.
                 currentCustomisationUrl = customisationUrl;
 
+            // reset the page load count and cartsQueue properties
+            utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.
+                customisationPageLoadCount = 0;
+            utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.cartsQueue = [];
+
             return true;
+        },
+
+        /**
+         * method is used to compare the cartQueue property and saves the latest customised product to
+         * local cart cache in the app database
+         *
+         * @returns {Promise<void>}
+         */
+        async saveCustomisedProductToCart(){
+            // get the previous cart object and the new/updated cart object
+            let previousCartObject = utopiasoftware[utopiasoftware_app_namespace].
+                controller.customiseProductPageViewModel.cartsQueue[0];
+            let updatedCartObject = utopiasoftware[utopiasoftware_app_namespace].
+                controller.customiseProductPageViewModel.cartsQueue[1];
+            // get the latest customised product by comparing the properties of the updateCartObject with the previousCartObject
+            for(let property in updatedCartObject){
+                // check if this property in the updateCartObject exist in th epreviousCartObject
+                if(! previousCartObject[property]){ // property does not exist in the previousCartObject, so this property belongs to the latest customised product
+                    // get the latest customised product
+                    let customisedProduct = updatedCartObject[property];
+
+                    let localCart = []; // holds the local cart collection
+                    let utopiasoftwareCartObject = {cartData: {}}; // holds the object whose properties make up the cart item
+
+                    // get the cached user cart
+                    try{
+                        localCart = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.loadData("user-cart",
+                            utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)).cart;
+                    }
+                    catch(err){}
+
+                    // set the other properties of the cart data
+                    utopiasoftwareCartObject.cartData.product_id = customisedProduct.product_id;
+                    utopiasoftwareCartObject.cartData.quantity = customisedProduct.quantity;
+                    utopiasoftwareCartObject.cartData.cart_item_data = customisedProduct.fpd_data; // holds the fancy product designer data
+
+                    // store the cart key used to identify the customised product as additional data just for the mobile app
+                    utopiasoftwareCartObject.anon_cart_key = customisedProduct.key;
+                    // store the name of the customised product as additional data just for the mobile app
+                    utopiasoftwareCartObject.product_name = customisedProduct.product_name;
+
+                    try{
+                        // add the created 'utopiasoftwareCartObject' to the user cart collection
+                        localCart.push(utopiasoftwareCartObject);
+                        // save the updated cached user cart
+                        await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
+                            {_id: "user-cart", docType: "USER_CART", cart: localCart},
+                            utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
+
+                        console.log("USER CART OBJECT", utopiasoftwareCartObject);
+                    }
+                    catch(err){
+                        console.log("CUSTOMISE PRODUCT ERROR", err);
+
+                    }
+
+                    break; // break the for-loop since the latest customised product has been found
+                }
+            }
         },
 
         /**
