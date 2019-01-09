@@ -4428,7 +4428,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         decimals: 0,
                         floatLabelType: 'Auto',
                         format: 'n',
-                        showSpinButton: false,
+                        showSpinButton: true,
                         min: 1,
                         max: 10,
                         placeholder: ' ',
