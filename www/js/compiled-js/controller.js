@@ -4297,10 +4297,31 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             {_id: "user-cart", docType: "USER_CART", cart: localCart},
                             utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
 
-                        console.log("USER CART OBJECT", utopiasoftwareCartObject);
+                        // inform the user that the product has been added to cart
+                        // hide all previously displayed ej2 toast
+                        $('.page-toast').get(0).ej2_instances[0].hide('All');
+                        $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                        // display toast to show that an error
+                        let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                        toast.cssClass = 'success-ej2-toast';
+                        toast.timeOut = 2000;
+                        toast.content = `Customised product has been added to your cart`;
+                        toast.dataBind();
+                        toast.show();
                     }
                     catch(err){
                         console.log("CUSTOMISE PRODUCT ERROR", err);
+
+                        // hide all previously displayed ej2 toast
+                        $('.page-toast').get(0).ej2_instances[0].hide('All');
+                        $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                        // display toast to show that an error
+                        let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                        toast.cssClass = 'error-ej2-toast';
+                        toast.timeOut = 3500;
+                        toast.content = `Error adding product to your cart. Try again`;
+                        toast.dataBind();
+                        toast.show();
 
                     }
 
