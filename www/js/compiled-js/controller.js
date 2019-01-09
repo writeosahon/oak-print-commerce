@@ -4434,7 +4434,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         placeholder: ' ',
                         step: 1,
                         strictMode: true,
-                        width: 16,
                         // sets value to the NumericTextBox
                         value: 1
                     }).appendTo($('#view-cart-page .view-cart-quantity-input').get(0));
