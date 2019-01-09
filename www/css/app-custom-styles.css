@@ -482,6 +482,20 @@
     background-size: contain;
     background-position: center;
 }
+/** style all the quantity input fields in the View Cart page **/
+#view-cart-page .view-cart-quantity-input-class.e-float-input.e-control-wrapper {
+    border-color: transparent;
+}
+#view-cart-page .view-cart-quantity-input-class.e-float-input.e-input-group:not(.e-float-icon-left) .e-float-line::before,
+#view-cart-page .view-cart-quantity-input-class.e-float-input.e-input-group:not(.e-float-icon-left) .e-float-line::after,
+#view-cart-page .view-cart-quantity-input-class.e-float-input.e-input-group.e-float-icon-left .e-input-in-wrap .e-float-line::before,
+#view-cart-page .view-cart-quantity-input-class.e-float-input.e-input-group.e-float-icon-left .e-input-in-wrap .e-float-line::after,
+#view-cart-page .view-cart-quantity-input-class.e-float-input.e-control-wrapper.e-input-group:not(.e-float-icon-left) .e-float-line::before,
+#view-cart-page .view-cart-quantity-input-class.e-float-input.e-control-wrapper.e-input-group:not(.e-float-icon-left) .e-float-line::after,
+#view-cart-page .view-cart-quantity-input-class.e-float-input.e-control-wrapper.e-input-group.e-float-icon-left .e-input-in-wrap .e-float-line::before,
+#view-cart-page .view-cart-quantity-input-class.e-float-input.e-control-wrapper.e-input-group.e-float-icon-left .e-input-in-wrap .e-float-line::after {
+    background: transparent;
+}
 /** STYLE FOR VIEW CART PAGE ENDS **/
 
 /** STYLE FOR LOGIN PAGE BEGINS **/

@@ -4423,7 +4423,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 try{
                     // create the "Pick Quantity" button
                     new ej.inputs.NumericTextBox({
-                        //cssClass: 'product-details-quantity-class',
+                        cssClass: 'view-cart-quantity-input-class',
                         currency: null,
                         decimals: 0,
                         floatLabelType: 'Auto',
@@ -4448,14 +4448,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                     // create the "Customise" button
                     new ej.buttons.Button({
-                        cssClass: 'e-flat e-small e-round',
+                        cssClass: 'e-flat e-round',
                         iconCss: "zmdi zmdi-delete",
                         //iconPosition: "Left"
                     }).appendTo($('#view-cart-page .view-cart-remove-button').get(0));
 
                     // create the "Review" button
                     new ej.buttons.Button({
-                        cssClass: 'e-flat e-small e-round',
+                        cssClass: 'e-flat e-round',
                         iconCss: "zmdi zmdi-edit",
                         iconPosition: "Left"
                     }).appendTo($('#view-cart-page .view-cart-edit-button').get(0));
