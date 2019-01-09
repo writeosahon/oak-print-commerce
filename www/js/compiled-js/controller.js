@@ -4431,10 +4431,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         showSpinButton: false,
                         min: 1,
                         max: 10,
-                        placeholder: '',
+                        placeholder: '&nbsp;&nbsp;',
                         step: 1,
                         strictMode: true,
-                        width: 'auto',
+                        width: '2em',
                         // sets value to the NumericTextBox
                         value: 1
                     }).appendTo($('#view-cart-page .view-cart-quantity-input').get(0));
