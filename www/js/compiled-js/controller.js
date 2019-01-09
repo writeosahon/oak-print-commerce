@@ -4485,7 +4485,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         pageShow: function(){
             // update cart count
-            $('#product-details-page .cart-count').html(utopiasoftware[utopiasoftware_app_namespace].model.cartCount);
+            $('#view-cart-page .cart-count').html(utopiasoftware[utopiasoftware_app_namespace].model.cartCount);
 
             window.SoftInputMode.set('adjustResize');
         },
@@ -4500,26 +4500,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is destroyed
          */
         pageDestroy: function(){
-            // destroy properties
-            utopiasoftware[utopiasoftware_app_namespace].controller.
-                productDetailsPageViewModel.currentProductDetails = null;
-            utopiasoftware[utopiasoftware_app_namespace].controller.
-                productDetailsPageViewModel.currentProductVariationIndex = -1;
-            // reset the product variations array
-            utopiasoftware[utopiasoftware_app_namespace].controller.
-                productDetailsPageViewModel.productVariationsArray = [];
-
-            // destroy the ej2 components on the page
-            $('#product-details-quantity').get(0).ej2_instances[0].destroy();
-            $('#product-details-review').get(0).ej2_instances[0].destroy();
-            $('#product-details-share').get(0).ej2_instances[0].destroy();
-            $('#product-details-add-to-cart').get(0).ej2_instances[0].destroy();
-            $('#product-details-customise-product').get(0).ej2_instances[0].destroy();
-
-            // destroy any product variation dropdown list
-            $('#product-details-page .product-details-variation-option').each(function(index, element){
-                element.ej2_instances[0].destroy(); // destroy the dropdown list component
-            });
         },
 
         /**

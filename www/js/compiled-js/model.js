@@ -134,3 +134,15 @@ $(document).on("hide", "#customise-product-page", utopiasoftware[utopiasoftware_
 
 // listen for when the CUSTOMISE PRODUCT page is destroyed
 $(document).on("destroy", "#customise-product-page", utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.pageDestroy);
+
+// listen for the initialisation of the VIEW CART page
+$(document).on("init", "#view-cart-page", utopiasoftware[utopiasoftware_app_namespace].controller.viewCartPageViewModel.pageInit);
+
+// listen for when the VIEW CART page is shown
+$(document).on("show", "#view-cart-page", utopiasoftware[utopiasoftware_app_namespace].controller.viewCartPageViewModel.pageShow);
+
+// listen for when the VIEW CART page is hidden
+$(document).on("hide", "#view-cart-page", utopiasoftware[utopiasoftware_app_namespace].controller.viewCartPageViewModel.pageHide);
+
+// listen for when the VIEW CART is destroyed
+$(document).on("destroy", "#view-cart-page", utopiasoftware[utopiasoftware_app_namespace].controller.viewCartPageViewModel.pageDestroy);
