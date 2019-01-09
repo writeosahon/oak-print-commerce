@@ -1,6 +1,33 @@
 <!-- view-cart page -->
 <ons-page id="view-cart-page">
 
+    <ons-toolbar style="background-color: #ffffff !important; color: #3f51b5 !important;
+    box-shadow: none !important; border-bottom: lightgray 1px solid"
+                 static modifier="noshadow">
+        <div class="left" style="background-color: #ffffff !important; color: #3f51b5 !important;">
+            <ons-toolbar-button style="background-color: #ffffff !important; color: #3f51b5 !important;"
+                                onclick="utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.backButtonClicked();">
+                <ons-icon icon="md-long-arrow-left"></ons-icon>
+            </ons-toolbar-button>
+        </div>
+        <div class="center title-bar" style="background-color: #ffffff !important; color: #3f51b5 !important; text-align: center;">
+            Cart
+        </div>
+
+        <div class="right" style="background-color: #ffffff !important; color: #3f51b5 !important;">
+            <!--<ons-toolbar-button style="background-color: #3f51b5 !important; color: #d70000 !important;"-->
+            <!--icon="md-favorite"></ons-toolbar-button>-->
+
+            <ons-toolbar-button style="background-color: #ffffff !important; color: #3f51b5 !important;">
+                <ons-icon style="position: relative;" icon="md-shopping-cart">
+                    <span class="cart-count e-badge e-badge-overlap
+                            e-badge-notification e-badge-circle e-badge-danger"
+                          style="font-size: 0.5em;">0</span>
+                </ons-icon>
+            </ons-toolbar-button>
+        </div>
+    </ons-toolbar>
+
     <!-- page pull hook -->
     <ons-pull-hook id="view-cart-page-pull-hook" threshold-height="120px" fixed-content style="text-align: center">
         <ons-fab id="view-cart-page-pull-hook-fab" modifier="mini" style="background-color: #ffffff; color: #ff0000;
@@ -25,6 +52,7 @@
                                 Jerseys
                             </div>
                         </div>
+                    </div>
                         <div class="e-card-content row">
                             <div class="col-xs-4">
                                 N450,000
@@ -36,7 +64,6 @@
                                 <input type="number">
                             </div>
                         </div>
-                    </div>
                 </div>
             </div>
         </div>
