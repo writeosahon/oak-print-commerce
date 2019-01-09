@@ -4319,7 +4319,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         let toast = $('.timed-page-toast').get(0).ej2_instances[0];
                         toast.cssClass = 'error-ej2-toast';
                         toast.timeOut = 3500;
-                        toast.content = `Error adding product to your cart. Try again`;
+                        toast.content = `Error adding customised product to your cart. Try again`;
                         toast.dataBind();
                         toast.show();
 
