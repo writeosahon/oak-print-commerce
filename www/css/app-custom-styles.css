@@ -464,7 +464,25 @@
 #customise-product-page .page--material__background {
     background-color: #ffffff;
 }
-/** STYLE FOR CUSTOMISE PRODUCT PAGE BEGINS **/
+/** STYLE FOR CUSTOMISE PRODUCT PAGE ENDS **/
+
+/** STYLE FOR VIEW CART PAGE START **/
+#view-cart-page .page__background,
+#view-cart-page .page--material__background {
+    background-color: #ffffff;
+}
+#view-cart-page .e-card {
+    background-color: rgba(211, 211, 211, 0.7);
+    background-color: transparent;
+    box-shadow: none !important;
+}
+#view-cart-page .e-card-image{
+    margin-top: 2px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+/** STYLE FOR VIEW CART PAGE ENDS **/
 
 /** STYLE FOR LOGIN PAGE BEGINS **/
 #login-page .page__background,

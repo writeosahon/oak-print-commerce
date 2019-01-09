@@ -1,0 +1,46 @@
+<!-- view-cart page -->
+<ons-page id="view-cart-page">
+
+    <!-- page pull hook -->
+    <ons-pull-hook id="view-cart-page-pull-hook" threshold-height="120px" fixed-content style="text-align: center">
+        <ons-fab id="view-cart-page-pull-hook-fab" modifier="mini" style="background-color: #ffffff; color: #ff0000;
+        box-shadow: none; border: 1px #ff0000 solid">
+            <ons-icon icon="md-long-arrow-down" size="24px" style="color: #363E7C"></ons-icon>
+        </ons-fab>
+    </ons-pull-hook>
+    <!-- page preloader -->
+    <ons-progress-bar class="page-preloader" indeterminate modifier="default-page-preloader"
+                      style="position: fixed; z-index: 2; width: 100%; display: block;"></ons-progress-bar>
+
+    <div class="row" id="view-cart-contents-container">
+
+        <div class="col-xs-12" style="border-bottom: 1px lightgray solid">
+            <div class="e-card e-card-horizontal">
+                <div class="e-card-image" style="min-height: 100%; background-image: url('css/app-images/1-12.jpg');">
+                </div>
+                <div class="e-card-stacked">
+                    <div class="e-card-header">
+                        <div class="e-card-header-caption"  style="padding-left: 3px; padding-right: 5px">
+                            <div class="e-card-sub-title" style="font-size: 14px; text-align: center; text-transform: capitalize">
+                                Mugs
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ons-bottom-toolbar modifier="transparent" style="border-top: lightgray 1px solid">
+
+        <div style="text-align: center; width: 100%; margin-top: 6px;">
+            <button id="product-details-add-to-cart" type="button" disabled
+                    style="color: #363E7C; background-color: #ffffff; box-shadow: none"
+                    onclick="">
+                <ons-ripple></ons-ripple>
+                Checkout
+            </button>
+        </div>
+    </ons-bottom-toolbar>
+
+</ons-page>
