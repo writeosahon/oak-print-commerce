@@ -4360,5 +4360,530 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // call the method to submit the product customisation form located in the iframe window
             $('#customise-product-page #customise-product-page-iframe').get(0).contentWindow.utopiasoftware_addUsage();
         }
+    },
+
+    /**
+     * this is the view-model/controller for the View Cart page
+     */
+    viewCartPageViewModel: {
+
+        /**
+         * event is triggered when page is initialised
+         */
+        pageInit: function(event){
+
+            var $thisPage = $(event.target); // get the current page shown
+
+            // call the function used to initialise the app page if the app is fully loaded
+            loadPageOnAppReady();
+
+            //function is used to initialise the page if the app is fully ready for execution
+            async function loadPageOnAppReady() {
+                // check to see if onsen is ready and if all app loading has been completed
+                if (!ons.isReady() || utopiasoftware[utopiasoftware_app_namespace].model.isAppReady === false) {
+                    setTimeout(loadPageOnAppReady, 500); // call this function again after half a second
+                    return;
+                }
+
+                // listen for the back button event
+                $('#app-main-navigator').get(0).topPage.onDeviceBackButton =
+                    utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.backButtonClicked;
+/*
+
+                // add method to handle the loading action of the pull-to-refresh widget
+                $('#product-details-page-pull-hook', $thisPage).get(0).onAction =
+                    utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.pagePullHookAction;
+
+                // register listener for the pull-to-refresh widget
+                $('#product-details-page-pull-hook', $thisPage).on("changestate", function(event){
+
+                    // check the state of the pull-to-refresh widget
+                    switch (event.originalEvent.state){
+                        case 'initial':
+                            // update the displayed content
+                            $('#product-details-page-pull-hook-fab', event.originalEvent.pullHook).
+                            html('<ons-icon icon="md-long-arrow-down" size="24px" style="color: #363E7C"></ons-icon>');
+                            break;
+
+                        case 'preaction':
+                            // update the displayed content
+                            $('#product-details-page-pull-hook-fab', event.originalEvent.pullHook).
+                            html('<ons-icon icon="md-long-arrow-up" size="24px" style="color: #363E7C"></ons-icon>');
+                            break;
+
+                        case 'action':
+                            // update the displayed content
+                            $('#product-details-page-pull-hook-fab', event.originalEvent.pullHook).
+                            html('<ons-progress-circular indeterminate modifier="pull-hook"></ons-progress-circular>');
+                            break;
+                    }
+                });
+*/
+
+                try{
+                    // create the "Pick Quantity" button
+                    new ej.inputs.NumericTextBox({
+                        //cssClass: 'product-details-quantity-class',
+                        currency: null,
+                        decimals: 0,
+                        floatLabelType: 'Auto',
+                        format: 'n',
+                        showSpinButton: false,
+                        min: 1,
+                        max: 10,
+                        placeholder: 'Quantity',
+                        step: 1,
+                        strictMode: true,
+                        // sets value to the NumericTextBox
+                        value: 1
+                    }).appendTo($('#view-cart-page .view-cart-quantity-input').get(0));
+
+                    /*
+                    // create the "Add To Cart" button
+                    new ej.splitbuttons.ProgressButton({
+                        cssClass: 'e-hide-spinner',
+                        duration: 10 * 60 * 60 * 1000 // set spinner/progress duration for 10 hr
+                    }).appendTo('#product-details-add-to-cart');
+                    */
+
+                    // create the "Customise" button
+                    new ej.buttons.Button({
+                        cssClass: 'e-flat e-small e-round',
+                        iconCss: "zmdi zmdi-delete",
+                        //iconPosition: "Left"
+                    }).appendTo($('#view-cart-page .view-cart-remove-button').get(0));
+
+                    // create the "Review" button
+                    new ej.buttons.Button({
+                        cssClass: 'e-flat e-small e-round',
+                        iconCss: "zmdi zmdi-edit",
+                        iconPosition: "Left"
+                    }).appendTo($('#view-cart-page .view-cart-edit-button').get(0));
+
+                }
+                catch(err){
+
+                    // hide all previously displayed ej2 toast
+                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                    // display toast to show that an error
+                    let toast = $('.page-toast').get(0).ej2_instances[0];
+                    toast.cssClass = 'error-ej2-toast';
+                    toast.content = `Sorry, an error occurred.${navigator.connection.type === Connection.NONE ? " Connect to the Internet." : ""} Pull down to refresh and try again`;
+                    toast.dataBind();
+                    toast.show();
+                }
+                finally {
+                    /*// hide the preloader
+                    $('#product-details-page .page-preloader').css("display", "none");*/
+                }
+            }
+
+        },
+
+        /**
+         * method is triggered when page is shown
+         */
+        pageShow: function(){
+            // update cart count
+            $('#product-details-page .cart-count').html(utopiasoftware[utopiasoftware_app_namespace].model.cartCount);
+
+            window.SoftInputMode.set('adjustResize');
+        },
+
+        /**
+         * method is triggered when page is hidden
+         */
+        pageHide: async function(){
+        },
+
+        /**
+         * method is triggered when page is destroyed
+         */
+        pageDestroy: function(){
+            // destroy properties
+            utopiasoftware[utopiasoftware_app_namespace].controller.
+                productDetailsPageViewModel.currentProductDetails = null;
+            utopiasoftware[utopiasoftware_app_namespace].controller.
+                productDetailsPageViewModel.currentProductVariationIndex = -1;
+            // reset the product variations array
+            utopiasoftware[utopiasoftware_app_namespace].controller.
+                productDetailsPageViewModel.productVariationsArray = [];
+
+            // destroy the ej2 components on the page
+            $('#product-details-quantity').get(0).ej2_instances[0].destroy();
+            $('#product-details-review').get(0).ej2_instances[0].destroy();
+            $('#product-details-share').get(0).ej2_instances[0].destroy();
+            $('#product-details-add-to-cart').get(0).ej2_instances[0].destroy();
+            $('#product-details-customise-product').get(0).ej2_instances[0].destroy();
+
+            // destroy any product variation dropdown list
+            $('#product-details-page .product-details-variation-option').each(function(index, element){
+                element.ej2_instances[0].destroy(); // destroy the dropdown list component
+            });
+        },
+
+        /**
+         * method is triggered when the device back button is clicked OR a similar action is triggered
+         */
+        backButtonClicked(){
+
+            // get back to the previous page on the app-main navigator stack
+            $('#app-main-navigator').get(0).popPage();
+        },
+
+        /**
+         * method is triggered when the pull-hook on the page is active
+         *
+         * @param doneCallBack
+         * @returns {Promise<void>}
+         */
+        async pagePullHookAction(doneCallBack = function(){}){
+            // disable pull-to-refresh widget till loading is done
+            $('#product-details-page #product-details-page-pull-hook').attr("disabled", true);
+
+            // hide all previously displayed ej2 toast
+            $('.page-toast').get(0).ej2_instances[0].hide('All');
+
+            // disable the "Add To Cart" button
+            $('#product-details-page #product-details-add-to-cart').attr("disabled", true);
+            // remove the spinner from the 'Add To Cart'
+            $('#product-details-page #product-details-add-to-cart').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
+            $('#product-details-page #product-details-add-to-cart').get(0).ej2_instances[0].dataBind();
+            $('#product-details-page #product-details-add-to-cart').get(0).ej2_instances[0].stop();
+
+            try{
+                // load product variations asynchronously without waiting for the response
+                utopiasoftware[utopiasoftware_app_namespace].controller.
+                productDetailsPageViewModel.loadProductVariations();
+                // load product details
+                let productDetailsArray = await utopiasoftware[utopiasoftware_app_namespace].controller.
+                productDetailsPageViewModel.loadProduct();
+                // display the loaded product details
+                await utopiasoftware[utopiasoftware_app_namespace].controller.
+                productDetailsPageViewModel.displayProductDetails(productDetailsArray[0]);
+            }
+            catch(err){ // an error occurred
+
+                // display toast to show that error
+                let toast = $('.page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.content = "Sorry, an error occurred. Refresh to try again";
+                toast.dataBind();
+                toast.show();
+            }
+            finally{
+                // enable pull-to-refresh widget till loading is done
+                $('#product-details-page #product-details-page-pull-hook').removeAttr("disabled");
+                // enable the "Add To Cart" button
+                $('#product-details-page #product-details-add-to-cart').removeAttr("disabled");
+                // signal that loading is done
+                doneCallBack();
+            }
+        },
+
+        /**
+         * method is used to load a particular product detail.
+         *
+         * The product to be loaded can be directly passed to the page for loading OR
+         * the id of the product can be provided to the page, so that the product is
+         * retrieved from the remote server
+         *
+         * @returns {Promise<void>}
+         */
+        async loadProduct(){
+            var productPromisesArray = []; // holds the array for the promises used to load the product
+
+            // check if there is Internet connection
+            if(navigator.connection.type === Connection.NONE){ // there is no Internet connection
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast to show that an error
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'default-ej2-toast';
+                toast.timeOut = 3000;
+                toast.content = `Connect to the Internet to see updated product details`;
+                toast.dataBind();
+                toast.show();
+            }
+            // check if all the product details were provided to the page
+            if($('#app-main-navigator').get(0).topPage.data.product){ // all product details were provided
+                let aProduct = $('#app-main-navigator').get(0).topPage.data.product; // get the product details
+
+                if(!aProduct.regular_price || aProduct.regular_price == ""){ // regular price was NOT set, so set it
+                    aProduct.regular_price = "0.00";
+                }
+
+                // set the current product to that which was provided to the page
+                utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
+                    currentProductDetails = aProduct;
+
+                productPromisesArray.push(Promise.resolve(aProduct)); // resolve the promise with the product details
+            }
+            else{ // at least the product id was provided
+                // load the requested products list from the server
+                productPromisesArray.push(new Promise(function(resolve, reject){
+                    Promise.resolve($.ajax(
+                        {
+                            url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + `/wp-json/wc/v3/products/${jQuery('#app-main-navigator').get(0).topPage.data.productId}`,
+                            type: "get",
+                            //contentType: "application/x-www-form-urlencoded",
+                            beforeSend: function(jqxhr) {
+                                jqxhr.setRequestHeader("Authorization", "Basic " +
+                                    utopiasoftware[utopiasoftware_app_namespace].accessor);
+                            },
+                            dataType: "json",
+                            timeout: 240000, // wait for 4 minutes before timeout of request
+                            processData: true
+                        }
+                    )).then(function(product){
+                        if(!product.regular_price || product.regular_price == ""){ // regular price was NOT set, so set it
+                            product.regular_price = "0.00";
+                        }
+                        // set the current product to that which was retrieved from the server
+                        utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
+                            currentProductDetails = product;
+                        resolve(product); // resolve the parent promise with the data gotten from the server
+
+                    }).catch(function(err){ // an error occurred
+
+                        reject(err); // reject the parent promise with the error
+                    });
+                }));
+
+            }
+
+            return Promise.all(productPromisesArray); // return a Promise which resolves when all promises resolve
+        },
+
+        /**
+         * method is used to display the product details on the page
+         *
+         * @param productDetails {Object} the product object to be displayed
+         *
+         * @returns {Promise<void>}
+         */
+        async displayProductDetails(productDetails){
+            // update the product details image
+            $('#product-details-page .e-card-image').css("background-image", `url("${productDetails.images[0].src}")`);
+
+            // check if the product is on-sale
+            if(productDetails.on_sale === true){ // product is on-sale
+                $('#product-details-page .e-card-image').
+                html(`
+                <span class="e-badge e-badge-danger" style="float: right; clear: both; 
+                                                    background-color: transparent; color: #d64113;
+                                                    border: 1px #d64113 solid; font-size: 0.6em;">
+                                                    ${Math.ceil((Math.abs(kendo.parseFloat(productDetails.price) -
+                    kendo.parseFloat(productDetails.regular_price)) /
+                    kendo.parseFloat(productDetails.regular_price === "0.00" ?
+                        productDetails.price : productDetails.regular_price))
+                    * 100)}% OFF
+                 </span>`);
+            }
+
+            // update the product title/name
+            $('#product-details-page .e-card-title').html(`${productDetails.name}`);
+            // update product price
+            $('#product-details-page .product-details-price').
+            html(`&#x20a6;${kendo.toString(kendo.parseFloat(productDetails.price), "n2")}`);
+
+            // check if product is on-sale
+            if(productDetails.on_sale === true){ // product is on-sale
+                // update the regular price
+                $('#product-details-page .product-details-regular-price').
+                html(`&#x20a6;${kendo.toString(kendo.parseFloat(productDetails.regular_price), "n2")}`);
+                // make the regular price visible
+                $('#product-details-page .product-details-regular-price').css("visibility", "visible");
+                // add 'sales' class to the quantity component
+                $('#product-details-quantity').get(0).ej2_instances[0].cssClass = "product-details-quantity-class sales";
+                $('#product-details-quantity').get(0).ej2_instances[0].dataBind();
+            }
+            else{ // product is NOT on-sale
+                // make the regular price invisible
+                $('#product-details-page .product-details-regular-price').css("visibility", "collapse");
+                // remove 'sales' class from the quantity component
+                $('#product-details-quantity').get(0).ej2_instances[0].cssClass = "product-details-quantity-class";
+                $('#product-details-quantity').get(0).ej2_instances[0].dataBind();
+            }
+
+            // reset the product details quantity numeric input field
+            $('#product-details-quantity').get(0).ej2_instances[0].value = 1;
+            $('#product-details-quantity').get(0).ej2_instances[0].dataBind();
+
+            // update the product details description
+            $('#product-details-page .product-details-description').html(`${productDetails.short_description}`);
+
+            // destroy any previous product variation dropdown list that may previously exist before creating the new ones
+            $('#product-details-page .product-details-variation-option').each(function(index, element){
+                element.ej2_instances[0].destroy(); // destroy the dropdown list component
+            });
+
+            // add/update product details variation
+            // expand the variations content
+            $('#product-details-page .product-details-variations').removeClass('expandable-content');
+            let variationContent = ''; // holds the product details variation content
+            for(let index = 0; index < productDetails.attributes.length; index++){
+                // create the product details variations
+                variationContent += `<div class="col-xs-4" style="padding-right: 5px; padding-left: 5px;">
+                    <select name="${productDetails.attributes[index].name}" class="product-details-variation-option">
+                        ${productDetails.attributes[index].options.map(function(arrayElem){
+                    return `<option value="${arrayElem}">${arrayElem}</option>`;
+                }).join("")}
+                    </select>
+                </div>`;
+            }
+            // insert the created Select inputs to the page
+            $('#product-details-page .product-details-variations').html(variationContent);
+
+            // create the dropdown list from each of the select input
+            $('#product-details-page .product-details-variation-option').each(function(index, element){
+                // check if this product details has default attributes set
+                if(productDetails.default_attributes.length > 0){ // there are default attributes
+                    // set those default attributes for the variations
+                    $(`option[value="${productDetails.default_attributes[index].option}"]`, element).attr("selected", true);
+                }
+                // create the dropdown list from the select input
+                new ej.dropdowns.DropDownList(
+                    {
+                        cssClass: "product-details-variation-class",
+                        placeholder: productDetails.attributes[index].name,
+                        floatLabelType: 'Always',
+                        change: async function () { // listen for when dropdown list value changes
+                            // return a Promise which resolves when the change is completed
+                            return new Promise(function(resolve2, reject2){
+
+                                // handle the change in a separate event block
+                                window.setTimeout(async function(){
+                                    let concatenatedVarationValue = ""; // holds the concatenated variation values
+                                    // get the value from all the variation select-input/dropdown and concatenate them
+                                    $('#product-details-page .product-details-variation-option').each(function(index2, element2){
+                                        concatenatedVarationValue += element2.ej2_instances[0].value;
+                                    });
+
+                                    // since the concatenated variation value, is also what is used to uniquely identify each varition,
+                                    // check if there is any variation with the same unique value has the concatenated variation value.
+                                    // Also, assign the index position of the 'found' variation (if anty) to the current variation index property
+                                    let variationIndexPosition =
+                                        utopiasoftware[utopiasoftware_app_namespace].controller.
+                                        productDetailsPageViewModel.productVariationsArray.findIndex(function(element3){
+                                            return concatenatedVarationValue === element3._variationValue;
+                                        });
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
+                                        currentProductVariationIndex = variationIndexPosition;
+
+                                    // check if there is a product variation that matches the user's selection
+                                    if(utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
+                                        currentProductVariationIndex !== -1){ // there is a product variation
+                                        // get the product variation
+                                        let productVariation = utopiasoftware[utopiasoftware_app_namespace].controller.
+                                            productDetailsPageViewModel.productVariationsArray[variationIndexPosition];
+                                        // update the product details display image and price to that of the selected variation (if any)
+                                        if(productVariation.image && productVariation.image !== ""){
+                                            // update the product details image
+                                            $('#product-details-page .e-card-image').css("background-image",
+                                                `url("${productVariation.image.src}")`);
+                                        }
+                                        if(productVariation.price && productVariation.price !== ""){
+                                            // update product price
+                                            $('#product-details-page .product-details-price').
+                                            html(`&#x20a6;${kendo.toString(kendo.parseFloat(productVariation.price), "n2")}`);
+                                        }
+                                    }
+
+                                    // resolve the parent Promise object to signified that change is completed
+                                    resolve2();
+
+                                }, 0);
+                            });
+                        }
+                    }).appendTo(element);
+            });
+
+            // collapse the variations content
+            $('#product-details-page .product-details-variations').addClass('expandable-content');
+
+            // update the rating for the product details
+            $('#product-details-page .product-details-rating').
+            html(`
+            ${Math.floor(kendo.parseFloat(productDetails.average_rating)) > 0 ?
+                '<ons-icon icon="md-star" fixed-width></ons-icon>'.
+                repeat(Math.floor(kendo.parseFloat(productDetails.average_rating))) :
+                '<ons-icon icon="md-star-outline" style="color: lightgray" fixed-width></ons-icon>'.repeat(5)}
+                <span style="display: inline-block; color: gray;">
+                ${Math.floor(kendo.parseFloat(productDetails.average_rating)) > 0 ?
+                `(${productDetails.rating_count})` : ""}
+                </span>
+            `);
+
+            // update the extra/more details for the product
+            $('#product-details-page .product-details-more-description').html(`
+            ${productDetails.description}`);
+
+            // update the dimensions for the product details
+            $('#product-details-page .product-details-dimensions').html(`
+            <span class="list-item__subtitle" style="display: block">length - ${!productDetails.dimensions.length ||
+            productDetails.dimensions.length == "" ? "(Not Available)" : `${productDetails.dimensions.length}`}</span>
+            <span class="list-item__subtitle" style="display: block">width - ${!productDetails.dimensions.width ||
+            productDetails.dimensions.width == "" ? "(Not Available)" : `${productDetails.dimensions.width}`}</span>
+            <span class="list-item__subtitle" style="display: block">height - ${!productDetails.dimensions.height ||
+            productDetails.dimensions.height == "" ? "(Not Available)" : `${productDetails.dimensions.height}`}</span>`);
+
+            // update the weight for the product
+            $('#product-details-page .product-details-weight').html(`${!productDetails.weight ||
+            productDetails.weight == "" ? "(Not Available)" : `${productDetails.weight}`}`);
+        },
+
+        /**
+         * method is triggered when the customise button is clicked
+         *
+         * @returns {Promise<void>}
+         */
+        async customiseButtonClicked(){
+            // check if there is Internet connection
+            if(navigator.connection.type === Connection.NONE){ // there is no Internet connection
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast to show that an error
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.timeOut = 3500;
+                toast.content = `Please connect to the Internet to customise product`;
+                toast.dataBind();
+                toast.show();
+
+                return; // exit method
+            }
+
+            // perform the method task in a separate event block
+            window.setTimeout(async function(){
+                var productUrl = ""; // holds the url for the product being customised
+
+                // check if the user has selected a product variation or if the default product is being customised
+                if(utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
+                    currentProductVariationIndex !== -1){ // a product variation was selected
+                    // get the index position of the selected variation
+                    let variationIndex = utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
+                        currentProductVariationIndex;
+                    // get the production variation object
+                    let productVariation = utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
+                        productVariationsArray[variationIndex];
+                    productUrl = productVariation.permalink; // set the product url
+                }
+                else{ // no product variation was selected, so use the default product details
+                    productUrl = utopiasoftware[utopiasoftware_app_namespace].controller.
+                        productDetailsPageViewModel.currentProductDetails.permalink; // set the product url
+                }
+
+                // load the "Customise Product" page to the app-main-navigator
+                await $('#app-main-navigator').get(0).pushPage("customise-product-page.html");
+                // load the product customisation url
+                await utopiasoftware[utopiasoftware_app_namespace].controller.
+                customiseProductPageViewModel.loadProductCustomisation(productUrl);
+
+            }, 0);
+
+        }
     }
 };
