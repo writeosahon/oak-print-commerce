@@ -4449,14 +4449,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     // create the "Customise" button
                     new ej.buttons.Button({
                         cssClass: 'e-flat e-round',
-                        iconCss: "zmdi zmdi-delete",
+                        iconCss: "zmdi zmdi-delete utopiasoftware-icon-zoom-one-point-two",
                         //iconPosition: "Left"
                     }).appendTo($('#view-cart-page .view-cart-remove-button').get(0));
 
                     // create the "Review" button
                     new ej.buttons.Button({
                         cssClass: 'e-flat e-round',
-                        iconCss: "zmdi zmdi-edit",
+                        iconCss: "zmdi zmdi-edit utopiasoftware-icon-zoom-one-point-two",
                         iconPosition: "Left"
                     }).appendTo($('#view-cart-page .view-cart-edit-button').get(0));
 
