@@ -4426,7 +4426,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         cssClass: 'view-cart-quantity-input-class',
                         currency: null,
                         decimals: 0,
-                        floatLabelType: 'Auto',
+                        floatLabelType: 'Never',
                         format: 'n',
                         showSpinButton: false,
                         min: 1,
@@ -4434,6 +4434,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         placeholder: 'Quantity',
                         step: 1,
                         strictMode: true,
+                        width: '70%',
                         // sets value to the NumericTextBox
                         value: 1
                     }).appendTo($('#view-cart-page .view-cart-quantity-input').get(0));
