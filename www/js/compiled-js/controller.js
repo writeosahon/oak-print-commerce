@@ -4439,22 +4439,20 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         value: 1
                     }).appendTo($('#view-cart-page .view-cart-quantity-input').get(0));
 
-                    /*
-                    // create the "Add To Cart" button
+                    // create the "Checkout" button
                     new ej.splitbuttons.ProgressButton({
                         cssClass: 'e-hide-spinner',
                         duration: 10 * 60 * 60 * 1000 // set spinner/progress duration for 10 hr
-                    }).appendTo('#product-details-add-to-cart');
-                    */
+                    }).appendTo('#view-cart-checkout');
 
-                    // create the "Customise" button
+                    // create the "Remove" button
                     new ej.buttons.Button({
                         cssClass: 'e-flat e-round',
                         iconCss: "zmdi zmdi-delete utopiasoftware-icon-zoom-one-point-two",
                         //iconPosition: "Left"
                     }).appendTo($('#view-cart-page .view-cart-remove-button').get(0));
 
-                    // create the "Review" button
+                    // create the "Edit" button
                     new ej.buttons.Button({
                         cssClass: 'e-flat e-round',
                         iconCss: "zmdi zmdi-edit utopiasoftware-icon-zoom-one-point-two",
