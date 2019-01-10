@@ -4714,6 +4714,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // create all the "Quantity" input required for the View Cart page
                 $("#view-cart-page .view-cart-quantity-input").each(function(index, element){
                     new ej.inputs.NumericTextBox({
+                        value: element.value,
                         cssClass: 'view-cart-quantity-input-class',
                         currency: null,
                         decimals: 0,
