@@ -4442,6 +4442,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 }
                 catch(err){
 
+                    console.log("VIEW-CART PAGE", err);
                     // hide all previously displayed ej2 toast
                     $('.page-toast').get(0).ej2_instances[0].hide('All');
                     // display toast to show that an error
