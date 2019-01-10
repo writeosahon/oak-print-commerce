@@ -4607,11 +4607,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             <div class="e-card-content row" style="padding: 0;">
                             <div class="col-xs-3">
                                 <button type="button" class="view-cart-edit-button"
-                                        style="background-color: #ffffff; color: #3f51b5"></button>
+                                        style="background-color: #ffffff; color: #3f51b5; height: 10px;"></button>
                             </div>
                             <div class="col-xs-4">
                                 <button type="button" class="view-cart-remove-button"
-                                        style="background-color: #ffffff; color: #3f51b5"></button>
+                                        style="background-color: #ffffff; color: #3f51b5 height: 10px;"></button>
                             </div>
                             <div class="col-xs-5">
                                 <input class="view-cart-quantity-input" type="number" style="padding-top: 2px;" value="${localCart[index].cartData.quantity}">
@@ -4644,7 +4644,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             </div>
                             <div class="col-xs-4">
                                 <button type="button" class="view-cart-remove-button"
-                                        style="background-color: #ffffff; color: #3f51b5"></button>
+                                        style="background-color: #ffffff; color: #3f51b5; height: 10px;"></button>
                             </div>
                             <div class="col-xs-5">
                                 <input class="view-cart-quantity-input" type="number" style="padding-top: 2px;" value="${localCart[index].cartData.quantity}">
@@ -4674,7 +4674,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             </div>
                             <div class="col-xs-4">
                                 <button type="button" class="view-cart-remove-button"
-                                        style="background-color: #ffffff; color: #3f51b5"></button>
+                                        style="background-color: #ffffff; color: #3f51b5; height: 10px;"></button>
                             </div>
                             <div class="col-xs-5">
                                 <input class="view-cart-quantity-input" type="number" style="padding-top: 2px;" value="${localCart[index].cartData.quantity}">
