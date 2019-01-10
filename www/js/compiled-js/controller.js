@@ -4421,7 +4421,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 */
 
                 try{
-                    // create the "Pick Quantity" button
+                    // create the "Quantity" input
                     new ej.inputs.NumericTextBox({
                         cssClass: 'view-cart-quantity-input-class',
                         currency: null,
