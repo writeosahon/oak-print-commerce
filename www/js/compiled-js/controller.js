@@ -4521,6 +4521,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $('#view-cart-page #view-cart-page-pull-hook').removeAttr("disabled");
                 // enable the "Checkout" button
                 $('#view-cart-page #view-cart-checkout').removeAttr("disabled");
+                // hide the preloader
+                $('#view-cart-page .page-preloader').css("display", "none");
                 // signal that loading is done
                 doneCallBack();
             }
@@ -4732,6 +4734,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     }).appendTo(element);
                 });
 
+                //todo
             }
             finally{
 
@@ -4844,6 +4847,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $('#view-cart-page .page-preloader').css("display", "none");
             }
 
+        },
+
+
+        /**
+         * method is a utility function used to calculate the approximate total process of all items in
+         * a user's local cart
+         *
+         * @param localCart {Array} containing an array of items in the user's local cart
+         *
+         * @returns {number} the total price for all the items contained in cart
+         */
+        calculateCartTotalPrice(localCart = []){
+            return 0;
         }
     }
 };
