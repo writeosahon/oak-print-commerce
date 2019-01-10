@@ -4449,10 +4449,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     toast.dataBind();
                     toast.show();
                 }
-                finally {
-                    // hide the preloader
-                    $('#view-cart-page .page-preloader').css("display", "none");
-                }
             }
 
         },
