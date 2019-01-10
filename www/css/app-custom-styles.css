@@ -486,6 +486,12 @@
 #view-cart-page .view-cart-quantity-input-class.e-float-input.e-control-wrapper label {
     color: #3F51B5;
 }
+#view-cart-page .view-cart-quantity-input-class.e-float-input.e-control-wrapper .e-spin-down {
+    margin-top: 0;
+}
+#view-cart-page .view-cart-quantity-input-class.e-float-input.e-control-wrapper .e-spin-up {
+    margin-top: 0;
+}
 #view-cart-page .view-cart-quantity-input-class.e-float-input.e-control-wrapper {
     border-color: transparent;
 }

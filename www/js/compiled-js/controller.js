@@ -3871,6 +3871,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // store the product object as additional data just for the mobile app
                 utopiasoftwareCartObject.product = utopiasoftware[utopiasoftware_app_namespace].controller.
                     productDetailsPageViewModel.currentProductDetails;
+                // store a unique local-cart uid to identify the product
+                utopiasoftwareCartObject.uid = Random.uuid4(utopiasoftware[utopiasoftware_app_namespace].randomisationEngine);
 
                 try{
                     // add the created 'utopiasoftwareCartObject' to the user cart collection
@@ -4282,12 +4284,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     // set the other properties of the cart data
                     utopiasoftwareCartObject.cartData.product_id = customisedProduct.product_id;
                     utopiasoftwareCartObject.cartData.quantity = customisedProduct.quantity;
+                    utopiasoftwareCartObject.cartData.variation_id = customisedProduct.variation_id;
+                    utopiasoftwareCartObject.cartData.variation = customisedProduct.variation;
                     utopiasoftwareCartObject.cartData.cart_item_data = customisedProduct.fpd_data; // holds the fancy product designer data
 
                     // store the cart key used to identify the customised product as additional data just for the mobile app
                     utopiasoftwareCartObject.anon_cart_key = customisedProduct.key;
                     // store the name of the customised product as additional data just for the mobile app
                     utopiasoftwareCartObject.product_name = customisedProduct.product_name;
+                    // store the cutomisationUrl of this product as additional data just for the mobile app
+                    utopiasoftwareCartObject.customisationUrl = utopiasoftware[utopiasoftware_app_namespace].controller.
+                        customiseProductPageViewModel.currentCustomisationUrl;
+                    // store a unique local-cart uid to identify the product just for the mobile app
+                    utopiasoftwareCartObject.uid = Random.uuid4(utopiasoftware[utopiasoftware_app_namespace].randomisationEngine);
 
                     try{
                         // add the created 'utopiasoftwareCartObject' to the user cart collection
@@ -4421,44 +4430,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 */
 
                 try{
-                    // create the "Quantity" input
-                    new ej.inputs.NumericTextBox({
-                        cssClass: 'view-cart-quantity-input-class',
-                        currency: null,
-                        decimals: 0,
-                        floatLabelType: 'Auto',
-                        format: 'n',
-                        showSpinButton: true,
-                        min: 1,
-                        max: 10,
-                        placeholder: ' ',
-                        step: 1,
-                        strictMode: true,
-                        width: '60%',
-                        // sets value to the NumericTextBox
-                        value: 1
-                    }).appendTo($('#view-cart-page .view-cart-quantity-input').get(0));
-
                     // create the "Checkout" button
                     new ej.splitbuttons.ProgressButton({
                         cssClass: 'e-hide-spinner',
                         duration: 10 * 60 * 60 * 1000 // set spinner/progress duration for 10 hr
                     }).appendTo('#view-cart-checkout');
 
-                    // create the "Remove" button
-                    new ej.buttons.Button({
-                        cssClass: 'e-flat e-round',
-                        iconCss: "zmdi zmdi-delete utopiasoftware-icon-zoom-one-point-two",
-                        //iconPosition: "Left"
-                    }).appendTo($('#view-cart-page .view-cart-remove-button').get(0));
-
-                    // create the "Edit" button
-                    new ej.buttons.Button({
-                        cssClass: 'e-flat e-round',
-                        iconCss: "zmdi zmdi-edit utopiasoftware-icon-zoom-one-point-two",
-                        iconPosition: "Left"
-                    }).appendTo($('#view-cart-page .view-cart-edit-button').get(0));
-
+                    await utopiasoftware[utopiasoftware_app_namespace].controller.viewCartPageViewModel.displayUserCart();
+                    // enable the checkout button
+                    $('#view-cart-page #view-cart-checkout').removeAttr("disabled");
                 }
                 catch(err){
 
@@ -4467,13 +4447,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     // display toast to show that an error
                     let toast = $('.page-toast').get(0).ej2_instances[0];
                     toast.cssClass = 'error-ej2-toast';
-                    toast.content = `Sorry, an error occurred.${navigator.connection.type === Connection.NONE ? " Connect to the Internet." : ""} Pull down to refresh and try again`;
+                    toast.content = `Sorry, an error occurred. Pull down to refresh`;
                     toast.dataBind();
                     toast.show();
                 }
                 finally {
-                    /*// hide the preloader
-                    $('#product-details-page .page-preloader').css("display", "none");*/
+                    // hide the preloader
+                    $('#view-cart-page .page-preloader').css("display", "none");
                 }
             }
 
@@ -4561,308 +4541,289 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         },
 
         /**
-         * method is used to load a particular product detail.
+         * method is used to display the user cart on the View Cart page.
+         * @param localCart {Array}
          *
-         * The product to be loaded can be directly passed to the page for loading OR
-         * the id of the product can be provided to the page, so that the product is
-         * retrieved from the remote server
-         *
-         * @returns {Promise<void>}
+         * @returns Promise
          */
-        async loadProduct(){
-            var productPromisesArray = []; // holds the array for the promises used to load the product
+        async displayUserCart(localCart){
+            var displayContent = ""; // holds the cart content to be displayed
+            try{
 
-            // check if there is Internet connection
-            if(navigator.connection.type === Connection.NONE){ // there is no Internet connection
-                // hide all previously displayed ej2 toast
-                $('.page-toast').get(0).ej2_instances[0].hide('All');
-                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
-                // display toast to show that an error
-                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
-                toast.cssClass = 'default-ej2-toast';
-                toast.timeOut = 3000;
-                toast.content = `Connect to the Internet to see updated product details`;
-                toast.dataBind();
-                toast.show();
-            }
-            // check if all the product details were provided to the page
-            if($('#app-main-navigator').get(0).topPage.data.product){ // all product details were provided
-                let aProduct = $('#app-main-navigator').get(0).topPage.data.product; // get the product details
-
-                if(!aProduct.regular_price || aProduct.regular_price == ""){ // regular price was NOT set, so set it
-                    aProduct.regular_price = "0.00";
+                try{
+                    // get the localCart from the parameter passed OR from the the cached loCart from app database
+                    localCart = localCart || (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                    loadData("user-cart",
+                        utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)).cart;
+                }
+                catch(err){
+                    // if error occurred during local cart retrieval
+                    localCart = []; // set localCart to empty array
                 }
 
-                // set the current product to that which was provided to the page
-                utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
-                    currentProductDetails = aProduct;
+                if(localCart.length === 0){ // localCart is empty
+                    // display message to inform user that cart is empty
+                    // hide all previously displayed ej2 toast
+                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                    $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                    // display toast to show that an error
+                    let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                    toast.cssClass = 'default-ej2-toast';
+                    toast.timeOut = 3000;
+                    toast.content = `Your cart is empty. Go order some products!`;
+                    toast.dataBind();
+                    toast.show();
 
-                productPromisesArray.push(Promise.resolve(aProduct)); // resolve the promise with the product details
-            }
-            else{ // at least the product id was provided
-                // load the requested products list from the server
-                productPromisesArray.push(new Promise(function(resolve, reject){
-                    Promise.resolve($.ajax(
-                        {
-                            url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + `/wp-json/wc/v3/products/${jQuery('#app-main-navigator').get(0).topPage.data.productId}`,
-                            type: "get",
-                            //contentType: "application/x-www-form-urlencoded",
-                            beforeSend: function(jqxhr) {
-                                jqxhr.setRequestHeader("Authorization", "Basic " +
-                                    utopiasoftware[utopiasoftware_app_namespace].accessor);
-                            },
-                            dataType: "json",
-                            timeout: 240000, // wait for 4 minutes before timeout of request
-                            processData: true
-                        }
-                    )).then(function(product){
-                        if(!product.regular_price || product.regular_price == ""){ // regular price was NOT set, so set it
-                            product.regular_price = "0.00";
-                        }
-                        // set the current product to that which was retrieved from the server
-                        utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
-                            currentProductDetails = product;
-                        resolve(product); // resolve the parent promise with the data gotten from the server
-
-                    }).catch(function(err){ // an error occurred
-
-                        reject(err); // reject the parent promise with the error
-                    });
-                }));
-
-            }
-
-            return Promise.all(productPromisesArray); // return a Promise which resolves when all promises resolve
-        },
-
-        /**
-         * method is used to display the product details on the page
-         *
-         * @param productDetails {Object} the product object to be displayed
-         *
-         * @returns {Promise<void>}
-         */
-        async displayProductDetails(productDetails){
-            // update the product details image
-            $('#product-details-page .e-card-image').css("background-image", `url("${productDetails.images[0].src}")`);
-
-            // check if the product is on-sale
-            if(productDetails.on_sale === true){ // product is on-sale
-                $('#product-details-page .e-card-image').
-                html(`
-                <span class="e-badge e-badge-danger" style="float: right; clear: both; 
-                                                    background-color: transparent; color: #d64113;
-                                                    border: 1px #d64113 solid; font-size: 0.6em;">
-                                                    ${Math.ceil((Math.abs(kendo.parseFloat(productDetails.price) -
-                    kendo.parseFloat(productDetails.regular_price)) /
-                    kendo.parseFloat(productDetails.regular_price === "0.00" ?
-                        productDetails.price : productDetails.regular_price))
-                    * 100)}% OFF
-                 </span>`);
-            }
-
-            // update the product title/name
-            $('#product-details-page .e-card-title').html(`${productDetails.name}`);
-            // update product price
-            $('#product-details-page .product-details-price').
-            html(`&#x20a6;${kendo.toString(kendo.parseFloat(productDetails.price), "n2")}`);
-
-            // check if product is on-sale
-            if(productDetails.on_sale === true){ // product is on-sale
-                // update the regular price
-                $('#product-details-page .product-details-regular-price').
-                html(`&#x20a6;${kendo.toString(kendo.parseFloat(productDetails.regular_price), "n2")}`);
-                // make the regular price visible
-                $('#product-details-page .product-details-regular-price').css("visibility", "visible");
-                // add 'sales' class to the quantity component
-                $('#product-details-quantity').get(0).ej2_instances[0].cssClass = "product-details-quantity-class sales";
-                $('#product-details-quantity').get(0).ej2_instances[0].dataBind();
-            }
-            else{ // product is NOT on-sale
-                // make the regular price invisible
-                $('#product-details-page .product-details-regular-price').css("visibility", "collapse");
-                // remove 'sales' class from the quantity component
-                $('#product-details-quantity').get(0).ej2_instances[0].cssClass = "product-details-quantity-class";
-                $('#product-details-quantity').get(0).ej2_instances[0].dataBind();
-            }
-
-            // reset the product details quantity numeric input field
-            $('#product-details-quantity').get(0).ej2_instances[0].value = 1;
-            $('#product-details-quantity').get(0).ej2_instances[0].dataBind();
-
-            // update the product details description
-            $('#product-details-page .product-details-description').html(`${productDetails.short_description}`);
-
-            // destroy any previous product variation dropdown list that may previously exist before creating the new ones
-            $('#product-details-page .product-details-variation-option').each(function(index, element){
-                element.ej2_instances[0].destroy(); // destroy the dropdown list component
-            });
-
-            // add/update product details variation
-            // expand the variations content
-            $('#product-details-page .product-details-variations').removeClass('expandable-content');
-            let variationContent = ''; // holds the product details variation content
-            for(let index = 0; index < productDetails.attributes.length; index++){
-                // create the product details variations
-                variationContent += `<div class="col-xs-4" style="padding-right: 5px; padding-left: 5px;">
-                    <select name="${productDetails.attributes[index].name}" class="product-details-variation-option">
-                        ${productDetails.attributes[index].options.map(function(arrayElem){
-                    return `<option value="${arrayElem}">${arrayElem}</option>`;
-                }).join("")}
-                    </select>
-                </div>`;
-            }
-            // insert the created Select inputs to the page
-            $('#product-details-page .product-details-variations').html(variationContent);
-
-            // create the dropdown list from each of the select input
-            $('#product-details-page .product-details-variation-option').each(function(index, element){
-                // check if this product details has default attributes set
-                if(productDetails.default_attributes.length > 0){ // there are default attributes
-                    // set those default attributes for the variations
-                    $(`option[value="${productDetails.default_attributes[index].option}"]`, element).attr("selected", true);
+                    return; // exit method
                 }
-                // create the dropdown list from the select input
-                new ej.dropdowns.DropDownList(
-                    {
-                        cssClass: "product-details-variation-class",
-                        placeholder: productDetails.attributes[index].name,
-                        floatLabelType: 'Always',
-                        change: async function () { // listen for when dropdown list value changes
-                            // return a Promise which resolves when the change is completed
-                            return new Promise(function(resolve2, reject2){
 
-                                // handle the change in a separate event block
-                                window.setTimeout(async function(){
-                                    let concatenatedVarationValue = ""; // holds the concatenated variation values
-                                    // get the value from all the variation select-input/dropdown and concatenate them
-                                    $('#product-details-page .product-details-variation-option').each(function(index2, element2){
-                                        concatenatedVarationValue += element2.ej2_instances[0].value;
-                                    });
+                // destroy all the "Edit" buttons on the View Cart page
+                $("#view-cart-page .view-cart-edit-button").each(function(index, element){
+                    // destroy the "Edit" button
+                    element.ej2_instances[0].destroy();
+                });
 
-                                    // since the concatenated variation value, is also what is used to uniquely identify each varition,
-                                    // check if there is any variation with the same unique value has the concatenated variation value.
-                                    // Also, assign the index position of the 'found' variation (if anty) to the current variation index property
-                                    let variationIndexPosition =
-                                        utopiasoftware[utopiasoftware_app_namespace].controller.
-                                        productDetailsPageViewModel.productVariationsArray.findIndex(function(element3){
-                                            return concatenatedVarationValue === element3._variationValue;
-                                        });
-                                    utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
-                                        currentProductVariationIndex = variationIndexPosition;
+                // create all the "Remove" buttons required for the View Cart page
+                $("#view-cart-page .view-cart-remove-button").each(function(index, element){
+                    // destroy the "Remove" button
+                    element.ej2_instances[0].destroy();
+                });
 
-                                    // check if there is a product variation that matches the user's selection
-                                    if(utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
-                                        currentProductVariationIndex !== -1){ // there is a product variation
-                                        // get the product variation
-                                        let productVariation = utopiasoftware[utopiasoftware_app_namespace].controller.
-                                            productDetailsPageViewModel.productVariationsArray[variationIndexPosition];
-                                        // update the product details display image and price to that of the selected variation (if any)
-                                        if(productVariation.image && productVariation.image !== ""){
-                                            // update the product details image
-                                            $('#product-details-page .e-card-image').css("background-image",
-                                                `url("${productVariation.image.src}")`);
-                                        }
-                                        if(productVariation.price && productVariation.price !== ""){
-                                            // update product price
-                                            $('#product-details-page .product-details-price').
-                                            html(`&#x20a6;${kendo.toString(kendo.parseFloat(productVariation.price), "n2")}`);
-                                        }
-                                    }
+                // create all the "Quantity" input required for the View Cart page
+                $("#view-cart-page .view-cart-quantity-input").each(function(index, element){
+                    // destroy the "Quantity" input
+                    element.ej2_instances[0].destroy();
+                });
 
-                                    // resolve the parent Promise object to signified that change is completed
-                                    resolve2();
+                // display the contents of the cart using a for-loop
+                for(let index = 0; index < localCart.length; index++){
+                    displayContent +=
+                        `<div class="col-xs-12" style="border-bottom: 1px lightgray solid">
+                        <div class="e-card e-card-horizontal">`;
 
-                                }, 0);
-                            });
-                        }
+                    if(localCart[index].anon_cart_key){ // this item is a customised product
+                        displayContent +=
+                            `<div class="e-card-image" style="-webkit-flex-basis: auto; flex-basis: auto; width: 30%;
+                            min-height: 100%; 
+                            background-image: url('${localCart[index].cartData.cart_item_data.fpd_data.fpd_product_thumbnail}');">
+                            </div>
+                            <div class="e-card-stacked" style="-webkit-flex-basis: auto; flex-basis: auto; width: 70%">
+                            <div class="e-card-header" style="padding: 0">
+                            <div class="e-card-header-caption"  style="padding-left: 3px; padding-right: 5px">
+                            <div class="e-card-sub-title" style="font-size: 14px; text-align: center; text-transform: capitalize">
+                                ${localCart[index].product_name}
+                            </div>
+                            <div class="e-card-sub-title" style="font-size: 11px; text-align: center; text-transform: capitalize">
+                                &#x20a6;${kendo.toString(kendo.parseFloat(localCart[index].cartData.cart_item_data.fpd_data.fpd_product_price), "n2")}
+                            </div>
+                            </div>
+                            </div>
+                            <div class="e-card-content row" style="padding: 0;">
+                            <div class="col-xs-3">
+                                <button type="button" class="view-cart-edit-button"
+                                        style="background-color: #ffffff; color: #3f51b5"></button>
+                            </div>
+                            <div class="col-xs-4">
+                                <button type="button" class="view-cart-remove-button"
+                                        style="background-color: #ffffff; color: #3f51b5"></button>
+                            </div>
+                            <div class="col-xs-5">
+                                <input class="view-cart-quantity-input" type="number" style="padding-top: 2px;">
+                            </div>
+                            </div>
+                            </div>`;
+                    }
+                    else if(localCart[index].productVariation){ // this product was NOT saved with customisation, but has variations
+                        displayContent +=
+                            `<div class="e-card-image" style="-webkit-flex-basis: auto; flex-basis: auto; width: 30%;
+                            min-height: 100%; 
+                            background-image: 
+                            url('${localCart[index].productVariation.image && localCart[index].productVariation.image !== "" ?
+                                localCart[index].productVariation.image.src : localCart[index].product.images[0].src}');">
+                            </div>
+                            <div class="e-card-stacked" style="-webkit-flex-basis: auto; flex-basis: auto; width: 70%">
+                            <div class="e-card-header" style="padding: 0">
+                            <div class="e-card-header-caption"  style="padding-left: 3px; padding-right: 5px">
+                            <div class="e-card-sub-title" style="font-size: 14px; text-align: center; text-transform: capitalize">
+                                ${localCart[index].product.name}
+                            </div>
+                            <div class="e-card-sub-title" style="font-size: 11px; text-align: center; text-transform: capitalize">
+                                &#x20a6;${kendo.toString(kendo.parseFloat((localCart[index].productVariation.price && localCart[index].productVariation.price !== "" ?
+                                localCart[index].productVariation.price : localCart[index].product.price)), "n2")}
+                            </div>
+                            </div>
+                            </div>
+                            <div class="e-card-content row" style="padding: 0;">
+                            <div class="col-xs-3">
+                            </div>
+                            <div class="col-xs-4">
+                                <button type="button" class="view-cart-remove-button"
+                                        style="background-color: #ffffff; color: #3f51b5"></button>
+                            </div>
+                            <div class="col-xs-5">
+                                <input class="view-cart-quantity-input" type="number" style="padding-top: 2px;">
+                            </div>
+                            </div>
+                            </div>`;
+                    }
+                    else if(! localCart[index].productVariation) { // this product was NOT ssaved with customisation, and has NO variations
+                        displayContent +=
+                            `<div class="e-card-image" style="-webkit-flex-basis: auto; flex-basis: auto; width: 30%;
+                            min-height: 100%; 
+                            background-image: url('${localCart[index].product.images[0].src}');">
+                            </div>
+                            <div class="e-card-stacked" style="-webkit-flex-basis: auto; flex-basis: auto; width: 70%">
+                            <div class="e-card-header" style="padding: 0">
+                            <div class="e-card-header-caption"  style="padding-left: 3px; padding-right: 5px">
+                            <div class="e-card-sub-title" style="font-size: 14px; text-align: center; text-transform: capitalize">
+                                ${localCart[index].product.name}
+                            </div>
+                            <div class="e-card-sub-title" style="font-size: 11px; text-align: center; text-transform: capitalize">
+                                &#x20a6;${kendo.toString(kendo.parseFloat(localCart[index].product.price), "n2")}
+                            </div>
+                            </div>
+                            </div>
+                            <div class="e-card-content row" style="padding: 0;">
+                            <div class="col-xs-3">                          
+                            </div>
+                            <div class="col-xs-4">
+                                <button type="button" class="view-cart-remove-button"
+                                        style="background-color: #ffffff; color: #3f51b5"></button>
+                            </div>
+                            <div class="col-xs-5">
+                                <input class="view-cart-quantity-input" type="number" style="padding-top: 2px;">
+                            </div>
+                            </div>
+                            </div>`;
+                    }
+
+                    displayContent +=
+                        `</div>
+                         </div>`;
+                }
+
+                // attach the displayContent to the page
+                $('#view-cart-page #view-cart-contents-container').html(displayContent);
+
+                // create all the "Edit" buttons required for the View Cart page
+                $("#view-cart-page .view-cart-edit-button").each(function(index, element){
+                    // create the "Edit" button
+                    new ej.buttons.Button({
+                        cssClass: 'e-flat e-round',
+                        iconCss: "zmdi zmdi-edit utopiasoftware-icon-zoom-one-point-two",
+                        iconPosition: "Left"
                     }).appendTo(element);
-            });
+                });
 
-            // collapse the variations content
-            $('#product-details-page .product-details-variations').addClass('expandable-content');
+                // create all the "Remove" buttons required for the View Cart page
+                $("#view-cart-page .view-cart-remove-button").each(function(index, element){
+                    // create the "Remove" button
+                    new ej.buttons.Button({
+                        cssClass: 'e-flat e-round',
+                        iconCss: "zmdi zmdi-delete utopiasoftware-icon-zoom-one-point-two",
+                        //iconPosition: "Left"
+                    }).appendTo(element);
+                });
 
-            // update the rating for the product details
-            $('#product-details-page .product-details-rating').
-            html(`
-            ${Math.floor(kendo.parseFloat(productDetails.average_rating)) > 0 ?
-                '<ons-icon icon="md-star" fixed-width></ons-icon>'.
-                repeat(Math.floor(kendo.parseFloat(productDetails.average_rating))) :
-                '<ons-icon icon="md-star-outline" style="color: lightgray" fixed-width></ons-icon>'.repeat(5)}
-                <span style="display: inline-block; color: gray;">
-                ${Math.floor(kendo.parseFloat(productDetails.average_rating)) > 0 ?
-                `(${productDetails.rating_count})` : ""}
-                </span>
-            `);
+                // create all the "Quantity" input required for the View Cart page
+                $("#view-cart-page .view-cart-quantity-input").each(function(index, element){
+                    new ej.inputs.NumericTextBox({
+                        cssClass: 'view-cart-quantity-input-class',
+                        currency: null,
+                        decimals: 0,
+                        floatLabelType: 'Auto',
+                        format: 'n',
+                        showSpinButton: true,
+                        min: 1,
+                        max: 10,
+                        placeholder: ' ',
+                        step: 1,
+                        strictMode: true,
+                        width: '60%',
+                        // sets value to the NumericTextBox
+                        value: 1
+                    }).appendTo(element);
+                });
 
-            // update the extra/more details for the product
-            $('#product-details-page .product-details-more-description').html(`
-            ${productDetails.description}`);
+            }
+            finally{
 
-            // update the dimensions for the product details
-            $('#product-details-page .product-details-dimensions').html(`
-            <span class="list-item__subtitle" style="display: block">length - ${!productDetails.dimensions.length ||
-            productDetails.dimensions.length == "" ? "(Not Available)" : `${productDetails.dimensions.length}`}</span>
-            <span class="list-item__subtitle" style="display: block">width - ${!productDetails.dimensions.width ||
-            productDetails.dimensions.width == "" ? "(Not Available)" : `${productDetails.dimensions.width}`}</span>
-            <span class="list-item__subtitle" style="display: block">height - ${!productDetails.dimensions.height ||
-            productDetails.dimensions.height == "" ? "(Not Available)" : `${productDetails.dimensions.height}`}</span>`);
-
-            // update the weight for the product
-            $('#product-details-page .product-details-weight').html(`${!productDetails.weight ||
-            productDetails.weight == "" ? "(Not Available)" : `${productDetails.weight}`}`);
+            }
         },
 
         /**
-         * method is triggered when the customise button is clicked
+         * method is used to save a search item i.e. a product to the cached "Recent Searches"
+         *
+         * @param product {Object} the product to include to the "Recent Searches" cache
+         * @returns {Promise<void>}
+         */
+        async saveRecentSearchItem(product){
+            var recentSearchesResultArray = []; // holds the recent searches array
+
+            try{
+                // get the recent searches collection
+                recentSearchesResultArray = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                loadData("recent-searches", utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)).products;
+            }
+            catch(err){}
+
+            try{
+                // add the received 'product' parameter to the top of the recent searches array
+                recentSearchesResultArray.unshift(product);
+                // ensure the array is NOT greater than 5 items in length
+                recentSearchesResultArray = recentSearchesResultArray.slice(0, 5);
+                // save the updated recent searches array  to the cached data collection of "Recent Searches"
+                await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
+                    {_id: "recent-searches", docType: "RECENT_SEARCHES", products: recentSearchesResultArray},
+                    utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
+                // display the updated recent searches to the user
+                await utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.displayRecentSearches();
+            }
+            catch(err){
+
+            }
+        },
+
+        /**
+         * method is used to remove a search item i.e. a product from the cached "Recent Searches"
+         *
+         * @param productIndex {Integer} holds the index position for the product that was clicked.
+         * The index position is gotten from the array of cached recent searches
+         *
+         * @param clickedElement {Element} the element that was clicked in order to trigger the product removal
          *
          * @returns {Promise<void>}
          */
-        async customiseButtonClicked(){
-            // check if there is Internet connection
-            if(navigator.connection.type === Connection.NONE){ // there is no Internet connection
-                // hide all previously displayed ej2 toast
-                $('.page-toast').get(0).ej2_instances[0].hide('All');
-                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
-                // display toast to show that an error
-                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
-                toast.cssClass = 'error-ej2-toast';
-                toast.timeOut = 3500;
-                toast.content = `Please connect to the Internet to customise product`;
-                toast.dataBind();
-                toast.show();
+        async removeRecentSearchItem(productIndex, clickedElement){
 
-                return; // exit method
-            }
-
-            // perform the method task in a separate event block
+            // execute the method is a different event queue
             window.setTimeout(async function(){
-                var productUrl = ""; // holds the url for the product being customised
+                var recentSearchesResultArray = []; // holds the recent searches array
 
-                // check if the user has selected a product variation or if the default product is being customised
-                if(utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
-                    currentProductVariationIndex !== -1){ // a product variation was selected
-                    // get the index position of the selected variation
-                    let variationIndex = utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
-                        currentProductVariationIndex;
-                    // get the production variation object
-                    let productVariation = utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
-                        productVariationsArray[variationIndex];
-                    productUrl = productVariation.permalink; // set the product url
+                try{
+                    // get the recent searches collection
+                    recentSearchesResultArray = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                    loadData("recent-searches", utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)).products;
                 }
-                else{ // no product variation was selected, so use the default product details
-                    productUrl = utopiasoftware[utopiasoftware_app_namespace].controller.
-                        productDetailsPageViewModel.currentProductDetails.permalink; // set the product url
+                catch(err){}
+
+                try{
+                    // remove the received 'product' parameter index from the recent searches array
+                    recentSearchesResultArray.splice(productIndex, 1);
+                    // save the updated recent searches array  to the cached data collection of "Recent Searches"
+                    await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
+                        {_id: "recent-searches", docType: "RECENT_SEARCHES", products: recentSearchesResultArray},
+                        utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
+                    // hide the list-item belonging to the clicked element from the displayed list
+                    let $listItem = $(clickedElement).closest('ons-list-item');
+                    await kendo.fx($listItem).expand("vertical").duration(300).reverse();
+                    // display the updated recent searches to the user
+                    await utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.displayRecentSearches();
                 }
+                catch(err){
 
-                // load the "Customise Product" page to the app-main-navigator
-                await $('#app-main-navigator').get(0).pushPage("customise-product-page.html");
-                // load the product customisation url
-                await utopiasoftware[utopiasoftware_app_namespace].controller.
-                customiseProductPageViewModel.loadProductCustomisation(productUrl);
-
-            }, 0);
-
-        }
+                }
+            }, 0)
+        },
     }
 };
