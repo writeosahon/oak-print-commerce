@@ -4436,9 +4436,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         duration: 10 * 60 * 60 * 1000 // set spinner/progress duration for 10 hr
                     }).appendTo('#view-cart-checkout');
 
-                    await utopiasoftware[utopiasoftware_app_namespace].controller.viewCartPageViewModel.displayUserCart();
-                    // enable the checkout button
-                    $('#view-cart-page #view-cart-checkout').removeAttr("disabled");
                 }
                 catch(err){
 
@@ -4828,9 +4825,37 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         },
 
         /**
-         * method is a utility
+         * method is a utility function used to view/load and display the user's cart
+         *
          * @returns {Promise<void>}
          */
-        async viewCartPage(){}
+        async viewCartPage(){
+
+            try{
+                // load the View Cart page
+                await $('#app-main-navigator').get(0).bringPageTop("view-cart-page.html");
+                // display the user cart
+                await utopiasoftware[utopiasoftware_app_namespace].controller.viewCartPageViewModel.displayUserCart();
+                // enable the checkout button
+                $('#view-cart-page #view-cart-checkout').removeAttr("disabled");
+            }
+            catch(err){
+
+                console.log("VIEW-CART PAGE", err);
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast to show that an error
+                let toast = $('.page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.content = `Sorry, an error occurred. Pull down to refresh`;
+                toast.dataBind();
+                toast.show();
+            }
+            finally {
+                // hide the preloader
+                $('#view-cart-page .page-preloader').css("display", "none");
+            }
+
+        }
     }
 };
