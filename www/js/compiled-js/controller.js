@@ -4840,7 +4840,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $('#view-cart-page #view-cart-checkout').removeAttr("disabled");
             }
             catch(err){
-
                 console.log("VIEW-CART PAGE", err);
                 // hide all previously displayed ej2 toast
                 $('.page-toast').get(0).ej2_instances[0].hide('All');
