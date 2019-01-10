@@ -4826,5 +4826,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 }
             }, 0)
         },
+
+        /**
+         * method is a utility
+         * @returns {Promise<void>}
+         */
+        async viewCartPage(){}
     }
 };
