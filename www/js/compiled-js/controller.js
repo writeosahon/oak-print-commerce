@@ -4396,38 +4396,36 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 // listen for the back button event
                 $('#app-main-navigator').get(0).topPage.onDeviceBackButton =
-                    utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.backButtonClicked;
-/*
+                    utopiasoftware[utopiasoftware_app_namespace].controller.viewCartPageViewModel.backButtonClicked;
 
                 // add method to handle the loading action of the pull-to-refresh widget
-                $('#product-details-page-pull-hook', $thisPage).get(0).onAction =
-                    utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.pagePullHookAction;
+                $('#view-cart-page-pull-hook', $thisPage).get(0).onAction =
+                    utopiasoftware[utopiasoftware_app_namespace].controller.viewCartPageViewModel.pagePullHookAction;
 
                 // register listener for the pull-to-refresh widget
-                $('#product-details-page-pull-hook', $thisPage).on("changestate", function(event){
+                $('#view-cart-page-pull-hook', $thisPage).on("changestate", function(event){
 
                     // check the state of the pull-to-refresh widget
                     switch (event.originalEvent.state){
                         case 'initial':
                             // update the displayed content
-                            $('#product-details-page-pull-hook-fab', event.originalEvent.pullHook).
+                            $('#view-cart-page-pull-hook-fab', event.originalEvent.pullHook).
                             html('<ons-icon icon="md-long-arrow-down" size="24px" style="color: #363E7C"></ons-icon>');
                             break;
 
                         case 'preaction':
                             // update the displayed content
-                            $('#product-details-page-pull-hook-fab', event.originalEvent.pullHook).
+                            $('#view-cart-page-pull-hook-fab', event.originalEvent.pullHook).
                             html('<ons-icon icon="md-long-arrow-up" size="24px" style="color: #363E7C"></ons-icon>');
                             break;
 
                         case 'action':
                             // update the displayed content
-                            $('#product-details-page-pull-hook-fab', event.originalEvent.pullHook).
+                            $('#view-cart-page-pull-hook-fab', event.originalEvent.pullHook).
                             html('<ons-progress-circular indeterminate modifier="pull-hook"></ons-progress-circular>');
                             break;
                     }
                 });
-*/
 
                 try{
                     // create the "Checkout" button
@@ -4449,6 +4447,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     toast.dataBind();
                     toast.show();
                 }
+
             }
 
         },
@@ -4492,28 +4491,21 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         async pagePullHookAction(doneCallBack = function(){}){
             // disable pull-to-refresh widget till loading is done
-            $('#product-details-page #product-details-page-pull-hook').attr("disabled", true);
+            $('#view-cart-page #view-cart-page-pull-hook').attr("disabled", true);
 
             // hide all previously displayed ej2 toast
             $('.page-toast').get(0).ej2_instances[0].hide('All');
 
-            // disable the "Add To Cart" button
-            $('#product-details-page #product-details-add-to-cart').attr("disabled", true);
+            // disable the "Checkout" button
+            $('#view-cart-page #view-cart-checkout').attr("disabled", true);
             // remove the spinner from the 'Add To Cart'
-            $('#product-details-page #product-details-add-to-cart').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
-            $('#product-details-page #product-details-add-to-cart').get(0).ej2_instances[0].dataBind();
-            $('#product-details-page #product-details-add-to-cart').get(0).ej2_instances[0].stop();
+            $('#view-cart-page #view-cart-checkout').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
+            $('#view-cart-page #view-cart-checkout').get(0).ej2_instances[0].dataBind();
+            $('#view-cart-page #view-cart-checkout').get(0).ej2_instances[0].stop();
 
             try{
-                // load product variations asynchronously without waiting for the response
-                utopiasoftware[utopiasoftware_app_namespace].controller.
-                productDetailsPageViewModel.loadProductVariations();
-                // load product details
-                let productDetailsArray = await utopiasoftware[utopiasoftware_app_namespace].controller.
-                productDetailsPageViewModel.loadProduct();
                 // display the loaded product details
-                await utopiasoftware[utopiasoftware_app_namespace].controller.
-                productDetailsPageViewModel.displayProductDetails(productDetailsArray[0]);
+                await utopiasoftware[utopiasoftware_app_namespace].controller.viewCartPageViewModel.displayUserCart();
             }
             catch(err){ // an error occurred
 
@@ -4526,9 +4518,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             }
             finally{
                 // enable pull-to-refresh widget till loading is done
-                $('#product-details-page #product-details-page-pull-hook').removeAttr("disabled");
-                // enable the "Add To Cart" button
-                $('#product-details-page #product-details-add-to-cart').removeAttr("disabled");
+                $('#view-cart-page #view-cart-page-pull-hook').removeAttr("disabled");
+                // enable the "Checkout" button
+                $('#view-cart-page #view-cart-checkout').removeAttr("disabled");
                 // signal that loading is done
                 doneCallBack();
             }
@@ -4608,7 +4600,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 ${localCart[index].product_name}
                             </div>
                             <div class="e-card-sub-title" style="font-size: 11px; text-align: center; text-transform: capitalize">
-                                &#x20a6;${kendo.toString(kendo.parseFloat(localCart[index].cartData.cart_item_data.fpd_data.fpd_product_price), "n2")}
+                                &#x20a6;${kendo.toString(localCart[index].cartData.quantity * kendo.parseFloat(localCart[index].cartData.cart_item_data.fpd_data.fpd_product_price), "n2")}
                             </div>
                             </div>
                             </div>
@@ -4622,7 +4614,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         style="background-color: #ffffff; color: #3f51b5"></button>
                             </div>
                             <div class="col-xs-5">
-                                <input class="view-cart-quantity-input" type="number" style="padding-top: 2px;">
+                                <input class="view-cart-quantity-input" type="number" style="padding-top: 2px;" value="${localCart[index].cartData.quantity}">
                             </div>
                             </div>
                             </div>`;
@@ -4642,7 +4634,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 ${localCart[index].product.name}
                             </div>
                             <div class="e-card-sub-title" style="font-size: 11px; text-align: center; text-transform: capitalize">
-                                &#x20a6;${kendo.toString(kendo.parseFloat((localCart[index].productVariation.price && localCart[index].productVariation.price !== "" ?
+                                &#x20a6;${kendo.toString(localCart[index].cartData.quantity * kendo.parseFloat((localCart[index].productVariation.price && localCart[index].productVariation.price !== "" ?
                                 localCart[index].productVariation.price : localCart[index].product.price)), "n2")}
                             </div>
                             </div>
@@ -4655,7 +4647,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         style="background-color: #ffffff; color: #3f51b5"></button>
                             </div>
                             <div class="col-xs-5">
-                                <input class="view-cart-quantity-input" type="number" style="padding-top: 2px;">
+                                <input class="view-cart-quantity-input" type="number" style="padding-top: 2px;" value="${localCart[index].cartData.quantity}">
                             </div>
                             </div>
                             </div>`;
@@ -4673,7 +4665,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 ${localCart[index].product.name}
                             </div>
                             <div class="e-card-sub-title" style="font-size: 11px; text-align: center; text-transform: capitalize">
-                                &#x20a6;${kendo.toString(kendo.parseFloat(localCart[index].product.price), "n2")}
+                                &#x20a6;${kendo.toString(localCart[index].cartData.quantity * kendo.parseFloat(localCart[index].product.price), "n2")}
                             </div>
                             </div>
                             </div>
@@ -4685,7 +4677,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         style="background-color: #ffffff; color: #3f51b5"></button>
                             </div>
                             <div class="col-xs-5">
-                                <input class="view-cart-quantity-input" type="number" style="padding-top: 2px;">
+                                <input class="view-cart-quantity-input" type="number" style="padding-top: 2px;" value="${localCart[index].cartData.quantity}">
                             </div>
                             </div>
                             </div>`;
