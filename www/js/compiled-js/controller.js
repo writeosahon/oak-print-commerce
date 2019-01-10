@@ -4286,7 +4286,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     utopiasoftwareCartObject.cartData.quantity = customisedProduct.quantity;
                     utopiasoftwareCartObject.cartData.variation_id = customisedProduct.variation_id;
                     utopiasoftwareCartObject.cartData.variation = customisedProduct.variation;
-                    utopiasoftwareCartObject.cartData.cart_item_data = customisedProduct.fpd_data; // holds the fancy product designer data
+                    utopiasoftwareCartObject.cartData.cart_item_data = {fpd_data: customisedProduct.fpd_data}; // holds the fancy product designer data
 
                     // store the cart key used to identify the customised product as additional data just for the mobile app
                     utopiasoftwareCartObject.anon_cart_key = customisedProduct.key;
