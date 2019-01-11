@@ -4616,7 +4616,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         style="background-color: #ffffff; color: #3f51b5; height: 10px;"></button>
                             </div>
                             <div class="col-xs-5">
-                                <input class="view-cart-quantity-input" type="number" style="padding-top: 2px;" value="${localCart[index].cartData.quantity}">
+                                <input class="view-cart-quantity-input" type="number" style="padding-top: 2px;" 
+                                value="${localCart[index].cartData.quantity}" 
+                                data-utopiasoftware-product-uid="${localCart[index].uid}">
                             </div>
                             </div>
                             </div>`;
@@ -4649,7 +4651,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         style="background-color: #ffffff; color: #3f51b5; height: 10px;"></button>
                             </div>
                             <div class="col-xs-5">
-                                <input class="view-cart-quantity-input" type="number" style="padding-top: 2px;" value="${localCart[index].cartData.quantity}">
+                                <input class="view-cart-quantity-input" type="number" style="padding-top: 2px;" 
+                                value="${localCart[index].cartData.quantity}" 
+                                data-utopiasoftware-product-uid="${localCart[index].uid}">
                             </div>
                             </div>
                             </div>`;
@@ -4679,7 +4683,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         style="background-color: #ffffff; color: #3f51b5; height: 10px;"></button>
                             </div>
                             <div class="col-xs-5">
-                                <input class="view-cart-quantity-input" type="number" style="padding-top: 2px;" value="${localCart[index].cartData.quantity}">
+                                <input class="view-cart-quantity-input" type="number" style="padding-top: 2px;" 
+                                value="${localCart[index].cartData.quantity}" 
+                                data-utopiasoftware-product-uid="${localCart[index].uid}">
                             </div>
                             </div>
                             </div>`;
@@ -4730,11 +4736,30 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         strictMode: true,
                         width: '60%',
                         // sets value to the NumericTextBox
-                        value: 1
+                        value: 1,
+                        change: function(){ // track changes in the quantity numeric input for every product
+                            let currentValue = this.value; // holds the current quantity value from the numeric input
+                            let product_uid = $(element).attr('data-utopiasoftware-product-uid');
+                            // dissplay page preloader
+                            $('#view-cart-page .page-preloader').css("display", "block");
+
+                            // handle task in a separate event block
+                            window.setTimeout(async function(){
+                                try {
+                                    // find the product to be updated within the app localCart
+                                    let updateProduct = localCart.find(function(productElement){
+                                        return product.uid === product_uid;
+                                    });
+                                }
+                                catch(err){}
+
+                            }, 0);
+                        }
                     }).appendTo(element);
                 });
 
-                // update the total price displayed
+
+                // update the total price of items displayed
                 $('#view-cart-page #view-cart-total-price').html(`&#x20a6;${kendo.toString(
                     utopiasoftware[utopiasoftware_app_namespace].
                     controller.viewCartPageViewModel.calculateCartTotalPrice(localCart), "n2")}`);
