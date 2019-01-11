@@ -129,6 +129,31 @@
     </ons-list>
 </ons-popover>
 
+<!-- create action sheet for deleting items from carts -->
+<ons-action-sheet id="delete-cart-item-action-sheet" cancelable title="delete product from cart?" disable-auto-styling>
+    <ons-list id="delete-cart-item-list" style="display: block" disable-auto-styling>
+
+        <ons-list-item modifier="nodivider" lock-on-drag="true" disable-auto-styling>
+            <div class="center">
+                <div style="width: 100%; text-align: center;">
+
+                    <button id="delete-cart-item-yes" type="button" style="color: #d64113;
+                box-shadow: none; margin-right: 1em; margin-bottom:0.5em">
+                        <ons-ripple></ons-ripple>
+                        Yes</button>
+
+                    <button id="delete-cart-item-no" type="button" style="color: #3F51B5;
+                box-shadow: none; margin-right: 1em; margin-bottom:0.5em">
+                        <ons-ripple></ons-ripple>
+                        No</button>
+
+                </div>
+            </div>
+        </ons-list-item>
+
+    </ons-list>
+</ons-action-sheet>
+
 <!-- container for app ej2 bottom toast -->
 <div class="page-toast"></div>
 

@@ -56,6 +56,20 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 showCloseButton: true
             }).appendTo($('.timed-page-toast').get(0));
 
+            // create the "Yes" button on the the Delete Cart Item action sheet
+            new ej.buttons.Button({
+                cssClass: 'e-flat e-small',
+                iconCss: "zmdi zmdi-star-outline",
+                iconPosition: "Left"
+            }).appendTo('#delete-cart-item-yes');
+
+            // create the "No" button on the the Delete Cart Item action sheet
+            new ej.buttons.Button({
+                cssClass: 'e-flat e-small',
+                iconCss: "zmdi zmdi-share",
+                iconPosition: "Left"
+            }).appendTo('#delete-cart-item-no');
+
 
             // START ALL CORDOVA PLUGINS CONFIGURATIONS
             try{
@@ -4613,7 +4627,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             </div>
                             <div class="col-xs-4">
                                 <button type="button" class="view-cart-remove-button"
-                                        style="background-color: #ffffff; color: #3f51b5; height: 10px;"></button>
+                                        style="background-color: #ffffff; color: #3f51b5; height: 10px;" 
+                                        onclick="document.getElementById('delete-cart-item-action-sheet').show();"></button>
                             </div>
                             <div class="col-xs-5">
                                 <input class="view-cart-quantity-input" type="number" style="padding-top: 2px;" 
@@ -4648,7 +4663,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             </div>
                             <div class="col-xs-4">
                                 <button type="button" class="view-cart-remove-button"
-                                        style="background-color: #ffffff; color: #3f51b5; height: 10px;"></button>
+                                        style="background-color: #ffffff; color: #3f51b5; height: 10px;" 
+                                        onclick="document.getElementById('delete-cart-item-action-sheet').show();"></button>
                             </div>
                             <div class="col-xs-5">
                                 <input class="view-cart-quantity-input" type="number" style="padding-top: 2px;" 
@@ -4680,7 +4696,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             </div>
                             <div class="col-xs-4">
                                 <button type="button" class="view-cart-remove-button"
-                                        style="background-color: #ffffff; color: #3f51b5; height: 10px;"></button>
+                                        style="background-color: #ffffff; color: #3f51b5; height: 10px;" 
+                                        onclick="document.getElementById('delete-cart-item-action-sheet').show();"></button>
                             </div>
                             <div class="col-xs-5">
                                 <input class="view-cart-quantity-input" type="number" style="padding-top: 2px;" 
