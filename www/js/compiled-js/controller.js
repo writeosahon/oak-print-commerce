@@ -59,14 +59,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // create the "Yes" button on the the Delete Cart Item action sheet
             new ej.buttons.Button({
                 cssClass: 'e-flat e-small',
-                iconCss: "zmdi zmdi-star-outline",
                 iconPosition: "Left"
             }).appendTo('#delete-cart-item-yes');
 
             // create the "No" button on the the Delete Cart Item action sheet
             new ej.buttons.Button({
                 cssClass: 'e-flat e-small',
-                iconCss: "zmdi zmdi-share",
                 iconPosition: "Left"
             }).appendTo('#delete-cart-item-no');
 
