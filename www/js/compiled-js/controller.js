@@ -4738,7 +4738,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         // sets value to the NumericTextBox
                         value: 1,
                         change: function(){ // track changes in the quantity numeric input for every product
-                            let currentValue = this.value; // holds the current quantity value from the numeric input
+                            let currentQuantityValue = this.value; // holds the current quantity value from the numeric input
                             let product_uid = $(element).attr('data-utopiasoftware-product-uid');
                             // dissplay page preloader
                             $('#view-cart-page .page-preloader').css("display", "block");
@@ -4746,12 +4746,46 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             // handle task in a separate event block
                             window.setTimeout(async function(){
                                 try {
+
                                     // find the product to be updated within the app localCart
-                                    let updateProduct = localCart.find(function(productElement){
+                                    let selectedProduct = localCart.find(function(productElement){
                                         return product.uid === product_uid;
                                     });
+                                    // update the quantity for the selected product
+                                    selectedProduct.cartData.quantity = currentQuantityValue;
+                                    // save the updated localCart object to the app cache/persistent storage
+                                    await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
+                                        {_id: "user-cart", docType: "USER_CART", cart: localCart},
+                                        utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
+
+                                    // inform the user that the product has been added to cart
+                                    // hide all previously displayed ej2 toast
+                                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                                    $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                                    // display toast to show that an error
+                                    let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                                    toast.cssClass = 'success-ej2-toast';
+                                    toast.timeOut = 2000;
+                                    toast.content = `Product quantity updated`;
+                                    toast.dataBind();
+                                    toast.show();
                                 }
-                                catch(err){}
+                                catch(err){
+                                    // hide all previously displayed ej2 toast
+                                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                                    $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                                    // display toast to show that an error occurred
+                                    let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                                    toast.cssClass = 'error-ej2-toast';
+                                    toast.timeOut = 3500;
+                                    toast.content = `Product quantity not updated. Try again`;
+                                    toast.dataBind();
+                                    toast.show();
+                                }
+                                finally{
+                                    // hide page preloader
+                                    $('#view-cart-page .page-preloader').css("display", "none");
+                                }
 
                             }, 0);
                         }
