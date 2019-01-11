@@ -60,13 +60,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             new ej.buttons.Button({
                 cssClass: 'e-flat e-small',
                 iconPosition: "Left"
-            }).appendTo('#delete-cart-item-yes');
+            }).appendTo('#view-cart-page-delete-cart-item-yes');
 
             // create the "No" button on the the Delete Cart Item action sheet
             new ej.buttons.Button({
                 cssClass: 'e-flat e-small',
                 iconPosition: "Left"
-            }).appendTo('#delete-cart-item-no');
+            }).appendTo('#view-cart-page-delete-cart-item-no');
 
 
             // START ALL CORDOVA PLUGINS CONFIGURATIONS
@@ -4626,7 +4626,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             <div class="col-xs-4">
                                 <button type="button" class="view-cart-remove-button"
                                         style="background-color: #ffffff; color: #3f51b5; height: 10px;" 
-                                        onclick="document.getElementById('delete-cart-item-action-sheet').show();"></button>
+                                        onclick="document.getElementById('view-cart-page-delete-cart-item-action-sheet').show();"></button>
                             </div>
                             <div class="col-xs-5">
                                 <input class="view-cart-quantity-input" type="number" style="padding-top: 2px;" 
@@ -4662,7 +4662,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             <div class="col-xs-4">
                                 <button type="button" class="view-cart-remove-button"
                                         style="background-color: #ffffff; color: #3f51b5; height: 10px;" 
-                                        onclick="document.getElementById('delete-cart-item-action-sheet').show();"></button>
+                                        onclick="document.getElementById('view-cart-page-delete-cart-item-action-sheet').show();"></button>
                             </div>
                             <div class="col-xs-5">
                                 <input class="view-cart-quantity-input" type="number" style="padding-top: 2px;" 
@@ -4695,7 +4695,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             <div class="col-xs-4">
                                 <button type="button" class="view-cart-remove-button"
                                         style="background-color: #ffffff; color: #3f51b5; height: 10px;" 
-                                        onclick="document.getElementById('delete-cart-item-action-sheet').show();"></button>
+                                        onclick="document.getElementById('view-cart-page-delete-cart-item-action-sheet').show();"></button>
                             </div>
                             <div class="col-xs-5">
                                 <input class="view-cart-quantity-input" type="number" style="padding-top: 2px;" 
@@ -4820,81 +4820,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             finally{
 
             }
-        },
-
-        /**
-         * method is used to save a search item i.e. a product to the cached "Recent Searches"
-         *
-         * @param product {Object} the product to include to the "Recent Searches" cache
-         * @returns {Promise<void>}
-         */
-        async saveRecentSearchItem(product){
-            var recentSearchesResultArray = []; // holds the recent searches array
-
-            try{
-                // get the recent searches collection
-                recentSearchesResultArray = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
-                loadData("recent-searches", utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)).products;
-            }
-            catch(err){}
-
-            try{
-                // add the received 'product' parameter to the top of the recent searches array
-                recentSearchesResultArray.unshift(product);
-                // ensure the array is NOT greater than 5 items in length
-                recentSearchesResultArray = recentSearchesResultArray.slice(0, 5);
-                // save the updated recent searches array  to the cached data collection of "Recent Searches"
-                await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
-                    {_id: "recent-searches", docType: "RECENT_SEARCHES", products: recentSearchesResultArray},
-                    utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
-                // display the updated recent searches to the user
-                await utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.displayRecentSearches();
-            }
-            catch(err){
-
-            }
-        },
-
-        /**
-         * method is used to remove a search item i.e. a product from the cached "Recent Searches"
-         *
-         * @param productIndex {Integer} holds the index position for the product that was clicked.
-         * The index position is gotten from the array of cached recent searches
-         *
-         * @param clickedElement {Element} the element that was clicked in order to trigger the product removal
-         *
-         * @returns {Promise<void>}
-         */
-        async removeRecentSearchItem(productIndex, clickedElement){
-
-            // execute the method is a different event queue
-            window.setTimeout(async function(){
-                var recentSearchesResultArray = []; // holds the recent searches array
-
-                try{
-                    // get the recent searches collection
-                    recentSearchesResultArray = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
-                    loadData("recent-searches", utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)).products;
-                }
-                catch(err){}
-
-                try{
-                    // remove the received 'product' parameter index from the recent searches array
-                    recentSearchesResultArray.splice(productIndex, 1);
-                    // save the updated recent searches array  to the cached data collection of "Recent Searches"
-                    await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
-                        {_id: "recent-searches", docType: "RECENT_SEARCHES", products: recentSearchesResultArray},
-                        utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
-                    // hide the list-item belonging to the clicked element from the displayed list
-                    let $listItem = $(clickedElement).closest('ons-list-item');
-                    await kendo.fx($listItem).expand("vertical").duration(300).reverse();
-                    // display the updated recent searches to the user
-                    await utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.displayRecentSearches();
-                }
-                catch(err){
-
-                }
-            }, 0)
         },
 
         /**
