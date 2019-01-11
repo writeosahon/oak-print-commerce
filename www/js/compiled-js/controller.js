@@ -4734,7 +4734,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     }).appendTo(element);
                 });
 
-                //todo
+                // update the total price displayed
+                $('#view-cart-page #view-cart-total-price').html(`&#x20a6;${utopiasoftware[utopiasoftware_app_namespace].
+                    controller.viewCartPAgeViewModel.calculateCartTotalPrice(localCart)}`);
             }
             finally{
 
@@ -4859,7 +4861,35 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {number} the total price for all the items contained in cart
          */
         calculateCartTotalPrice(localCart = []){
-            return 0;
+
+            if(localCart.length === 0){ // this is an empty cart, so just return 0
+                return 0.00;
+            }
+
+            // run an array reduce function which gets the sub-total price of each item in the cart by multiplying their
+            // quantity by the unit price. Then adding all sub-totals to get the total price
+
+            localCart.reduce(function(accumulator, currentElement, currentIndex, thisArray){
+
+                // check the types of products in the cart
+
+                if(currentElement.anon_cart_key){ // this item is a customised product
+                    // multiply the product unit price with the specified quantity and add the to the current cumulative total
+                    return accumulator + (currentElement.cartData.quantity *
+                        kendo.parseFloat(currentElement.cartData.cart_item_data.fpd_data.fpd_product_price));
+                }
+                else if(currentElement.productVariation){ // this product was NOT saved with customisation, but has variations
+                    // multiply the product unit price with the specified quantity and add the to the current cumulative total
+                    return accumulator + (currentElement.cartData.quantity *
+                    kendo.parseFloat((currentElement.productVariation.price && currentElement.productVariation.price !== "" ?
+                        currentElement.productVariation.price : currentElement.product.price)));
+                }
+                else if(! currentElement.productVariation) { // this product was NOT saved with customisation, and has NO variations
+                    // multiply the product unit price with the specified quantity and add the to the current cumulative total
+                    return accumulator + (currentElement.cartData.quantity * kendo.parseFloat(currentElement.product.price));
+                }
+
+            }, 0);
         }
     }
 };

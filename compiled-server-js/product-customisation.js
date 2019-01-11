@@ -79,7 +79,7 @@ function utopiasoftware_getUsage(){
 
 /**
  *
- * method is used to add the 'presently' customised product to the available cart
+ * method is used to add the 'presently'/ currrent product being customised to the available cart
  */
 function utopiasoftware_addUsage(){
     // trigger the submission of the customisation form by triggering a click on the submit button
