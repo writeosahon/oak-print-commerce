@@ -54,3 +54,7 @@ html.utopiasoftware-mobile .woocommerce-notices-wrapper .woocommerce-message {
 html.utopiasoftware-mobile .woocommerce-notices-wrapper a.button { /* hidden the 'add to cart' button */
     visibility: hidden !important;
 }
+
+html.utopiasoftware-mobile #chatra__iframe-wrapper { /** hide the chatra chat support on the page **/
+    display: none!important;
+}

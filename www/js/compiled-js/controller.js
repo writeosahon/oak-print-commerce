@@ -4735,8 +4735,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 });
 
                 // update the total price displayed
-                $('#view-cart-page #view-cart-total-price').html(`&#x20a6;${utopiasoftware[utopiasoftware_app_namespace].
-                    controller.viewCartPageViewModel.calculateCartTotalPrice(localCart)}`);
+                $('#view-cart-page #view-cart-total-price').html(`&#x20a6;${kendo.toString(
+                    utopiasoftware[utopiasoftware_app_namespace].
+                    controller.viewCartPageViewModel.calculateCartTotalPrice(localCart), "n2")}`);
             }
             finally{
 
