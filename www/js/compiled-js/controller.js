@@ -4749,7 +4749,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                     // find the product to be updated within the app localCart
                                     let selectedProduct = localCart.find(function(productElement){
-                                        return product.uid === product_uid;
+                                        return productElement.uid === product_uid;
                                     });
                                     // update the quantity for the selected product
                                     selectedProduct.cartData.quantity = currentQuantityValue;
