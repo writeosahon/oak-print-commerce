@@ -4871,8 +4871,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             localCart.reduce(function(accumulator, currentElement, currentIndex, thisArray){
 
+                console.log("ACCUMULATOR", accumulator);
+                console.log("CURRENT INDEX", currentIndex);
                 // check the types of products in the cart
-
                 if(currentElement.anon_cart_key){ // this item is a customised product
                     // multiply the product unit price with the specified quantity and add the to the current cumulative total
                     return accumulator + (currentElement.cartData.quantity *
