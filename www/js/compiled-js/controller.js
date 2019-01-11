@@ -4757,6 +4757,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
                                         {_id: "user-cart", docType: "USER_CART", cart: localCart},
                                         utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
+                                    // display the updated user cart
+                                    await utopiasoftware[utopiasoftware_app_namespace].controller.
+                                    viewCartPageViewModel.displayUserCart(localCart);
 
                                     // inform the user that the product has been added to cart
                                     // hide all previously displayed ej2 toast
