@@ -4613,7 +4613,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             </div>
                             <div class="col-xs-4">
                                 <button type="button" class="view-cart-remove-button"
-                                        style="background-color: #ffffff; color: #3f51b5 height: 10px;"></button>
+                                        style="background-color: #ffffff; color: #3f51b5; height: 10px;"></button>
                             </div>
                             <div class="col-xs-5">
                                 <input class="view-cart-quantity-input" type="number" style="padding-top: 2px;" value="${localCart[index].cartData.quantity}">
@@ -4736,7 +4736,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 // update the total price displayed
                 $('#view-cart-page #view-cart-total-price').html(`&#x20a6;${utopiasoftware[utopiasoftware_app_namespace].
-                    controller.viewCartPAgeViewModel.calculateCartTotalPrice(localCart)}`);
+                    controller.viewCartPageViewModel.calculateCartTotalPrice(localCart)}`);
             }
             finally{
 
