@@ -4869,7 +4869,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // run an array reduce function which gets the sub-total price of each item in the cart by multiplying their
             // quantity by the unit price. Then adding all sub-totals to get the total price
 
-            localCart.reduce(function(accumulator, currentElement, currentIndex, thisArray){
+            return localCart.reduce(function(accumulator, currentElement, currentIndex, thisArray){
 
                 console.log("ACCUMULATOR", accumulator);
                 console.log("CURRENT INDEX", currentIndex);
