@@ -4771,6 +4771,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     toast.show();
                                 }
                                 catch(err){
+                                    console.log("UPDATE PRODUCT QUANTITY", err);
                                     // hide all previously displayed ej2 toast
                                     $('.page-toast').get(0).ej2_instances[0].hide('All');
                                     $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
