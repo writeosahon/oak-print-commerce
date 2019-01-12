@@ -4333,7 +4333,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             // get the utopiasoftwareCartObject for the old customised product being updated.
                             // This old object will be replaced by the newly customised product, so delete it from app local cache/database
-                            let customisedIndex = utopiasoftwareCartObject = localCart.findIndex(function(cartObject){
+                            let customisedIndex = localCart.findIndex(function(cartObject){
                                 return cartObject.anon_cart_key === utopiasoftware[utopiasoftware_app_namespace].
                                     controller.customiseProductPageViewModel.currentCustomisationCartKey;
                             });
