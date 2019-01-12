@@ -4626,7 +4626,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             <div class="col-xs-4">
                                 <button type="button" class="view-cart-remove-button"
                                         style="background-color: #ffffff; color: #3f51b5; height: 10px;" 
-                                        onclick="document.getElementById('view-cart-page-delete-cart-item-action-sheet').show();"></button>
+                                        onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
+                                        viewCartPageViewModel.deleteCartItemButtonClicked('${localCart[index].uid}')"></button>
                             </div>
                             <div class="col-xs-5">
                                 <input class="view-cart-quantity-input" type="number" style="padding-top: 2px;" 
@@ -4662,7 +4663,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             <div class="col-xs-4">
                                 <button type="button" class="view-cart-remove-button"
                                         style="background-color: #ffffff; color: #3f51b5; height: 10px;" 
-                                        onclick="document.getElementById('view-cart-page-delete-cart-item-action-sheet').show();"></button>
+                                        onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
+                                        viewCartPageViewModel.deleteCartItemButtonClicked('${localCart[index].uid}')"></button>
                             </div>
                             <div class="col-xs-5">
                                 <input class="view-cart-quantity-input" type="number" style="padding-top: 2px;" 
@@ -4695,7 +4697,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             <div class="col-xs-4">
                                 <button type="button" class="view-cart-remove-button"
                                         style="background-color: #ffffff; color: #3f51b5; height: 10px;" 
-                                        onclick="document.getElementById('view-cart-page-delete-cart-item-action-sheet').show();"></button>
+                                        onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
+                                        viewCartPageViewModel.deleteCartItemButtonClicked('${localCart[index].uid}')"></button>
                             </div>
                             <div class="col-xs-5">
                                 <input class="view-cart-quantity-input" type="number" style="padding-top: 2px;" 
@@ -4823,7 +4826,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         },
 
         /**
-         * method is a utility function used to view/load and display the user's cart
+         * method is a utility/helper function used to view/load and display the user's cart
          *
          * @returns {Promise<void>}
          */
@@ -4895,6 +4898,97 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 }
 
             }, 0);
+        },
+
+
+        /**
+         * method is triggered when the Delete/Remove" cart item button (attached to each product on the
+         * View Cart page) is clicked.
+         *
+         * @param productUId {String} the unique uid created for each product in
+         * the user's local cart. This identifies the product to be deleted from cart
+         *
+         * @returns {Promise<void>}
+         */
+        async deleteCartItemButtonClicked (productUId = ""){
+
+            // attach functions to handle the "Reject/No" and "Accept/Yes" buttons click event.
+            // These buttons are located in the 'Delete Cart Item Action Sheet'.
+            // Click event handlers must always be defined for these buttons when using this action sheet
+
+            // function for "Reject/No" button
+            $('#view-cart-page-delete-cart-item-action-sheet #view-cart-page-delete-cart-item-no').on("click",
+                async function(){
+                    // hide the action sheet
+                    await document.getElementById('view-cart-page-delete-cart-item-action-sheet').hide();
+                }
+            );
+
+            // function for "Reject/No" button
+            $('#view-cart-page-delete-cart-item-action-sheet #view-cart-page-delete-cart-item-no').on("click",
+                async function(){
+                    let localCart = []; // holds the local cart array
+                    try{
+
+                        try{
+                            // get the localCart from the cached localCart of the app database
+                            localCart = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                            loadData("user-cart",
+                                utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)).cart;
+                        }
+                        catch(err){}
+
+                        // get the product to be deleted from the cart
+                        let productIndex = localCart.findIndex(function(productElement, index){
+                            // check if this is the product being search for by comparing the product uid
+                            return productUId === productElement.uid;
+                        });
+
+                        // check if a [rpduct was found
+                        if(productIndex !== -1){ // product was found
+                            // delete the product from localCart
+                            localCart.splice(productIndex, 1);
+                        }
+
+                        // save the updated cart
+                        await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
+                            {_id: "user-cart", docType: "USER_CART", cart: localCart},
+                            utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
+
+                        // redisplay view cart content, no need to wait for the content to complete display
+                        utopiasoftware[utopiasoftware_app_namespace].controller.viewCartPageViewModel.
+                        displayUserCart(localCart);
+
+                        // inform the user that the product has been added to cart
+                        // hide all previously displayed ej2 toast
+                        $('.page-toast').get(0).ej2_instances[0].hide('All');
+                        $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                        // display toast to show that an error
+                        let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                        toast.cssClass = 'default-ej2-toast';
+                        toast.timeOut = 2000;
+                        toast.content = `Product has been deleted from your cart`;
+                        toast.dataBind();
+                        toast.show();
+                    }
+                    catch(err){
+                        console.log("DELETE CART ERROR", err);
+                        // hide all previously displayed ej2 toast
+                        $('.page-toast').get(0).ej2_instances[0].hide('All');
+                        $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                        // display toast to show that an error
+                        let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                        toast.cssClass = 'error-ej2-toast';
+                        toast.timeOut = 3500;
+                        toast.content = `Error deleting product from your cart. Try again`;
+                        toast.dataBind();
+                        toast.show();
+                    }
+                }
+            );
+
+            // display the delete confirmation dialog
+            await document.getElementById('view-cart-page-delete-cart-item-action-sheet').show();
         }
     }
 };
