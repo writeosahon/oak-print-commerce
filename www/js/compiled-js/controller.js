@@ -4598,7 +4598,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // display the contents of the cart using a for-loop
                 for(let index = 0; index < localCart.length; index++){
                     displayContent +=
-                        `<div class="col-xs-12" style="border-bottom: 1px lightgray solid">
+                        `<div class="col-xs-12" style="border-bottom: 1px lightgray solid" 
+                            data-utopiasoftware-product-uid="${localCart[index].uid}">
                         <div class="e-card e-card-horizontal">`;
 
                     if(localCart[index].anon_cart_key){ // this item is a customised product
@@ -4958,11 +4959,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             {_id: "user-cart", docType: "USER_CART", cart: localCart},
                             utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
 
-                        // redisplay view cart content, no need to wait for the content to complete display
-                        await utopiasoftware[utopiasoftware_app_namespace].controller.viewCartPageViewModel.
-                        displayUserCart(localCart);
+                        // hide from display, the cart item belonging to the deleted product
+                        let $cartDisplayedItem = $(`#view-cart-page .col-xs-12[data-utopiasoftware-product-uid="${productUId}"]`);
+                        await kendo.fx($cartDisplayedItem).expand("vertical").duration(250).reverse();
+                        // update the total price of items displayed
+                        $('#view-cart-page #view-cart-total-price').html(`&#x20a6;${kendo.toString(
+                            utopiasoftware[utopiasoftware_app_namespace].
+                            controller.viewCartPageViewModel.calculateCartTotalPrice(localCart), "n2")}`);
 
-                        // inform the user that the product has been added to cart
+                        // inform the user that the product has been removed from cart
                         // hide all previously displayed ej2 toast
                         $('.page-toast').get(0).ej2_instances[0].hide('All');
                         $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
