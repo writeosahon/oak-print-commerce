@@ -3946,6 +3946,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         currentCustomisationUrl : "",
 
         /**
+         * holds the remote/server cart item key for the current customised product
+         */
+        currentCustomisationCartKey: null,
+
+        /**
          * holds the number of times the customisation page has been loaded from the parent server
          */
         customisationPageLoadCount: 0,
@@ -4200,9 +4205,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             $('.page-toast').get(0).ej2_instances[0].hide('All');
 
             try{
-                // reload the current product customisation url into the iframe
+                // reload the current product customisation url  & current remote cart item key into the iframe
                 await utopiasoftware[utopiasoftware_app_namespace].controller.
-               customiseProductPageViewModel.loadProductCustomisation();
+               customiseProductPageViewModel.
+                loadProductCustomisation(utopiasoftware[utopiasoftware_app_namespace].controller.
+                    customiseProductPageViewModel.currentCustomisationUrl,
+                    utopiasoftware[utopiasoftware_app_namespace].controller.
+                        customiseProductPageViewModel.currentCustomisationCartKey);
             }
             catch(err){ // an error occurred
 
@@ -4228,10 +4237,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          *
          * @param customisationUrl {String} holds the url for the product to be customised
          *
+         * @param remoteCartItemKey {String} holds the remote cart item key for the
+         * product being customised
+         *
          * @returns {Promise<void>}
          */
         async loadProductCustomisation(customisationUrl = utopiasoftware[utopiasoftware_app_namespace].
-            controller.customiseProductPageViewModel.currentCustomisationUrl){
+            controller.customiseProductPageViewModel.currentCustomisationUrl, remoteCartItemKey){
 
             // check if there is Internet connection
             if(navigator.connection.type === Connection.NONE){ // there is no Internet connection
@@ -4249,12 +4261,33 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 return; // exit method
             }
 
-            // load the specified url into the customisation iframe
-            $('#customise-product-page #customise-product-page-iframe').attr("src", customisationUrl);
+            // check if the 'remoteCartItemKey' has been provided
+            if(remoteCartItemKey){ // the remote cart item key was provided
+                if(customisationUrl.indexOf("?") < 0){ // there are NO previous query parameters
+                    // attach the cart item key to the available customisation url & load it
+                    // load the specified url into the customisation iframe
+                    $('#customise-product-page #customise-product-page-iframe').attr("src",
+                        customisationUrl + `?cart_item_key=${window.encodeURIComponent(remoteCartItemKey)}`);
+                }
+                else{ // there are previous query parameters
+                    // attach the cart item key to the previous query parameters and load the customisation url
+                    // load the specified url into the customisation iframe
+                    $('#customise-product-page #customise-product-page-iframe').attr("src",
+                        customisationUrl + `&cart_item_key=${window.encodeURIComponent(remoteCartItemKey)}`);
+                }
+            }
+            else{ // NO remote cart item key was provided
+                // load the specified url (as is) into the customisation iframe
+                $('#customise-product-page #customise-product-page-iframe').attr("src", customisationUrl);
+            }
 
             // update the current customisation url
             utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.
                 currentCustomisationUrl = customisationUrl;
+
+            // update the current remote/server cart item key for the product being customised
+            utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.
+                currentCustomisationCartKey = remoteCartItemKey;
 
             // reset the page load count and cartsQueue properties
             utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.
@@ -4276,6 +4309,90 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 controller.customiseProductPageViewModel.cartsQueue[0];
             let updatedCartObject = utopiasoftware[utopiasoftware_app_namespace].
                 controller.customiseProductPageViewModel.cartsQueue[1];
+
+            // check if this is a save of an "edited" previously customised product
+            if(utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.
+                currentCustomisationCartKey){ // since a current customisation cart key exist, this is an update
+                // save the current customisation cart key
+                let customisationCartKey = utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.
+                    currentCustomisationCartKey;
+
+                // get the updated customised product
+                let customisedProduct = updatedCartObject[customisationCartKey];
+
+                let localCart = []; // holds the local cart collection
+                let utopiasoftwareCartObject = {cartData: {}}; // holds the object whose properties make up the cart item
+
+                try{
+                    // get the cached user cart
+                    localCart = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.loadData("user-cart",
+                        utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)).cart;
+
+                    // get the utopiasoftwareCartObject for the customised product being updated
+                    utopiasoftwareCartObject = localCart.find(function(cartObject){
+                        return cartObject.anon_cart_key === customisationCartKey;
+                    }) || utopiasoftwareCartObject;
+                }
+                catch(err){}
+
+                // set the other properties of the cart data
+                utopiasoftwareCartObject.cartData.product_id = customisedProduct.product_id;
+                utopiasoftwareCartObject.cartData.quantity = customisedProduct.quantity;
+                utopiasoftwareCartObject.cartData.variation_id = customisedProduct.variation_id;
+                utopiasoftwareCartObject.cartData.variation = customisedProduct.variation;
+                utopiasoftwareCartObject.cartData.cart_item_data = {fpd_data: customisedProduct.fpd_data}; // holds the fancy product designer data
+
+                // store the cart key used to identify the customised product as additional data just for the mobile app
+                utopiasoftwareCartObject.anon_cart_key = customisedProduct.key;
+                // store the name of the customised product as additional data just for the mobile app
+                utopiasoftwareCartObject.product_name = customisedProduct.product_name;
+                // store the cutomisationUrl of this product as additional data just for the mobile app
+                utopiasoftwareCartObject.customisationUrl = utopiasoftware[utopiasoftware_app_namespace].controller.
+                    customiseProductPageViewModel.currentCustomisationUrl;
+
+                try{
+                    // check if the cart object being saved already has a unique local-cart uid
+                    if(! utopiasoftwareCartObject.uid){ // there is no uid
+                        // therefore saved object has a new entry in the local cart
+                        localCart.push(utopiasoftwareCartObject);
+                    }
+                    // save the updated cached user cart
+                    await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
+                        {_id: "user-cart", docType: "USER_CART", cart: localCart},
+                        utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
+
+                    // inform the user that the product has been updated to cart
+                    // hide all previously displayed ej2 toast
+                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                    $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                    // display toast to show that an error
+                    let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                    toast.cssClass = 'success-ej2-toast';
+                    toast.timeOut = 2000;
+                    toast.content = `Customised product has been updated in your cart`;
+                    toast.dataBind();
+                    toast.show();
+                }
+                catch(err){
+                    console.log("CUSTOMISE PRODUCT ERROR", err);
+
+                    // hide all previously displayed ej2 toast
+                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                    $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                    // display toast to show that an error
+                    let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                    toast.cssClass = 'error-ej2-toast';
+                    toast.timeOut = 3500;
+                    toast.content = `Error updating customised product in your cart. Try again`;
+                    toast.dataBind();
+                    toast.show();
+
+                }
+
+                return; // exit the method
+            }
+
+
             // get the latest customised product by comparing the properties of the updateCartObject with the previousCartObject
             for(let property in updatedCartObject){
                 // check if this property in the updateCartObject exist in th epreviousCartObject
@@ -4622,7 +4739,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             <div class="e-card-content row" style="padding: 0;">
                             <div class="col-xs-3">
                                 <button type="button" class="view-cart-edit-button"
-                                        style="background-color: #ffffff; color: #3f51b5; height: 10px;"></button>
+                                        style="background-color: #ffffff; color: #3f51b5; height: 10px;" 
+                                        onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
+                                        viewCartPageViewModel.
+                                        editCartItemButtonClicked('${localCart[index].productVariation ? 
+                                localCart[index].productVariation.permalink : localCart[index].product.permalink}', 
+                                        '${localCart[index].anon_cart_key}')"></button>
                             </div>
                             <div class="col-xs-4">
                                 <button type="button" class="view-cart-remove-button"
@@ -4931,7 +5053,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     try{
 
                         // display page preloader
-                        $('#view-cart-page .page-preloader').css("display", "none");
+                        $('#view-cart-page .page-preloader').css("display", "block");
                         // hide the action sheet
                         await document.getElementById('view-cart-page-delete-cart-item-action-sheet').hide();
 
@@ -5001,6 +5123,25 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             // display the delete confirmation dialog
             await document.getElementById('view-cart-page-delete-cart-item-action-sheet').show();
+        },
+
+        /**
+         * method is triggered when the "Edit" cart item button (attached to each product on the
+         * View Cart page) is clicked.
+         *
+         * @param productUrl {String} holds the remote/server url for the product desired to be edited
+         *
+         * @param cartItemKey {String} holds the remote/server cart key for this product/cart-item
+         *
+         * @returns {Promise<void>}
+         */
+        async editCartItemButtonClicked(productUrl, cartItemKey){
+
+            // load the "Customise Product" page to the app-main-navigator
+            await $('#app-main-navigator').get(0).bringPageTop("customise-product-page.html");
+            // load the product customisation url
+            await utopiasoftware[utopiasoftware_app_namespace].controller.
+            customiseProductPageViewModel.loadProductCustomisation(productUrl, cartItemKey);
         }
     }
 };
