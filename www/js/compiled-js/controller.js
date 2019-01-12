@@ -4918,19 +4918,20 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // Click event handlers must always be defined for these buttons when using this action sheet
 
             // function for "Reject/No" button
-            $('#view-cart-page-delete-cart-item-action-sheet #view-cart-page-delete-cart-item-no').on("click",
+            $('#view-cart-page-delete-cart-item-action-sheet #view-cart-page-delete-cart-item-no').get(0).onclick =
                 async function(){
                     // hide the action sheet
                     await document.getElementById('view-cart-page-delete-cart-item-action-sheet').hide();
-                }
-            );
+                };
 
             // function for "Accept/Yes" button
-            $('#view-cart-page-delete-cart-item-action-sheet #view-cart-page-delete-cart-item-yes').on("click",
+            $('#view-cart-page-delete-cart-item-action-sheet #view-cart-page-delete-cart-item-no').get(0).onclick =
                 async function(){
                     let localCart = []; // holds the local cart array
                     try{
 
+                        // display page preloader
+                        $('#view-cart-page .page-preloader').css("display", "none");
                         // hide the action sheet
                         await document.getElementById('view-cart-page-delete-cart-item-action-sheet').hide();
 
@@ -4992,8 +4993,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         toast.dataBind();
                         toast.show();
                     }
-                }
-            );
+                    finally {
+                        // hide page preloader
+                        $('#view-cart-page .page-preloader').css("display", "none");
+                    }
+                };
 
             // display the delete confirmation dialog
             await document.getElementById('view-cart-page-delete-cart-item-action-sheet').show();
