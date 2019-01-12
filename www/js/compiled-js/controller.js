@@ -4924,11 +4924,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 }
             );
 
-            // function for "Reject/No" button
-            $('#view-cart-page-delete-cart-item-action-sheet #view-cart-page-delete-cart-item-no').on("click",
+            // function for "Accept/Yes" button
+            $('#view-cart-page-delete-cart-item-action-sheet #view-cart-page-delete-cart-item-yes').on("click",
                 async function(){
                     let localCart = []; // holds the local cart array
                     try{
+
+                        // hide the action sheet
+                        await document.getElementById('view-cart-page-delete-cart-item-action-sheet').hide();
 
                         try{
                             // get the localCart from the cached localCart of the app database
@@ -4944,7 +4947,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             return productUId === productElement.uid;
                         });
 
-                        // check if a [rpduct was found
+                        // check if a product was found
                         if(productIndex !== -1){ // product was found
                             // delete the product from localCart
                             localCart.splice(productIndex, 1);
@@ -4956,7 +4959,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
 
                         // redisplay view cart content, no need to wait for the content to complete display
-                        utopiasoftware[utopiasoftware_app_namespace].controller.viewCartPageViewModel.
+                        await utopiasoftware[utopiasoftware_app_namespace].controller.viewCartPageViewModel.
                         displayUserCart(localCart);
 
                         // inform the user that the product has been added to cart
