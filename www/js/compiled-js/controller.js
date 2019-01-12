@@ -4317,6 +4317,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     // get the latest customised product
                     let customisedProduct = updatedCartObject[property];
 
+                    console.log("CUSTOMISED PRODUCT", customisedProduct);
+
                     let localCart = []; // holds the local cart collection
                     let utopiasoftwareCartObject = {cartData: {}}; // holds the object whose properties make up the cart item
 
