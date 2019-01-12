@@ -4743,8 +4743,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         style="background-color: #ffffff; color: #3f51b5; height: 10px;" 
                                         onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
                                         viewCartPageViewModel.
-                                        editCartItemButtonClicked('${localCart[index].productVariation ? 
-                                localCart[index].productVariation.permalink : localCart[index].product.permalink}', 
+                                        editCartItemButtonClicked('${localCart[index].customisationUrl}', 
                                         '${localCart[index].anon_cart_key}')"></button>
                             </div>
                             <div class="col-xs-4">
