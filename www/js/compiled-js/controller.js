@@ -4304,95 +4304,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         async saveCustomisedProductToCart(){
-            // get the previous cart object and the new/updated cart object
+            // get the previous remote cart object and the new/updated remote cart object
             let previousCartObject = utopiasoftware[utopiasoftware_app_namespace].
                 controller.customiseProductPageViewModel.cartsQueue[0];
             let updatedCartObject = utopiasoftware[utopiasoftware_app_namespace].
                 controller.customiseProductPageViewModel.cartsQueue[1];
-
-            // check if this is a save of an "edited" previously customised product
-            if(utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.
-                currentCustomisationCartKey){ // since a current customisation cart key exist, this is an update
-                // save the current customisation cart key
-                let customisationCartKey = utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.
-                    currentCustomisationCartKey;
-
-                // get the updated customised product
-                let customisedProduct = updatedCartObject[customisationCartKey];
-
-                let localCart = []; // holds the local cart collection
-                let utopiasoftwareCartObject = {cartData: {}}; // holds the object whose properties make up the cart item
-
-                try{
-                    // get the cached user cart
-                    localCart = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.loadData("user-cart",
-                        utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)).cart;
-
-                    // get the utopiasoftwareCartObject for the customised product being updated
-                    utopiasoftwareCartObject = localCart.find(function(cartObject){
-                        return cartObject.anon_cart_key === customisationCartKey;
-                    }) || utopiasoftwareCartObject;
-                }
-                catch(err){}
-
-                // set the other properties of the cart data
-                utopiasoftwareCartObject.cartData.product_id = customisedProduct.product_id;
-                utopiasoftwareCartObject.cartData.quantity = customisedProduct.quantity;
-                utopiasoftwareCartObject.cartData.variation_id = customisedProduct.variation_id;
-                utopiasoftwareCartObject.cartData.variation = customisedProduct.variation;
-                utopiasoftwareCartObject.cartData.cart_item_data = {fpd_data: customisedProduct.fpd_data}; // holds the fancy product designer data
-
-                // store the cart key used to identify the customised product as additional data just for the mobile app
-                utopiasoftwareCartObject.anon_cart_key = customisedProduct.key;
-                // store the name of the customised product as additional data just for the mobile app
-                utopiasoftwareCartObject.product_name = customisedProduct.product_name;
-                // store the cutomisationUrl of this product as additional data just for the mobile app
-                utopiasoftwareCartObject.customisationUrl = utopiasoftware[utopiasoftware_app_namespace].controller.
-                    customiseProductPageViewModel.currentCustomisationUrl;
-
-                try{
-                    // check if the cart object being saved already has a unique local-cart uid
-                    if(! utopiasoftwareCartObject.uid){ // there is no uid
-                        // therefore saved object has a new entry in the local cart
-                        localCart.push(utopiasoftwareCartObject);
-                    }
-                    // save the updated cached user cart
-                    await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
-                        {_id: "user-cart", docType: "USER_CART", cart: localCart},
-                        utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
-
-                    // inform the user that the product has been updated to cart
-                    // hide all previously displayed ej2 toast
-                    $('.page-toast').get(0).ej2_instances[0].hide('All');
-                    $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
-                    // display toast to show that an error
-                    let toast = $('.timed-page-toast').get(0).ej2_instances[0];
-                    toast.cssClass = 'success-ej2-toast';
-                    toast.timeOut = 2000;
-                    toast.content = `Customised product has been updated in your cart`;
-                    toast.dataBind();
-                    toast.show();
-                }
-                catch(err){
-                    console.log("CUSTOMISE PRODUCT ERROR", err);
-
-                    // hide all previously displayed ej2 toast
-                    $('.page-toast').get(0).ej2_instances[0].hide('All');
-                    $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
-                    // display toast to show that an error
-                    let toast = $('.timed-page-toast').get(0).ej2_instances[0];
-                    toast.cssClass = 'error-ej2-toast';
-                    toast.timeOut = 3500;
-                    toast.content = `Error updating customised product in your cart. Try again`;
-                    toast.dataBind();
-                    toast.show();
-
-                }
-
-                return; // exit the method
-            }
-
-            // CODE GETS TO THIS SEGMENT BELOW IF IT IS A FRESH PRODUCT BEING SAVED I.E. NOT AN UPDATE
 
             // get the latest customised product by comparing the properties of the updateCartObject with the previousCartObject
             for(let property in updatedCartObject){
@@ -4408,6 +4324,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     try{
                         localCart = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.loadData("user-cart",
                             utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)).cart;
+
+                        // check if this is a save of an "edited" previously customised product
+                        if(utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.
+                            currentCustomisationCartKey){ // since a current customisation cart key exist, this is an update
+
+                            // get the utopiasoftwareCartObject for the old customised product being updated.
+                            // This old object will be replaced by the newly customised product, so delete it from app local cache/database
+                            let customisedIndex = utopiasoftwareCartObject = localCart.findIndex(function(cartObject){
+                                return cartObject.anon_cart_key === utopiasoftware[utopiasoftware_app_namespace].
+                                    controller.customiseProductPageViewModel.currentCustomisationCartKey;
+                            });
+                            localCart.splice(customisedIndex, 1); // delete the old customised product
+                        }
                     }
                     catch(err){}
 
@@ -4462,6 +4391,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         toast.dataBind();
                         toast.show();
 
+                    }
+                    finally{
+                        // check if this is a save of an "edited" previously customised product
+                        if(utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.
+                            currentCustomisationCartKey){ // since a current customisation cart key exist, this is an update
+                            // update the 'currentCustomisationCartKey' property with the key of the newly customised product
+                            utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.
+                                currentCustomisationCartKey = customisedProduct.key;
+                        }
                     }
 
                     break; // break the for-loop since the latest customised product has been found
