@@ -4082,6 +4082,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // reset the current customisation url
             utopiasoftware[utopiasoftware_app_namespace].controller.
                 customiseProductPageViewModel.currentCustomisationUrl = "";
+            // reset the current customisation remote cart item key
+            utopiasoftware[utopiasoftware_app_namespace].controller.
+                customiseProductPageViewModel.currentCustomisationCartKey = null;
             // reset the customisation page load count
             utopiasoftware[utopiasoftware_app_namespace].controller.
                 customiseProductPageViewModel.customisationPageLoadCount = 0;
