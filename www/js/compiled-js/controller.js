@@ -4925,7 +4925,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 };
 
             // function for "Accept/Yes" button
-            $('#view-cart-page-delete-cart-item-action-sheet #view-cart-page-delete-cart-item-no').get(0).onclick =
+            $('#view-cart-page-delete-cart-item-action-sheet #view-cart-page-delete-cart-item-yes').get(0).onclick =
                 async function(){
                     let localCart = []; // holds the local cart array
                     try{
