@@ -4392,6 +4392,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 return; // exit the method
             }
 
+            // CODE GETS TO THIS SEGMENT BELOW IF IT IS A FRESH PRODUCT BEING SAVED I.E. NOT AN UPDATE
 
             // get the latest customised product by comparing the properties of the updateCartObject with the previousCartObject
             for(let property in updatedCartObject){
