@@ -1,7 +1,6 @@
 
 
 var utopiasoftware_Cookies = {};  // holds the Global cookie object for the js-cookie library
-console.log("COOKIES", utopiasoftware_Cookies.get());
 
 
 // register a listener for receiving messages from the mobile app
