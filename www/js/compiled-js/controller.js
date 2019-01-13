@@ -68,6 +68,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 iconPosition: "Left"
             }).appendTo('#view-cart-page-delete-cart-item-no');
 
+            // create the global ej2 spinner to be used by the app
+            ej.popups.createSpinner({
+                target: $('body').get(0)
+            });
+
 
             // START ALL CORDOVA PLUGINS CONFIGURATIONS
             try{
@@ -4438,6 +4443,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].cssClass = '';
             $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].dataBind();
             $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].start();
+
+            // show spinner to block customisation frame while it's loading
+            ej.popups.showSpinner($('#customise-product-page #customise-product-page-iframe-container').get(0));
 
             // call the method to submit the product customisation form located in the iframe window
             $('#customise-product-page #customise-product-page-iframe').get(0).contentWindow.utopiasoftware_addUsage();
