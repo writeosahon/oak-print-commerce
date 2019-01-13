@@ -1,10 +1,8 @@
-/*
-var utopiasoftware_Cookies = Cookies.noConflict();
+
+
+var utopiasoftware_Cookies = {};  // holds the Global cookie object for the js-cookie library
 console.log("COOKIES", utopiasoftware_Cookies.get());
-var localCookies = utopiasoftware_Cookies.get();
-for(let item in localCookies){
-    utopiasoftware_Cookies.remove(item);
-}*/
+
 
 // register a listener for receiving messages from the mobile app
 window.addEventListener("message", utopiasoftware_receiveMessage, false);
@@ -16,6 +14,9 @@ jQuery(document).ready(function(){
     if(window !== window.parent){ // page is being accessed from an iframe
         // add the utopiasoftware-mobile class to the HTML tag
         jQuery('html').addClass("utopiasoftware-mobile");
+
+        // set the use of the Cookie library
+        utopiasoftware_Cookies = Cookies.noConflict();
     }
 
     // check if the utopiasoftware-mobile class is set
@@ -84,4 +85,20 @@ function utopiasoftware_getUsage(){
 function utopiasoftware_addUsage(){
     // trigger the submission of the customisation form by triggering a click on the submit button
     jQuery('.variations_form.cart button[type="submit"].button').get(0).click();
+}
+
+
+/**
+ * method is used to remove all cookies, local storage and
+ * sessions storage used to keep access to the user's cart. i.e. it is used to clear the user's cart
+ */
+function utopiasoftware_removeUsage(){
+
+    // get all the cookies created by this site
+    var localCookies = utopiasoftware_Cookies.get();
+
+    // remove each cookie using a for-loop
+    for(let item in localCookies){
+        utopiasoftware_Cookies.remove(item); // remove the cookie
+    }
 }
