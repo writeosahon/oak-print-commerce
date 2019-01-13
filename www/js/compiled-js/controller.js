@@ -4405,6 +4405,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.
                                 currentCustomisationCartKey = customisedProduct.key;
                         }
+
+                        // hide page loader after saving the customised product to user cart
+                        $('#customise-product-page #customise-product-page-iframe-container .modal').css("display", "none");
                     }
 
                     break; // break the for-loop since the latest customised product has been found
@@ -4438,6 +4441,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].cssClass = '';
             $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].dataBind();
             $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].start();
+
+            // display page loader while completing the "add to cart" request
+            $('#customise-product-page #customise-product-page-iframe-container .modal').css("display", "table");
 
             // call the method to submit the product customisation form located in the iframe window
             $('#customise-product-page #customise-product-page-iframe').get(0).contentWindow.utopiasoftware_addUsage();
