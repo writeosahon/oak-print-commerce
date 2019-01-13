@@ -68,11 +68,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 iconPosition: "Left"
             }).appendTo('#view-cart-page-delete-cart-item-no');
 
-            // create the global ej2 spinner to be used by the app
-            ej.popups.createSpinner({
-                target: $('body').get(0)
-            });
-
 
             // START ALL CORDOVA PLUGINS CONFIGURATIONS
             try{
