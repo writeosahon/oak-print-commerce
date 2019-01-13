@@ -4545,6 +4545,25 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is destroyed
          */
         pageDestroy: function(){
+            // destroy View Cart button
+            $('#view-cart-checkout').get(0).ej2_instances[0].destroy();
+            // destroy all the "Edit" buttons on the View Cart page
+            $("#view-cart-page .view-cart-edit-button").each(function(index, element){
+                // destroy the "Edit" button
+                element.ej2_instances[0].destroy();
+            });
+
+            // destroy all the "Remove" buttons required for the View Cart page
+            $("#view-cart-page .view-cart-remove-button").each(function(index, element){
+                // destroy the "Remove" button
+                element.ej2_instances[0].destroy();
+            });
+
+            // destroy all the "Quantity" input required for the View Cart page
+            $("#view-cart-page .view-cart-quantity-input").each(function(index, element){
+                // destroy the "Quantity" input
+                element.ej2_instances[0].destroy();
+            });
         },
 
         /**
@@ -4644,13 +4663,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     element.ej2_instances[0].destroy();
                 });
 
-                // create all the "Remove" buttons required for the View Cart page
+                // destroy all the "Remove" buttons required for the View Cart page
                 $("#view-cart-page .view-cart-remove-button").each(function(index, element){
                     // destroy the "Remove" button
                     element.ej2_instances[0].destroy();
                 });
 
-                // create all the "Quantity" input required for the View Cart page
+                // destroy all the "Quantity" input required for the View Cart page
                 $("#view-cart-page .view-cart-quantity-input").each(function(index, element){
                     // destroy the "Quantity" input
                     element.ej2_instances[0].destroy();
