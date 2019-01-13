@@ -2,9 +2,9 @@
     <ons-carousel id="login-carousel" fullscreen direction="horizontal" auto-scroll auto-scroll-ratio="0.1"
                   item-width="100%" initial-index="0" animation="none">
         <ons-carousel-item class="first">
-            <div style="width: 100%; text-align: center; margin-top: 1.5em;">
+            <!--<div style="width: 100%; text-align: center; margin-top: 1.5em;">
                 <img src="css/app-images/oak-banner.jpg" style="width: 14em;">
-            </div>
+            </div>-->
 
             <div style="width: 100%; text-align: center; margin-top: 1em; position: fixed; z-index: 1000">
                 <ons-segment class="login-segment" active-index="0" style="min-width: 60%; max-width: 100%;">
@@ -28,22 +28,24 @@
                               ons-input[type=reset], ons-input[type=hidden], [disabled], :hidden">
 
                     <ons-row vertical-align="bottom" style="margin-bottom: 1.5em; text-align: center;">
-                        <ons-col width="100%" style="border: 2px solid red; border-radius: 6px; background-color: #363E7C; color: #ffffff;
+                        <ons-col width="100%" style="border: 2px solid lightgray; border-radius: 6px; background-color: #ffffff;
+                        color: #3f51b5;
                     font-size: 1.3em; padding-top:0.5em;">
-                            <ons-icon icon="md-email" size="28px" fixed-width style="color: #ffffff; margin-right: 0.5em;"></ons-icon>
+                            <ons-icon icon="md-email" size="28px" fixed-width style="color: #3f51b5; margin-right: 0.5em;"></ons-icon>
                             <ons-input id="login-email" type="email" style="width: 75%;
-                        caret-color: #ffffff !important; color: #ffffff !important;" required
+                        caret-color: #3f51b5 !important; color: #3f51b5 !important;" required
                                        placeholder="Email" disable-auto-styling
                                        data-parsley-required-message="email is required"
                                        data-parsley-type-message="provide a valid email"></ons-input>
                         </ons-col>
                     </ons-row>
                     <ons-row vertical-align="bottom" style="margin-bottom: 2em; text-align: center;">
-                        <ons-col width="100%" style="border: 2px solid red; border-radius: 6px; background-color: #363E7C; color: #ffffff;
+                        <ons-col width="100%" style="border: 2px solid lightgray; border-radius: 6px; background-color: #ffffff;
+                        color: #3f51b5;
                     font-size: 1.3em; padding-top:0.5em;">
-                            <ons-icon icon="md-utopiasoftware-icon-lock" size="28px" fixed-width style="color: #ffffff; margin-right: 0.5em;"></ons-icon>
+                            <ons-icon icon="md-utopiasoftware-icon-lock" size="28px" fixed-width style="color: #3f51b5; margin-right: 0.5em;"></ons-icon>
                             <ons-input id="login-password" type="password" style="width: 75%;
-                        caret-color: #ffffff !important; color: #ffffff !important;" required
+                        caret-color: #3f51b5 !important; color: #3f51b5 !important;" required
                                        placeholder="Password" disable-auto-styling
                                        data-parsley-required-message="password is required"></ons-input>
                         </ons-col>
@@ -51,7 +53,7 @@
                     <ons-row style="margin-bottom: 1.5em;">
                         <ons-col width="20%"></ons-col>
                         <ons-col width="60%" style="text-align: center">
-                            <ons-button style="border-color: red; background-color: #363E7C; color: #ffffff"
+                            <ons-button style="border-color: #ffffff; background-color: #ffffff; color: #363E7C"
                                         disable-auto-styling modifier="large"
                                         onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
                                         loginPageViewModel.signinButtonClicked();">
