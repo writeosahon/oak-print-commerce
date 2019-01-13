@@ -100,4 +100,10 @@ function utopiasoftware_removeUsage(){
     for(let item in localCookies){
         utopiasoftware_Cookies.remove(item); // remove the cookie
     }
+
+    // remove the localStorage data
+    window.localStorage.clear();
+
+    // remove the sessionStorage data
+    window.sessionStorage.clear();
 }
