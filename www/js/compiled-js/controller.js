@@ -2680,7 +2680,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
 
                     // hide loader
-                    await $('#loader-modal').get(0).show(); // show loader
+                    await $('#loader-modal').get(0).hide(); // hide loader
 
                     // leave the signup page and go back to the previous page in the app main navigator. Call the backbuttonClicked() method
                     await utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.backButtonClicked();
@@ -2700,8 +2700,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 }).catch(async function(err){ // an error occurred
 
+                    // if err is a string convert it to an object using JSON.parse()
+                    err = typeof err === "string" ? JSON.parse(err) : err;
+
                     // hide loader
-                    await $('#loader-modal').get(0).show(); // show loader
+                    await $('#loader-modal').get(0).hide(); // hide loader
 
                     // hide all previously displayed ej2 toast
                     $('.page-toast').get(0).ej2_instances[0].hide('All');
