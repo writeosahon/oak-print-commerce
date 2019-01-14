@@ -2420,10 +2420,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         /**
          * method is triggered when the device back button is clicked OR a similar action is triggered
          */
-        backButtonClicked(){
+        async backButtonClicked(){
 
             // get back to the previous page on the app-main navigator stack
-            $('#app-main-navigator').get(0).popPage();
+            return $('#app-main-navigator').get(0).popPage();
         },
 
         /**
@@ -2640,14 +2640,85 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
                 // display toast to show that an error
                 let toast = $('.timed-page-toast').get(0).ej2_instances[0];
-                toast.cssClass = 'default-ej2-toast';
+                toast.cssClass = 'error-ej2-toast';
                 toast.timeOut = 3000;
-                toast.content = `Connect to the Internet to see updated product details`;
+                toast.content = `Connect to the Internet to sign up`;
                 toast.dataBind();
                 toast.show();
 
-                return;
+                return; // exit method
             }
+
+            // display modal to user that signup is being completed
+            $('#loader-modal-message').html("Completing Signup...");
+            await $('#loader-modal').get(0).show(); // show loader
+
+            var promisesArray = []; // holds the array for the promises used to complete user signup
+
+            // make the request to create the new user account
+            promisesArray.push(new Promise(function(resolve, reject){
+                Promise.resolve($.ajax(
+                    {
+                        url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + "/wp-json/wc/v3/customers",
+                        type: "post",
+                        contentType: "application/json",
+                        beforeSend: function(jqxhr) {
+                            jqxhr.setRequestHeader("Authorization", "Basic " +
+                                utopiasoftware[utopiasoftware_app_namespace].accessor);
+                        },
+                        dataType: "json",
+                        timeout: 240000, // wait for 4 minutes before timeout of request
+                        processData: false,
+                        data: JSON.stringify({email: $('#login-page #signup-form #signup-email').val().trim(),
+                        username: $('#login-page #signup-form #signup-email').val().trim().replace(/@/ig, "_"),
+                        password: $('#login-page #signup-form #signup-password').val().trim()})
+                    }
+                )).then(async function(userDetails){
+                    // save the created user details data to app database as cached data
+                    await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
+                        {_id: "user-details", docType: "USER_DETAILS", userDetails},
+                        utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
+
+                    // hide loader
+                    await $('#loader-modal').get(0).show(); // show loader
+
+                    // leave the signup page and go back to the previous page in the app main navigator. Call the backbuttonClicked() method
+                    await utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.backButtonClicked();
+
+                    // hide all previously displayed ej2 toast
+                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                    $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                    // display toast message
+                    let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                    toast.cssClass = 'success-ej2-toast';
+                    toast.timeOut = 3000;
+                    toast.content = `User signup completed`;
+                    toast.dataBind();
+                    toast.show();
+
+                    resolve(userDetails); // resolve the parent promise with the data gotten from the server
+
+                }).catch(async function(err){ // an error occurred
+
+                    // hide loader
+                    await $('#loader-modal').get(0).show(); // show loader
+
+                    // hide all previously displayed ej2 toast
+                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                    $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                    // display toast message
+                    let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                    toast.cssClass = 'error-ej2-toast';
+                    toast.timeOut = 3000;
+                    toast.content = `Error. ${err.message || "User signup failed"}`;
+                    toast.dataBind();
+                    toast.show();
+
+                    reject(err); // reject the parent promise with the error
+                });
+            }));
+
+            return Promise.all(promisesArray); // return the resolved promisesArray
 
         },
 
