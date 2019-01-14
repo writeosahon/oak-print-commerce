@@ -2645,8 +2645,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             await $('#loader-modal').get(0).show(); // show loader
 
             var promisesArray = []; // holds the array for the promises used to complete user signin
-            var userEmail = $('#login-page #signup-form #signup-email').val().trim(); // holds user email from the login form
-            var userPassword = $('#login-page #signup-form #signup-password').val().trim(); // holds the user password
+            var userEmail = $('#login-page #login-form #login-email').val().trim(); // holds user email from the login form
+            var userPassword = $('#login-page #login-form #signup-password').val().trim(); // holds the user password
 
 
             // make the request to authenticate user login credentials
@@ -2727,7 +2727,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 let toast = $('.timed-page-toast').get(0).ej2_instances[0];
                 toast.cssClass = 'error-ej2-toast';
                 toast.timeOut = 3000;
-                toast.content = `Error, invalid user email or password. User signin failed `;
+                toast.content = `Invalid user email or password. User signin failed `;
                 toast.dataBind();
                 toast.show();
 
