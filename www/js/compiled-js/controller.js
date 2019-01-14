@@ -2699,7 +2699,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     resolve(userDetails); // resolve the parent promise with the data gotten from the server
 
                 }).catch(async function(err){ // an error occurred
-
+                    console.log("SIGN UP ERROR", err);
                     // if err is a string convert it to an object using JSON.parse()
                     err = typeof err === "string" ? JSON.parse(err) : err;
 
