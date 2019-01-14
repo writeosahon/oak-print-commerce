@@ -2633,6 +2633,22 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         async signupFormValidated(){
 
+            // check if there is Internet connection
+            if(navigator.connection.type === Connection.NONE){ // there is no Internet connection
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast to show that an error
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'default-ej2-toast';
+                toast.timeOut = 3000;
+                toast.content = `Connect to the Internet to see updated product details`;
+                toast.dataBind();
+                toast.show();
+
+                return;
+            }
+
         },
 
         /**
