@@ -2149,6 +2149,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         signupFormValidator: null,
 
         /**
+         * used to hold the parsley form validator object for the forgot password page
+         */
+        forgotPasswordFormValidator: null,
+
+        /**
          * event is triggered when page is initialised
          */
         pageInit: function(event){
@@ -2182,9 +2187,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.loginFormValidator =
                     $('#login-page #login-form').parsley();
 
-                // initialise the login form validation
+                // initialise the signup form validation
                 utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.signupFormValidator =
                     $('#login-page #signup-form').parsley();
+
+                // initialise the forgot password form validation
+                utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.forgotPasswordFormValidator =
+                    $('#login-page #forgot-password-form').parsley();
 
                 // listen for log in form field validation failure event
                 utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.loginFormValidator.on('field:error', function(fieldInstance) {
@@ -2228,9 +2237,32 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     tooltip.close();
                 });
 
-                // listen for log in form validation success
+                // listen for signup form validation success
                 utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.signupFormValidator.on('form:success',
                     utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.signupFormValidated);
+
+                // listen for forgot password form field validation failure event
+                utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.forgotPasswordFormValidator.on('field:error', function(fieldInstance) {
+                    // get the element that triggered the field validation error and use it to display tooltip
+                    // display tooltip
+                    let tooltip = $('#login-page #forgot-password-form').get(0).
+                        ej2_instances[fieldInstance.$element.get(0)._utopiasoftware_validator_index];
+                    tooltip.content = fieldInstance.getErrorsMessages()[0];
+                    tooltip.dataBind();
+                    tooltip.open(fieldInstance.$element.get(0));
+                });
+
+                // listen for forgot password form field validation success event
+                utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.forgotPasswordFormValidator.on('field:success', function(fieldInstance) {
+                    // hide tooltip from element
+                    let tooltip = $('#login-page #forgot-password-form').get(0).
+                        ej2_instances[fieldInstance.$element.get(0)._utopiasoftware_validator_index];
+                    tooltip.close();
+                });
+
+                // listen for forgot password form validation success
+                utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.forgotPasswordFormValidator.on('form:success',
+                    utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.forgotPasswordFormValidated);
 
 
                 // listen for scroll event on the page to adjust the tooltips when page scrolls
@@ -2252,7 +2284,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     });
                                     break;
 
-                                case 2:
+                                case 2: // third carousel item is active, so adjust the input elements on the login form
+                                    $("#login-page #forgot-password-form ons-input").each(function(index, element){
+                                        document.getElementById('forgot-password-form').ej2_instances[index].refresh(element);
+                                    });
 
                                     break;
                             }
@@ -2280,6 +2315,17 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             position: 'TopCenter',
                             opensOn: 'Custom'
                         }).appendTo($('#login-page #signup-form').get(0));
+                    });
+
+                    // create the tooltip objects for the forgot password form
+                    $('#forgot-password-form ons-input', $thisPage).each(function(index, element){
+                        element._utopiasoftware_validator_index = index;
+                        // create the tool tips for every element being validated, but attach it to the html form object
+                        new ej.popups.Tooltip({
+                            cssClass: 'utopiasoftware-ej2-validation-tooltip',
+                            position: 'TopCenter',
+                            opensOn: 'Custom'
+                        }).appendTo($('#login-page #forgot-password-form').get(0));
                     });
 
                     // create the button for showing password visibility on the signup page
@@ -2329,9 +2375,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 tooltipArrayElem.close();
             });
 
+            // hide the tooltips on the forgot password form
+            $('#login-page #forgot-password-form').get(0).ej2_instances.forEach(function(tooltipArrayElem){
+                // hide the tooltip
+                tooltipArrayElem.close();
+            });
+
             // reset all form validator objects
             utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.loginFormValidator.reset();
             utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.signupFormValidator.reset();
+            utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.forgotPasswordFormValidator.reset();
         },
 
         /**
@@ -2351,9 +2404,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 tooltipArrayElem.destroy();
             });
 
+            // destroy the tooltips on the forgot password form
+            $('#login-page #forgot-password-form').get(0).ej2_instances.forEach(function(tooltipArrayElem){
+                // hide the tooltip
+                tooltipArrayElem.destroy();
+            });
+
             // destroy all form validator objects
             utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.loginFormValidator.destroy();
             utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.signupFormValidator.destroy();
+            utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.forgotPasswordFormValidator.destroy();
 
         },
 
@@ -2466,7 +2526,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 case 1:
 
-                    // hide the tooltips on the login form
+                    // hide the tooltips on the signup form
                     $('#login-page #signup-form').get(0).ej2_instances.forEach(function(tooltipArrayElem){
                         // hide the tooltip
                         tooltipArrayElem.close();
@@ -2475,9 +2535,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 case 2:
 
+                    // hide the tooltips on the forgot password form
+                    $('#login-page #forgot-password-form').get(0).ej2_instances.forEach(function(tooltipArrayElem) {
+                        // hide the tooltip
+                        tooltipArrayElem.close();
+                    });
                     break;
             }
         },
+
         /**
          * method is triggered when the keyboard is shown.
          * It is used to adjust the display height
@@ -2508,7 +2574,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     break;
 
                 case 2:
-
+                    // add padding to the bottom, to allow elements to scroll into view
+                    $("#login-page ons-carousel-item.third .login-page-form-container").
+                    css({"padding-bottom": adjustedKeyboardHeight + "px"});
+                    // scroll to the currently focused input element
+                    $("#login-page ons-carousel-item.third .login-page-form-container").
+                    scrollTop(Math.floor($(document.activeElement).closest("ons-input").position().top - 30));
                     break;
             }
         },
@@ -2536,6 +2607,17 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         },
 
         /**
+         * method is triggered when the "Forgot Password" button is clicked
+         *
+         * @returns {Promise<void>}
+         */
+        async forgotPasswordButtonClicked() {
+
+            // run the validation method for the sign-in form
+            utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.forgotPasswordFormValidator.whenValidate();
+        },
+
+        /**
          * method is triggered when the login form is successfully validated
          *
          * @returns {Promise<void>}
@@ -2550,6 +2632,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         async signupFormValidated(){
+
+        },
+
+        /**
+         * method is triggered when the forgot password form is successfully validated
+         *
+         * @returns {Promise<void>}
+         */
+        async forgotPasswordFormValidated(){
 
         }
     },
