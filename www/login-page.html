@@ -20,7 +20,7 @@
             margin-left: 10%; margin-right: 10%;">
 
                 <div style="width: 100%; text-align: center; color: #363E7C; margin-bottom: 1em;">
-                    <h1>Welcome Back</h1>
+                    <h1>Welcome</h1>
                 </div>
 
                 <form id="login-form" autocomplete="off" data-parsley-inputs="ons-input,textarea,select"
@@ -181,10 +181,10 @@
 
         <ons-carousel-item class="third">
             <div style="width: 100%; text-align: center; margin-top: 1.5em;">
-                <img src="css/app-images/logo-mini.png" style="width: 14em;">
+                <img src="css/app-images/oak-banner.jpg" style="width: 9em;">
             </div>
 
-            <div style="width: 100%; text-align: center; margin-top: 2.5em;">
+            <div style="width: 100%; text-align: center; margin-top: 1em; position: fixed; z-index: 1000">
                 <ons-segment class="login-segment" active-index="-1" style="min-width: 60%; max-width: 100%;">
                     <button onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
                     loginPageViewModel.segmentButtonClicked(0);">Sign In</button>
@@ -193,10 +193,12 @@
                 </ons-segment>
             </div>
 
-            <div style="position: absolute; width: 80%; top: 50%; left: 50%; padding: 0; margin-top: 2em;
-            -webkit-transform: translate(-50%, -50%); transform: translate(-50%, -50%);">
+            <div class="login-page-form-container" style="overflow-y: scroll; min-height: 50vh; max-height: 60vh;
+            position: absolute;
+            width: 80%; padding: 0; margin-top: 2em;
+            margin-left: 10%; margin-right: 10%;">
 
-                <div style="width: 100%; text-align: center; color: #ffffff; margin-bottom: 1em;">
+                <div style="width: 100%; text-align: center; color: #363E7C; margin-bottom: 1em;">
                     <h1>Reset Your Password</h1>
                 </div>
 
@@ -205,21 +207,24 @@
                               ons-input[type=reset], ons-input[type=hidden], [disabled], :hidden">
 
                     <ons-row vertical-align="bottom" style="margin-bottom: 1.5em; text-align: center;">
-                        <ons-col width="100%" style="border: 2px solid #00d5c3; background-color: #696969; color: #f4c724;
+                        <ons-col width="100%" style="border: 2px solid lightgray; border-radius: 6px; background-color: #ffffff;
+                        color: #3f51b5;
                     font-size: 1.3em; padding-top:0.5em;">
-                            <ons-icon icon="md-email" size="28px" fixed-width style="color: #f4c724; margin-right: 0.5em;"></ons-icon>
-                            <ons-input id="forgot-password-email" type="email" style="width: 80%;
-                        caret-color: #00d5c3 !important; color: #00d5c3 !important;" required
+                            <ons-icon icon="md-email" size="28px" fixed-width style="color: #3f51b5; margin-right: 0.5em;"></ons-icon>
+                            <ons-input id="forgot-password-email" type="email" style="width: 75%;
+                        caret-color: #3f51b5 !important; color: #3f51b5 !important;" required
                                        placeholder="Email" disable-auto-styling
-                                       data-parsley-required-message="new password is required"
-                                       class="hint--top"></ons-input>
+                                       data-parsley-required-message="your registered email is required"
+                                       data-parsley-type-message="provide a valid email"></ons-input>
                         </ons-col>
                     </ons-row>
 
                     <ons-row style="margin-bottom: 2.2em;">
                         <ons-col width="15%"></ons-col>
                         <ons-col width="70%" style="text-align: center">
-                            <ons-button disable-auto-styling modifier="large">
+                            <ons-button style="border-color: #ffffff; background-color: #ffffff; color: #363E7C"
+                                        disable-auto-styling modifier="large"
+                                        onclick="">
                                 Reset Password
                             </ons-button>
                         </ons-col>
