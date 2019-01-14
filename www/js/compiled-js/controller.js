@@ -114,7 +114,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 await new Promise(function(resolve, reject){
                     utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase.
                     crypto(secureKey.password, {
-                        ignore: ['_attachments', '_deleted'],
+                        ignore: ['_attachments', '_deleted', 'docType'],
                         cb: function(err, key){
                             if(err){ // there is an error
                                 reject(err); // reject Promise
@@ -2624,6 +2624,117 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         async loginFormValidated(){
 
+            // check if there is Internet connection
+            if(navigator.connection.type === Connection.NONE){ // there is no Internet connection
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast to show that an error
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.timeOut = 3000;
+                toast.content = `Connect to the Internet to sign in`;
+                toast.dataBind();
+                toast.show();
+
+                return; // exit method
+            }
+
+            // display modal to user that signin is being completed
+            $('#loader-modal-message').html("Completing Signin...");
+            await $('#loader-modal').get(0).show(); // show loader
+
+            var promisesArray = []; // holds the array for the promises used to complete user signin
+            var userEmail = $('#login-page #signup-form #signup-email').val().trim(); // holds user email from the login form
+            var userPassword = $('#login-page #signup-form #signup-password').val().trim(); // holds the user password
+
+
+            // make the request to authenticate user login credentials
+            promisesArray.push(Promise.resolve($.ajax(
+                {
+                    url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + "/wp-json",
+                    type: "get",
+                    // contentType: "application/json",
+                    beforeSend: function(jqxhr) {
+                        jqxhr.setRequestHeader("Authorization", "Basic " +
+                            Base64.encode(`${userEmail}:${userPassword}`));
+                    },
+                    dataType: "json",
+                    timeout: 240000, // wait for 4 minutes before timeout of request
+                    processData: false
+                }
+            )));
+
+            // make the request to retrieve a user with the specified login email
+            promisesArray.push(Promise.resolve($.ajax(
+                {
+                    url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + "/wp-json/wc/v3/customers",
+                    type: "get",
+                    //contentType: "application/json",
+                    beforeSend: function(jqxhr) {
+                        jqxhr.setRequestHeader("Authorization", "Basic " +
+                            utopiasoftware[utopiasoftware_app_namespace].accessor);
+                    },
+                    dataType: "json",
+                    timeout: 240000, // wait for 4 minutes before timeout of request
+                    processData: false,
+                    data: JSON.stringify({email: userEmail})
+                }
+            )));
+
+            // get the promise created from the promisesArray
+            let promisesArrayPromise = Promise.all(promisesArray);
+
+            // listen for when the promisesArrayPromise resolves
+            promisesArrayPromise.then(async function(resultsArray){
+                // add the user's password to the user details retrieved from the server
+                resultsArray[1].password = userPassword;
+
+                // save the created user details data to ENCRYPTED app database as cached data
+                await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
+                    {_id: "user-details", docType: "USER_DETAILS", userDetails: resultsArray[1]},
+                    utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase);
+
+                // hide loader
+                await $('#loader-modal').get(0).hide(); // hide loader
+
+                // leave the signup page and go back to the previous page in the app main navigator. Call the backbuttonClicked() method
+                await utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.backButtonClicked();
+
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast message
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'success-ej2-toast';
+                toast.timeOut = 3000;
+                toast.content = `User signin completed`;
+                toast.dataBind();
+                toast.show();
+
+            }).catch(async function(err){ // an error occurred
+                console.log("SIGN IN ERROR", err);
+
+                err = JSON.parse(err.responseText);
+
+                // hide loader
+                await $('#loader-modal').get(0).hide(); // hide loader
+
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast message
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.timeOut = 3000;
+                toast.content = `Error, invalid user email or password. User signin failed `;
+                toast.dataBind();
+                toast.show();
+
+            });
+
+            return promisesArrayPromise; // return the resolved promisesArray
+
         },
 
         /**
@@ -2674,10 +2785,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         password: $('#login-page #signup-form #signup-password').val().trim()})
                     }
                 )).then(async function(userDetails){
-                    // save the created user details data to app database as cached data
+                    // add the user's password to the user details retrieved from the server
+                    userDetails.password = $('#login-page #signup-form #signup-password').val().trim();
+
+                    // save the created user details data to ENCRYPTED app database as cached data
                     await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
                         {_id: "user-details", docType: "USER_DETAILS", userDetails},
-                        utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
+                        utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase);
 
                     // hide loader
                     await $('#loader-modal').get(0).hide(); // hide loader
