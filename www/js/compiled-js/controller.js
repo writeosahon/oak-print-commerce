@@ -2646,7 +2646,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             var promisesArray = []; // holds the array for the promises used to complete user signin
             var userEmail = $('#login-page #login-form #login-email').val().trim(); // holds user email from the login form
-            var userPassword = $('#login-page #login-form #signup-password').val().trim(); // holds the user password
+            var userPassword = $('#login-page #login-form #login-password').val().trim(); // holds the user password
 
 
             // make the request to authenticate user login credentials
