@@ -2700,8 +2700,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 }).catch(async function(err){ // an error occurred
                     console.log("SIGN UP ERROR", err);
-                    // if err is a string convert it to an object using JSON.parse()
-                    err = typeof err === "string" ? JSON.parse(err) : err;
+
+                    err = JSON.parse(err.responseText);
 
                     // hide loader
                     await $('#loader-modal').get(0).hide(); // hide loader
