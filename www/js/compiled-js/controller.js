@@ -2613,6 +2613,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         async forgotPasswordButtonClicked() {
 
+            // open inapp browser for user to reset password
+            cordova.InAppBrowser.open(window.encodeURI('https://shopoakexclusive.com/my-account/lost-password/'), '_blank',
+                'location=yes,clearcache=yes,clearsessioncache=yes,closebuttoncolor=#ffffff,hardwareback=no,hidenavigationbuttons=yes,hideurlbar=yes,zoom=no,toolbarcolor=#3f51b5');
+        },
+
+        /**
+         * method is triggered when the "Reset Password" button is clicked
+         *
+         * @returns {Promise<void>}
+         */
+        async resetPasswordButtonClicked() {
+
             // run the validation method for the sign-in form
             utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.forgotPasswordFormValidator.whenValidate();
         },
