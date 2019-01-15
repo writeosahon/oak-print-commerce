@@ -2088,10 +2088,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     accountPageViewModel.backButtonClicked;
 
                 try{
+                    // create the accorodion ej2 component used on the "Account" page
                     let accordion = new ej.navigations.Accordion({
                         expandMode: 'Single'
                     });
-                    accordion.appendTo('#account-personal-accordion');
+                    accordion.appendTo('#account-accordion');
+                    // expand the first item of the accordion
                     accordion.expandItem(true, 0);
                 }
                 catch(err){}
@@ -2102,12 +2104,26 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         /**
          * method is triggered when page is shown
          */
-        pageShow: function(){
+        pageShow: async function(){
             $('#app-main-page ons-toolbar div.title-bar').html("Account"); // update the title of the page
             // update cart count
             $('#app-main-page .cart-count').html(utopiasoftware[utopiasoftware_app_namespace].model.cartCount);
 
             window.SoftInputMode.set('adjustPan');
+
+            try{
+                let hasUserDetails = await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                loadData("user-details", utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase);
+
+                $('#account-page .utopiasoftware-can-hide-list-item.utopiasoftware-user-sign-in-show').css("display", "flex");
+                $('#account-page .utopiasoftware-can-hide-list-item:not(.utopiasoftware-user-sign-in-show)')
+                    .css("display", "none");
+            }
+            catch(err){
+                $('#account-page .utopiasoftware-can-hide-list-item.utopiasoftware-user-sign-in-show').css("display", "none");
+                $('#account-page .utopiasoftware-can-hide-list-item:not(.utopiasoftware-user-sign-in-show)')
+                    .css("display", "flex");
+            }
         },
 
 
@@ -2122,6 +2138,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         pageDestroy: function(){
 
+            // destroy the "Account" accordion
+            $('#account-page #account-accordion').get(0).ej2_instances[0].destroy();
         },
 
         /**
