@@ -2111,19 +2111,38 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             window.SoftInputMode.set('adjustPan');
 
-            try{
-                let hasUserDetails = await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
-                loadData("user-details", utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase);
+            // handle the user sign-in check in a promise
+            return new Promise(function(resolve, reject){
+                window.setTimeout(async function(){
+                    try{
+                        // check if user has been signed in
+                        let hasUserDetails = await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                        loadData("user-details", utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase);
 
-                $('#account-page .utopiasoftware-can-hide-list-item.utopiasoftware-user-sign-in-show').css("display", "flex");
-                $('#account-page .utopiasoftware-can-hide-list-item:not(.utopiasoftware-user-sign-in-show)')
-                    .css("display", "none");
-            }
-            catch(err){
-                $('#account-page .utopiasoftware-can-hide-list-item.utopiasoftware-user-sign-in-show').css("display", "none");
-                $('#account-page .utopiasoftware-can-hide-list-item:not(.utopiasoftware-user-sign-in-show)')
-                    .css("display", "flex");
-            }
+                        // since user is signed in, hide some list items and show some list items on the page.
+
+                        // all items that are interested in have their display altered MUST have the
+                        // class 'utopiasoftware-can-hide-list-item'.
+                        // items that want to be displayed when a user is signed in and hidden when a user is signed out, MUST ALSO
+                        // have the class 'utopiasoftware-user-sign-in-show' in addition to 'utopiasoftware-can-hide-list-item'.
+
+                        // alter the list item display because a user is signed in
+                        $('#account-page .utopiasoftware-can-hide-list-item.utopiasoftware-user-sign-in-show').css("display", "flex");
+                        $('#account-page .utopiasoftware-can-hide-list-item:not(.utopiasoftware-user-sign-in-show)')
+                            .css("display", "none");
+
+                        resolve(); // resolve the promise
+                    }
+                    catch(err){
+                        // alter the list item display because NO user is signed in
+                        $('#account-page .utopiasoftware-can-hide-list-item.utopiasoftware-user-sign-in-show').css("display", "none");
+                        $('#account-page .utopiasoftware-can-hide-list-item:not(.utopiasoftware-user-sign-in-show)')
+                            .css("display", "flex");
+
+                        // resolve the promise
+                    }
+                }, 0);
+            });
         },
 
 
