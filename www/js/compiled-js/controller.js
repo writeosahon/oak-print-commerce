@@ -2793,7 +2793,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         timeout: 240000, // wait for 4 minutes before timeout of request
                         processData: false,
                         data: JSON.stringify({email: $('#login-page #signup-form #signup-email').val().trim(),
-                        username: $('#login-page #signup-form #signup-email').val().trim().replace(/@/ig, "_"),
+                        username: $('#login-page #signup-form #signup-email').val().trim(),
                         password: $('#login-page #signup-form #signup-password').val().trim()})
                     }
                 )).then(async function(userDetails){
