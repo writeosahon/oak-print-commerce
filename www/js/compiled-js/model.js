@@ -146,3 +146,15 @@ $(document).on("hide", "#view-cart-page", utopiasoftware[utopiasoftware_app_name
 
 // listen for when the VIEW CART is destroyed
 $(document).on("destroy", "#view-cart-page", utopiasoftware[utopiasoftware_app_namespace].controller.viewCartPageViewModel.pageDestroy);
+
+// listen for the initialisation of the PROFILE page
+$(document).on("init", "#profile-page", utopiasoftware[utopiasoftware_app_namespace].controller.profilePageViewModel.pageInit);
+
+// listen for when the PROFILE page is shown
+$(document).on("show", "#profile-page", utopiasoftware[utopiasoftware_app_namespace].controller.profilePageViewModel.pageShow);
+
+// listen for when the PROFILE page is hidden
+$(document).on("hide", "#profile-page", utopiasoftware[utopiasoftware_app_namespace].controller.profilePageViewModel.pageHide);
+
+// listen for when the PROFILE is destroyed
+$(document).on("destroy", "#profile-page", utopiasoftware[utopiasoftware_app_namespace].controller.profilePageViewModel.pageDestroy);

@@ -507,6 +507,13 @@
 }
 /** STYLE FOR VIEW CART PAGE ENDS **/
 
+/** STYLE FOR PROFILE PAGE BEGINS **/
+#profile-page .page__background,
+#profile-page .page--material__background {
+    background-color: #ffffff;
+}
+/** STYLE FOR PROFILE PAGE ENDS **/
+
 /** STYLE FOR LOGIN PAGE BEGINS **/
 #login-page .page__background,
 #login-page .page--material__background {

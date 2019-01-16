@@ -2111,7 +2111,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             window.SoftInputMode.set('adjustPan');
 
-            // handle the user sign-in check in a promise
+            // handle the user sign-in check inside a promise
             return new Promise(function(resolve, reject){
                 window.setTimeout(async function(){
                     try{
@@ -2170,6 +2170,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             $('#app-main-tabbar').get(0).setActiveTab(2);
         },
 
+        /**
+         * method is triggered when the user clicks on the "Sign Out" list item
+         *
+         * @returns {Promise<void>}
+         */
         async signOutListItemClicked(){
 
             // inform the user that the sign out process is on
@@ -2211,6 +2216,46 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             toast.content = `User signed out`;
             toast.dataBind();
             toast.show();
+        },
+
+        /**
+         * method is triggered when the user clicks on the "Profile" list item
+         *
+         * @returns {Promise<void>}
+         */
+        async profileListItemClicked(){
+
+            // handle the user sign-in check inside a promise
+            return new Promise(function(resolve, reject){
+                window.setTimeout(async function(){
+                    try{
+                        // check if user has been signed in
+                        let hasUserDetails = await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                        loadData("user-details", utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase);
+
+                        // user has been signed in, so display the user profile page
+                        await $('#app-main-navigator').get(0).pushPage('profile-page.html');
+
+                        resolve(); // resolve the promise
+                    }
+                    catch(err){
+                        // inform user they need to sign in before viewing the profile page
+                        // hide all previously displayed ej2 toast
+                        $('.page-toast').get(0).ej2_instances[0].hide('All');
+                        $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                        // display toast message
+                        let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                        toast.cssClass = 'default-ej2-toast';
+                        toast.timeOut = 3000;
+                        toast.content = `Sign in to view your profile`;
+                        toast.dataBind();
+                        toast.show();
+
+                        // resolve the promise
+                        resolve(); // resolve the promise
+                    }
+                }, 0);
+            });
         }
     },
 
@@ -4589,6 +4634,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
             $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].dataBind();
             $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].stop();
+
+            // hide page loader
+            $('#customise-product-page #customise-product-page-iframe-container .modal').css("display", "none");
 
             // disable pull-to-refresh widget till loading is done
             $('#customise-product-page #customise-product-page-pull-hook').attr("disabled", true);
