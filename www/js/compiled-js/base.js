@@ -94,7 +94,7 @@ const utopiasoftware = {
                     // get the last _rev property that was used to save the data
                     let docRev =
                         (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
-                        loadData(id, database))._rev;
+                        loadData(docId, database))._rev;
 
                     // delete the data
                     return await database.remove(docId, docRev);
