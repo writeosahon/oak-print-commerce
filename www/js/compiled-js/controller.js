@@ -4528,6 +4528,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // remove listener for listening to messages from the parent site
             window.removeEventListener("message", utopiasoftware[utopiasoftware_app_namespace].controller.
                 customiseProductPageViewModel.receiveMessageListener, false);
+
+            $('#customise-product-cancel').get(0).ej2_instances[0].destroy();
+            $('#customise-product-add-to-cart').get(0).ej2_instances[0].destroy();
         },
 
         /**
@@ -5546,6 +5549,207 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // load the product customisation url
             await utopiasoftware[utopiasoftware_app_namespace].controller.
             customiseProductPageViewModel.loadProductCustomisation(productUrl, cartItemKey);
+        }
+    },
+
+    /**
+     * this is the view-model/controller for the Profile page
+     */
+    profilePageViewModel: {
+
+        /**
+         * event is triggered when page is initialised
+         */
+        pageInit: function(event){
+
+            var $thisPage = $(event.target); // get the current page shown
+
+            // call the function used to initialise the app page if the app is fully loaded
+            loadPageOnAppReady();
+
+            //function is used to initialise the page if the app is fully ready for execution
+            async function loadPageOnAppReady() {
+                // check to see if onsen is ready and if all app loading has been completed
+                if (!ons.isReady() || utopiasoftware[utopiasoftware_app_namespace].model.isAppReady === false) {
+                    setTimeout(loadPageOnAppReady, 500); // call this function again after half a second
+                    return;
+                }
+
+                // listen for the back button event
+                $('#app-main-navigator').get(0).topPage.onDeviceBackButton =
+                    utopiasoftware[utopiasoftware_app_namespace].controller.
+                        profilePageViewModel.backButtonClicked;
+
+                // add method to handle the loading action of the pull-to-refresh widget
+                $('#profile-page-pull-hook', $thisPage).get(0).onAction =
+                    utopiasoftware[utopiasoftware_app_namespace].controller.
+                        profilePageViewModel.pagePullHookAction;
+
+                // register listener for the pull-to-refresh widget
+                $('#profile-page-pull-hook', $thisPage).on("changestate", function(event){
+
+                    // check the state of the pull-to-refresh widget
+                    switch (event.originalEvent.state){
+                        case 'initial':
+                            // update the displayed content
+                            $('#profile-page-pull-hook-fab', event.originalEvent.pullHook).
+                            html('<ons-icon icon="md-long-arrow-down" size="24px" style="color: #363E7C"></ons-icon>');
+                            break;
+
+                        case 'preaction':
+                            // update the displayed content
+                            $('#profile-page-pull-hook-fab', event.originalEvent.pullHook).
+                            html('<ons-icon icon="md-long-arrow-up" size="24px" style="color: #363E7C"></ons-icon>');
+                            break;
+
+                        case 'action':
+                            // update the displayed content
+                            $('#profile-page-pull-hook-fab', event.originalEvent.pullHook).
+                            html('<ons-progress-circular indeterminate modifier="pull-hook"></ons-progress-circular>');
+                            break;
+                    }
+                });
+
+                try{
+
+                    // create the "Cancel" button
+                    new ej.buttons.Button({
+                        //iconCss: "zmdi zmdi-shopping-cart-add utopiasoftware-icon-zoom-one-point-two",
+                        //iconPosition: "Left"
+                    }).appendTo('#profile-cancel');
+
+                    // create the "Update" button
+                    new ej.splitbuttons.ProgressButton({
+                        cssClass: 'e-hide-spinner',
+                        duration: 10 * 60 * 60 * 1000 // set spinner/progress duration for 10 hr
+                    }).appendTo('#profile-update');
+
+
+                }
+                catch(err){
+                    console.log("PROFILE ERROR", err);
+                }
+                finally {
+
+                }
+            }
+
+        },
+
+        /**
+         * method is triggered when page is shown
+         */
+        pageShow: function(){
+            window.SoftInputMode.set('adjustResize');
+
+            // update cart count
+            $('#profile-page .cart-count').html(utopiasoftware[utopiasoftware_app_namespace].model.cartCount);
+
+        },
+
+        /**
+         * method is triggered when page is hidden
+         */
+        pageHide: async function(){},
+
+        /**
+         * method is triggered when page is destroyed
+         */
+        pageDestroy: function(){
+
+        },
+
+        /**
+         * method is triggered when the device back button is clicked OR a similar action is triggered
+         */
+        backButtonClicked(){
+            // get back to the previous page on the app-main navigator stack
+            $('#app-main-navigator').get(0).popPage();
+        },
+
+
+        /**
+         * method is triggered when the pull-hook on the page is active
+         *
+         * @param doneCallBack
+         * @returns {Promise<void>}
+         */
+        async pagePullHookAction(doneCallBack = function(){}){
+            // show the page preloader
+            $('#profile-page .page-preloader').css("display", "block");
+            // disable the "Update" button
+            $('#profile-page #profile-update').attr("disabled", true);
+            // remove the spinner from the 'Update'
+            $('#profile-page #profile-update').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
+            $('#profile-page #profile-update').get(0).ej2_instances[0].dataBind();
+            $('#profile-page #profile-update').get(0).ej2_instances[0].stop();
+
+            // disable pull-to-refresh widget till loading is done
+            $('#profile-page #profile-page-pull-hook').attr("disabled", true);
+            // hide all previously displayed ej2 toast
+            $('.page-toast').get(0).ej2_instances[0].hide('All');
+
+            try{
+                // reload the current product customisation url  & current remote cart item key into the iframe
+                await utopiasoftware[utopiasoftware_app_namespace].controller.
+                customiseProductPageViewModel.
+                loadProductCustomisation(utopiasoftware[utopiasoftware_app_namespace].controller.
+                        customiseProductPageViewModel.currentCustomisationUrl,
+                    utopiasoftware[utopiasoftware_app_namespace].controller.
+                        customiseProductPageViewModel.currentCustomisationCartKey);
+            }
+            catch(err){ // an error occurred
+
+                // display toast to show that error
+                let toast = $('.page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.content = "Sorry, an error occurred. Refresh to try again";
+                toast.dataBind();
+                toast.show();
+            }
+            finally{
+                window.setTimeout(function(){ // wait for 2 sec before declaring loading done
+                    // enable pull-to-refresh widget till loading is done
+                    $('#customise-product-page #customise-product-page-pull-hook').removeAttr("disabled");
+                    // signal that loading is done
+                    doneCallBack();
+                }, 2000);
+            }
+        },
+
+
+        /**
+         * method is triggered when the user clicks the "Add To Cart" button
+         *
+         * @returns {Promise<void>}
+         */
+        async addToCartButtonClicked(){
+
+            if(navigator.connection.type === Connection.NONE){ // there is no Internet connection
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast to show that an error
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'default-ej2-toast';
+                toast.timeOut = 3500;
+                toast.content = `Please connect to the Internet to add customised product to cart`;
+                toast.dataBind();
+                toast.show();
+
+                return; // exit method
+            }
+
+            // show the spinner on the 'Add To Cart' button to indicate process is ongoing
+            $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].cssClass = '';
+            $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].dataBind();
+            $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].start();
+
+            // display page loader while completing the "add to cart" request
+            $('#customise-product-page #customise-product-page-iframe-container .modal').css("display", "table");
+
+            // call the method to submit the product customisation form located in the iframe window
+            $('#customise-product-page #customise-product-page-iframe').get(0).contentWindow.utopiasoftware_addUsage();
         }
     }
 };
