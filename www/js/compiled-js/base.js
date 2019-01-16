@@ -73,8 +73,31 @@ const utopiasoftware = {
                     }
                     catch(err){}
 
-                    // return the game settings data
+                    // return the document data
                     return await database.put(saveData);
+                }
+                finally{
+                }
+            },
+
+            /**
+             * method is used to remove the data with the specified docId, from the specified database
+             *
+             * @param docId
+             * @param database
+             *
+             * @returns {Promise<void>}
+             */
+            async removeData(docId, database){
+
+                try{
+                    // get the last _rev property that was used to save the data
+                    let docRev =
+                        (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                        loadData(id, database))._rev;
+
+                    // delete the data
+                    return await database.remove(docId, docRev);
                 }
                 finally{
                 }
