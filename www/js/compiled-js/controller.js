@@ -2140,6 +2140,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             .css("display", "flex");
 
                         // resolve the promise
+                        resolve(); // resolve the promise
                     }
                 }, 0);
             });
@@ -2168,6 +2169,49 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // go to the "Home" page (tab)
             $('#app-main-tabbar').get(0).setActiveTab(2);
         },
+
+        async signOutListItemClicked(){
+
+            // inform the user that the sign out process is on
+            $('#loader-modal-message').html("Signing user out...");
+            await $('#loader-modal').get(0).show(); // show loader
+
+            try{
+                // delete all user related data
+                await Promise.all([utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                removeData("user-details", utopiasoftware[utopiasoftware_app_namespace].model.
+                    encryptedAppDatabase),
+                    utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                    removeData("user-cart", utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)]);
+            }
+            catch(err){
+                console.log("USER SIGN OUT", err);
+            }
+
+            // check if user can sign out from the remote app serve via an iframe
+            if($('#user-signout-iframe-container #user-signout-iframe').get(0).contentWindow.utopiasoftware_removeUsage){
+                // call the method to remotely sign out
+                $('#user-signout-iframe-container #user-signout-iframe').get(0).contentWindow.utopiasoftware_removeUsage();
+            }
+
+            // refresh the display of the app Account page
+            await utopiasoftware[utopiasoftware_app_namespace].controller.accountPageViewModel.pageShow();
+
+            // hide loader modal
+            await $('#loader-modal').get(0).hide();
+
+            // inform user that they have been signed out
+            // hide all previously displayed ej2 toast
+            $('.page-toast').get(0).ej2_instances[0].hide('All');
+            $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+            // display toast message
+            let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+            toast.cssClass = 'success-ej2-toast';
+            toast.timeOut = 3000;
+            toast.content = `User signed out`;
+            toast.dataBind();
+            toast.show();
+        }
     },
 
     /**
