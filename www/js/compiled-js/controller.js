@@ -5708,12 +5708,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 toast.show();
             }
             finally{
-                window.setTimeout(function(){ // wait for 2 sec before declaring loading done
-                    // enable pull-to-refresh widget till loading is done
-                    $('#customise-product-page #customise-product-page-pull-hook').removeAttr("disabled");
-                    // signal that loading is done
-                    doneCallBack();
-                }, 2000);
+                // signal that loading is done
+                doneCallBack();
             }
         },
 

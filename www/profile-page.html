@@ -39,6 +39,66 @@
     <ons-progress-bar class="page-preloader" indeterminate modifier="default-page-preloader"
                       style="position: fixed; z-index: 2; width: 100%; display: block;"></ons-progress-bar>
 
+    <form id="profile-form" autocomplete="off" data-parsley-inputs="ons-input,textarea,select"
+          data-parsley-excluded="ons-input[type=button], ons-input[type=submit],
+                              ons-input[type=reset], ons-input[type=hidden], [disabled], :hidden">
+
+        <ons-row vertical-align="bottom" style="margin-bottom: 1.5em; text-align: center;">
+            <ons-col width="100%" style="border: 2px solid lightgray; border-radius: 6px; background-color: #ffffff;
+                        color: #3f51b5;
+                    font-size: 1.3em; padding-top:0.5em;">
+                <ons-icon icon="md-email" size="28px" fixed-width style="color: #3f51b5; margin-right: 0.5em;"></ons-icon>
+                <ons-input id="login-email" type="email" style="width: 75%;
+                        caret-color: #3f51b5 !important; color: #3f51b5 !important;"
+                           placeholder="Email" modifier="material" float disable-auto-styling></ons-input>
+            </ons-col>
+        </ons-row>
+        <ons-row vertical-align="bottom" style="margin-bottom: 2em; text-align: center;">
+            <ons-col width="100%" style="border: 2px solid lightgray; border-radius: 6px; background-color: #ffffff;
+                        color: #3f51b5;
+                    font-size: 1.3em; padding-top:0.5em;">
+                <ons-icon icon="md-utopiasoftware-icon-lock" size="28px" fixed-width style="color: #3f51b5; margin-right: 0.5em;"></ons-icon>
+                <ons-input id="login-password" type="password" style="width: 75%;
+                        caret-color: #3f51b5 !important; color: #3f51b5 !important;" required
+                           placeholder="Password" disable-auto-styling
+                           data-parsley-required-message="password is required"></ons-input>
+            </ons-col>
+        </ons-row>
+        <ons-row style="margin-bottom: 1.5em;">
+            <ons-col width="20%"></ons-col>
+            <ons-col width="60%" style="text-align: center">
+                <ons-button style="border-color: #ffffff; background-color: #ffffff; color: #363E7C"
+                            disable-auto-styling modifier="large"
+                            onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
+                                        loginPageViewModel.signinButtonClicked();">
+                    Sign In
+                </ons-button>
+            </ons-col>
+            <ons-col width="20%"></ons-col>
+        </ons-row>
+        <ons-row style="margin-bottom: 1em;">
+            <ons-col width="100%" style="text-align: center">
+                <div style="width: 100%; text-align: center">
+                    <span style="font-weight: bold; color: #000000; font-size: 0.85em">OR USE </span>
+                    <img src="css/app-images/google-signin-img.png" style="height: 2.5em;">
+                    <img src="css/app-images/facebook-signin-img.png" style="height: 2.5em;">
+                    <img src="css/app-images/twitter-signin-img.png" style="height: 2.5em;">
+                </div>
+            </ons-col>
+        </ons-row>
+
+        <ons-row>
+            <ons-col width="100%" style="text-align: center">
+                <ons-button disable-auto-styling modifier="large--quiet"
+                            style="color: #3f51b5; text-decoration: underline"
+                            onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
+                    loginPageViewModel.forgotPasswordButtonClicked();">
+                    Forgot Password?
+                </ons-button>
+            </ons-col>
+        </ons-row>
+    </form>
+
 
     <ons-bottom-toolbar modifier="transparent" style="border-top: lightgray 1px solid">
 
