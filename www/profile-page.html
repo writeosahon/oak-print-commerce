@@ -28,76 +28,77 @@
             </ons-toolbar-button>
         </div>
     </ons-toolbar>
-    <!-- page pull hook -->
-    <ons-pull-hook id="profile-page-pull-hook" threshold-height="120px" fixed-content style="text-align: center">
-        <ons-fab id="profile-page-pull-hook-fab" modifier="mini" style="background-color: #ffffff; color: #ff0000;
-        box-shadow: none; border: 1px #ff0000 solid">
-            <ons-icon icon="md-long-arrow-down" size="24px" style="color: #363E7C"></ons-icon>
-        </ons-fab>
-    </ons-pull-hook>
-    <!-- page preloader -->
-    <ons-progress-bar class="page-preloader" indeterminate modifier="default-page-preloader"
-                      style="position: fixed; z-index: 2; width: 100%; display: block;"></ons-progress-bar>
 
-    <form id="profile-form" autocomplete="off" data-parsley-inputs="ons-input,textarea,select"
-          data-parsley-excluded="ons-input[type=button], ons-input[type=submit],
+    <div class="content">
+
+        <!-- page preloader -->
+        <ons-progress-bar class="page-preloader" indeterminate modifier="default-page-preloader"
+                          style="position: fixed; z-index: 2; width: 100%; display: block;"></ons-progress-bar>
+
+        <form id="profile-form" autocomplete="off" data-parsley-inputs="ons-input,textarea,select"
+              data-parsley-excluded="ons-input[type=button], ons-input[type=submit],
                               ons-input[type=reset], ons-input[type=hidden], [disabled], :hidden">
 
-        <ons-row vertical-align="bottom" style="margin-bottom: 1.5em; text-align: center;">
-            <ons-col width="100%" style="border: 2px solid lightgray; border-radius: 6px; background-color: #ffffff;
+            <ons-row vertical-align="bottom" style="margin-top: 1.5em; margin-bottom: 1.5em; text-align: center;">
+                <ons-col width="10%"></ons-col>
+                <ons-col width="80%" style="border: 2px solid lightgray; border-radius: 6px; background-color: #ffffff;
                         color: #3f51b5;
                     font-size: 1.3em; padding-top:0.5em;">
-                <ons-icon icon="md-email" size="28px" fixed-width style="color: #3f51b5; margin-right: 0.5em;"></ons-icon>
-                <ons-input id="login-email" type="email" style="width: 75%;
-                        caret-color: #3f51b5 !important; color: #3f51b5 !important;"
-                           placeholder="Email" modifier="material" float disable-auto-styling></ons-input>
-            </ons-col>
-        </ons-row>
-        <ons-row vertical-align="bottom" style="margin-bottom: 2em; text-align: center;">
-            <ons-col width="100%" style="border: 2px solid lightgray; border-radius: 6px; background-color: #ffffff;
-                        color: #3f51b5;
-                    font-size: 1.3em; padding-top:0.5em;">
-                <ons-icon icon="md-utopiasoftware-icon-lock" size="28px" fixed-width style="color: #3f51b5; margin-right: 0.5em;"></ons-icon>
-                <ons-input id="login-password" type="password" style="width: 75%;
-                        caret-color: #3f51b5 !important; color: #3f51b5 !important;" required
-                           placeholder="Password" disable-auto-styling
-                           data-parsley-required-message="password is required"></ons-input>
-            </ons-col>
-        </ons-row>
-        <ons-row style="margin-bottom: 1.5em;">
-            <ons-col width="20%"></ons-col>
-            <ons-col width="60%" style="text-align: center">
-                <ons-button style="border-color: #ffffff; background-color: #ffffff; color: #363E7C"
-                            disable-auto-styling modifier="large"
-                            onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
-                                        loginPageViewModel.signinButtonClicked();">
-                    Sign In
-                </ons-button>
-            </ons-col>
-            <ons-col width="20%"></ons-col>
-        </ons-row>
-        <ons-row style="margin-bottom: 1em;">
-            <ons-col width="100%" style="text-align: center">
-                <div style="width: 100%; text-align: center">
-                    <span style="font-weight: bold; color: #000000; font-size: 0.85em">OR USE </span>
-                    <img src="css/app-images/google-signin-img.png" style="height: 2.5em;">
-                    <img src="css/app-images/facebook-signin-img.png" style="height: 2.5em;">
-                    <img src="css/app-images/twitter-signin-img.png" style="height: 2.5em;">
-                </div>
-            </ons-col>
-        </ons-row>
+                    <ons-icon icon="md-email" size="28px" fixed-width style="color: #3f51b5; margin-right: 0.5em;"></ons-icon>
+                    <ons-input id="profile-email" type="email" style="width: 75%;
+                        caret-color: #3f51b5 !important; color: #3f51b5 !important;" disabled
+                               placeholder="Email" modifier="material" float disable-auto-styling></ons-input>
+                </ons-col>
+                <ons-col width="10%"></ons-col>
+            </ons-row>
 
-        <ons-row>
-            <ons-col width="100%" style="text-align: center">
-                <ons-button disable-auto-styling modifier="large--quiet"
-                            style="color: #3f51b5; text-decoration: underline"
-                            onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
-                    loginPageViewModel.forgotPasswordButtonClicked();">
-                    Forgot Password?
-                </ons-button>
-            </ons-col>
-        </ons-row>
-    </form>
+            <ons-row vertical-align="bottom" style="margin-bottom: 1.5em; text-align: center;">
+                <ons-col width="10%"></ons-col>
+                <ons-col width="80%" style="border: 2px solid lightgray; border-radius: 6px; background-color: #ffffff;
+                        color: #3f51b5;
+                    font-size: 1.3em; padding-top:0.5em;">
+                    <ons-icon icon="md-account" size="28px" fixed-width style="color: #3f51b5; margin-right: 0.5em;"></ons-icon>
+                    <ons-input id="profile-first-name" type="text"
+                               pattern="[a-zA-Z]{1}[\w\s\-\.]*[a-zA-Z]{1}\s*" style="width: 75%;
+                        caret-color: #3f51b5 !important; color: #3f51b5 !important;" required
+                               placeholder="First Name" disable-auto-styling
+                               data-parsley-required-message="your first name is required"
+                               data-parsley-pattern-message="incorrect first name. please check your spelling"></ons-input>
+                </ons-col>
+            </ons-row>
+
+            <ons-row vertical-align="bottom" style="margin-bottom: 1.5em; text-align: center;">
+                <ons-col width="10%"></ons-col>
+                <ons-col width="80%" style="border: 2px solid lightgray; border-radius: 6px; background-color: #ffffff;
+                        color: #3f51b5;
+                    font-size: 1.3em; padding-top:0.5em;">
+                    <ons-icon icon="md-account" size="28px" fixed-width style="color: #3f51b5; margin-right: 0.5em;"></ons-icon>
+                    <ons-input id="profile-last-name" type="text"
+                               pattern="[a-zA-Z]{1}[\w\s\-\.]*[a-zA-Z]{1}\s*" style="width: 75%;
+                        caret-color: #3f51b5 !important; color: #3f51b5 !important;" required
+                               placeholder="Last Name" disable-auto-styling
+                               data-parsley-required-message="your last name is required"
+                               data-parsley-pattern-message="incorrect last name. please check your spelling"></ons-input>
+                </ons-col>
+            </ons-row>
+
+            <ons-row vertical-align="bottom" style="margin-bottom: 1.5em; text-align: center;">
+                <ons-col width="10%"></ons-col>
+                <ons-col width="80%" style="border: 2px solid lightgray; border-radius: 6px; background-color: #ffffff;
+                        color: #3f51b5;
+                    font-size: 1.3em; padding-top:0.5em;">
+                    <ons-icon icon="md-account" size="28px" fixed-width style="color: #3f51b5; margin-right: 0.5em;"></ons-icon>
+                    <ons-input id="profile-phone-number" type="tel"
+                               pattern="((0[1-9]{1}[0-9]{9}|\+234[1-9]{1}[0-9]{9})|\+[1-9]{1}[0-9]{4,})" style="width: 75%;
+                        caret-color: #3f51b5 !important; color: #3f51b5 !important;"
+                               placeholder="Phone Number" disable-auto-styling
+                               data-parsley-pattern-message="incorrect phone number format. phone number must be in international format (starting with '+')"
+                               data-parsley-type-message="incorrect phone number format. phone number must be in international format (starting with '+')"></ons-input>
+                </ons-col>
+            </ons-row>
+
+        </form>
+    </div>
 
 
     <ons-bottom-toolbar modifier="transparent" style="border-top: lightgray 1px solid">

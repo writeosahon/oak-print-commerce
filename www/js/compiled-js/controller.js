@@ -5580,36 +5580,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     utopiasoftware[utopiasoftware_app_namespace].controller.
                         profilePageViewModel.backButtonClicked;
 
-                // add method to handle the loading action of the pull-to-refresh widget
-                $('#profile-page-pull-hook', $thisPage).get(0).onAction =
-                    utopiasoftware[utopiasoftware_app_namespace].controller.
-                        profilePageViewModel.pagePullHookAction;
-
-                // register listener for the pull-to-refresh widget
-                $('#profile-page-pull-hook', $thisPage).on("changestate", function(event){
-
-                    // check the state of the pull-to-refresh widget
-                    switch (event.originalEvent.state){
-                        case 'initial':
-                            // update the displayed content
-                            $('#profile-page-pull-hook-fab', event.originalEvent.pullHook).
-                            html('<ons-icon icon="md-long-arrow-down" size="24px" style="color: #363E7C"></ons-icon>');
-                            break;
-
-                        case 'preaction':
-                            // update the displayed content
-                            $('#profile-page-pull-hook-fab', event.originalEvent.pullHook).
-                            html('<ons-icon icon="md-long-arrow-up" size="24px" style="color: #363E7C"></ons-icon>');
-                            break;
-
-                        case 'action':
-                            // update the displayed content
-                            $('#profile-page-pull-hook-fab', event.originalEvent.pullHook).
-                            html('<ons-progress-circular indeterminate modifier="pull-hook"></ons-progress-circular>');
-                            break;
-                    }
-                });
-
                 try{
 
                     // create the "Cancel" button
@@ -5665,52 +5635,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         backButtonClicked(){
             // get back to the previous page on the app-main navigator stack
             $('#app-main-navigator').get(0).popPage();
-        },
-
-
-        /**
-         * method is triggered when the pull-hook on the page is active
-         *
-         * @param doneCallBack
-         * @returns {Promise<void>}
-         */
-        async pagePullHookAction(doneCallBack = function(){}){
-            // show the page preloader
-            $('#profile-page .page-preloader').css("display", "block");
-            // disable the "Update" button
-            $('#profile-page #profile-update').attr("disabled", true);
-            // remove the spinner from the 'Update'
-            $('#profile-page #profile-update').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
-            $('#profile-page #profile-update').get(0).ej2_instances[0].dataBind();
-            $('#profile-page #profile-update').get(0).ej2_instances[0].stop();
-
-            // disable pull-to-refresh widget till loading is done
-            $('#profile-page #profile-page-pull-hook').attr("disabled", true);
-            // hide all previously displayed ej2 toast
-            $('.page-toast').get(0).ej2_instances[0].hide('All');
-
-            try{
-                // reload the current product customisation url  & current remote cart item key into the iframe
-                await utopiasoftware[utopiasoftware_app_namespace].controller.
-                customiseProductPageViewModel.
-                loadProductCustomisation(utopiasoftware[utopiasoftware_app_namespace].controller.
-                        customiseProductPageViewModel.currentCustomisationUrl,
-                    utopiasoftware[utopiasoftware_app_namespace].controller.
-                        customiseProductPageViewModel.currentCustomisationCartKey);
-            }
-            catch(err){ // an error occurred
-
-                // display toast to show that error
-                let toast = $('.page-toast').get(0).ej2_instances[0];
-                toast.cssClass = 'error-ej2-toast';
-                toast.content = "Sorry, an error occurred. Refresh to try again";
-                toast.dataBind();
-                toast.show();
-            }
-            finally{
-                // signal that loading is done
-                doneCallBack();
-            }
         },
 
 
