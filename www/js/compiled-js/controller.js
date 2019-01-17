@@ -5748,6 +5748,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 loadData("user-details",
                     utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
 
+                console.log("USER DETAILS", userDetails);
+
                 // display the user profile data in the profile form
                 $('#profile-page #profile-form #profile-email').val(userDetails.email);
                 $('#profile-page #profile-form #profile-first-name').val(userDetails.first_name || "");
