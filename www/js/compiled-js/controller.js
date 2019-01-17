@@ -421,6 +421,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     $('#home-page .page-preloader').css("display", "none");
                 }
                 catch(err){
+                    console.log("HOME PAGE ERROR", err);
                     // hide all previously displayed ej2 toast
                     $('.page-toast').get(0).ej2_instances[0].hide('All');
                     // display toast to show that an error
@@ -1198,6 +1199,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 }
                 catch(err){
 
+                    console.log("CATEGORY PAGE ERROR", err);
                     // hide all previously displayed ej2 toast
                     $('.page-toast').get(0).ej2_instances[0].hide('All');
                     // display toast to show that an error
