@@ -2203,6 +2203,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // refresh the display of the app Account page
             await utopiasoftware[utopiasoftware_app_namespace].controller.accountPageViewModel.pageShow();
 
+            // alter the list item displayed on the Account page because NO user is signed in
+            $('#account-page .utopiasoftware-can-hide-list-item.utopiasoftware-user-sign-in-show').css("display", "none");
+            $('#account-page .utopiasoftware-can-hide-list-item:not(.utopiasoftware-user-sign-in-show)')
+                .css("display", "flex");
+
             // hide loader modal
             await $('#loader-modal').get(0).hide();
 
@@ -2827,11 +2832,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // listen for when the promisesArrayPromise resolves
             promisesArrayPromise.then(async function(resultsArray){
                 // add the user's password to the user details retrieved from the server
-                resultsArray[1].password = userPassword;
+                resultsArray[1][0].password = userPassword;
 
                 // save the created user details data to ENCRYPTED app database as cached data
                 await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
-                    {_id: "user-details", docType: "USER_DETAILS", userDetails: resultsArray[1]},
+                    {_id: "user-details", docType: "USER_DETAILS", userDetails: resultsArray[1][0]},
                     utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase);
 
                 // hide loader
