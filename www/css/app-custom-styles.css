@@ -512,6 +512,13 @@
 #profile-page .page--material__background {
     background-color: #ffffff;
 }
+#profile-page ons-input input {
+    /*font-size: 0.7em;*/
+    height: 1.2em;
+    line-height: 1.2em;
+    color: #3f51b5 !important;
+    caret-color: #3f51b5;
+}
 /** STYLE FOR PROFILE PAGE ENDS **/
 
 /** STYLE FOR LOGIN PAGE BEGINS **/
