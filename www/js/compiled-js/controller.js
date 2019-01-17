@@ -2816,8 +2816,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     },
                     dataType: "json",
                     timeout: 240000, // wait for 4 minutes before timeout of request
-                    processData: false,
-                    data: JSON.stringify({email: userEmail})
+                    processData: true,
+                    data: {email: userEmail}
                 }
             )));
 
