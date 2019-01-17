@@ -2194,7 +2194,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             }
 
             // check if user can sign out from the remote app serve via an iframe
-            if($('#user-signout-iframe-container #user-signout-iframe').get(0).contentWindow.utopiasoftware_removeUsage){
+            if($('#user-signout-iframe-container #user-signout-iframe').get(0).contentWindow &&
+                $('#user-signout-iframe-container #user-signout-iframe').get(0).contentWindow.utopiasoftware_removeUsage){
                 // call the method to remotely sign out
                 $('#user-signout-iframe-container #user-signout-iframe').get(0).contentWindow.utopiasoftware_removeUsage();
             }
@@ -5650,7 +5651,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         duration: 10 * 60 * 60 * 1000 // set spinner/progress duration for 10 hr
                     }).appendTo('#profile-update');
 
-
+                    // display the user's profile on the profile form
+                    await utopiasoftware[utopiasoftware_app_namespace].controller.profilePageViewModel.displayProfileContent();
                 }
                 catch(err){
                     console.log("PROFILE ERROR", err);
@@ -5732,7 +5734,36 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          *
          * @returns {Promise<void>}
          */
-        async profileFormValidated(){}
+        async profileFormValidated(){},
+
+        /**
+         * method is used to load the current user profile data into the profile form
+         * @returns {Promise<void>}
+         */
+        async displayProfileContent(){
+
+            try{
+                // load the user profile details from the app database
+                let userDetails = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                loadData("user-details",
+                    utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
+
+                // display the user profile data in the profile form
+                $('#profile-page #profile-form #profile-email').val(userDetails.email);
+                $('#profile-page #profile-form #profile-first-name').val(userDetails.first_name || "");
+                $('#profile-page #profile-form #profile-last-name').val(userDetails.last_name || "");
+                $('#profile-page #profile-form #profile-phone-number').
+                val(userDetails.billing && userDetails.billing.phone ? userDetails.billing.phone : "");
+            }
+            finally {
+                // hide page preloader
+                $('#profile-page .page-preloader').css("display", "none");
+                // hide page modal loader
+                $('#profile-page .modal').css("display", "none");
+                // enable the "Update" button
+                $('#profile-page #profile-update').removeAttr("disabled");
+            }
+        }
 
     }
 };

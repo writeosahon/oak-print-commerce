@@ -30,6 +30,12 @@
     </ons-toolbar>
 
     <div class="content">
+        <!-- page modal loader -->
+        <div class="modal" style="z-index: 2; background-color: transparent; display: table;">
+            <div class="modal__content">
+                <ons-progress-circular indeterminate modifier="pull-hook" style="transform: scale(1.5);"></ons-progress-circular>
+            </div>
+        </div>
 
         <!-- page preloader -->
         <ons-progress-bar class="page-preloader" indeterminate modifier="default-page-preloader"
