@@ -2392,7 +2392,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
 
                 // listen for scroll event on the page to adjust the tooltips when page scrolls
-                $('#login-page .login-page-form-container',).on("scroll", function(){
+                $('#login-page .login-page-form-container').on("scroll", function(){
 
                     // place function execution in the event queue to be executed ASAP
                     window.setTimeout(function(){
@@ -5558,6 +5558,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
     profilePageViewModel: {
 
         /**
+         * used to hold the parsley form validation object for the profile form
+         */
+        profileFormValidator: null,
+
+        /**
          * event is triggered when page is initialised
          */
         pageInit: function(event){
@@ -5580,7 +5585,58 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     utopiasoftware[utopiasoftware_app_namespace].controller.
                         profilePageViewModel.backButtonClicked;
 
+                // initialise the profile form validation
+                utopiasoftware[utopiasoftware_app_namespace].controller.profilePageViewModel.profileFormValidator =
+                    $('#profile-page #profile-form').parsley();
+
+                // listen for profile form field validation failure event
+                utopiasoftware[utopiasoftware_app_namespace].controller.profilePageViewModel.profileFormValidator.on('field:error', function(fieldInstance) {
+                    // get the element that triggered the field validation error and use it to display tooltip
+                    // display tooltip
+                    let tooltip = $('#profile-page #profile-form').get(0).
+                        ej2_instances[fieldInstance.$element.get(0)._utopiasoftware_validator_index];
+                    tooltip.content = fieldInstance.getErrorsMessages()[0];
+                    tooltip.dataBind();
+                    tooltip.open(fieldInstance.$element.get(0));
+                });
+
+                // listen for profile form field validation success event
+                utopiasoftware[utopiasoftware_app_namespace].controller.profilePageViewModel.profileFormValidator.on('field:success', function(fieldInstance) {
+                    // hide tooltip from element
+                    let tooltip = $('#profile-page #profile-form').get(0).
+                        ej2_instances[fieldInstance.$element.get(0)._utopiasoftware_validator_index];
+                    tooltip.close();
+                });
+
+                // listen for profile form validation success
+                utopiasoftware[utopiasoftware_app_namespace].controller.profilePageViewModel.profileFormValidator.on('form:success',
+                    utopiasoftware[utopiasoftware_app_namespace].controller.profilePageViewModel.profileFormValidated);
+
+                // listen for scroll event on the page to adjust the tooltips when page scrolls
+                $('#profile-page .content').on("scroll", function(){
+                    // place function execution in the event queue to be executed ASAP
+                    window.setTimeout(function(){
+                        // adjust the tooltips elements on the profile form
+                        $("#profile-page #profile-form ons-input").each(function(index, element){
+                            document.getElementById('profile-form').ej2_instances[index].refresh(element);
+                        });
+
+                    }, 0);
+                });
+
+
                 try{
+
+                    // create the tooltip objects for the profile form
+                    $('#profile-form ons-input', $thisPage).each(function(index, element){
+                        element._utopiasoftware_validator_index = index;
+                        // create the tool tips for every element being validated, but attach it to the html form object
+                        new ej.popups.Tooltip({
+                            cssClass: 'utopiasoftware-ej2-validation-tooltip',
+                            position: 'TopLeft',
+                            opensOn: 'Custom'
+                        }).appendTo($('#profile-page #profile-form').get(0));
+                    });
 
                     // create the "Cancel" button
                     new ej.buttons.Button({
@@ -5620,13 +5676,35 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         /**
          * method is triggered when page is hidden
          */
-        pageHide: async function(){},
+        pageHide: async function(){
+
+            // hide the tooltips on the profile form
+            $('#profile-page #profile-form').get(0).ej2_instances.forEach(function(tooltipArrayElem){
+                // hide the tooltip
+                tooltipArrayElem.close();
+            });
+
+            // reset all form validator objects
+            utopiasoftware[utopiasoftware_app_namespace].controller.profilePageViewModel.profileFormValidator.reset();
+        },
 
         /**
          * method is triggered when page is destroyed
          */
         pageDestroy: function(){
 
+            // destroy the tooltips on the profile form
+            $('#profile-page #profile-form').get(0).ej2_instances.forEach(function(tooltipArrayElem){
+                // destroy the tooltip
+                tooltipArrayElem.destroy();
+            });
+
+            // destroy the "Cancel" and "Update" buttons
+            $('#profile-page #profile-cancel').get(0).ej2_instances[0].destroy();
+            $('#profile-page #profile-update').get(0).ej2_instances[0].destroy();
+
+            // destroy all form validator objects
+            utopiasoftware[utopiasoftware_app_namespace].controller.profilePageViewModel.profileFormValidator.destroy();
         },
 
         /**
@@ -5639,37 +5717,22 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
 
         /**
-         * method is triggered when the user clicks the "Add To Cart" button
+         * method is triggered when the user clicks the "Update" button
          *
          * @returns {Promise<void>}
          */
-        async addToCartButtonClicked(){
+        async updateButtonClicked(){
 
-            if(navigator.connection.type === Connection.NONE){ // there is no Internet connection
-                // hide all previously displayed ej2 toast
-                $('.page-toast').get(0).ej2_instances[0].hide('All');
-                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
-                // display toast to show that an error
-                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
-                toast.cssClass = 'default-ej2-toast';
-                toast.timeOut = 3500;
-                toast.content = `Please connect to the Internet to add customised product to cart`;
-                toast.dataBind();
-                toast.show();
+            // run the validation method for the profile form
+            utopiasoftware[utopiasoftware_app_namespace].controller.profilePageViewModel.profileFormValidator.whenValidate();
+        },
 
-                return; // exit method
-            }
+        /**
+         * method is triggered when the profile form is successfully validated
+         *
+         * @returns {Promise<void>}
+         */
+        async profileFormValidated(){}
 
-            // show the spinner on the 'Add To Cart' button to indicate process is ongoing
-            $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].cssClass = '';
-            $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].dataBind();
-            $('#customise-product-page #customise-product-add-to-cart').get(0).ej2_instances[0].start();
-
-            // display page loader while completing the "add to cart" request
-            $('#customise-product-page #customise-product-page-iframe-container .modal').css("display", "table");
-
-            // call the method to submit the product customisation form located in the iframe window
-            $('#customise-product-page #customise-product-page-iframe').get(0).contentWindow.utopiasoftware_addUsage();
-        }
     }
 };

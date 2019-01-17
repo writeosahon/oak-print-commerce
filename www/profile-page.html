@@ -40,7 +40,7 @@
                               ons-input[type=reset], ons-input[type=hidden], [disabled], :hidden">
 
             <ons-row vertical-align="bottom" style="margin-top: 1.5em; margin-bottom: 1.5em; text-align: center;">
-                <ons-col width="10%"></ons-col>
+                <ons-col width="5%"></ons-col>
                 <ons-col width="80%" style="border: 2px solid lightgray; border-radius: 6px; background-color: #ffffff;
                         color: #3f51b5;
                     font-size: 1.3em; padding-top:0.5em;">
@@ -49,11 +49,11 @@
                         caret-color: #3f51b5 !important; color: #3f51b5 !important;" disabled
                                placeholder="Email" modifier="material" float disable-auto-styling></ons-input>
                 </ons-col>
-                <ons-col width="10%"></ons-col>
+                <ons-col width="15%"></ons-col>
             </ons-row>
 
             <ons-row vertical-align="bottom" style="margin-bottom: 1.5em; text-align: center;">
-                <ons-col width="10%"></ons-col>
+                <ons-col width="5%"></ons-col>
                 <ons-col width="80%" style="border: 2px solid lightgray; border-radius: 6px; background-color: #ffffff;
                         color: #3f51b5;
                     font-size: 1.3em; padding-top:0.5em;">
@@ -61,14 +61,15 @@
                     <ons-input id="profile-first-name" type="text"
                                pattern="[a-zA-Z]{1}[\w\s\-\.]*[a-zA-Z]{1}\s*" style="width: 75%;
                         caret-color: #3f51b5 !important; color: #3f51b5 !important;" required
-                               placeholder="First Name" disable-auto-styling
+                               placeholder="First Name" modifier="material" float disable-auto-styling
                                data-parsley-required-message="your first name is required"
                                data-parsley-pattern-message="incorrect first name. please check your spelling"></ons-input>
                 </ons-col>
+                <ons-col width="15%"></ons-col>
             </ons-row>
 
             <ons-row vertical-align="bottom" style="margin-bottom: 1.5em; text-align: center;">
-                <ons-col width="10%"></ons-col>
+                <ons-col width="5%"></ons-col>
                 <ons-col width="80%" style="border: 2px solid lightgray; border-radius: 6px; background-color: #ffffff;
                         color: #3f51b5;
                     font-size: 1.3em; padding-top:0.5em;">
@@ -76,25 +77,27 @@
                     <ons-input id="profile-last-name" type="text"
                                pattern="[a-zA-Z]{1}[\w\s\-\.]*[a-zA-Z]{1}\s*" style="width: 75%;
                         caret-color: #3f51b5 !important; color: #3f51b5 !important;" required
-                               placeholder="Last Name" disable-auto-styling
+                               placeholder="Last Name" modifier="material" float disable-auto-styling
                                data-parsley-required-message="your last name is required"
                                data-parsley-pattern-message="incorrect last name. please check your spelling"></ons-input>
                 </ons-col>
+                <ons-col width="15%"></ons-col>
             </ons-row>
 
             <ons-row vertical-align="bottom" style="margin-bottom: 1.5em; text-align: center;">
-                <ons-col width="10%"></ons-col>
+                <ons-col width="5%"></ons-col>
                 <ons-col width="80%" style="border: 2px solid lightgray; border-radius: 6px; background-color: #ffffff;
                         color: #3f51b5;
                     font-size: 1.3em; padding-top:0.5em;">
-                    <ons-icon icon="md-account" size="28px" fixed-width style="color: #3f51b5; margin-right: 0.5em;"></ons-icon>
+                    <ons-icon icon="md-phone" size="28px" fixed-width style="color: #3f51b5; margin-right: 0.5em;"></ons-icon>
                     <ons-input id="profile-phone-number" type="tel"
                                pattern="((0[1-9]{1}[0-9]{9}|\+234[1-9]{1}[0-9]{9})|\+[1-9]{1}[0-9]{4,})" style="width: 75%;
                         caret-color: #3f51b5 !important; color: #3f51b5 !important;"
-                               placeholder="Phone Number" disable-auto-styling
+                               placeholder="Phone Number" modifier="material" float disable-auto-styling
                                data-parsley-pattern-message="incorrect phone number format. phone number must be in international format (starting with '+')"
                                data-parsley-type-message="incorrect phone number format. phone number must be in international format (starting with '+')"></ons-input>
                 </ons-col>
+                <ons-col width="15%"></ons-col>
             </ons-row>
 
         </form>
