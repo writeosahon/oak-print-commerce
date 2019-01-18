@@ -5876,6 +5876,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 toast.dataBind();
                 toast.show();
 
+                // display page loader while completing the "update profile" request
+                $('#profile-page .modal').css("display", "none");
             }
             finally {
                 // disable the "Update" button
