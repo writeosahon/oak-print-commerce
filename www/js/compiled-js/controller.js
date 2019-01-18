@@ -5621,16 +5621,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     utopiasoftware[utopiasoftware_app_namespace].controller.profilePageViewModel.profileFormValidated);
 
                 // listen for scroll event on the page to adjust the tooltips when page scrolls
-                $('#profile-page .content').on("scroll", function(){
-                    // place function execution in the event queue to be executed ASAP
-                    window.setTimeout(function(){
-                        // adjust the tooltips elements on the profile form
-                        $("#profile-page #profile-form ons-input").each(function(index, element){
-                            document.getElementById('profile-form').ej2_instances[index].refresh(element);
-                        });
-
-                    }, 0);
-                });
+                $('#profile-page .content').on("scroll", utopiasoftware[utopiasoftware_app_namespace].
+                    controller.profilePageViewModel.scrollAndResizeEventListener);
 
 
                 try{
@@ -5680,6 +5672,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // update cart count
             $('#profile-page .cart-count').html(utopiasoftware[utopiasoftware_app_namespace].model.cartCount);
 
+            //add listener for when the window is resized by virtue of the device keyboard being shown
+            window.addEventListener("resize", utopiasoftware[utopiasoftware_app_namespace].controller.
+                profilePageViewModel.scrollAndResizeEventListener, false);
+
         },
 
         /**
@@ -5695,6 +5691,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             // reset all form validator objects
             utopiasoftware[utopiasoftware_app_namespace].controller.profilePageViewModel.profileFormValidator.reset();
+
+            //remove listener for when the window is resized by virtue of the device keyboard being shown
+            window.removeEventListener("resize", utopiasoftware[utopiasoftware_app_namespace].controller.
+                profilePageViewModel.scrollAndResizeEventListener, false);
         },
 
         /**
@@ -5724,6 +5724,24 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             $('#app-main-navigator').get(0).popPage();
         },
 
+        /**
+         * method is triggered when the profile page is scrolled or the display window is resized by
+         * virtue of the device keyboard being displayed
+         *
+         * @returns {Promise<void>}
+         */
+        async scrollAndResizeEventListener(){
+            // place function execution in the event queue to be executed ASAP
+            window.setTimeout(function(){
+                // adjust the tooltips elements on the profile form
+                $("#profile-page #profile-form ons-input").each(function(index, element){
+                    document.getElementById('profile-form').ej2_instances[index].refresh(element);
+                });
+
+            }, 0);
+
+        },
+
 
         /**
          * method is triggered when the user clicks the "Update" button
@@ -5741,7 +5759,136 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          *
          * @returns {Promise<void>}
          */
-        async profileFormValidated(){},
+        async profileFormValidated(){
+
+            // check if there is Internet connection
+            if(navigator.connection.type === Connection.NONE){ // there is no Internet connection
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast to show that an error
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.timeOut = 3000;
+                toast.content = `Connect to the Internet to update your profile`;
+                toast.dataBind();
+                toast.show();
+
+                return; // exit method
+            }
+
+            // disable the "Update" button
+            $('#profile-page #profile-update').attr("disabled", true);
+            // show the spinner on the 'Update' button to indicate process is ongoing
+            $('#profile-page #profile-update').get(0).ej2_instances[0].cssClass = '';
+            $('#profile-page #profile-update').get(0).ej2_instances[0].dataBind();
+            $('#profile-page #profile-update').get(0).ej2_instances[0].start();
+
+            // display page loader while completing the "update profile" request
+            $('#profile-page .modal').css("display", "table");
+
+            var promisesArray = []; // holds the array for the promises used to complete the process
+
+            var promisesArrayPromise = null; // holds the promise gotten from the promisesArray
+
+            try{
+                // load the use details from the encrypted app database
+                let userDetails = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                loadData("user-details",
+                    utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
+
+                console.log("USER DETAILS BEFORE PROFILE UPDATE", userDetails);
+
+                // temporary hold the user id and password
+                let userId = userDetails.id;
+                let userPassword = userDetails.password;
+
+                // use the input from the profile form to update the user details
+                userDetails.first_name = $('#profile-page #profile-form #profile-first-name').val().trim();
+                userDetails.last_name = $('#profile-page #profile-form #profile-last-name').val().trim();
+
+                // check if user details has the billing property
+                if(!userDetails.billing){ // no billing property, so create it
+                    // create the billing property
+                    userDetails.billing = {};
+                }
+
+                userDetails.billing.phone = $('#profile-page #profile-form #profile-phone-number').val().trim();
+
+                // delete the properties not needed for the update from the userDetails object
+                delete userDetails.id;
+                delete userDetails.password;
+
+                // now send the user profile update request to the remote server
+                promisesArray.push(Promise.resolve($.ajax(
+                    {
+                        url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + `/wp-json/wc/v3/customers/${userId}`,
+                        type: "put",
+                        contentType: "application/json",
+                        beforeSend: function(jqxhr) {
+                            jqxhr.setRequestHeader("Authorization", "Basic " +
+                                utopiasoftware[utopiasoftware_app_namespace].accessor);
+                        },
+                        dataType: "json",
+                        timeout: 240000, // wait for 4 minutes before timeout of request
+                        processData: false,
+                        data: JSON.stringify(userDetails)
+                    }
+                )));
+
+                // get the promise created from the promisesArray
+                promisesArrayPromise = Promise.all(promisesArray);
+
+                // get the result from the promisesArray
+                let resultsArray = await promisesArrayPromise;
+
+                // add the user's password to the user details retrieved from the server
+                resultsArray[0].password = userPassword;
+
+                // save the created user details data to ENCRYPTED app database as cached data
+                await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
+                    {_id: "user-details", docType: "USER_DETAILS", userDetails: resultsArray[0]},
+                    utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase);
+
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast message
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'success-ej2-toast';
+                toast.timeOut = 3000;
+                toast.content = `User profile updated`;
+                toast.dataBind();
+                toast.show();
+
+            }
+            catch (err) {
+                err = JSON.parse(err.responseText);
+
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast message
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.timeOut = 3000;
+                toast.content = `User profile update failed. ${err.message || ""}`;
+                toast.dataBind();
+                toast.show();
+
+            }
+            finally {
+                // disable the "Update" button
+                $('#profile-page #profile-update').removeAttr("disabled");
+                // show the spinner on the 'Update' button to indicate process is ongoing
+                $('#profile-page #profile-update').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
+                $('#profile-page #profile-update').get(0).ej2_instances[0].dataBind();
+                $('#profile-page #profile-update').get(0).ej2_instances[0].stop();
+            }
+
+            return promisesArrayPromise; // return the resolved promisesArray
+
+        },
 
         /**
          * method is used to load the current user profile data into the profile form
