@@ -5926,5 +5926,381 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             }
         }
 
+    },
+
+    /**
+     * this is the view-model/controller for the Change Password page
+     */
+    changePasswordPageViewModel: {
+
+        /**
+         * used to hold the parsley form validation object for the change password form
+         */
+        changePasswordFormValidator: null,
+
+        /**
+         * event is triggered when page is initialised
+         */
+        pageInit: function(event){
+
+            var $thisPage = $(event.target); // get the current page shown
+
+            // call the function used to initialise the app page if the app is fully loaded
+            loadPageOnAppReady();
+
+            //function is used to initialise the page if the app is fully ready for execution
+            async function loadPageOnAppReady() {
+                // check to see if onsen is ready and if all app loading has been completed
+                if (!ons.isReady() || utopiasoftware[utopiasoftware_app_namespace].model.isAppReady === false) {
+                    setTimeout(loadPageOnAppReady, 500); // call this function again after half a second
+                    return;
+                }
+
+                // listen for the back button event
+                $('#app-main-navigator').get(0).topPage.onDeviceBackButton =
+                    utopiasoftware[utopiasoftware_app_namespace].controller.
+                        changePasswordPageViewModel.backButtonClicked;
+
+                // initialise the changePassword form validation
+                utopiasoftware[utopiasoftware_app_namespace].controller.changePasswordPageViewModel.changePasswordFormValidator =
+                    $('#change-password-page #change-password-form').parsley();
+
+                // listen for changePassword form field validation failure event
+                utopiasoftware[utopiasoftware_app_namespace].controller.changePasswordPageViewModel.
+                changePasswordFormValidator.on('field:error', function(fieldInstance) {
+                    // get the element that triggered the field validation error and use it to display tooltip
+                    // display tooltip
+                    let tooltip = $('#change-password-page #change-password-form').get(0).
+                        ej2_instances[fieldInstance.$element.get(0)._utopiasoftware_validator_index];
+                    tooltip.content = fieldInstance.getErrorsMessages()[0];
+                    tooltip.dataBind();
+                    tooltip.open(fieldInstance.$element.get(0));
+                });
+
+                // listen for changePassword form field validation success event
+                utopiasoftware[utopiasoftware_app_namespace].controller.changePasswordPageViewModel
+                    .changePasswordFormValidator.on('field:success', function(fieldInstance) {
+                    // hide tooltip from element
+                    let tooltip = $('#change-password-page #change-password-form').get(0).
+                        ej2_instances[fieldInstance.$element.get(0)._utopiasoftware_validator_index];
+                    tooltip.close();
+                });
+
+                // listen for profile form validation success
+                utopiasoftware[utopiasoftware_app_namespace].controller.changePasswordPageViewModel.
+                changePasswordFormValidator.on('form:success',
+                    utopiasoftware[utopiasoftware_app_namespace].controller.
+                        changePasswordPageViewModel.changePasswordFormValidated);
+
+                // listen for scroll event on the page to adjust the tooltips when page scrolls
+                $('#change-password-page .content').on("scroll", utopiasoftware[utopiasoftware_app_namespace].
+                    controller.changePasswordPageViewModel.scrollAndResizeEventListener);
+
+
+                try{
+
+                    // create the tooltip objects for the changePassword form
+                    $('#change-password-form ons-input', $thisPage).each(function(index, element){
+                        element._utopiasoftware_validator_index = index;
+                        // create the tool tips for every element being validated, but attach it to the html form object
+                        new ej.popups.Tooltip({
+                            cssClass: 'utopiasoftware-ej2-validation-tooltip',
+                            position: 'TopLeft',
+                            opensOn: 'Custom'
+                        }).appendTo($('#change-password-page #change-password-form').get(0));
+                    });
+
+                    // create the "Cancel" button
+                    new ej.buttons.Button({
+                        //iconCss: "zmdi zmdi-shopping-cart-add utopiasoftware-icon-zoom-one-point-two",
+                        //iconPosition: "Left"
+                    }).appendTo('#change-password-cancel');
+
+                    // create the "Update" button
+                    new ej.splitbuttons.ProgressButton({
+                        cssClass: 'e-hide-spinner',
+                        duration: 10 * 60 * 60 * 1000 // set spinner/progress duration for 10 hr
+                    }).appendTo('#change-password-update');
+
+                    // display the user's changePassword on the profile form
+                    await utopiasoftware[utopiasoftware_app_namespace].controller.
+                    changePasswordPageViewModel.displayProfileContent();
+                }
+                catch(err){
+                    console.log("CHANGE PASSWORD ERROR", err);
+                }
+                finally {
+
+                }
+            }
+
+        },
+
+        /**
+         * method is triggered when page is shown
+         */
+        pageShow: function(){
+            window.SoftInputMode.set('adjustResize');
+
+            // update cart count
+            $('#change-password-page .cart-count').html(utopiasoftware[utopiasoftware_app_namespace].model.cartCount);
+
+            //add listener for when the window is resized by virtue of the device keyboard being shown
+            window.addEventListener("resize", utopiasoftware[utopiasoftware_app_namespace].controller.
+                changePasswordPageViewModel.scrollAndResizeEventListener, false);
+
+        },
+
+        /**
+         * method is triggered when page is hidden
+         */
+        pageHide: async function(){
+
+            // hide the tooltips on the changePassword form
+            $('#change-password-page #change-password-form').get(0).ej2_instances.forEach(function(tooltipArrayElem){
+                // hide the tooltip
+                tooltipArrayElem.close();
+            });
+
+            // reset all form validator objects
+            utopiasoftware[utopiasoftware_app_namespace].controller.changePasswordPageViewModel.
+            changePasswordFormValidator.reset();
+
+            //remove listener for when the window is resized by virtue of the device keyboard being shown
+            window.removeEventListener("resize", utopiasoftware[utopiasoftware_app_namespace].controller.
+                changePasswordPageViewModel.scrollAndResizeEventListener, false);
+        },
+
+        /**
+         * method is triggered when page is destroyed
+         */
+        pageDestroy: function(){
+
+            // destroy the tooltips on the changePassword form
+            $('#change-password-page #change-password-form').get(0).ej2_instances.forEach(function(tooltipArrayElem){
+                // destroy the tooltip
+                tooltipArrayElem.destroy();
+            });
+
+            // destroy the "Cancel" and "Update" buttons
+            $('#change-password-page #change-password-cancel').get(0).ej2_instances[0].destroy();
+            $('#change-password-page #change-password-update').get(0).ej2_instances[0].destroy();
+
+            // destroy all form validator objects
+            utopiasoftware[utopiasoftware_app_namespace].controller.changePasswordPageViewModel.
+            changePasswordFormValidator.destroy();
+        },
+
+        /**
+         * method is triggered when the device back button is clicked OR a similar action is triggered
+         */
+        backButtonClicked(){
+            // get back to the previous page on the app-main navigator stack
+            $('#app-main-navigator').get(0).popPage();
+        },
+
+        /**
+         * method is triggered when the profile page is scrolled or the display window is resized by
+         * virtue of the device keyboard being displayed
+         *
+         * @returns {Promise<void>}
+         */
+        async scrollAndResizeEventListener(){
+            // place function execution in the event queue to be executed ASAP
+            window.setTimeout(function(){
+                // adjust the tooltips elements on the changePassword form
+                $("#change-password-page #change-password-form ons-input").each(function(index, element){
+                    document.getElementById('change-password-form').ej2_instances[index].refresh(element);
+                });
+
+            }, 0);
+
+        },
+
+
+        /**
+         * method is triggered when the user clicks the "Update" button
+         *
+         * @returns {Promise<void>}
+         */
+        async updateButtonClicked(){
+
+            // run the validation method for the profile form
+            utopiasoftware[utopiasoftware_app_namespace].controller.changePasswordPageViewModel.
+            changePasswordFormValidator.whenValidate();
+        },
+
+        /**
+         * method is triggered when the changePassword form is successfully validated
+         *
+         * @returns {Promise<void>}
+         */
+        async changePasswordFormValidated(){
+
+            // check if there is Internet connection
+            if(navigator.connection.type === Connection.NONE){ // there is no Internet connection
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast to show that an error
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.timeOut = 3000;
+                toast.content = `Connect to the Internet to change password`;
+                toast.dataBind();
+                toast.show();
+
+                return; // exit method
+            }
+
+            // disable the "Update" button
+            $('#profile-page #profile-update').attr("disabled", true);
+            // show the spinner on the 'Update' button to indicate process is ongoing
+            $('#profile-page #profile-update').get(0).ej2_instances[0].cssClass = '';
+            $('#profile-page #profile-update').get(0).ej2_instances[0].dataBind();
+            $('#profile-page #profile-update').get(0).ej2_instances[0].start();
+
+            // display page loader while completing the "update profile" request
+            $('#profile-page .modal').css("display", "table");
+
+            var promisesArray = []; // holds the array for the promises used to complete the process
+
+            var promisesArrayPromise = null; // holds the promise gotten from the promisesArray
+
+            try{
+                // load the use details from the encrypted app database
+                let userDetails = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                loadData("user-details",
+                    utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
+
+                console.log("USER DETAILS BEFORE PROFILE UPDATE", userDetails);
+
+                // temporary hold the user id and password
+                let userId = userDetails.id;
+                let userPassword = userDetails.password;
+
+                // use the input from the profile form to update the user details
+                userDetails.first_name = $('#profile-page #profile-form #profile-first-name').val().trim();
+                userDetails.last_name = $('#profile-page #profile-form #profile-last-name').val().trim();
+
+                // check if user details has the billing property
+                if(!userDetails.billing){ // no billing property, so create it
+                    // create the billing property
+                    userDetails.billing = {};
+                }
+
+                // set the billing email to the email of the user
+                userDetails.billing.email = $('#profile-page #profile-form #profile-email').val().trim();
+                // update the user phone number
+                userDetails.billing.phone = $('#profile-page #profile-form #profile-phone-number').val().trim();
+
+                // delete the properties not needed for the update from the userDetails object
+                delete userDetails.id;
+                delete userDetails.password;
+
+                // now send the user profile update request to the remote server
+                promisesArray.push(Promise.resolve($.ajax(
+                    {
+                        url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + `/wp-json/wc/v3/customers/${userId}`,
+                        type: "put",
+                        contentType: "application/json",
+                        beforeSend: function(jqxhr) {
+                            jqxhr.setRequestHeader("Authorization", "Basic " +
+                                utopiasoftware[utopiasoftware_app_namespace].accessor);
+                        },
+                        dataType: "json",
+                        timeout: 240000, // wait for 4 minutes before timeout of request
+                        processData: false,
+                        data: JSON.stringify(userDetails)
+                    }
+                )));
+
+                // get the promise created from the promisesArray
+                promisesArrayPromise = Promise.all(promisesArray);
+
+                // get the result from the promisesArray
+                let resultsArray = await promisesArrayPromise;
+
+                // add the user's password to the user details retrieved from the server
+                resultsArray[0].password = userPassword;
+
+                // save the created user details data to ENCRYPTED app database as cached data
+                await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
+                    {_id: "user-details", docType: "USER_DETAILS", userDetails: resultsArray[0]},
+                    utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase);
+
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast message
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'success-ej2-toast';
+                toast.timeOut = 3000;
+                toast.content = `User profile updated`;
+                toast.dataBind();
+                toast.show();
+
+            }
+            catch (err) {
+                err = JSON.parse(err.responseText);
+
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast message
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.timeOut = 3000;
+                toast.content = `User profile update failed. ${err.message || ""}`;
+                toast.dataBind();
+                toast.show();
+            }
+            finally {
+                // disable the "Update" button
+                $('#profile-page #profile-update').removeAttr("disabled");
+                // show the spinner on the 'Update' button to indicate process is ongoing
+                $('#profile-page #profile-update').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
+                $('#profile-page #profile-update').get(0).ej2_instances[0].dataBind();
+                $('#profile-page #profile-update').get(0).ej2_instances[0].stop();
+
+                // display page loader while completing the "update profile" request
+                $('#profile-page .modal').css("display", "none");
+            }
+
+            return promisesArrayPromise; // return the resolved promisesArray
+
+        },
+
+        /**
+         * method is used to load the current user profile data into the profile form
+         * @returns {Promise<void>}
+         */
+        async displayProfileContent(){
+
+            try{
+                // load the user profile details from the app database
+                let userDetails = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                loadData("user-details",
+                    utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
+
+                console.log("USER DETAILS", userDetails);
+
+                // display the user profile data in the profile form
+                $('#profile-page #profile-form #profile-email').val(userDetails.email);
+                $('#profile-page #profile-form #profile-first-name').val(userDetails.first_name || "");
+                $('#profile-page #profile-form #profile-last-name').val(userDetails.last_name || "");
+                $('#profile-page #profile-form #profile-phone-number').
+                val(userDetails.billing && userDetails.billing.phone ? userDetails.billing.phone : "");
+            }
+            finally {
+                // hide page preloader
+                $('#profile-page .page-preloader').css("display", "none");
+                // hide page modal loader
+                $('#profile-page .modal').css("display", "none");
+                // enable the "Update" button
+                $('#profile-page #profile-update').removeAttr("disabled");
+            }
+        }
+
     }
 };
