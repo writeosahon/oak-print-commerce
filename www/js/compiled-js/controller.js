@@ -5878,9 +5878,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 toast.content = `User profile update failed. ${err.message || ""}`;
                 toast.dataBind();
                 toast.show();
-
-                // display page loader while completing the "update profile" request
-                $('#profile-page .modal').css("display", "none");
             }
             finally {
                 // disable the "Update" button
@@ -5889,6 +5886,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $('#profile-page #profile-update').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
                 $('#profile-page #profile-update').get(0).ej2_instances[0].dataBind();
                 $('#profile-page #profile-update').get(0).ej2_instances[0].stop();
+
+                // display page loader while completing the "update profile" request
+                $('#profile-page .modal').css("display", "none");
             }
 
             return promisesArrayPromise; // return the resolved promisesArray
