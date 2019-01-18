@@ -5813,6 +5813,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     userDetails.billing = {};
                 }
 
+                // set the billing email to the email of the user
+                userDetails.billing.email = $('#profile-page #profile-form #profile-email').val().trim();
+                // update the user phone number
                 userDetails.billing.phone = $('#profile-page #profile-form #profile-phone-number').val().trim();
 
                 // delete the properties not needed for the update from the userDetails object
