@@ -6013,6 +6013,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         }).appendTo($('#change-password-page #change-password-form').get(0));
                     });
 
+                    // create the button for switching password visibility on the signup page
+                    new ej.buttons.Button({
+                        isToggle: true,
+                        cssClass: 'e-flat e-small e-round',
+                        iconCss: "zmdi zmdi-eye",
+                        iconPosition: "Left"
+                    }).appendTo($('#change-password-view-button', $thisPage).get(0));
+
                     // create the "Cancel" button
                     new ej.buttons.Button({
                         //iconCss: "zmdi zmdi-shopping-cart-add utopiasoftware-icon-zoom-one-point-two",
