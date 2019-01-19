@@ -6234,8 +6234,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     ));
                 }
                 catch(err){ // if an error occurs, it meanns the inputed current password DOES NOT MATCH the current user password
-                    // throw an error because user current password does not match
-                    throw JSON.stringify({responseText: {message: "current password is incorrect."}});
+                    // throw an error object because user current password does not match
+                    throw {responseText: JSON.stringify({message: "current password is incorrect."})};
                 }
 
                 // temporary hold the user id
