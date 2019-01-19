@@ -11,7 +11,7 @@
             </ons-toolbar-button>
         </div>
         <div class="center title-bar" style="background-color: #ffffff !important; color: #3f51b5 !important; text-align: center;">
-            User Profile
+            Billing Information
         </div>
 
         <div class="right" style="background-color: #ffffff !important; color: #3f51b5 !important;">
@@ -45,29 +45,18 @@
               data-parsley-excluded="ons-input[type=button], ons-input[type=submit],
                               ons-input[type=reset], ons-input[type=hidden], [disabled], :hidden">
 
-            <ons-row vertical-align="bottom" style="margin-top: 1.5em; margin-bottom: 1.5em; text-align: center;">
-                <ons-col width="5%"></ons-col>
-                <ons-col width="80%" style="border: 2px solid lightgray; border-radius: 6px;
-                background-color: lightgray !important; color: #3f51b5; font-size: 1.3em; padding-top:0.5em;">
-                    <ons-icon icon="md-email" size="28px" fixed-width style="color: #3f51b5; margin-right: 0.5em;"></ons-icon>
-                    <ons-input id="profile-email" type="email" style="width: 75%;
-                        caret-color: #3f51b5 !important; color: #3f51b5 !important;" readonly
-                               placeholder="Email" modifier="material transparent" float disable-auto-styling></ons-input>
-                </ons-col>
-                <ons-col width="15%"></ons-col>
-            </ons-row>
 
-            <ons-row vertical-align="bottom" style="margin-bottom: 1.5em; text-align: center;">
+            <ons-row vertical-align="bottom" style="margin-top: 1.5em; margin-bottom: 1.5em; text-align: center;">
                 <ons-col width="5%"></ons-col>
                 <ons-col width="80%" style="border: 2px solid lightgray; border-radius: 6px; background-color: #ffffff;
                         color: #3f51b5;
                     font-size: 1.3em; padding-top:0.5em;">
                     <ons-icon icon="md-account" size="28px" fixed-width style="color: #3f51b5; margin-right: 0.5em;"></ons-icon>
-                    <ons-input id="profile-first-name" type="text"
+                    <ons-input id="billing-info-first-name" type="text"
                                pattern="[a-zA-Z]{1}[\w\s\-\.]*[a-zA-Z]{1}\s*" style="width: 75%;
                         caret-color: #3f51b5 !important; color: #3f51b5 !important;" required
                                placeholder="First Name" modifier="material" float disable-auto-styling
-                               data-parsley-required-message="your first name is required"
+                               data-parsley-required-message="first name is required"
                                data-parsley-pattern-message="incorrect first name. please check your spelling"></ons-input>
                 </ons-col>
                 <ons-col width="15%"></ons-col>
@@ -79,11 +68,11 @@
                         color: #3f51b5;
                     font-size: 1.3em; padding-top:0.5em;">
                     <ons-icon icon="md-account" size="28px" fixed-width style="color: #3f51b5; margin-right: 0.5em;"></ons-icon>
-                    <ons-input id="profile-last-name" type="text"
+                    <ons-input id="billing-info-last-name" type="text"
                                pattern="[a-zA-Z]{1}[\w\s\-\.]*[a-zA-Z]{1}\s*" style="width: 75%;
                         caret-color: #3f51b5 !important; color: #3f51b5 !important;" required
                                placeholder="Last Name" modifier="material" float disable-auto-styling
-                               data-parsley-required-message="your last name is required"
+                               data-parsley-required-message="last name is required"
                                data-parsley-pattern-message="incorrect last name. please check your spelling"></ons-input>
                 </ons-col>
                 <ons-col width="15%"></ons-col>
@@ -91,18 +80,13 @@
 
             <ons-row vertical-align="bottom" style="margin-bottom: 1.5em; text-align: center;">
                 <ons-col width="5%"></ons-col>
-                <ons-col width="80%" style="border: 2px solid lightgray; border-radius: 6px; background-color: #ffffff;
+                <ons-col width="40%" style="border: 2px solid lightgray; border-radius: 6px; background-color: #ffffff;
                         color: #3f51b5;
                     font-size: 1.3em; padding-top:0.5em;">
                     <ons-icon icon="md-phone" size="28px" fixed-width style="color: #3f51b5; margin-right: 0.5em;"></ons-icon>
-                    <ons-input id="profile-phone-number" type="tel"
-                               pattern="((0[1-9]{1}[0-9]{9}|\+234[1-9]{1}[0-9]{9})|\+[1-9]{1}[0-9]{4,})" style="width: 75%;
-                        caret-color: #3f51b5 !important; color: #3f51b5 !important;"
-                               placeholder="Phone Number" modifier="material" float disable-auto-styling
-                               data-parsley-pattern-message="incorrect phone number format. phone number must be in international format (starting with '+')"
-                               data-parsley-type-message="incorrect phone number format. phone number must be in international format (starting with '+')"></ons-input>
+                    <input id="billing-info-country" type="text">
                 </ons-col>
-                <ons-col width="15%"></ons-col>
+                <ons-col width="5%"></ons-col>
             </ons-row>
 
         </form>
