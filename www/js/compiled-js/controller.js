@@ -2544,6 +2544,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 tooltipArrayElem.destroy();
             });
 
+            // destroy the password visibility button
+            $('#login-page #signup-password-view-button').get(0).ej2_instances[0].destroy();
+
             // destroy all form validator objects
             utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.loginFormValidator.destroy();
             utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.signupFormValidator.destroy();
@@ -6098,6 +6101,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // destroy the "Cancel" and "Update" buttons
             $('#change-password-page #change-password-cancel').get(0).ej2_instances[0].destroy();
             $('#change-password-page #change-password-update').get(0).ej2_instances[0].destroy();
+
+            // destroy the password visibility button
+            $('#change-password-page #change-password-view-button').get(0).ej2_instances[0].destroy();
 
             // destroy all form validator objects
             utopiasoftware[utopiasoftware_app_namespace].controller.changePasswordPageViewModel.
