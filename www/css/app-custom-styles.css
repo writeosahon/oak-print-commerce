@@ -522,6 +522,21 @@
 }
 /** STYLE FOR PROFILE PAGE ENDS **/
 
+/** STYLE FOR CHANGE PASSWORD PAGE BEGINS **/
+#change-password-page .page__background,
+#change-password-page .page--material__background {
+    background-color: #ffffff;
+}
+#change-password-page ons-input input {
+    /*font-size: 0.7em;*/
+    height: 1.2em;
+    line-height: 1.2em;
+    color: #3f51b5 !important;
+    caret-color: #3f51b5;
+    background-image: none;
+}
+/** STYLE FOR CHANGE PASSWORD PAGE ENDS **/
+
 /** STYLE FOR LOGIN PAGE BEGINS **/
 #login-page .page__background,
 #login-page .page--material__background {

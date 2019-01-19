@@ -3424,9 +3424,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         async displayPageContent(productsArray, appendContent = true, overwriteContent = true){
-            for(let index = 0; index < 4; index++){ // REMOVE THIS LATER JUST FOR TEST TODO
-                productsArray.push(...productsArray);
-            }
+
             var displayCompletedPromise = new Promise(function(resolve, reject){
 
                 let productsContent = ""; // holds the contents for the products
@@ -5815,8 +5813,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 // set the billing email to the email of the user
                 userDetails.billing.email = $('#profile-page #profile-form #profile-email').val().trim();
+
                 // update the user phone number
                 userDetails.billing.phone = $('#profile-page #profile-form #profile-phone-number').val().trim();
+                if(userDetails.billing.phone.startsWith("0")){ // phone number starts with zero
+                    // replace the starting zero with '+234'
+                    userDetails.billing.phone = userDetails.billing.phone.replace(/0/i, "+234");
+                }
 
                 // delete the properties not needed for the update from the userDetails object
                 delete userDetails.id;
@@ -5880,14 +5883,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 toast.show();
             }
             finally {
-                // disable the "Update" button
+                // enable the "Update" button
                 $('#profile-page #profile-update').removeAttr("disabled");
-                // show the spinner on the 'Update' button to indicate process is ongoing
+                // hide the spinner on the 'Update' button to indicate process is ongoing
                 $('#profile-page #profile-update').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
                 $('#profile-page #profile-update').get(0).ej2_instances[0].dataBind();
                 $('#profile-page #profile-update').get(0).ej2_instances[0].stop();
 
-                // display page loader while completing the "update profile" request
+                // hide page loader
                 $('#profile-page .modal').css("display", "none");
             }
 
@@ -6022,15 +6025,17 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         duration: 10 * 60 * 60 * 1000 // set spinner/progress duration for 10 hr
                     }).appendTo('#change-password-update');
 
-                    // display the user's changePassword on the profile form
-                    await utopiasoftware[utopiasoftware_app_namespace].controller.
-                    changePasswordPageViewModel.displayProfileContent();
                 }
                 catch(err){
                     console.log("CHANGE PASSWORD ERROR", err);
                 }
                 finally {
-
+                    // hide the page preloader
+                    $('#change-password-page .page-preloader').css("display", "none");
+                    // hide page loader
+                    $('#change-password-page .modal').css("display", "none");
+                    // enable the update button
+                    $('#change-password-page #change-password-update').removeAttr("disabled");
                 }
             }
 
@@ -6100,6 +6105,34 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         },
 
         /**
+         * method is triggered when the Password Visibility button is clicked
+         *
+         * @param buttonElement {HTMLElement} button element being clicked
+         *
+         * @param inputId {String} the id for the input whose content visibility is being changed
+         */
+        passwordVisibilityButtonClicked(buttonElement, inputId){
+
+            // check the state of the button is it 'active' or not
+            if(! $(buttonElement).hasClass('e-active')){ // button is not active
+                // change the type for the input field
+                $(document.getElementById(inputId)).attr("type", "text");
+                // change the icon on the button to indicate the change in visibility
+                let ej2Button = buttonElement.ej2_instances[0];
+                ej2Button.iconCss = 'zmdi zmdi-eye-off';
+                ej2Button.dataBind();
+            }
+            else{ // button is active
+                // change the type for the input field
+                $(document.getElementById(inputId)).attr("type", "password");
+                // change the icon on the button to indicate the change in visibility
+                let ej2Button = buttonElement.ej2_instances[0];
+                ej2Button.iconCss = 'zmdi zmdi-eye';
+                ej2Button.dataBind();
+            }
+        },
+
+        /**
          * method is triggered when the profile page is scrolled or the display window is resized by
          * virtue of the device keyboard being displayed
          *
@@ -6154,14 +6187,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             }
 
             // disable the "Update" button
-            $('#profile-page #profile-update').attr("disabled", true);
+            $('#change-password-page #change-password-update').attr("disabled", true);
             // show the spinner on the 'Update' button to indicate process is ongoing
-            $('#profile-page #profile-update').get(0).ej2_instances[0].cssClass = '';
-            $('#profile-page #profile-update').get(0).ej2_instances[0].dataBind();
-            $('#profile-page #profile-update').get(0).ej2_instances[0].start();
+            $('#change-password-page #change-password-update').get(0).ej2_instances[0].cssClass = '';
+            $('#change-password-page #change-password-update').get(0).ej2_instances[0].dataBind();
+            $('#change-password-page #change-password-update').get(0).ej2_instances[0].start();
 
             // display page loader while completing the "update profile" request
-            $('#profile-page .modal').css("display", "table");
+            $('#change-password-page .modal').css("display", "table");
 
             var promisesArray = []; // holds the array for the promises used to complete the process
 
@@ -6173,32 +6206,37 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 loadData("user-details",
                     utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
 
-                console.log("USER DETAILS BEFORE PROFILE UPDATE", userDetails);
+                console.log("USER DETAILS BEFORE PASSWORD CHANGE", userDetails);
 
-                // temporary hold the user id and password
-                let userId = userDetails.id;
-                let userPassword = userDetails.password;
-
-                // use the input from the profile form to update the user details
-                userDetails.first_name = $('#profile-page #profile-form #profile-first-name').val().trim();
-                userDetails.last_name = $('#profile-page #profile-form #profile-last-name').val().trim();
-
-                // check if user details has the billing property
-                if(!userDetails.billing){ // no billing property, so create it
-                    // create the billing property
-                    userDetails.billing = {};
+                // check if the current password input matches that in the current user password
+                try{
+                    await Promise.resolve($.ajax(
+                        {
+                            url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + "/wp-json",
+                            type: "get",
+                            // contentType: "application/json",
+                            beforeSend: function(jqxhr) {
+                                jqxhr.setRequestHeader("Authorization", "Basic " +
+                                    Base64.encode(`${userDetails.email}:${jQuery('#change-password-current-password').val().trim()}`));
+                            },
+                            dataType: "json",
+                            timeout: 240000, // wait for 4 minutes before timeout of request
+                            processData: false
+                        }
+                    ));
+                }
+                catch(err){ // if an error occurs, it meanns the inputed current password DOES NOT MATCH the current user password
+                    // throw an error because user current password does not match
+                    throw JSON.stringify({responseText: {message: "current password is incorrect."}});
                 }
 
-                // set the billing email to the email of the user
-                userDetails.billing.email = $('#profile-page #profile-form #profile-email').val().trim();
-                // update the user phone number
-                userDetails.billing.phone = $('#profile-page #profile-form #profile-phone-number').val().trim();
+                // temporary hold the user id
+                let userId = userDetails.id;
 
-                // delete the properties not needed for the update from the userDetails object
-                delete userDetails.id;
-                delete userDetails.password;
+                // use the new password input to change/update the user password
+                userDetails.password = $('#change-password-page #change-password-form #change-password-new-password').val().trim();
 
-                // now send the user profile update request to the remote server
+                // now send the user profile/password change request to the remote server
                 promisesArray.push(Promise.resolve($.ajax(
                     {
                         url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + `/wp-json/wc/v3/customers/${userId}`,
@@ -6221,8 +6259,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // get the result from the promisesArray
                 let resultsArray = await promisesArrayPromise;
 
-                // add the user's password to the user details retrieved from the server
-                resultsArray[0].password = userPassword;
+                // add the user's new password to the user details retrieved from the server
+                resultsArray[0].password =
+                    $('#change-password-page #change-password-form #change-password-new-password').val().trim();
 
                 // save the created user details data to ENCRYPTED app database as cached data
                 await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
@@ -6236,7 +6275,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 let toast = $('.timed-page-toast').get(0).ej2_instances[0];
                 toast.cssClass = 'success-ej2-toast';
                 toast.timeOut = 3000;
-                toast.content = `User profile updated`;
+                toast.content = `User password changed`;
                 toast.dataBind();
                 toast.show();
 
@@ -6251,55 +6290,23 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 let toast = $('.timed-page-toast').get(0).ej2_instances[0];
                 toast.cssClass = 'error-ej2-toast';
                 toast.timeOut = 3000;
-                toast.content = `User profile update failed. ${err.message || ""}`;
+                toast.content = `User password change failed. ${err.message || ""}`;
                 toast.dataBind();
                 toast.show();
             }
             finally {
-                // disable the "Update" button
-                $('#profile-page #profile-update').removeAttr("disabled");
-                // show the spinner on the 'Update' button to indicate process is ongoing
-                $('#profile-page #profile-update').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
-                $('#profile-page #profile-update').get(0).ej2_instances[0].dataBind();
-                $('#profile-page #profile-update').get(0).ej2_instances[0].stop();
+                // enable the "Update" button
+                $('#change-password-page #change-password-update').removeAttr("disabled");
+                // hide the spinner on the 'Update' button to indicate process is ongoing
+                $('#change-password-page #change-password-update').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
+                $('#change-password-page #change-password-update').get(0).ej2_instances[0].dataBind();
+                $('#change-password-page #change-password-update').get(0).ej2_instances[0].stop();
 
-                // display page loader while completing the "update profile" request
-                $('#profile-page .modal').css("display", "none");
+                // hide page loader
+                $('#change-password-page .modal').css("display", "none");
             }
 
             return promisesArrayPromise; // return the resolved promisesArray
-
-        },
-
-        /**
-         * method is used to load the current user profile data into the profile form
-         * @returns {Promise<void>}
-         */
-        async displayProfileContent(){
-
-            try{
-                // load the user profile details from the app database
-                let userDetails = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
-                loadData("user-details",
-                    utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
-
-                console.log("USER DETAILS", userDetails);
-
-                // display the user profile data in the profile form
-                $('#profile-page #profile-form #profile-email').val(userDetails.email);
-                $('#profile-page #profile-form #profile-first-name').val(userDetails.first_name || "");
-                $('#profile-page #profile-form #profile-last-name').val(userDetails.last_name || "");
-                $('#profile-page #profile-form #profile-phone-number').
-                val(userDetails.billing && userDetails.billing.phone ? userDetails.billing.phone : "");
-            }
-            finally {
-                // hide page preloader
-                $('#profile-page .page-preloader').css("display", "none");
-                // hide page modal loader
-                $('#profile-page .modal').css("display", "none");
-                // enable the "Update" button
-                $('#profile-page #profile-update').removeAttr("disabled");
-            }
         }
 
     }
