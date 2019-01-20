@@ -11,7 +11,7 @@
             </ons-toolbar-button>
         </div>
         <div class="center title-bar" style="background-color: #ffffff !important; color: #3f51b5 !important; text-align: center;">
-            Billing Information
+            Billing Address
         </div>
 
         <div class="right" style="background-color: #ffffff !important; color: #3f51b5 !important;">
@@ -41,7 +41,7 @@
         <ons-progress-bar class="page-preloader" indeterminate modifier="default-page-preloader"
                           style="position: fixed; z-index: 2; width: 100%; display: block;"></ons-progress-bar>
 
-        <form id="profile-form" autocomplete="off" data-parsley-inputs="ons-input,textarea,select"
+        <form id="billing-info-form" autocomplete="off" data-parsley-inputs="ons-input,textarea,select"
               data-parsley-excluded="ons-input[type=button], ons-input[type=submit],
                               ons-input[type=reset], ons-input[type=hidden], [disabled], :hidden">
 
@@ -51,13 +51,14 @@
                 <ons-col width="80%" style="border: 2px solid lightgray; border-radius: 6px; background-color: #ffffff;
                         color: #3f51b5;
                     font-size: 1.3em; padding-top:0.5em;">
-                    <ons-icon icon="md-account" size="28px" fixed-width style="color: #3f51b5; margin-right: 0.5em;"></ons-icon>
-                    <ons-input id="billing-info-first-name" type="text"
-                               pattern="[a-zA-Z]{1}[\w\s\-\.]*[a-zA-Z]{1}\s*" style="width: 75%;
+                    <label id="billing-info-address-1-label" class="address-label" for="billing-info-address-1">Address 1</label>
+                    <ons-icon icon="md-city-alt" size="28px" fixed-width style="color: #3f51b5; margin-right: 0.5em;"></ons-icon>
+                    <textareaa id="billing-info-address-1" class="textarea textarea--transparent" style="width: 75%;
                         caret-color: #3f51b5 !important; color: #3f51b5 !important;" required
-                               placeholder="First Name" modifier="material" float disable-auto-styling
-                               data-parsley-required-message="first name is required"
-                               data-parsley-pattern-message="incorrect first name. please check your spelling"></ons-input>
+                               placeholder="Address" rows="2"
+                               data-parsley-minwords="2"
+                               data-parsley-required-message="address is required"
+                               data-parsley-minwords-message="incorrect address. please check your spelling"></textareaa>
                 </ons-col>
                 <ons-col width="15%"></ons-col>
             </ons-row>

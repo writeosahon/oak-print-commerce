@@ -6334,7 +6334,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
     billingInfoPageViewModel: {
 
         /**
-         * used to hold the parsley form validation object for the profile form
+         * used to hold the parsley form validation object for the billing address form
          */
         billingInfoFormValidator: null,
 

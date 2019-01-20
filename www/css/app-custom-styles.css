@@ -599,3 +599,18 @@
     border-width: 0;
 }
 /** STYLE FOR LOGIN PAGE ENDS **/
+
+/** STYLE FOR BILLING INFO PAGE BEGINS **/
+#billing-info-page .page__background,
+#billing-info-page .page--material__background {
+    background-color: #ffffff;
+}
+#billing-info-page .address-label { /** used to style the label for the address text area **/
+    color: #3F51B5;
+    font-size: 15px;
+    line-height: 1;
+    display: block;
+    padding-right: 30px;
+}
+
+/** STYLE FOR BILLING INFO PAGE ENDS **/
