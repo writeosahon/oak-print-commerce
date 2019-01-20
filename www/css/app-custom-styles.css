@@ -610,7 +610,15 @@
     font-size: 15px;
     line-height: 1;
     display: block;
-    padding-right: 30px;
+    text-align: left;
+    padding-right: 65px;
 }
-
+#billing-info-page ons-input input {
+    /*font-size: 0.7em;*/
+    height: 1.2em;
+    line-height: 1.2em;
+    color: #3f51b5 !important;
+    caret-color: #3f51b5;
+    background-image: none;
+}
 /** STYLE FOR BILLING INFO PAGE ENDS **/

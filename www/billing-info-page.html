@@ -6,7 +6,7 @@
                  static modifier="noshadow">
         <div class="left" style="background-color: #ffffff !important; color: #3f51b5 !important;">
             <ons-toolbar-button style="background-color: #ffffff !important; color: #3f51b5 !important;"
-                 onclick="utopiasoftware[utopiasoftware_app_namespace].controller.profilePageViewModel.backButtonClicked();">
+                 onclick="utopiasoftware[utopiasoftware_app_namespace].controller.billingInfoPageViewModel.backButtonClicked();">
                 <ons-icon icon="md-long-arrow-left"></ons-icon>
             </ons-toolbar-button>
         </div>
@@ -31,7 +31,7 @@
 
     <div class="content">
         <!-- page modal loader -->
-        <div class="modal" style="z-index: 2; background-color: transparent; display: table;">
+        <div class="modal" style="z-index: 2; background-color: transparent; display: none;">
             <div class="modal__content">
                 <ons-progress-circular indeterminate modifier="pull-hook" style="transform: scale(1.5);"></ons-progress-circular>
             </div>
@@ -41,9 +41,9 @@
         <ons-progress-bar class="page-preloader" indeterminate modifier="default-page-preloader"
                           style="position: fixed; z-index: 2; width: 100%; display: block;"></ons-progress-bar>
 
-        <form id="billing-info-form" autocomplete="off" data-parsley-inputs="ons-input,textarea,select"
-              data-parsley-excluded="ons-input[type=button], ons-input[type=submit],
-                              ons-input[type=reset], ons-input[type=hidden], [disabled], :hidden">
+        <form id="billing-info-form" autocomplete="off" data-parsley-inputs="ons-input,input,textarea,select"
+              data-parsley-excluded="[type=button], [type=submit],
+                              [type=reset], [type=hidden], [disabled], :hidden">
 
 
             <ons-row vertical-align="bottom" style="margin-top: 1.5em; margin-bottom: 1.5em; text-align: center;">
@@ -53,12 +53,12 @@
                     font-size: 1.3em; padding-top:0.5em;">
                     <label id="billing-info-address-1-label" class="address-label" for="billing-info-address-1">Address 1</label>
                     <ons-icon icon="md-city-alt" size="28px" fixed-width style="color: #3f51b5; margin-right: 0.5em;"></ons-icon>
-                    <textareaa id="billing-info-address-1" class="textarea textarea--transparent" style="width: 75%;
+                    <textarea id="billing-info-address-1" class="textarea textarea--transparent" style="width: 75%;
                         caret-color: #3f51b5 !important; color: #3f51b5 !important;" required
-                               placeholder="Address" rows="2"
+                               placeholder="Address Line 1" rows="2"
                                data-parsley-minwords="2"
                                data-parsley-required-message="address is required"
-                               data-parsley-minwords-message="incorrect address. please check your spelling"></textareaa>
+                               data-parsley-minwords-message="incorrect address. please check your spelling"></textarea>
                 </ons-col>
                 <ons-col width="15%"></ons-col>
             </ons-row>
@@ -68,13 +68,29 @@
                 <ons-col width="80%" style="border: 2px solid lightgray; border-radius: 6px; background-color: #ffffff;
                         color: #3f51b5;
                     font-size: 1.3em; padding-top:0.5em;">
-                    <ons-icon icon="md-account" size="28px" fixed-width style="color: #3f51b5; margin-right: 0.5em;"></ons-icon>
-                    <ons-input id="billing-info-last-name" type="text"
-                               pattern="[a-zA-Z]{1}[\w\s\-\.]*[a-zA-Z]{1}\s*" style="width: 75%;
+                    <label id="billing-info-address-2-label" class="address-label" for="billing-info-address-2">Address 2</label>
+                    <ons-icon icon="md-city-alt" size="28px" fixed-width style="color: #3f51b5; margin-right: 0.5em;"></ons-icon>
+                    <textarea id="billing-info-address-2" class="textarea textarea--transparent" style="width: 75%;
                         caret-color: #3f51b5 !important; color: #3f51b5 !important;" required
-                               placeholder="Last Name" modifier="material" float disable-auto-styling
-                               data-parsley-required-message="last name is required"
-                               data-parsley-pattern-message="incorrect last name. please check your spelling"></ons-input>
+                              placeholder="Address Line 2 (Optional)" rows="2"
+                              data-parsley-minwords="2"
+                              data-parsley-minwords-message="incorrect address. please check your spelling"></textarea>
+                </ons-col>
+                <ons-col width="15%"></ons-col>
+            </ons-row>
+
+            <ons-row vertical-align="bottom" style="margin-bottom: 1.5em; text-align: center;">
+                <ons-col width="5%"></ons-col>
+                <ons-col width="80%" style="border: 2px solid lightgray; border-radius: 6px; background-color: #ffffff;
+                        color: #3f51b5;
+                    font-size: 1.3em; padding-top:0.5em;">
+                    <ons-icon icon="md-pin" size="28px" fixed-width style="color: #3f51b5; margin-right: 0.5em;"></ons-icon>
+                    <ons-input id="billing-info-city" type="text" style="width: 75%;
+                        caret-color: #3f51b5 !important; color: #3f51b5 !important;" required
+                               placeholder="City" modifier="material" float disable-auto-styling
+                               data-parsley-minwords="1"
+                               data-parsley-required-message="city is required"
+                               data-parsley-minwords-message="incorrect city. please check your spelling"></ons-input>
                 </ons-col>
                 <ons-col width="15%"></ons-col>
             </ons-row>
@@ -82,10 +98,12 @@
             <ons-row vertical-align="bottom" style="margin-bottom: 1.5em; text-align: center;">
                 <ons-col width="5%"></ons-col>
                 <ons-col width="40%" style="border: 2px solid lightgray; border-radius: 6px; background-color: #ffffff;
-                        color: #3f51b5;
-                    font-size: 1.3em; padding-top:0.5em;">
-                    <ons-icon icon="md-phone" size="28px" fixed-width style="color: #3f51b5; margin-right: 0.5em;"></ons-icon>
-                    <input id="billing-info-country" type="text">
+                        color: #3f51b5; padding-top:0.5em; padding-right: 2px">
+                    <input id="billing-info-country" type="text" style="width: 100%">
+                </ons-col>
+                <ons-col width="40%" style="border: 2px solid lightgray; border-radius: 6px; background-color: #ffffff;
+                        color: #3f51b5; padding-top:0.5em; padding-left: 3px">
+                    <input id="billing-info-state" type="text" style="width: 100%">
                 </ons-col>
                 <ons-col width="5%"></ons-col>
             </ons-row>
