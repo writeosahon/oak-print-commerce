@@ -623,7 +623,8 @@
 }
 /** style for the dropdown list */
 #billing-info-page .billing-info-dropdownlist.e-float-input.e-control-wrapper {
-    border-color: transparent;
+    border: 2px solid lightgray;
+    border-radius: 6px;
 }
 #billing-info-page .billing-info-dropdownlist.e-float-input.e-input-group:not(.e-float-icon-left) .e-float-line::before,
 #billing-info-page .billing-info-dropdownlist.e-float-input.e-input-group:not(.e-float-icon-left) .e-float-line::after,
