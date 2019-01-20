@@ -818,11 +818,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.
                             newProductsCarousel.append($(columnContent));
                         }
-                        $('#home-page #home-latest-design-block').css("opacity", "1"); // show the "Products" segment
+                        // $('#home-page #home-latest-design-block').css("opacity", "1"); // show the "Products" segment
+                        $('#home-page #home-latest-design-block').css({"opacity": "0", "display": "none"}); // hide the segment
                         resolve(); // resolve the parent promise
                     }).catch(function(err){
 
-                        $('#home-page #home-latest-design-block').css("opacity", "1"); // show the "Products" segment
+                        // $('#home-page #home-latest-design-block').css("opacity", "1"); // show the "Products" segment
+                        $('#home-page #home-latest-design-block').css({"opacity": "0", "display": "none"}); // hide the segment
                         reject(); // reject the parent promise
                     });
                 }));
@@ -6359,70 +6361,85 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // listen for the back button event
                 $('#app-main-navigator').get(0).topPage.onDeviceBackButton =
                     utopiasoftware[utopiasoftware_app_namespace].controller.
-                        profilePageViewModel.backButtonClicked;
+                        billingInfoPageViewModel.backButtonClicked;
 
-                // initialise the profile form validation
-                utopiasoftware[utopiasoftware_app_namespace].controller.profilePageViewModel.profileFormValidator =
-                    $('#profile-page #profile-form').parsley();
+                // initialise the billing info form validation
+                utopiasoftware[utopiasoftware_app_namespace].controller.billingInfoPageViewModel.billingInfoFormValidator =
+                    $('#billing-info-page #billing-info-form').parsley();
 
-                // listen for profile form field validation failure event
-                utopiasoftware[utopiasoftware_app_namespace].controller.profilePageViewModel.profileFormValidator.on('field:error', function(fieldInstance) {
+                // listen for billing form field validation failure event
+                utopiasoftware[utopiasoftware_app_namespace].controller.billingInfoPageViewModel.billingInfoFormValidator.
+                on('field:error', function(fieldInstance) {
                     // get the element that triggered the field validation error and use it to display tooltip
                     // display tooltip
-                    let tooltip = $('#profile-page #profile-form').get(0).
+                    let tooltip = $('#billing-info-page #billing-info-form').get(0).
                         ej2_instances[fieldInstance.$element.get(0)._utopiasoftware_validator_index];
                     tooltip.content = fieldInstance.getErrorsMessages()[0];
                     tooltip.dataBind();
                     tooltip.open(fieldInstance.$element.get(0));
                 });
 
-                // listen for profile form field validation success event
-                utopiasoftware[utopiasoftware_app_namespace].controller.profilePageViewModel.profileFormValidator.on('field:success', function(fieldInstance) {
+                // listen for billing info form field validation success event
+                utopiasoftware[utopiasoftware_app_namespace].controller.billingInfoPageViewModel.billingInfoFormValidator.
+                on('field:success', function(fieldInstance) {
                     // hide tooltip from element
-                    let tooltip = $('#profile-page #profile-form').get(0).
+                    let tooltip = $('#billing-info-page #billing-info-form').get(0).
                         ej2_instances[fieldInstance.$element.get(0)._utopiasoftware_validator_index];
                     tooltip.close();
                 });
 
-                // listen for profile form validation success
-                utopiasoftware[utopiasoftware_app_namespace].controller.profilePageViewModel.profileFormValidator.on('form:success',
-                    utopiasoftware[utopiasoftware_app_namespace].controller.profilePageViewModel.profileFormValidated);
+                // listen for billing info form validation success
+                utopiasoftware[utopiasoftware_app_namespace].controller.billingInfoPageViewModel.billingInfoFormValidator.
+                on('form:success',
+                    utopiasoftware[utopiasoftware_app_namespace].controller.billingInfoPageViewModel.billingInfoFormValidated);
 
                 // listen for scroll event on the page to adjust the tooltips when page scrolls
-                $('#profile-page .content').on("scroll", utopiasoftware[utopiasoftware_app_namespace].
-                    controller.profilePageViewModel.scrollAndResizeEventListener);
+                $('#billing-info-page .content').on("scroll", utopiasoftware[utopiasoftware_app_namespace].
+                    controller.billingInfoPageViewModel.scrollAndResizeEventListener);
 
 
                 try{
 
-                    // create the tooltip objects for the profile form
-                    $('#profile-form ons-input', $thisPage).each(function(index, element){
+                    // create the tooltip objects for the billing info form
+                    $('#billing-info-form textarea, #billing-info-form ons-input, #billing-info-form input', $thisPage).
+                    each(function(index, element){
                         element._utopiasoftware_validator_index = index;
                         // create the tool tips for every element being validated, but attach it to the html form object
                         new ej.popups.Tooltip({
                             cssClass: 'utopiasoftware-ej2-validation-tooltip',
                             position: 'TopLeft',
                             opensOn: 'Custom'
-                        }).appendTo($('#profile-page #profile-form').get(0));
+                        }).appendTo($('#billing-info-page #billing-info-form').get(0));
                     });
 
                     // create the "Cancel" button
                     new ej.buttons.Button({
                         //iconCss: "zmdi zmdi-shopping-cart-add utopiasoftware-icon-zoom-one-point-two",
                         //iconPosition: "Left"
-                    }).appendTo('#profile-cancel');
+                    }).appendTo('#billing-info-cancel');
 
                     // create the "Update" button
                     new ej.splitbuttons.ProgressButton({
                         cssClass: 'e-hide-spinner',
                         duration: 10 * 60 * 60 * 1000 // set spinner/progress duration for 10 hr
-                    }).appendTo('#profile-update');
+                    }).appendTo('#billing-info-update');
+
+                    // create the dropdown list from the select input
+                    new ej.dropdowns.DropDownList(
+                        {
+                            cssClass: "billing-info-dropdownlist",
+                            dataSource: ["Algeria", "Benin", "Congo", "Nigeria"],
+                            placeholder: "Country",
+                            floatLabelType: 'Auto',
+                            change: async function () { // listen for when dropdown list value changes
+                            }
+                        }).appendTo('#billing-info-country');
 
                     // display the user's profile on the profile form
-                    await utopiasoftware[utopiasoftware_app_namespace].controller.profilePageViewModel.displayProfileContent();
+                    //await utopiasoftware[utopiasoftware_app_namespace].controller.profilePageViewModel.displayProfileContent();
                 }
                 catch(err){
-                    console.log("PROFILE ERROR", err);
+                    console.log("BILLING ADDRESS ERROR", err);
                 }
                 finally {
 
@@ -6438,11 +6455,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             window.SoftInputMode.set('adjustResize');
 
             // update cart count
-            $('#profile-page .cart-count').html(utopiasoftware[utopiasoftware_app_namespace].model.cartCount);
+            $('#billing-info-page .cart-count').html(utopiasoftware[utopiasoftware_app_namespace].model.cartCount);
 
             //add listener for when the window is resized by virtue of the device keyboard being shown
             window.addEventListener("resize", utopiasoftware[utopiasoftware_app_namespace].controller.
-                profilePageViewModel.scrollAndResizeEventListener, false);
+                billingInfoPageViewModel.scrollAndResizeEventListener, false);
 
         },
 
@@ -6502,7 +6519,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // place function execution in the event queue to be executed ASAP
             window.setTimeout(function(){
                 // adjust the tooltips elements on the profile form
-                $("#profile-page #profile-form ons-input").each(function(index, element){
+                $('#billing-info-form textarea, #billing-info-form ons-input, #billing-info-form input').
+                each(function(index, element){
                     document.getElementById('profile-form').ej2_instances[index].refresh(element);
                 });
 
@@ -6518,16 +6536,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         async updateButtonClicked(){
 
-            // run the validation method for the profile form
-            utopiasoftware[utopiasoftware_app_namespace].controller.profilePageViewModel.profileFormValidator.whenValidate();
+            // run the validation method for the billing-info form
+            utopiasoftware[utopiasoftware_app_namespace].controller.billingInfoPageViewModel.billingInfoFormValidator.whenValidate();
         },
 
         /**
-         * method is triggered when the profile form is successfully validated
+         * method is triggered when the billing-info form is successfully validated
          *
          * @returns {Promise<void>}
          */
-        async profileFormValidated(){
+        async billingInfoFormValidated(){
 
             // check if there is Internet connection
             if(navigator.connection.type === Connection.NONE){ // there is no Internet connection

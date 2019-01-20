@@ -170,3 +170,16 @@ $(document).on("hide", "#change-password-page", utopiasoftware[utopiasoftware_ap
 
 // listen for when the CHANGE PASSWORD is destroyed
 $(document).on("destroy", "#change-password-page", utopiasoftware[utopiasoftware_app_namespace].controller.changePasswordPageViewModel.pageDestroy);
+
+// listen for the initialisation of the CHANGE PASSWORD page
+$(document).on("init", "#change-password-page", utopiasoftware[utopiasoftware_app_namespace].controller.changePasswordPageViewModel.pageInit);
+
+/*
+// listen for when the CHANGE PASSWORD page is shown
+$(document).on("show", "#change-password-page", utopiasoftware[utopiasoftware_app_namespace].controller.changePasswordPageViewModel.pageShow);
+
+// listen for when the CHANGE PASSWORD page is hidden
+$(document).on("hide", "#change-password-page", utopiasoftware[utopiasoftware_app_namespace].controller.changePasswordPageViewModel.pageHide);
+
+// listen for when the CHANGE PASSWORD is destroyed
+$(document).on("destroy", "#change-password-page", utopiasoftware[utopiasoftware_app_namespace].controller.changePasswordPageViewModel.pageDestroy);*/
