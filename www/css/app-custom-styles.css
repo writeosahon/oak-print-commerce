@@ -611,7 +611,7 @@
     line-height: 1;
     display: block;
     text-align: left;
-    padding-right: 65px;
+    padding-left: 65px;
 }
 #billing-info-page ons-input input {
     /*font-size: 0.7em;*/
