@@ -71,10 +71,10 @@
                     <label id="billing-info-address-2-label" class="address-label" for="billing-info-address-2">Address 2</label>
                     <ons-icon icon="md-city-alt" size="28px" fixed-width style="color: #3f51b5; margin-right: 0.5em;"></ons-icon>
                     <textarea id="billing-info-address-2" class="textarea textarea--transparent" style="width: 75%;
-                        caret-color: #3f51b5 !important; color: #3f51b5 !important;" required
+                        caret-color: #3f51b5 !important; color: #3f51b5 !important;"
                               placeholder="Address Line 2 (Optional)" rows="2"
-                              data-parsley-maxwords="500"
-                              data-parsley-maxwords-message="address limit exceeded"></textarea>
+                              data-parsley-minwords="2"
+                              data-parsley-minwords-message="incorrect address. please check your spelling"></textarea>
                 </ons-col>
                 <ons-col width="15%"></ons-col>
             </ons-row>
