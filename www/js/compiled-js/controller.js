@@ -6458,8 +6458,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             placeholder: "Country",
                             floatLabelType: 'Auto',
                             value: 'NG',
-                            itemTemplate: '${jQuery(\"<div/>").html(name).text()}',
-                            valueTemplate: '${jQuery(\"<div/>").html(name).text()}',
                             change: async function () { // listen for when dropdown list value changes
                                 let countryDropDownList = this; // holds this dropdown list
 
