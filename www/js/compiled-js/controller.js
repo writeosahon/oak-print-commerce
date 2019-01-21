@@ -6783,7 +6783,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 statesDropDownList.dataBind();
                 let countryDropDownList = $('#billing-info-page #billing-info-form #billing-info-country').get(0).ej2_instances[0];
                 countryDropDownList.value = (userDetails.billing && userDetails.billing.country && userDetails.billing.country !== "")
-                    ? userDetails.billing.country : null;
+                    ? userDetails.billing.country : 'NG';
                 countryDropDownList.dataBind();
             }
             finally {
