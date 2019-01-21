@@ -6373,14 +6373,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 utopiasoftware[utopiasoftware_app_namespace].controller.billingInfoPageViewModel.billingInfoFormValidator =
                     $('#billing-info-page #billing-info-form').parsley();
 
-                $('#billing-info-page #billing-info-form select[name="billing-info-country"]').parsley({
+                $('#billing-info-page #billing-info-form #billing-info-country').parsley({
                     value: function(parsley) {
                         // return the unmasked input from the card number field
                         return $('#billing-info-country').get(0).ej2_instances[0].value;
                     }
                 });
 
-                $('#billing-info-page #billing-info-form select[name="billing-info-state"]').parsley({
+                $('#billing-info-page #billing-info-form #billing-info-state').parsley({
                     value: function(parsley) {
                         // return the unmasked input from the card number field
                         return $('#billing-info-state').get(0).ej2_instances[0].value;
@@ -6440,7 +6440,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     ));
 
                     // create the tooltip objects for the billing info form
-                    $('#billing-info-form textarea, #billing-info-form ons-input, #billing-info-form select', $thisPage).
+                    $('#billing-info-form textarea, #billing-info-form ons-input, #billing-info-form #billing-info-country, #billing-info-form #billing-info-state', $thisPage).
                     each(function(index, element){
                         element._utopiasoftware_validator_index = index;
                         // create the tool tips for every element being validated, but attach it to the html form object
@@ -6609,7 +6609,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // place function execution in the event queue to be executed ASAP
             window.setTimeout(function(){
                 // adjust the tooltips elements on the profile form
-                $('#billing-info-form textarea, #billing-info-form ons-input, #billing-info-form select').
+                $('#billing-info-form textarea, #billing-info-form ons-input, #billing-info-form #billing-info-country, #billing-info-form #billing-info-state').
                 each(function(index, element){
                     document.getElementById('billing-info-form').ej2_instances[index].refresh(element);
                 });
