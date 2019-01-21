@@ -6373,6 +6373,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 utopiasoftware[utopiasoftware_app_namespace].controller.billingInfoPageViewModel.billingInfoFormValidator =
                     $('#billing-info-page #billing-info-form').parsley();
 
+                $('#billing-info-page #billing-info-form select[name="billing-info-country"]').parsley({
+                    value: function(parsley) {
+                        // return the unmasked input from the card number field
+                        return $('#billing-info-country').get(0).ej2_instances[0].value;
+                    }
+                });
+
                 // listen for billing form field validation failure event
                 utopiasoftware[utopiasoftware_app_namespace].controller.billingInfoPageViewModel.billingInfoFormValidator.
                 on('field:error', function(fieldInstance) {
@@ -6426,7 +6433,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     ));
 
                     // create the tooltip objects for the billing info form
-                    $('#billing-info-form textarea, #billing-info-form ons-input, #billing-info-form input', $thisPage).
+                    $('#billing-info-form textarea, #billing-info-form ons-input, #billing-info-form select', $thisPage).
                     each(function(index, element){
                         element._utopiasoftware_validator_index = index;
                         // create the tool tips for every element being validated, but attach it to the html form object
@@ -6459,6 +6466,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             floatLabelType: 'Auto',
                             value: 'NG',
                             itemTemplate: '<span>${name}</span>',
+                            valueTemplate: '<span>${name}</span>',
                             select: async function () { // listen for when dropdown list value changes
                                 let countryDropDownList = this; // holds this dropdown list
 
@@ -6500,6 +6508,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             fields: { value: 'code', text: 'name'},
                             placeholder: "State",
                             floatLabelType: 'Auto',
+                            itemTemplate: '<span>${name}</span>',
+                            valueTemplate: '<span>${name}</span>',
                             change: async function () { // listen for when dropdown list value changes
                             }
                         }).appendTo('#billing-info-state');
@@ -6592,7 +6602,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // place function execution in the event queue to be executed ASAP
             window.setTimeout(function(){
                 // adjust the tooltips elements on the profile form
-                $('#billing-info-form textarea, #billing-info-form ons-input, #billing-info-form input').
+                $('#billing-info-form textarea, #billing-info-form ons-input, #billing-info-form select').
                 each(function(index, element){
                     document.getElementById('billing-info-form').ej2_instances[index].refresh(element);
                 });
