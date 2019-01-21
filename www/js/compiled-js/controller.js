@@ -6499,7 +6499,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             fields: { value: 'code', text: 'name'},
                             placeholder: "State",
                             floatLabelType: 'Auto',
-                            value: 'NG',
                             change: async function () { // listen for when dropdown list value changes
                             }
                         }).appendTo('#billing-info-state');
@@ -6785,10 +6784,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 statesDropDownList.value = (userDetails.billing && userDetails.billing.state && userDetails.billing.state !== "")
                     ? userDetails.billing.state : null;
                 statesDropDownList.dataBind();
-                let countryDropDownList = $('#billing-info-page #billing-info-form #billing-info-country').get(0).ej2_instances[0];
+                /*let countryDropDownList = $('#billing-info-page #billing-info-form #billing-info-country').get(0).ej2_instances[0];
                 countryDropDownList.value = (userDetails.billing && userDetails.billing.country && userDetails.billing.country !== "")
                     ? userDetails.billing.country : 'NG';
-                countryDropDownList.dataBind();
+                countryDropDownList.dataBind();*/
             }
             finally {
                 // hide page preloader
