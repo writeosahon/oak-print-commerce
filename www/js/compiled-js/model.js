@@ -174,12 +174,11 @@ $(document).on("destroy", "#change-password-page", utopiasoftware[utopiasoftware
 // listen for the initialisation of the BILLING-INFO page
 $(document).on("init", "#billing-info-page", utopiasoftware[utopiasoftware_app_namespace].controller.billingInfoPageViewModel.pageInit);
 
-/*
-// listen for when the CHANGE PASSWORD page is shown
-$(document).on("show", "#change-password-page", utopiasoftware[utopiasoftware_app_namespace].controller.changePasswordPageViewModel.pageShow);
+// listen for when the BILLING-INFO page is shown
+$(document).on("show", "#billing-info-page", utopiasoftware[utopiasoftware_app_namespace].controller.billingInfoPageViewModel.pageShow);
 
-// listen for when the CHANGE PASSWORD page is hidden
-$(document).on("hide", "#change-password-page", utopiasoftware[utopiasoftware_app_namespace].controller.changePasswordPageViewModel.pageHide);
+// listen for when the BILLING-INFO page is hidden
+$(document).on("hide", "#billing-info-page", utopiasoftware[utopiasoftware_app_namespace].controller.billingInfoPageViewModel.pageHide);
 
-// listen for when the CHANGE PASSWORD is destroyed
-$(document).on("destroy", "#change-password-page", utopiasoftware[utopiasoftware_app_namespace].controller.changePasswordPageViewModel.pageDestroy);*/
+// listen for when the BILLING-INFO is destroyed
+$(document).on("destroy", "#billing-info-page", utopiasoftware[utopiasoftware_app_namespace].controller.billingInfoPageViewModel.pageDestroy);
