@@ -624,6 +624,9 @@
 #billing-info-page .billing-info-dropdownlist.e-control-wrapper #label_billing-info-country { /** label for country dropdown select  **/
     color: #3F51B5;
 }
+#billing-info-page .billing-info-dropdownlist.e-control-wrapper #label_billing-info-state { /** label for state dropdown select  **/
+    color: #3F51B5;
+}
 /** style for the dropdown select */
 #billing-info-page .billing-info-dropdownlist.e-float-input.e-control-wrapper {
     border: 2px solid lightgray;

@@ -6449,7 +6449,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         duration: 10 * 60 * 60 * 1000 // set spinner/progress duration for 10 hr
                     }).appendTo('#billing-info-update');
 
-                    // create the dropdown list from the select input
+                    // create the Country dropdown list from the select input
                     new ej.dropdowns.DropDownList(
                         {
                             cssClass: "billing-info-dropdownlist",
@@ -6457,12 +6457,25 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             fields: { value: 'code', text: 'name'},
                             placeholder: "Country",
                             floatLabelType: 'Auto',
-                            allowFiltering: true,
-                            ignoreAccent: true,
                             value: 'NG',
                             change: async function () { // listen for when dropdown list value changes
                             }
                         }).appendTo('#billing-info-country');
+
+                    // create the Country dropdown list from the select input
+                    new ej.dropdowns.DropDownList(
+                        {
+                            cssClass: "billing-info-dropdownlist",
+                            dataSource: countryDataArray.find(function(countryElement){
+                                return countryElement.code === "NG";
+                            }).states,
+                            fields: { value: 'code', text: 'name'},
+                            placeholder: "State",
+                            floatLabelType: 'Auto',
+                            value: 'NG',
+                            change: async function () { // listen for when dropdown list value changes
+                            }
+                        }).appendTo('#billing-info-state');
 
                     // display the user's profile on the profile form
                     //await utopiasoftware[utopiasoftware_app_namespace].controller.profilePageViewModel.displayProfileContent();
