@@ -621,7 +621,7 @@
     caret-color: #3f51b5;
     background-image: none;
 }
-billing-info-page .billing-info-dropdownlist.e-control-wrapper #label_billing-info-country { /** label for country dropdown select  **/
+#billing-info-page .billing-info-dropdownlist.e-control-wrapper #label_billing-info-country { /** label for country dropdown select  **/
     color: #3F51B5;
 }
 /** style for the dropdown select */
