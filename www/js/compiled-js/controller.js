@@ -6538,17 +6538,17 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         pageHide: async function(){
 
             // hide the tooltips on the profile form
-            $('#profile-page #profile-form').get(0).ej2_instances.forEach(function(tooltipArrayElem){
+            $('#billing-info-page #billing-info-form').get(0).ej2_instances.forEach(function(tooltipArrayElem){
                 // hide the tooltip
                 tooltipArrayElem.close();
             });
 
             // reset all form validator objects
-            utopiasoftware[utopiasoftware_app_namespace].controller.profilePageViewModel.profileFormValidator.reset();
+            utopiasoftware[utopiasoftware_app_namespace].controller.billingInfoPageViewModel.billingInfoFormValidator.reset();
 
             //remove listener for when the window is resized by virtue of the device keyboard being shown
             window.removeEventListener("resize", utopiasoftware[utopiasoftware_app_namespace].controller.
-                profilePageViewModel.scrollAndResizeEventListener, false);
+                billingInfoPageViewModel.scrollAndResizeEventListener, false);
         },
 
         /**
@@ -6557,17 +6557,21 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         pageDestroy: function(){
 
             // destroy the tooltips on the profile form
-            $('#profile-page #profile-form').get(0).ej2_instances.forEach(function(tooltipArrayElem){
+            $('#billing-info-page #billing-info-form').get(0).ej2_instances.forEach(function(tooltipArrayElem){
                 // destroy the tooltip
                 tooltipArrayElem.destroy();
             });
 
+            // destroy the Country & State DropDownLists
+            $('#billing-info-page #billing-info-country').get(0).ej2_instances[0].destroy();
+            $('#billing-info-page #billing-info-state').get(0).ej2_instances[0].destroy();
+
             // destroy the "Cancel" and "Update" buttons
-            $('#profile-page #profile-cancel').get(0).ej2_instances[0].destroy();
-            $('#profile-page #profile-update').get(0).ej2_instances[0].destroy();
+            $('#billing-info-page #billing-info-cancel').get(0).ej2_instances[0].destroy();
+            $('#billing-info-page #billing-info-update').get(0).ej2_instances[0].destroy();
 
             // destroy all form validator objects
-            utopiasoftware[utopiasoftware_app_namespace].controller.profilePageViewModel.profileFormValidator.destroy();
+            utopiasoftware[utopiasoftware_app_namespace].controller.billingInfoPageViewModel.billingInfoFormValidator.destroy();
         },
 
         /**
