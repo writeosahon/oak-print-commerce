@@ -6452,12 +6452,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     // create the Country dropdown list from the select input
                     new ej.dropdowns.DropDownList(
                         {
-                            cssClass: "b; illing-info-dropdownlist",
+                            cssClass: "billing-info-dropdownlist",
                             dataSource: countryDataArray,
                             fields: { value: 'code', text: 'name'},
                             placeholder: "Country",
                             floatLabelType: 'Auto',
                             value: 'NG',
+                            itemTemplate: '<span>${name}</span>',
                             select: async function () { // listen for when dropdown list value changes
                                 let countryDropDownList = this; // holds this dropdown list
 
