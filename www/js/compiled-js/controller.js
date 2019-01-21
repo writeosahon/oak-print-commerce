@@ -6459,6 +6459,33 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             floatLabelType: 'Auto',
                             value: 'NG',
                             change: async function () { // listen for when dropdown list value changes
+                                let countryDropDownList = this; // holds this dropdown list
+
+                                // execute the task in a separate event block
+                                window.setTimeout(async function(){
+                                    // get the country object and its states that represents the country value selected
+                                    let countryStatesArray = countryDropDownList.getDataByValue(countryDropDownList.value).states;
+                                    // get the state dropdownlist
+                                    let stateDropDownList = $('#billing-info-page #billing-info-form #billing-info-state').
+                                                                get(0).ej2_instances[0];
+                                    // reset the selected value for the State
+                                    stateDropDownList.value = null;
+                                    // reset the dataSource for the State
+                                    stateDropDownList.dataSource = countryStatesArray;
+
+                                    if(countryStatesArray.length > 0 ){ // there are states in the selected country
+                                        // enable the State dropdownlist for user selection
+                                        stateDropDownList.enabled = true;
+                                    }
+                                    else{ // there are NO states in the selected country
+                                        // disable the State dropdownlist for user selection
+                                        stateDropDownList.enabled = false;
+                                    }
+
+                                    // bind/update all changes made to the State dropdownlist
+                                    stateDropDownList.dataBind();
+
+                                }, 0);
                             }
                         }).appendTo('#billing-info-country');
 
@@ -6477,8 +6504,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             }
                         }).appendTo('#billing-info-state');
 
-                    // display the user's profile on the profile form
-                    //await utopiasoftware[utopiasoftware_app_namespace].controller.profilePageViewModel.displayProfileContent();
+                    // display the billing info on the billing info form
+                    await utopiasoftware[utopiasoftware_app_namespace].controller.billingInfoPageViewModel.displayContent();
                 }
                 catch(err){
                     console.log("BILLING ADDRESS ERROR", err);
@@ -6563,7 +6590,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // adjust the tooltips elements on the profile form
                 $('#billing-info-form textarea, #billing-info-form ons-input, #billing-info-form input').
                 each(function(index, element){
-                    document.getElementById('profile-form').ej2_instances[index].refresh(element);
+                    document.getElementById('billing-info-form').ej2_instances[index].refresh(element);
                 });
 
             }, 0);
@@ -6729,10 +6756,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         },
 
         /**
-         * method is used to load the current user profile data into the profile form
+         * method is used to load the current billing info data into the billing info form
          * @returns {Promise<void>}
          */
-        async displayProfileContent(){
+        async displayContent(){
 
             try{
                 // load the user profile details from the app database
@@ -6742,20 +6769,30 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 console.log("USER DETAILS", userDetails);
 
-                // display the user profile data in the profile form
-                $('#profile-page #profile-form #profile-email').val(userDetails.email);
-                $('#profile-page #profile-form #profile-first-name').val(userDetails.first_name || "");
-                $('#profile-page #profile-form #profile-last-name').val(userDetails.last_name || "");
-                $('#profile-page #profile-form #profile-phone-number').
-                val(userDetails.billing && userDetails.billing.phone ? userDetails.billing.phone : "");
+                // display the user billing info data in the billing info form
+                $('#billing-info-page #billing-info-form #billing-info-address-1').
+                val(userDetails.billing && userDetails.billing.address_1 ? userDetails.billing.address_1 : "");
+                $('#billing-info-page #billing-info-form #billing-info-address-2').
+                val(userDetails.billing && userDetails.billing.address_2 ? userDetails.billing.address_2 : "");
+                $('#billing-info-page #billing-info-form #billing-info-city').
+                val(userDetails.billing && userDetails.billing.city ? userDetails.billing.city : "");
+                // update the select dropdownlist for country and state
+                let statesDropDownList = $('#billing-info-page #billing-info-form #billing-info-state').get(0).ej2_instances[0];
+                statesDropDownList.value = (userDetails.billing && userDetails.billing.state && userDetails.billing.state !== "")
+                    ? userDetails.billing.state : null;
+                statesDropDownList.dataBind();
+                let countryDropDownList = $('#billing-info-page #billing-info-form #billing-info-country').get(0).ej2_instances[0];
+                countryDropDownList.value = (userDetails.billing && userDetails.billing.country && userDetails.billing.country !== "")
+                    ? userDetails.billing.country : null;
+                countryDropDownList.dataBind();
             }
             finally {
                 // hide page preloader
-                $('#profile-page .page-preloader').css("display", "none");
+                $('#billing-info-page .page-preloader').css("display", "none");
                 // hide page modal loader
-                $('#profile-page .modal').css("display", "none");
+                $('#billing-info-page .modal').css("display", "none");
                 // enable the "Update" button
-                $('#profile-page #profile-update').removeAttr("disabled");
+                $('#billing-info-page #billing-info-update').removeAttr("disabled");
             }
         }
 
