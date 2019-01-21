@@ -603,11 +603,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             {_id: "banner-products", docType: "BANNER_PRODUCTS", products: productsArray},
                             utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
 
-                        $('#home-page #home-latest-design-block').css("opacity", "1"); // hide the "Products" segment
-                        // remove the previously slides from the carousel
-                        utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.
+                        if(productsArray.length > 0){
+                            // show the "Products" segment
+                            $('#home-page #home-latest-design-block').css({"opacity": "1", "display": "block"}); // show the "Products" segment
+                            // remove the previously slides from the carousel
+                            utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.
                             newProductsCarousel.
-                        remove($('#home-page #home-latest-design-block .row .col-xs-12').get());
+                            remove($('#home-page #home-latest-design-block .row .col-xs-12').get());
+                        }
+                        else{
+                            // hide the "Products" segment
+                            $('#home-page #home-latest-design-block').css({"opacity": "0", "display": "none"});
+                        }
+
                         // attach the products to the page
                         for(let index = 0; index < productsArray.length; index++){
                             let columnContent =
@@ -622,11 +630,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.
                             newProductsCarousel.append($(columnContent));
                         }
-                        $('#home-page #home-latest-design-block').css("opacity", "1"); // show the "Products" segment
+
                         resolve(); // resolve the parent promise
                     }).catch(function(err){
-
-                        $('#home-page #home-latest-design-block').css("opacity", "1"); // show the "Products" segment
                         reject(); // reject the parent promise
                     });
                 }));
@@ -6400,6 +6406,25 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 try{
 
+                    let countryDataArray = []; // holds the array containing country objects
+
+                    // load the country data from the local list with the app
+                    countryDataArray = await Promise.resolve($.ajax(
+                        {
+                            url: 'country-list.json',
+                            type: "get",
+                            //contentType: "application/json",
+                            beforeSend: function(jqxhr) {
+                                jqxhr.setRequestHeader("Authorization", "Basic " +
+                                    utopiasoftware[utopiasoftware_app_namespace].accessor);
+                            },
+                            dataType: "json",
+                            timeout: 240000, // wait for 4 minutes before timeout of request
+                            processData: true,
+                            data: {}
+                        }
+                    ));
+
                     // create the tooltip objects for the billing info form
                     $('#billing-info-form textarea, #billing-info-form ons-input, #billing-info-form input', $thisPage).
                     each(function(index, element){
@@ -6428,9 +6453,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     new ej.dropdowns.DropDownList(
                         {
                             cssClass: "billing-info-dropdownlist",
-                            dataSource: ["Algeria", "Benin", "Congo", "Nigeria"],
+                            dataSource: countryDataArray,
+                            fields: { value: 'code', text: 'name'},
                             placeholder: "Country",
                             floatLabelType: 'Auto',
+                            allowFiltering: true,
+                            ignoreAccent: true,
+                            value: 'NG',
                             change: async function () { // listen for when dropdown list value changes
                             }
                         }).appendTo('#billing-info-country');
