@@ -6530,7 +6530,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 // update the value of the input field tied to this dropdownlist
                                 //$('#billing-info-page #billing-info-state').val(this.value);
                                 utopiasoftware[utopiasoftware_app_namespace].billingInfoPageViewModel.
-                                billingInfoFormValidator.validate();
+                                billingInfoFormValidator.whenValidate();
                             }
                         }).appendTo('#billing-info-state');
 
