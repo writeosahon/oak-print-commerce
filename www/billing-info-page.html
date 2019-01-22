@@ -41,7 +41,7 @@
             </div>
         </div>
 
-        <form id="billing-info-form" autocomplete="off" data-parsley-inputs="ons-input,textarea,#billing-info-country,#billing-info-state"
+        <form id="billing-info-form" autocomplete="off" data-parsley-inputs="ons-input,textarea,select"
               data-parsley-excluded="[type=button], [type=submit],
                               [type=reset], [type=hidden], [disabled], :hidden">
 
@@ -98,11 +98,11 @@
             <ons-row vertical-align="bottom" style="margin-bottom: 1.5em;">
                 <ons-col width="5%"></ons-col>
                 <ons-col width="40%" style="background-color: #ffffff; color: #3f51b5;">
-                    <input id="billing-info-country" type="text" style="width: 100%">
+                    <select id="billing-info-country" type="text" style="width: 100%" required></select>
                 </ons-col>
                 <ons-col width="5px"></ons-col>
                 <ons-col width="40%" style="background-color: #ffffff; color: #3f51b5;">
-                    <input id="billing-info-state" type="text" style="width: 100%" required>
+                    <select id="billing-info-state" type="text" style="width: 100%" required></select>
                 </ons-col>
             </ons-row>
 
