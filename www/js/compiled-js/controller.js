@@ -6375,19 +6375,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
 
                 $('#billing-info-page #billing-info-form select').attr("required", true);
-                /*$('#billing-info-page #billing-info-form #billing-info-country').parsley({
+                $('#billing-info-page #billing-info-form select[name="billing-info-country"]').parsley({
                     value: function(parsley) {
                         // return the unmasked input from the card number field
                         return $('#billing-info-country').get(0).ej2_instances[0].value;
                     }
                 });
 
-                $('#billing-info-page #billing-info-form #billing-info-state').parsley({
+                $('#billing-info-page #billing-info-form select[name="billing-info-state"]').parsley({
                     value: function(parsley) {
                         // return the unmasked input from the card number field
                         return $('#billing-info-state').get(0).ej2_instances[0].value;
                     }
-                });*/
+                });
 
                 // listen for billing form field validation failure event
                 utopiasoftware[utopiasoftware_app_namespace].controller.billingInfoPageViewModel.billingInfoFormValidator.
