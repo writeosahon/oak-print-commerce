@@ -6373,23 +6373,25 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 utopiasoftware[utopiasoftware_app_namespace].controller.billingInfoPageViewModel.billingInfoFormValidator =
                     $('#billing-info-page #billing-info-form').parsley();
 
-
+                // initialise the custom validation for the billing info 'country' field
                 $('#billing-info-page #billing-info-form #billing-info-country').parsley({
                     value: function(parsley) {
-                        // return the unmasked input from the card number field
+                        // return the value from the dropdownlist
                         return $('#billing-info-country').get(0).ej2_instances[0].value;
                     }
                 });
 
+                // initialise the custom validation for the billing info 'state' field
                 $('#billing-info-page #billing-info-form #billing-info-state').parsley({
-                    value: function(parsley) {
+                    value: function(parsley) { // function returns a 'custom' value
+                        // get the State dropdownlist component
                         let stateDropDownList = $('#billing-info-state').get(0).ej2_instances[0];
-                        if(stateDropDownList.enabled !== true){
-                            return " ";
+                        // check if the dropdownlist is enabled or not
+                        if(stateDropDownList.enabled !== true){ // dropdownlist is disabled
+                            return " "; // return an empty string
                         }
-                        else{
-                            // return the unmasked input from the card number field
-                            return stateDropDownList.value;
+                        else{ // dropdownlist is enabled
+                            return stateDropDownList.value; // return the value from the dropdownlist
                         }
                     }
                 });
@@ -6492,19 +6494,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                                 get(0).ej2_instances[0];
                                     // reset the selected value for the State
                                     stateDropDownList.value = null;
-                                    //$('#billing-info-page #billing-info-state').val("");
                                     // reset the dataSource for the State
                                     stateDropDownList.dataSource = countryStatesArray;
 
                                     if(countryStatesArray.length > 0 ){ // there are states in the selected country
                                         // enable the State dropdownlist for user selection
                                         stateDropDownList.enabled = true;
-                                        //$('#billing-info-page #billing-info-state').removeAttr("disabled");
                                     }
                                     else{ // there are NO states in the selected country
                                         // disable the State dropdownlist for user selection
                                         stateDropDownList.enabled = false;
-                                        //$('#billing-info-page #billing-info-state').attr("disabled", true);
                                     }
 
                                     // bind/update all changes made to the State dropdownlist
@@ -6527,8 +6526,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             itemTemplate: '<span>${name}</span>',
                             valueTemplate: '<span>${name}</span>',
                             select: async function () { // listen for when dropdown list value is changed by selection
-                                // update the value of the input field tied to this dropdownlist
-                                //$('#billing-info-page #billing-info-state').val(this.value);
+                                // since a difference value has been selected, trigger form validation again
                                 utopiasoftware[utopiasoftware_app_namespace].billingInfoPageViewModel.
                                 billingInfoFormValidator.whenValidate();
                             }
@@ -6640,7 +6638,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         async updateButtonClicked(){
 
             // run the validation method for the billing-info form
-            utopiasoftware[utopiasoftware_app_namespace].controller.billingInfoPageViewModel.billingInfoFormValidator.whenValidate();
+            utopiasoftware[utopiasoftware_app_namespace].controller.billingInfoPageViewModel.
+            billingInfoFormValidator.whenValidate();
         },
 
         /**
@@ -6810,15 +6809,21 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 val(userDetails.billing && userDetails.billing.address_2 ? userDetails.billing.address_2 : "");
                 $('#billing-info-page #billing-info-form #billing-info-city').
                 val(userDetails.billing && userDetails.billing.city ? userDetails.billing.city : "");
+
                 // update the select dropdownlist for country and state
-                let statesDropDownList = $('#billing-info-page #billing-info-form #billing-info-state').get(0).ej2_instances[0];
-                statesDropDownList.value = (userDetails.billing && userDetails.billing.state && userDetails.billing.state !== "")
-                    ? userDetails.billing.state : null;
-                statesDropDownList.dataBind();
                 let countryDropDownList = $('#billing-info-page #billing-info-form #billing-info-country').get(0).ej2_instances[0];
                 countryDropDownList.value = (userDetails.billing && userDetails.billing.country && userDetails.billing.country !== "")
                     ? userDetails.billing.country : 'NG';
                 countryDropDownList.dataBind();
+
+                let statesDropDownList = $('#billing-info-page #billing-info-form #billing-info-state').get(0).ej2_instances[0];
+                statesDropDownList.dataSource = countryDropDownList.dataSource.find(function(countryElement){
+                    return countryElement.code === countryDropDownList.value;
+                }).states;
+
+                statesDropDownList.value = (userDetails.billing && userDetails.billing.state && userDetails.billing.state !== "")
+                    ? userDetails.billing.state : null;
+                statesDropDownList.dataBind();
             }
             finally {
                 // hide page preloader
