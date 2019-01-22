@@ -6529,9 +6529,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 // handle method task in a different event block
                                 window.setTimeout(function(){
-                                    // since a difference value has been selected, trigger form validation again
-                                    utopiasoftware[utopiasoftware_app_namespace].billingInfoPageViewModel.
-                                    billingInfoFormValidator.whenValidate();
+                                    // call the method used to trigger the form validation
+                                    utopiasoftware[utopiasoftware_app_namespace].controller.
+                                    billingInfoPageViewModel.updateButtonClicked()
                                 }, 0);
                             }
                         }).appendTo('#billing-info-state');
@@ -6709,7 +6709,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 userDetails.billing.address_2 = $('#billing-info-page #billing-info-address-2').val();
                 userDetails.billing.city = $('#billing-info-page #billing-info-city').val();
                 userDetails.billing.country = $('#billing-info-page #billing-info-country').get(0).ej2_instances[0].value;
-                userDetails.billing.state = $('#billing-info-page #billing-info-state').get(0).ej2_instances[0].value;
+                userDetails.billing.state = $('#billing-info-page #billing-info-state').get(0).ej2_instances[0].value ?
+                    $('#billing-info-page #billing-info-state').get(0).ej2_instances[0].value : "";
 
                 // delete the properties not needed for the update from the userDetails object
                 delete userDetails.id;
@@ -6824,6 +6825,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 statesDropDownList.value = (userDetails.billing && userDetails.billing.state && userDetails.billing.state !== "")
                     ? userDetails.billing.state : null;
                 statesDropDownList.dataBind();
+                console.log("STATE VALUE", statesDropDownList.value);
             }
             finally {
                 // hide page preloader
