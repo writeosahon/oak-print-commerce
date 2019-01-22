@@ -6420,6 +6420,17 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
 
                 try{
+                    // create the "Cancel" button
+                    new ej.buttons.Button({
+                        //iconCss: "zmdi zmdi-shopping-cart-add utopiasoftware-icon-zoom-one-point-two",
+                        //iconPosition: "Left"
+                    }).appendTo('#billing-info-cancel');
+
+                    // create the "Update" button
+                    new ej.splitbuttons.ProgressButton({
+                        cssClass: 'e-hide-spinner',
+                        duration: 10 * 60 * 60 * 1000 // set spinner/progress duration for 10 hr
+                    }).appendTo('#billing-info-update');
 
                     let countryDataArray = []; // holds the array containing country objects
 
@@ -6451,18 +6462,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             opensOn: 'Custom'
                         }).appendTo($('#billing-info-page #billing-info-form').get(0));
                     });
-
-                    // create the "Cancel" button
-                    new ej.buttons.Button({
-                        //iconCss: "zmdi zmdi-shopping-cart-add utopiasoftware-icon-zoom-one-point-two",
-                        //iconPosition: "Left"
-                    }).appendTo('#billing-info-cancel');
-
-                    // create the "Update" button
-                    new ej.splitbuttons.ProgressButton({
-                        cssClass: 'e-hide-spinner',
-                        duration: 10 * 60 * 60 * 1000 // set spinner/progress duration for 10 hr
-                    }).appendTo('#billing-info-update');
 
                     // create the Country dropdown list from the select input
                     new ej.dropdowns.DropDownList(
