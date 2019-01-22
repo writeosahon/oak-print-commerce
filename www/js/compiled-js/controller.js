@@ -6658,7 +6658,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 let toast = $('.timed-page-toast').get(0).ej2_instances[0];
                 toast.cssClass = 'error-ej2-toast';
                 toast.timeOut = 3000;
-                toast.content = `Connect to the Internet to update your profile`;
+                toast.content = `Connect to the Internet to update your billing address`;
                 toast.dataBind();
                 toast.show();
 
@@ -6666,14 +6666,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             }
 
             // disable the "Update" button
-            $('#profile-page #profile-update').attr("disabled", true);
+            $('#billing-info-page #billing-info-update').attr("disabled", true);
             // show the spinner on the 'Update' button to indicate process is ongoing
-            $('#profile-page #profile-update').get(0).ej2_instances[0].cssClass = '';
-            $('#profile-page #profile-update').get(0).ej2_instances[0].dataBind();
-            $('#profile-page #profile-update').get(0).ej2_instances[0].start();
+            $('#billing-info-page #billing-info-update').get(0).ej2_instances[0].cssClass = '';
+            $('#billing-info-page #billing-info-update').get(0).ej2_instances[0].dataBind();
+            $('#billing-info-page #billing-info-update').get(0).ej2_instances[0].start();
 
             // display page loader while completing the "update profile" request
-            $('#profile-page .modal').css("display", "table");
+            $('#billing-info-page .modal').css("display", "table");
 
             var promisesArray = []; // holds the array for the promises used to complete the process
 
@@ -6685,15 +6685,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 loadData("user-details",
                     utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
 
-                console.log("USER DETAILS BEFORE PROFILE UPDATE", userDetails);
+                console.log("USER DETAILS BEFORE BILLING INFO UPDATE", userDetails);
 
                 // temporary hold the user id and password
                 let userId = userDetails.id;
                 let userPassword = userDetails.password;
-
-                // use the input from the profile form to update the user details
-                userDetails.first_name = $('#profile-page #profile-form #profile-first-name').val().trim();
-                userDetails.last_name = $('#profile-page #profile-form #profile-last-name').val().trim();
 
                 // check if user details has the billing property
                 if(!userDetails.billing){ // no billing property, so create it
@@ -6702,14 +6698,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 }
 
                 // set the billing email to the email of the user
-                userDetails.billing.email = $('#profile-page #profile-form #profile-email').val().trim();
+                userDetails.billing.email = userDetails.email;
 
-                // update the user phone number
-                userDetails.billing.phone = $('#profile-page #profile-form #profile-phone-number').val().trim();
-                if(userDetails.billing.phone.startsWith("0")){ // phone number starts with zero
-                    // replace the starting zero with '+234'
-                    userDetails.billing.phone = userDetails.billing.phone.replace(/0/i, "+234");
-                }
+                // use the input from the profile form to update the user details
+                userDetails.billing.address_1 = $('#billing-info-page #billing-info-address-1').val();
+                userDetails.billing.address_2 = $('#billing-info-page #billing-info-address-2').val();
+                userDetails.billing.city = $('#billing-info-page #billing-info-city').val();
+                userDetails.billing.country = $('#billing-info-page #billing-info-country').get(0).ej2_instances[0].value;
+                userDetails.billing.state = $('#billing-info-page #billing-info-state').get(0).ej2_instances[0].value;
 
                 // delete the properties not needed for the update from the userDetails object
                 delete userDetails.id;
@@ -6753,7 +6749,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 let toast = $('.timed-page-toast').get(0).ej2_instances[0];
                 toast.cssClass = 'success-ej2-toast';
                 toast.timeOut = 3000;
-                toast.content = `User profile updated`;
+                toast.content = `User billing address updated`;
                 toast.dataBind();
                 toast.show();
 
@@ -6768,20 +6764,20 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 let toast = $('.timed-page-toast').get(0).ej2_instances[0];
                 toast.cssClass = 'error-ej2-toast';
                 toast.timeOut = 3000;
-                toast.content = `User profile update failed. ${err.message || ""}`;
+                toast.content = `User billing address update failed. ${err.message || ""}`;
                 toast.dataBind();
                 toast.show();
             }
             finally {
                 // enable the "Update" button
-                $('#profile-page #profile-update').removeAttr("disabled");
+                $('#billing-info-page #billing-info-update').removeAttr("disabled");
                 // hide the spinner on the 'Update' button to indicate process is ongoing
-                $('#profile-page #profile-update').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
-                $('#profile-page #profile-update').get(0).ej2_instances[0].dataBind();
-                $('#profile-page #profile-update').get(0).ej2_instances[0].stop();
+                $('#billing-info-page #billing-info-update').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
+                $('#billing-info-page #billing-info-update').get(0).ej2_instances[0].dataBind();
+                $('#billing-info-page #billing-info-update').get(0).ej2_instances[0].stop();
 
                 // hide page loader
-                $('#profile-page .modal').css("display", "none");
+                $('#billing-info-page .modal').css("display", "none");
             }
 
             return promisesArrayPromise; // return the resolved promisesArray
