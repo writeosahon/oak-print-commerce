@@ -6383,8 +6383,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 $('#billing-info-page #billing-info-form #billing-info-state').parsley({
                     value: function(parsley) {
-                        // return the unmasked input from the card number field
-                        return $('#billing-info-state').get(0).ej2_instances[0].value;
+                        let stateDropDownList = $('#billing-info-state').get(0).ej2_instances[0];
+                        if(stateDropDownList.enabled !== true){
+                            return " ";
+                        }
+                        else{
+                            // return the unmasked input from the card number field
+                            return stateDropDownList.value;
+                        }
                     }
                 });
 
@@ -6486,19 +6492,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                                 get(0).ej2_instances[0];
                                     // reset the selected value for the State
                                     stateDropDownList.value = null;
-                                    $('#billing-info-page #billing-info-state').val("");
+                                    //$('#billing-info-page #billing-info-state').val("");
                                     // reset the dataSource for the State
                                     stateDropDownList.dataSource = countryStatesArray;
 
                                     if(countryStatesArray.length > 0 ){ // there are states in the selected country
                                         // enable the State dropdownlist for user selection
                                         stateDropDownList.enabled = true;
-                                        $('#billing-info-page #billing-info-state').removeAttr("disabled");
+                                        //$('#billing-info-page #billing-info-state').removeAttr("disabled");
                                     }
                                     else{ // there are NO states in the selected country
                                         // disable the State dropdownlist for user selection
                                         stateDropDownList.enabled = false;
-                                        $('#billing-info-page #billing-info-state').attr("disabled", true);
+                                        //$('#billing-info-page #billing-info-state').attr("disabled", true);
                                     }
 
                                     // bind/update all changes made to the State dropdownlist
@@ -6522,7 +6528,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             valueTemplate: '<span>${name}</span>',
                             select: async function () { // listen for when dropdown list value is changed by selection
                                 // update the value of the input field tied to this dropdownlist
-                                $('#billing-info-page #billing-info-state').val(this.value);
+                                //$('#billing-info-page #billing-info-state').val(this.value);
                                 utopiasoftware[utopiasoftware_app_namespace].billingInfoPageViewModel.
                                 billingInfoFormValidator.validate();
                             }
