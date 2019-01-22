@@ -6526,9 +6526,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             itemTemplate: '<span>${name}</span>',
                             valueTemplate: '<span>${name}</span>',
                             select: async function () { // listen for when dropdown list value is changed by selection
-                                // since a difference value has been selected, trigger form validation again
-                                utopiasoftware[utopiasoftware_app_namespace].billingInfoPageViewModel.
-                                billingInfoFormValidator.whenValidate();
+
+                                // handle method task in a different event block
+                                window.setTimeout(function(){
+                                    // since a difference value has been selected, trigger form validation again
+                                    utopiasoftware[utopiasoftware_app_namespace].billingInfoPageViewModel.
+                                    billingInfoFormValidator.whenValidate();
+                                }, 0);
                             }
                         }).appendTo('#billing-info-state');
 
