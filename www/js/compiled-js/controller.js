@@ -6529,9 +6529,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                 // handle method task in a different event block
                                 window.setTimeout(function(){
+                                    $('#billing-info-page #billing-info-form').get(0).
+                                        ej2_instances[$('#billing-info-state').get(0)._utopiasoftware_validator_index].close();
                                     // call the method used to trigger the form validation
-                                    utopiasoftware[utopiasoftware_app_namespace].controller.
-                                    billingInfoPageViewModel.updateButtonClicked()
+                                    /*utopiasoftware[utopiasoftware_app_namespace].controller.
+                                    billingInfoPageViewModel.updateButtonClicked()*/
                                 }, 0);
                             }
                         }).appendTo('#billing-info-state');
@@ -6821,7 +6823,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 statesDropDownList.dataSource = countryDropDownList.dataSource.find(function(countryElement){
                     return countryElement.code === countryDropDownList.value;
                 }).states;
-
+                statesDropDownList.dataBind();
                 statesDropDownList.value = (userDetails.billing && userDetails.billing.state && userDetails.billing.state !== "")
                     ? userDetails.billing.state : null;
                 statesDropDownList.dataBind();
