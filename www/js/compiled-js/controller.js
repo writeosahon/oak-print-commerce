@@ -6678,9 +6678,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 userDetails.billing.email = userDetails.email;
 
                 // use the input from the profile form to update the user details
-                userDetails.billing.address_1 = $('#billing-info-page #billing-info-address-1').val();
-                userDetails.billing.address_2 = $('#billing-info-page #billing-info-address-2').val();
-                userDetails.billing.city = $('#billing-info-page #billing-info-city').val();
+                userDetails.billing.company = $('#billing-info-page #billing-info-company').val().trim();
+                userDetails.billing.address_1 = $('#billing-info-page #billing-info-address-1').val().trim();
+                userDetails.billing.address_2 = $('#billing-info-page #billing-info-address-2').val().trim();
+                userDetails.billing.city = $('#billing-info-page #billing-info-city').val().trim();
                 userDetails.billing.country = $('#billing-info-page #billing-info-country').get(0).ej2_instances[0].value;
                 userDetails.billing.state = $('#billing-info-page #billing-info-state').get(0).ej2_instances[0].value ?
                     $('#billing-info-page #billing-info-state').get(0).ej2_instances[0].value : "";
@@ -6777,6 +6778,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 console.log("USER DETAILS", userDetails);
 
                 // display the user billing info data in the billing info form
+                $('#billing-info-page #billing-info-form #billing-info-company').
+                val(userDetails.billing && userDetails.billing.company ? userDetails.billing.company : "");
                 $('#billing-info-page #billing-info-form #billing-info-address-1').
                 val(userDetails.billing && userDetails.billing.address_1 ? userDetails.billing.address_1 : "");
                 $('#billing-info-page #billing-info-form #billing-info-address-2').
@@ -7200,11 +7203,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 }
 
                 // use the input from the shipping form to update the user details
-                userDetails.shipping.first_name = $('#shipping-info-page #shipping-info-first-name').val();
-                userDetails.shipping.last_name = $('#shipping-info-page #shipping-info-last-name').val();
-                userDetails.shipping.address_1 = $('#shipping-info-page #shipping-info-address-1').val();
-                userDetails.shipping.address_2 = $('#shipping-info-page #shipping-info-address-2').val();
-                userDetails.shipping.city = $('#shipping-info-page #shipping-info-city').val();
+                userDetails.shipping.first_name = $('#shipping-info-page #shipping-info-first-name').val().trim();
+                userDetails.shipping.last_name = $('#shipping-info-page #shipping-info-last-name').val().trim();
+                userDetails.shipping.company = $('#shipping-info-page #shipping-info-company').val().trim();
+                userDetails.shipping.address_1 = $('#shipping-info-page #shipping-info-address-1').val().trim();
+                userDetails.shipping.address_2 = $('#shipping-info-page #shipping-info-address-2').val().trim();
+                userDetails.shipping.city = $('#shipping-info-page #shipping-info-city').val().trim();
                 userDetails.shipping.country = $('#shipping-info-page #shipping-info-country').get(0).ej2_instances[0].value;
                 userDetails.shipping.state = $('#shipping-info-page #shipping-info-state').get(0).ej2_instances[0].value ?
                     $('#shipping-info-page #shipping-info-state').get(0).ej2_instances[0].value : "";
@@ -7305,6 +7309,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 val(userDetails.shipping && userDetails.shipping.first_name ? userDetails.shipping.first_name : "");
                 $('#shipping-info-page #shipping-info-form #shipping-info-last-name').
                 val(userDetails.shipping && userDetails.shipping.last_name ? userDetails.shipping.last_name : "");
+                $('#shipping-info-page #shipping-info-form #shipping-info-company').
+                val(userDetails.shipping && userDetails.shipping.company ? userDetails.shipping.company : "");
                 $('#shipping-info-page #shipping-info-form #shipping-info-address-1').
                 val(userDetails.shipping && userDetails.shipping.address_1 ? userDetails.shipping.address_1 : "");
                 $('#shipping-info-page #shipping-info-form #shipping-info-address-2').
