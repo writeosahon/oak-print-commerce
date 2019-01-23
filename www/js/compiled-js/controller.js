@@ -7135,7 +7135,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         async updateButtonClicked(){
 
-            // run the validation method for the billing-info form
+            // run the validation method for the shipping-info form
             utopiasoftware[utopiasoftware_app_namespace].controller.shippingInfoPageViewModel.
             shippingInfoFormValidator.whenValidate();
         },
