@@ -1,17 +1,17 @@
-<!-- profile page -->
-<ons-page id="profile-page">
+<!-- shipping info page -->
+<ons-page id="shipping-info-page">
 
     <ons-toolbar style="background-color: #ffffff !important; color: #3f51b5 !important;
     box-shadow: none !important; border-bottom: lightgray 1px solid"
                  static modifier="noshadow">
         <div class="left" style="background-color: #ffffff !important; color: #3f51b5 !important;">
             <ons-toolbar-button style="background-color: #ffffff !important; color: #3f51b5 !important;"
-                 onclick="utopiasoftware[utopiasoftware_app_namespace].controller.profilePageViewModel.backButtonClicked();">
+                 onclick="utopiasoftware[utopiasoftware_app_namespace].controller.shippingInfoPageViewModel.backButtonClicked();">
                 <ons-icon icon="md-long-arrow-left"></ons-icon>
             </ons-toolbar-button>
         </div>
         <div class="center title-bar" style="background-color: #ffffff !important; color: #3f51b5 !important; text-align: center;">
-            User Profile
+            Shipping Information
         </div>
 
         <div class="right" style="background-color: #ffffff !important; color: #3f51b5 !important;">
@@ -41,29 +41,17 @@
             </div>
         </div>
 
-        <form id="profile-form" autocomplete="off" data-parsley-inputs="ons-input,textarea,select"
-              data-parsley-excluded="ons-input[type=button], ons-input[type=submit],
-                              ons-input[type=reset], ons-input[type=hidden], [disabled], :hidden">
+        <form id="shipping-info-form" autocomplete="off" data-parsley-inputs="ons-input,textarea,#shipping-info-country,#shipping-info-state"
+              data-parsley-excluded="[type=button], [type=submit],
+                              [type=reset], [type=hidden], [disabled]">
 
             <ons-row vertical-align="bottom" style="margin-top: 1.5em; margin-bottom: 1.5em; text-align: center;">
-                <ons-col width="5%"></ons-col>
-                <ons-col width="80%" style="border: 2px solid lightgray; border-radius: 6px;
-                background-color: lightgray !important; color: #3f51b5; font-size: 1.3em; padding-top:0.5em;">
-                    <ons-icon icon="md-email" size="28px" fixed-width style="color: #3f51b5; margin-right: 0.5em;"></ons-icon>
-                    <ons-input id="profile-email" type="email" style="width: 75%;
-                        caret-color: #3f51b5 !important; color: #3f51b5 !important;" readonly
-                               placeholder="Email" modifier="material transparent" float disable-auto-styling></ons-input>
-                </ons-col>
-                <ons-col width="15%"></ons-col>
-            </ons-row>
-
-            <ons-row vertical-align="bottom" style="margin-bottom: 1.5em; text-align: center;">
                 <ons-col width="5%"></ons-col>
                 <ons-col width="80%" style="border: 2px solid lightgray; border-radius: 6px; background-color: #ffffff;
                         color: #3f51b5;
                     font-size: 1.3em; padding-top:0.5em;">
                     <ons-icon icon="md-account" size="28px" fixed-width style="color: #3f51b5; margin-right: 0.5em;"></ons-icon>
-                    <ons-input id="profile-first-name" type="text"
+                    <ons-input id="shipping-info-first-name" type="text"
                                pattern="[a-zA-Z]{1}[\w\s\-\.]*[a-zA-Z]{1}\s*" style="width: 75%;
                         caret-color: #3f51b5 !important; color: #3f51b5 !important;" required
                                placeholder="First Name" modifier="material" float disable-auto-styling
@@ -79,7 +67,7 @@
                         color: #3f51b5;
                     font-size: 1.3em; padding-top:0.5em;">
                     <ons-icon icon="md-account" size="28px" fixed-width style="color: #3f51b5; margin-right: 0.5em;"></ons-icon>
-                    <ons-input id="profile-last-name" type="text"
+                    <ons-input id="shipping-info-last-name" type="text"
                                pattern="[a-zA-Z]{1}[\w\s\-\.]*[a-zA-Z]{1}\s*" style="width: 75%;
                         caret-color: #3f51b5 !important; color: #3f51b5 !important;" required
                                placeholder="Last Name" modifier="material" float disable-auto-styling
@@ -94,15 +82,61 @@
                 <ons-col width="80%" style="border: 2px solid lightgray; border-radius: 6px; background-color: #ffffff;
                         color: #3f51b5;
                     font-size: 1.3em; padding-top:0.5em;">
-                    <ons-icon icon="md-phone" size="28px" fixed-width style="color: #3f51b5; margin-right: 0.5em;"></ons-icon>
-                    <ons-input id="profile-phone-number" type="tel"
-                               pattern="((0[1-9]{1}[0-9]{9}|\+234[1-9]{1}[0-9]{9})|\+[1-9]{1}[0-9]{4,})" style="width: 75%;
-                        caret-color: #3f51b5 !important; color: #3f51b5 !important;"
-                               placeholder="Phone Number" modifier="material" float disable-auto-styling
-                               data-parsley-pattern-message="incorrect phone number format. phone number must be in international format (starting with '+')"
-                               data-parsley-type-message="incorrect phone number format. phone number must be in international format (starting with '+')"></ons-input>
+                    <label id="shipping-info-address-1-label" class="address-label" for="shipping-info-address-1">Address 1</label>
+                    <ons-icon icon="md-city-alt" size="28px" fixed-width style="color: #3f51b5; margin-right: 0.5em;"></ons-icon>
+                    <textarea id="shipping-info-address-1" class="textarea textarea--transparent" style="width: 75%;
+                        caret-color: #3f51b5 !important; color: #3f51b5 !important;" required
+                               placeholder="Address Line 1" rows="2"
+                               data-parsley-minwords="2"
+                               data-parsley-required-message="address is required"
+                               data-parsley-minwords-message="incorrect address. please check your spelling"></textarea>
                 </ons-col>
                 <ons-col width="15%"></ons-col>
+            </ons-row>
+
+            <ons-row vertical-align="bottom" style="margin-bottom: 1.5em; text-align: center;">
+                <ons-col width="5%"></ons-col>
+                <ons-col width="80%" style="border: 2px solid lightgray; border-radius: 6px; background-color: #ffffff;
+                        color: #3f51b5;
+                    font-size: 1.3em; padding-top:0.5em;">
+                    <label id="shipping-info-address-2-label" class="address-label" for="shipping-info-address-2">Address 2</label>
+                    <ons-icon icon="md-city-alt" size="28px" fixed-width style="color: #3f51b5; margin-right: 0.5em;"></ons-icon>
+                    <textarea id="shipping-info-address-2" class="textarea textarea--transparent" style="width: 75%;
+                        caret-color: #3f51b5 !important; color: #3f51b5 !important;"
+                              placeholder="Address Line 2 (Optional)" rows="2"
+                              data-parsley-minwords="2"
+                              data-parsley-minwords-message="incorrect address. please check your spelling"></textarea>
+                </ons-col>
+                <ons-col width="15%"></ons-col>
+            </ons-row>
+
+            <ons-row vertical-align="bottom" style="margin-bottom: 1em; text-align: center;">
+                <ons-col width="5%"></ons-col>
+                <ons-col width="80%" style="border: 2px solid lightgray; border-radius: 6px; background-color: #ffffff;
+                        color: #3f51b5;
+                    font-size: 1.3em; padding-top:0.5em;">
+                    <ons-icon icon="md-pin" size="28px" fixed-width style="color: #3f51b5; margin-right: 0.5em;"></ons-icon>
+                    <ons-input id="shipping-info-city" type="text" style="width: 75%;
+                        caret-color: #3f51b5 !important; color: #3f51b5 !important;" required
+                               placeholder="City" modifier="material" float disable-auto-styling
+                               data-parsley-minwords="1"
+                               data-parsley-required-message="city is required"
+                               data-parsley-minwords-message="incorrect city. please check your spelling"></ons-input>
+                </ons-col>
+                <ons-col width="15%"></ons-col>
+            </ons-row>
+
+            <ons-row vertical-align="bottom" style="margin-bottom: 1.5em;">
+                <ons-col width="5%"></ons-col>
+                <ons-col width="40%" style="background-color: #ffffff; color: #3f51b5;">
+                    <input id="shipping-info-country" type="text" style="width: 100%" required
+                           data-parsley-required-message="country is required">
+                </ons-col>
+                <ons-col width="5px"></ons-col>
+                <ons-col width="40%" style="background-color: #ffffff; color: #3f51b5;">
+                    <input id="shipping-info-state" type="text" style="width: 100%" required
+                           data-parsley-required-message="state is required">
+                </ons-col>
             </ons-row>
 
         </form>
@@ -112,18 +146,18 @@
     <ons-bottom-toolbar modifier="transparent" style="border-top: lightgray 1px solid">
 
         <div style="text-align: center; width: 100%; margin-top: 6px;">
-            <button id="profile-cancel" type="button"
+            <button id="shipping-info-cancel" type="button"
                     style="color: #d64113; background-color: #ffffff; box-shadow: none"
-            onclick="utopiasoftware[utopiasoftware_app_namespace].controller.profilePageViewModel.
+            onclick="utopiasoftware[utopiasoftware_app_namespace].controller.shippingInfoPageViewModel.
             backButtonClicked();">
                 <ons-ripple></ons-ripple>
                 Cancel
             </button>
 
             <!-- button is disabled by default -->
-            <button id="profile-update" type="button" disabled
+            <button id="shipping-info-update" type="button" disabled
                     style="color: #363E7C; background-color: #ffffff; box-shadow: none"
-                    onclick="utopiasoftware[utopiasoftware_app_namespace].controller.profilePageViewModel.
+                    onclick="utopiasoftware[utopiasoftware_app_namespace].controller.shippingInfoPageViewModel.
                     updateButtonClicked()">
                 <ons-ripple></ons-ripple>
                 Update

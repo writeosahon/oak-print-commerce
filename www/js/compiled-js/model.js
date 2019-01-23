@@ -182,3 +182,15 @@ $(document).on("hide", "#billing-info-page", utopiasoftware[utopiasoftware_app_n
 
 // listen for when the BILLING-INFO is destroyed
 $(document).on("destroy", "#billing-info-page", utopiasoftware[utopiasoftware_app_namespace].controller.billingInfoPageViewModel.pageDestroy);
+
+// listen for the initialisation of the SHIPPING-INFO page
+$(document).on("init", "#shipping-info-page", utopiasoftware[utopiasoftware_app_namespace].controller.shippingInfoPageViewModel.pageInit);
+
+// listen for when the SHIPPING-INFO page is shown
+$(document).on("show", "#shipping-info-page", utopiasoftware[utopiasoftware_app_namespace].controller.shippingInfoPageViewModel.pageShow);
+
+// listen for when the SHIPPING-INFO page is hidden
+$(document).on("hide", "#shipping-info-page", utopiasoftware[utopiasoftware_app_namespace].controller.shippingInfoPageViewModel.pageHide);
+
+// listen for when the SHIPPING-INFO is destroyed
+$(document).on("destroy", "#shipping-info-page", utopiasoftware[utopiasoftware_app_namespace].controller.shippingInfoPageViewModel.pageDestroy);

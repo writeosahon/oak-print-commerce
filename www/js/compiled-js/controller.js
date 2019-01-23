@@ -6858,5 +6858,530 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             }
         }
 
+    },
+
+    /**
+     * this is the view-model/controller for the Shipping Info page
+     */
+    shippingInfoPageViewModel: {
+
+        /**
+         * used to hold the parsley form validation object for the shipping info form
+         */
+        shippingInfoFormValidator: null,
+
+        /**
+         * event is triggered when page is initialised
+         */
+        pageInit: function(event){
+
+            var $thisPage = $(event.target); // get the current page shown
+
+            // call the function used to initialise the app page if the app is fully loaded
+            loadPageOnAppReady();
+
+            //function is used to initialise the page if the app is fully ready for execution
+            async function loadPageOnAppReady() {
+                // check to see if onsen is ready and if all app loading has been completed
+                if (!ons.isReady() || utopiasoftware[utopiasoftware_app_namespace].model.isAppReady === false) {
+                    setTimeout(loadPageOnAppReady, 500); // call this function again after half a second
+                    return;
+                }
+
+                // listen for the back button event
+                $('#app-main-navigator').get(0).topPage.onDeviceBackButton =
+                    utopiasoftware[utopiasoftware_app_namespace].controller.
+                        shippingInfoPageViewModel.backButtonClicked;
+
+                // initialise the shipping info form validation
+                utopiasoftware[utopiasoftware_app_namespace].controller.shippingInfoPageViewModel.shippingInfoFormValidator =
+                    $('#shipping-info-page #shipping-info-form').parsley();
+
+                // initialise the custom validation for the shipping info 'country' field
+                $('#shipping-info-page #shipping-info-form #shipping-info-country').parsley({
+                    value: function(parsley) {
+                        // return the value from the dropdownlist
+                        return $('#shipping-info-country').get(0).ej2_instances[0].value;
+                    }
+                });
+
+                // initialise the custom validation for the shipping info 'state' field
+                $('#shipping-info-page #shipping-info-form #shipping-info-state').parsley({
+                    value: function(parsley) { // function returns a 'custom' value
+                        // get the State dropdownlist component
+                        let stateDropDownList = $('#shipping-info-state').get(0).ej2_instances[0];
+                        // check if the dropdownlist is enabled or not
+                        if(stateDropDownList.enabled !== true){ // dropdownlist is disabled
+                            return " "; // return an empty string
+                        }
+                        else{ // dropdownlist is enabled
+                            return stateDropDownList.value; // return the value from the dropdownlist
+                        }
+                    }
+                });
+
+                // listen for shipping form field validation failure event
+                utopiasoftware[utopiasoftware_app_namespace].controller.shippingInfoPageViewModel.shippingInfoFormValidator.
+                on('field:error', function(fieldInstance) {
+                    // get the element that triggered the field validation error and use it to display tooltip
+                    // display tooltip
+                    let tooltip = $('#shipping-info-page #shipping-info-form').get(0).
+                        ej2_instances[fieldInstance.$element.get(0)._utopiasoftware_validator_index];
+                    tooltip.content = fieldInstance.getErrorsMessages()[0];
+                    tooltip.dataBind();
+                    tooltip.open(fieldInstance.$element.get(0));
+                });
+
+                // listen for shipping info form field validation success event
+                utopiasoftware[utopiasoftware_app_namespace].controller.shippingInfoPageViewModel.shippingInfoFormValidator.
+                on('field:success', function(fieldInstance) {
+                    // hide tooltip from element
+                    let tooltip = $('#shipping-info-page #shipping-info-form').get(0).
+                        ej2_instances[fieldInstance.$element.get(0)._utopiasoftware_validator_index];
+                    tooltip.close();
+                });
+
+                // listen for shipping info form validation success
+                utopiasoftware[utopiasoftware_app_namespace].controller.shippingInfoPageViewModel.shippingInfoFormValidator.
+                on('form:success',
+                    utopiasoftware[utopiasoftware_app_namespace].controller.shippingInfoPageViewModel.shippingInfoFormValidated);
+
+                // listen for scroll event on the page to adjust the tooltips when page scrolls
+                $('#shipping-info-page .content').on("scroll", utopiasoftware[utopiasoftware_app_namespace].
+                    controller.shippingInfoPageViewModel.scrollAndResizeEventListener);
+
+
+                try{
+                    // create the "Cancel" button
+                    new ej.buttons.Button({
+                        //iconCss: "zmdi zmdi-shopping-cart-add utopiasoftware-icon-zoom-one-point-two",
+                        //iconPosition: "Left"
+                    }).appendTo('#shipping-info-cancel');
+
+                    // create the "Update" button
+                    new ej.splitbuttons.ProgressButton({
+                        cssClass: 'e-hide-spinner',
+                        duration: 10 * 60 * 60 * 1000 // set spinner/progress duration for 10 hr
+                    }).appendTo('#shipping-info-update');
+
+                    let countryDataArray = []; // holds the array containing country objects
+
+                    // load the country data from the local list with the app
+                    countryDataArray = await Promise.resolve($.ajax(
+                        {
+                            url: 'country-list.json',
+                            type: "get",
+                            //contentType: "application/json",
+                            beforeSend: function(jqxhr) {
+                                jqxhr.setRequestHeader("Authorization", "Basic " +
+                                    utopiasoftware[utopiasoftware_app_namespace].accessor);
+                            },
+                            dataType: "json",
+                            timeout: 240000, // wait for 4 minutes before timeout of request
+                            processData: true,
+                            data: {}
+                        }
+                    ));
+
+                    // create the tooltip objects for the shipping info form
+                    $('#shipping-info-form textarea, #shipping-info-form ons-input, #shipping-info-form #shipping-info-country, #shipping-info-form #shipping-info-state', $thisPage).
+                    each(function(index, element){
+                        element._utopiasoftware_validator_index = index;
+                        // create the tool tips for every element being validated, but attach it to the html form object
+                        new ej.popups.Tooltip({
+                            cssClass: 'utopiasoftware-ej2-validation-tooltip',
+                            position: 'TopLeft',
+                            opensOn: 'Custom'
+                        }).appendTo($('#shipping-info-page #shipping-info-form').get(0));
+                    });
+
+                    // create the Country dropdown list from the select input
+                    new ej.dropdowns.DropDownList(
+                        {
+                            cssClass: "shipping-info-dropdownlist",
+                            dataSource: countryDataArray,
+                            fields: { value: 'code', text: 'name'},
+                            placeholder: "Country",
+                            floatLabelType: 'Auto',
+                            value: 'NG',
+                            itemTemplate: '<span>${name}</span>',
+                            valueTemplate: '<span>${name}</span>'
+                        }).appendTo('#shipping-info-country');
+
+                    // create the Country dropdown list from the select input
+                    new ej.dropdowns.DropDownList(
+                        {
+                            cssClass: "shipping-info-dropdownlist",
+                            dataSource: countryDataArray.find(function(countryElement){
+                                return countryElement.code === "NG";
+                            }).states,
+                            fields: { value: 'code', text: 'name'},
+                            placeholder: "State",
+                            floatLabelType: 'Auto',
+                            itemTemplate: '<span>${name}</span>',
+                            valueTemplate: '<span>${name}</span>',
+                            select: async function () { // listen for when dropdown list value is changed by selection
+
+                                // handle method task in a different event block
+                                window.setTimeout(function(){
+                                    // since the dropdownlist value has changed, remove any tooltip that is being displayed on this component
+                                    $('#shipping-info-page #shipping-info-form').get(0).
+                                        ej2_instances[$('#shipping-info-state').get(0)._utopiasoftware_validator_index].close();
+                                }, 0);
+                            }
+                        }).appendTo('#shipping-info-state');
+
+                    // display the shipping info on the shipping info form
+                    await utopiasoftware[utopiasoftware_app_namespace].controller.shippingInfoPageViewModel.displayContent();
+                }
+                catch(err){
+                    console.log("SHIPPING INFO ERROR", err);
+                }
+                finally {
+
+                }
+            }
+
+        },
+
+        /**
+         * method is triggered when page is shown
+         */
+        pageShow: function(){
+            window.SoftInputMode.set('adjustResize');
+
+            // update cart count
+            $('#shipping-info-page .cart-count').html(utopiasoftware[utopiasoftware_app_namespace].model.cartCount);
+
+            //add listener for when the window is resized by virtue of the device keyboard being shown
+            window.addEventListener("resize", utopiasoftware[utopiasoftware_app_namespace].controller.
+                shippingInfoPageViewModel.scrollAndResizeEventListener, false);
+        },
+
+        /**
+         * method is triggered when page is hidden
+         */
+        pageHide: async function(){
+
+            // hide the tooltips on the profile form
+            $('#shipping-info-page #shipping-info-form').get(0).ej2_instances.forEach(function(tooltipArrayElem){
+                // hide the tooltip
+                tooltipArrayElem.close();
+            });
+
+            // reset all form validator objects
+            utopiasoftware[utopiasoftware_app_namespace].controller.shippingInfoPageViewModel.shippingInfoFormValidator.reset();
+
+            //remove listener for when the window is resized by virtue of the device keyboard being shown
+            window.removeEventListener("resize", utopiasoftware[utopiasoftware_app_namespace].controller.
+                shippingInfoPageViewModel.scrollAndResizeEventListener, false);
+        },
+
+        /**
+         * method is triggered when page is destroyed
+         */
+        pageDestroy: function(){
+
+            // destroy the tooltips on the shipping form
+            $('#shipping-info-page #shipping-info-form').get(0).ej2_instances.forEach(function(tooltipArrayElem){
+                // destroy the tooltip
+                tooltipArrayElem.destroy();
+            });
+
+            // destroy the Country & State DropDownLists
+            $('#shipping-info-page #shipping-info-country').get(0).ej2_instances[0].destroy();
+            $('#shipping-info-page #shipping-info-state').get(0).ej2_instances[0].destroy();
+
+            // destroy the "Cancel" and "Update" buttons
+            $('#shipping-info-page #shipping-info-cancel').get(0).ej2_instances[0].destroy();
+            $('#shipping-info-page #shipping-info-update').get(0).ej2_instances[0].destroy();
+
+            // destroy all form validator objects
+            utopiasoftware[utopiasoftware_app_namespace].controller.shippingInfoPageViewModel.shippingInfoFormValidator.destroy();
+        },
+
+        /**
+         * method is triggered when the device back button is clicked OR a similar action is triggered
+         */
+        backButtonClicked(){
+            // get back to the previous page on the app-main navigator stack
+            $('#app-main-navigator').get(0).popPage();
+        },
+
+        /**
+         * method is triggered when the profile page is scrolled or the display window is resized by
+         * virtue of the device keyboard being displayed
+         *
+         * @returns {Promise<void>}
+         */
+        async scrollAndResizeEventListener(){
+            // place function execution in the event queue to be executed ASAP
+            window.setTimeout(function(){
+                // adjust the tooltips elements on the shipping form
+                $('#shipping-info-form textarea, #shipping-info-form ons-input, #shipping-info-form #shipping-info-country, #shipping-info-form #shipping-info-state').
+                each(function(index, element){
+                    document.getElementById('billing-info-form').ej2_instances[index].refresh(element);
+                });
+
+            }, 0);
+
+        },
+
+
+        /**
+         * method is triggered when the user clicks the "Update" button
+         *
+         * @returns {Promise<void>}
+         */
+        async updateButtonClicked(){
+
+            // run the validation method for the billing-info form
+            utopiasoftware[utopiasoftware_app_namespace].controller.shippingInfoPageViewModel.
+            shippingInfoFormValidator.whenValidate();
+        },
+
+        /**
+         * method is triggered when the shipping-info form is successfully validated
+         *
+         * @returns {Promise<void>}
+         */
+        async shippingInfoFormValidated(){
+
+            // check if there is Internet connection
+            if(navigator.connection.type === Connection.NONE){ // there is no Internet connection
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast to show that an error
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.timeOut = 3000;
+                toast.content = `Connect to the Internet to update shipping information`;
+                toast.dataBind();
+                toast.show();
+
+                return; // exit method
+            }
+
+            // disable the "Update" button
+            $('#shipping-info-page #shipping-info-update').attr("disabled", true);
+            // show the spinner on the 'Update' button to indicate process is ongoing
+            $('#shipping-info-page #shipping-info-update').get(0).ej2_instances[0].cssClass = '';
+            $('#shipping-info-page #shipping-info-update').get(0).ej2_instances[0].dataBind();
+            $('#shipping-info-page #shipping-info-update').get(0).ej2_instances[0].start();
+
+            // display page loader while completing the "update profile" request
+            $('#shipping-info-page .modal').css("display", "table");
+
+            var promisesArray = []; // holds the array for the promises used to complete the process
+
+            var promisesArrayPromise = null; // holds the promise gotten from the promisesArray
+
+            try{
+                // load the use details from the encrypted app database
+                let userDetails = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                loadData("user-details",
+                    utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
+
+                console.log("USER DETAILS BEFORE SHIPPING INFO UPDATE", userDetails);
+
+                // temporary hold the user id and password
+                let userId = userDetails.id;
+                let userPassword = userDetails.password;
+
+                // check if user details has the shipping property
+                if(!userDetails.shipping){ // no shipping property, so create it
+                    // create the shipping property
+                    userDetails.shipping = {};
+                }
+
+                // use the input from the shipping form to update the user details
+                userDetails.shipping.first_name = $('#shipping-info-page #shipping-info-first-name').val();
+                userDetails.shipping.last_name = $('#shipping-info-page #shipping-info-last-name').val();
+                userDetails.shipping.address_1 = $('#shipping-info-page #shipping-info-address-1').val();
+                userDetails.shipping.address_2 = $('#shipping-info-page #shipping-info-address-2').val();
+                userDetails.shipping.city = $('#shipping-info-page #shipping-info-city').val();
+                userDetails.shipping.country = $('#shipping-info-page #shipping-info-country').get(0).ej2_instances[0].value;
+                userDetails.shipping.state = $('#shipping-info-page #shipping-info-state').get(0).ej2_instances[0].value ?
+                    $('#shipping-info-page #shipping-info-state').get(0).ej2_instances[0].value : "";
+
+                // delete the properties not needed for the update from the userDetails object
+                delete userDetails.id;
+                delete userDetails.password;
+
+                // now send the user profile update request to the remote server
+                promisesArray.push(Promise.resolve($.ajax(
+                    {
+                        url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + `/wp-json/wc/v3/customers/${userId}`,
+                        type: "put",
+                        contentType: "application/json",
+                        beforeSend: function(jqxhr) {
+                            jqxhr.setRequestHeader("Authorization", "Basic " +
+                                utopiasoftware[utopiasoftware_app_namespace].accessor);
+                        },
+                        dataType: "json",
+                        timeout: 240000, // wait for 4 minutes before timeout of request
+                        processData: false,
+                        data: JSON.stringify(userDetails)
+                    }
+                )));
+
+                // get the promise created from the promisesArray
+                promisesArrayPromise = Promise.all(promisesArray);
+
+                // get the result from the promisesArray
+                let resultsArray = await promisesArrayPromise;
+
+                // add the user's password to the user details retrieved from the server
+                resultsArray[0].password = userPassword;
+
+                // save the created user details data to ENCRYPTED app database as cached data
+                await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
+                    {_id: "user-details", docType: "USER_DETAILS", userDetails: resultsArray[0]},
+                    utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase);
+
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast message
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'success-ej2-toast';
+                toast.timeOut = 3000;
+                toast.content = `Shipping information updated`;
+                toast.dataBind();
+                toast.show();
+
+            }
+            catch (err) {
+                err = JSON.parse(err.responseText);
+
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast message
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.timeOut = 3000;
+                toast.content = `Shipping information update failed. ${err.message || ""}`;
+                toast.dataBind();
+                toast.show();
+            }
+            finally {
+                // enable the "Update" button
+                $('#shipping-info-page #shipping-info-update').removeAttr("disabled");
+                // hide the spinner on the 'Update' button to indicate process is ongoing
+                $('#shipping-info-page #shipping-info-update').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
+                $('#shipping-info-page #shipping-info-update').get(0).ej2_instances[0].dataBind();
+                $('#shipping-info-page #shipping-info-update').get(0).ej2_instances[0].stop();
+
+                // hide page loader
+                $('#shipping-info-page .modal').css("display", "none");
+            }
+
+            return promisesArrayPromise; // return the resolved promisesArray
+
+        },
+
+        /**
+         * method is used to load the current shipping info data into the shipping info form
+         * @returns {Promise<void>}
+         */
+        async displayContent(){
+
+            try{
+                // load the user profile details from the app database
+                let userDetails = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                loadData("user-details",
+                    utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
+
+                console.log("USER DETAILS", userDetails);
+
+                // display the user shipping info data in the shipping info form
+                $('#shipping-info-page #shipping-info-form #shipping-info-first-name').
+                val(userDetails.shipping && userDetails.shipping.first_name ? userDetails.shipping.first_name : "");
+                $('#shipping-info-page #shipping-info-form #shipping-info-last-name').
+                val(userDetails.shipping && userDetails.shipping.last_name ? userDetails.shipping.last_name : "");
+                $('#shipping-info-page #shipping-info-form #shipping-info-address-1').
+                val(userDetails.shipping && userDetails.shipping.address_1 ? userDetails.shipping.address_1 : "");
+                $('#shipping-info-page #shipping-info-form #shipping-info-address-2').
+                val(userDetails.shipping && userDetails.shipping.address_2 ? userDetails.shipping.address_2 : "");
+                $('#shipping-info-page #shipping-info-form #shipping-info-city').
+                val(userDetails.shipping && userDetails.shipping.city ? userDetails.shipping.city : "");
+
+                // get the country dropdownlist
+                var countryDropDownList = $('#shipping-info-page #shipping-info-form #shipping-info-country').get(0).ej2_instances[0];
+                // temporarily remove the select event listener for the country dropdownlist
+                countryDropDownList.removeEventListener("select");
+                // update the select dropdownlist for country
+                countryDropDownList.value = (userDetails.shipping && userDetails.shipping.country && userDetails.shipping.country !== "")
+                    ? userDetails.shipping.country : 'NG';
+                countryDropDownList.dataBind();
+
+                // update the select dropdownlist for state
+                let statesDropDownList = $('#shipping-info-page #shipping-info-form #shipping-info-state').get(0).ej2_instances[0];
+                statesDropDownList.dataSource = countryDropDownList.dataSource.find(function(countryElement){
+                    return countryElement.code === countryDropDownList.value;
+                }).states;
+                statesDropDownList.dataBind();
+                statesDropDownList.value = (userDetails.shipping && userDetails.shipping.state && userDetails.shipping.state !== "")
+                    ? userDetails.shipping.state : null;
+                statesDropDownList.dataBind();
+                // check if the state dropdownlist has a value
+                if(statesDropDownList.value){ // check if the state dropdownlist has a value
+                    statesDropDownList.enabled = true; // enable the state dropdownlist
+                    statesDropDownList.dataBind();
+                }
+                else{
+                    statesDropDownList.enabled = false; // disable the state dropdownlist
+                    statesDropDownList.dataBind();
+                }
+                console.log("STATE VALUE", statesDropDownList.value);
+
+            }
+            finally {
+                // hide page preloader
+                $('#shipping-info-page .page-preloader').css("display", "none");
+                // hide page modal loader
+                $('#shipping-info-page .modal').css("display", "none");
+                // enable the "Update" button
+                $('#shipping-info-page #shipping-info-update').removeAttr("disabled");
+
+                // reinstate the country dropdownlist "select" listener in a separate event block
+                window.setTimeout(async function(){
+                    // reinstate the country dropdownlist "select" listener
+                    countryDropDownList.addEventListener("select", async function () { // listen for when dropdown list value is changed by selection
+                        let countryDropDownList = this; // holds this dropdown list
+
+                        // execute the task in a separate event block
+                        window.setTimeout(async function(){
+                            // get the country object and its states that represents the country value selected
+                            let countryStatesArray = countryDropDownList.getDataByValue(countryDropDownList.value).states;
+                            // get the state dropdownlist
+                            let stateDropDownList = $('#shipping-info-page #shipping-info-form #shipping-info-state').
+                            get(0).ej2_instances[0];
+                            // reset the selected value for the State
+                            stateDropDownList.value = null;
+                            // reset the dataSource for the State
+                            stateDropDownList.dataSource = countryStatesArray;
+
+                            if(countryStatesArray.length > 0 ){ // there are states in the selected country
+                                // enable the State dropdownlist for user selection
+                                stateDropDownList.enabled = true;
+                            }
+                            else{ // there are NO states in the selected country
+                                // disable the State dropdownlist for user selection
+                                stateDropDownList.enabled = false;
+                            }
+
+                            // bind/update all changes made to the State dropdownlist
+                            stateDropDownList.dataBind();
+
+                        }, 0);
+                    });
+                }, 0);
+            }
+        }
+
     }
+
 };
