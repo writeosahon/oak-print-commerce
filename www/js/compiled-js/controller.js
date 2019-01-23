@@ -6802,6 +6802,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 statesDropDownList.value = (userDetails.billing && userDetails.billing.state && userDetails.billing.state !== "")
                     ? userDetails.billing.state : null;
                 statesDropDownList.dataBind();
+                // check if the state dropdownlist has a value
+                if(statesDropDownList.value){ // check if the state dropdownlist has a value
+                    statesDropDownList.enabled = true; // enable the state dropdownlist
+                    statesDropDownList.dataBind();
+                }
+                else{
+                    statesDropDownList.enabled = false; // disable the state dropdownlist
+                    statesDropDownList.dataBind();
+                }
                 console.log("STATE VALUE", statesDropDownList.value);
 
             }
