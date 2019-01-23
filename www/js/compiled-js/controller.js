@@ -6792,7 +6792,35 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // update the select dropdownlist for country
                 countryDropDownList.value = (userDetails.billing && userDetails.billing.country && userDetails.billing.country !== "")
                     ? userDetails.billing.country : 'NG';
-                countryDropDownList.select = countrySelectListener; // reinstate the country select listener
+                countryDropDownList.addEventListener("select", async function () { // listen for when dropdown list value is changed by selection
+                    let countryDropDownList = this; // holds this dropdown list
+
+                    // execute the task in a separate event block
+                    window.setTimeout(async function(){
+                        // get the country object and its states that represents the country value selected
+                        let countryStatesArray = countryDropDownList.getDataByValue(countryDropDownList.value).states;
+                        // get the state dropdownlist
+                        let stateDropDownList = $('#billing-info-page #billing-info-form #billing-info-state').
+                        get(0).ej2_instances[0];
+                        // reset the selected value for the State
+                        stateDropDownList.value = null;
+                        // reset the dataSource for the State
+                        stateDropDownList.dataSource = countryStatesArray;
+
+                        if(countryStatesArray.length > 0 ){ // there are states in the selected country
+                            // enable the State dropdownlist for user selection
+                            stateDropDownList.enabled = true;
+                        }
+                        else{ // there are NO states in the selected country
+                            // disable the State dropdownlist for user selection
+                            stateDropDownList.enabled = false;
+                        }
+
+                        // bind/update all changes made to the State dropdownlist
+                        stateDropDownList.dataBind();
+
+                    }, 0);
+                }); // reinstate the country select listener
                 countryDropDownList.dataBind();
                 // update the select dropdownlist for state
                 let statesDropDownList = $('#billing-info-page #billing-info-form #billing-info-state').get(0).ej2_instances[0];
