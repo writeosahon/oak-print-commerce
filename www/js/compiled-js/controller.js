@@ -6807,7 +6807,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     statesDropDownList.enabled = true; // enable the state dropdownlist
                     statesDropDownList.dataBind();
                 }
-                else{
+                else if(countryDropDownList.value === 'NG'){ // if the country selected is nigeria
+                    statesDropDownList.enabled = true; // enable the state dropdownlist
+                    statesDropDownList.dataBind();
+                }
+                else { // the state dropdown has no value and the country selected is not nigeria
                     statesDropDownList.enabled = false; // disable the state dropdownlist
                     statesDropDownList.dataBind();
                 }
@@ -7331,7 +7335,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     statesDropDownList.enabled = true; // enable the state dropdownlist
                     statesDropDownList.dataBind();
                 }
-                else{
+                else if(countryDropDownList.value === 'NG'){ // if the country selected is nigeria
+                    statesDropDownList.enabled = true; // enable the state dropdownlist
+                    statesDropDownList.dataBind();
+                }
+                else { // the state dropdown has no value and the country selected is not nigeria
                     statesDropDownList.enabled = false; // disable the state dropdownlist
                     statesDropDownList.dataBind();
                 }
