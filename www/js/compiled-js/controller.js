@@ -6791,7 +6791,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // update the select dropdownlist for country
                 countryDropDownList.value = (userDetails.billing && userDetails.billing.country && userDetails.billing.country !== "")
                     ? userDetails.billing.country : 'NG';
-                countryDropDownList.dataBind();;
+                countryDropDownList.dataBind();
 
                 // update the select dropdownlist for state
                 let statesDropDownList = $('#billing-info-page #billing-info-form #billing-info-state').get(0).ej2_instances[0];
