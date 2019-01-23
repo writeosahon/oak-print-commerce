@@ -7120,7 +7120,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // adjust the tooltips elements on the shipping form
                 $('#shipping-info-form textarea, #shipping-info-form ons-input, #shipping-info-form #shipping-info-country, #shipping-info-form #shipping-info-state').
                 each(function(index, element){
-                    document.getElementById('billing-info-form').ej2_instances[index].refresh(element);
+                    document.getElementById('shipping-info-form').ej2_instances[index].refresh(element);
                 });
 
             }, 0);
