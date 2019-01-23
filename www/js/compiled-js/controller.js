@@ -6813,12 +6813,17 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $('#billing-info-page #billing-info-form #billing-info-city').
                 val(userDetails.billing && userDetails.billing.city ? userDetails.billing.city : "");
 
-                // update the select dropdownlist for country and state
+                // temporarily remove the select event listener for the country dropdownlist
                 let countryDropDownList = $('#billing-info-page #billing-info-form #billing-info-country').get(0).ej2_instances[0];
+                let countrySelectListener = countryDropDownList.select;
+                countryDropDownList.select = function(){};
+                countryDropDownList.dataBind();
+                // update the select dropdownlist for country
                 countryDropDownList.value = (userDetails.billing && userDetails.billing.country && userDetails.billing.country !== "")
                     ? userDetails.billing.country : 'NG';
                 countryDropDownList.dataBind();
-
+                countryDropDownList.select = countrySelectListener; // reinstate the country select listener
+                // update the select dropdownlist for state
                 let statesDropDownList = $('#billing-info-page #billing-info-form #billing-info-state').get(0).ej2_instances[0];
                 statesDropDownList.dataSource = countryDropDownList.dataSource.find(function(countryElement){
                     return countryElement.code === countryDropDownList.value;
