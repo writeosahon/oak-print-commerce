@@ -6784,44 +6784,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $('#billing-info-page #billing-info-form #billing-info-city').
                 val(userDetails.billing && userDetails.billing.city ? userDetails.billing.city : "");
 
+                // get the country dropdownlist
+                var countryDropDownList = $('#billing-info-page #billing-info-form #billing-info-country').get(0).ej2_instances[0];
                 // temporarily remove the select event listener for the country dropdownlist
-                let countryDropDownList = $('#billing-info-page #billing-info-form #billing-info-country').get(0).ej2_instances[0];
-                let countrySelectListener = countryDropDownList.select;
-                countryDropDownList.select = function(){};
-                countryDropDownList.dataBind();
+                countryDropDownList.removeEventListener("select");
                 // update the select dropdownlist for country
                 countryDropDownList.value = (userDetails.billing && userDetails.billing.country && userDetails.billing.country !== "")
                     ? userDetails.billing.country : 'NG';
-                countryDropDownList.addEventListener("select", async function () { // listen for when dropdown list value is changed by selection
-                    let countryDropDownList = this; // holds this dropdown list
-
-                    // execute the task in a separate event block
-                    window.setTimeout(async function(){
-                        // get the country object and its states that represents the country value selected
-                        let countryStatesArray = countryDropDownList.getDataByValue(countryDropDownList.value).states;
-                        // get the state dropdownlist
-                        let stateDropDownList = $('#billing-info-page #billing-info-form #billing-info-state').
-                        get(0).ej2_instances[0];
-                        // reset the selected value for the State
-                        stateDropDownList.value = null;
-                        // reset the dataSource for the State
-                        stateDropDownList.dataSource = countryStatesArray;
-
-                        if(countryStatesArray.length > 0 ){ // there are states in the selected country
-                            // enable the State dropdownlist for user selection
-                            stateDropDownList.enabled = true;
-                        }
-                        else{ // there are NO states in the selected country
-                            // disable the State dropdownlist for user selection
-                            stateDropDownList.enabled = false;
-                        }
-
-                        // bind/update all changes made to the State dropdownlist
-                        stateDropDownList.dataBind();
-
-                    }, 0);
-                }); // reinstate the country select listener
                 countryDropDownList.dataBind();
+
                 // update the select dropdownlist for state
                 let statesDropDownList = $('#billing-info-page #billing-info-form #billing-info-state').get(0).ej2_instances[0];
                 statesDropDownList.dataSource = countryDropDownList.dataSource.find(function(countryElement){
@@ -6832,6 +6803,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     ? userDetails.billing.state : null;
                 statesDropDownList.dataBind();
                 console.log("STATE VALUE", statesDropDownList.value);
+
             }
             finally {
                 // hide page preloader
@@ -6840,6 +6812,40 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $('#billing-info-page .modal').css("display", "none");
                 // enable the "Update" button
                 $('#billing-info-page #billing-info-update').removeAttr("disabled");
+
+                // reinstate the country dropdownlist "select" listener in a separate event block
+                window.setTimeout(async function(){
+                    // reinstate the country dropdownlist "select" listener
+                    countryDropDownList.addEventListener("select", async function () { // listen for when dropdown list value is changed by selection
+                        let countryDropDownList = this; // holds this dropdown list
+
+                        // execute the task in a separate event block
+                        window.setTimeout(async function(){
+                            // get the country object and its states that represents the country value selected
+                            let countryStatesArray = countryDropDownList.getDataByValue(countryDropDownList.value).states;
+                            // get the state dropdownlist
+                            let stateDropDownList = $('#billing-info-page #billing-info-form #billing-info-state').
+                            get(0).ej2_instances[0];
+                            // reset the selected value for the State
+                            stateDropDownList.value = null;
+                            // reset the dataSource for the State
+                            stateDropDownList.dataSource = countryStatesArray;
+
+                            if(countryStatesArray.length > 0 ){ // there are states in the selected country
+                                // enable the State dropdownlist for user selection
+                                stateDropDownList.enabled = true;
+                            }
+                            else{ // there are NO states in the selected country
+                                // disable the State dropdownlist for user selection
+                                stateDropDownList.enabled = false;
+                            }
+
+                            // bind/update all changes made to the State dropdownlist
+                            stateDropDownList.dataBind();
+
+                        }, 0);
+                    });
+                }, 0);
             }
         }
 
