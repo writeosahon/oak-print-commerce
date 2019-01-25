@@ -6681,6 +6681,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 userDetails.billing.company = $('#billing-info-page #billing-info-company').val().trim();
                 userDetails.billing.address_1 = $('#billing-info-page #billing-info-address-1').val().trim();
                 userDetails.billing.address_2 = $('#billing-info-page #billing-info-address-2').val().trim();
+                userDetails.billing.postcode = $('#billing-info-page #billing-info-postcode').val().trim();
                 userDetails.billing.city = $('#billing-info-page #billing-info-city').val().trim();
                 userDetails.billing.country = $('#billing-info-page #billing-info-country').get(0).ej2_instances[0].value;
                 userDetails.billing.state = $('#billing-info-page #billing-info-state').get(0).ej2_instances[0].value ?
@@ -6784,6 +6785,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 val(userDetails.billing && userDetails.billing.address_1 ? userDetails.billing.address_1 : "");
                 $('#billing-info-page #billing-info-form #billing-info-address-2').
                 val(userDetails.billing && userDetails.billing.address_2 ? userDetails.billing.address_2 : "");
+                $('#billing-info-page #billing-info-form #billing-info-postcode').
+                val(userDetails.billing && userDetails.billing.postcode ? userDetails.billing.postcode : "");
                 $('#billing-info-page #billing-info-form #billing-info-city').
                 val(userDetails.billing && userDetails.billing.city ? userDetails.billing.city : "");
 
@@ -7208,6 +7211,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 userDetails.shipping.company = $('#shipping-info-page #shipping-info-company').val().trim();
                 userDetails.shipping.address_1 = $('#shipping-info-page #shipping-info-address-1').val().trim();
                 userDetails.shipping.address_2 = $('#shipping-info-page #shipping-info-address-2').val().trim();
+                userDetails.shipping.postcode = $('#shipping-info-page #shipping-info-postcode').val().trim();
                 userDetails.shipping.city = $('#shipping-info-page #shipping-info-city').val().trim();
                 userDetails.shipping.country = $('#shipping-info-page #shipping-info-country').get(0).ej2_instances[0].value;
                 userDetails.shipping.state = $('#shipping-info-page #shipping-info-state').get(0).ej2_instances[0].value ?
@@ -7315,6 +7319,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 val(userDetails.shipping && userDetails.shipping.address_1 ? userDetails.shipping.address_1 : "");
                 $('#shipping-info-page #shipping-info-form #shipping-info-address-2').
                 val(userDetails.shipping && userDetails.shipping.address_2 ? userDetails.shipping.address_2 : "");
+                $('#shipping-info-page #shipping-info-form #shipping-info-postcode').
+                val(userDetails.shipping && userDetails.shipping.postcode ? userDetails.shipping.postcode : "");
                 $('#shipping-info-page #shipping-info-form #shipping-info-city').
                 val(userDetails.shipping && userDetails.shipping.city ? userDetails.shipping.city : "");
 
