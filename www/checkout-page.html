@@ -42,7 +42,7 @@
         </div>
 
         <div id="checkout-accordion" style="width: 100%">
-            <div id="checkout-personal-details-accordion-item"> <!-- accordion item container -->
+            <div class="checkout-personal-details-accordion-item"> <!-- accordion item container -->
                 <div> <!-- accordion header container -->
                     <div><!-- accordion header -->
                         <ons-list-title>
@@ -55,10 +55,10 @@
                 </div>
 
                 <div> <!-- accordion panel container -->
-                    <div style="transform: scale(0.7);"> <!-- accordion content -->
-                        <ons-row vertical-align="bottom" style="margin-bottom: 1.5em; text-align: center;">
+                    <div> <!-- accordion content -->
+                        <ons-row vertical-align="bottom" style="margin-bottom: 1.5em; text-align: left;">
                             <ons-col width="80%" style="border: 2px solid lightgray; border-radius: 6px;
-                background-color: lightgray !important; color: #3f51b5; font-size: 1.3em; padding-left: 0.5em;
+                background-color: lightgray !important; color: #3f51b5; font-size: 0.8em; padding-left: 0.5em;
                 padding-top:0.5em; padding-right: 0.5em">
                                 <div style="color: blue; text-align: left; width: 100%">Email</div>
                                 <span id="checkout-personal-details-email">writeosahon@gmail.com</span>
@@ -66,9 +66,9 @@
                             <ons-col width="15%"></ons-col>
                         </ons-row>
 
-                        <ons-row vertical-align="bottom" style="margin-bottom: 1.5em; text-align: center;">
+                        <ons-row vertical-align="bottom" style="margin-bottom: 1.5em; text-align: left;">
                             <ons-col width="80%" style="border: 2px solid lightgray; border-radius: 6px;
-                background-color: lightgray !important; color: #3f51b5; font-size: 1.3em; padding-left: 0.5em;
+                background-color: lightgray !important; color: #3f51b5; font-size: 0.8em; padding-left: 0.5em;
                 padding-top:0.5em; padding-right: 0.5em">
                                 <div style="color: blue; text-align: left; width: 100%">First Name</div>
                                 <span id="checkout-personal-details-first-name">Osahon</span>
@@ -79,11 +79,11 @@
                         <ons-row vertical-align="bottom" style="margin-bottom: 1.5em; text-align: center;">
                             <ons-col width="80%" style="background-color: transparent !important; padding-left: 0.5em;
                 padding-top:0.5em; padding-right: 0.5em; text-align: right;">
-                                <ons-fab  modifier="mini"
-                                         style="background-color: #ffffff; box-shadow: none; border: none"
-                                         onclick="">
-                                    <ons-icon icon="md-edit" size="24px" style="color: #363E7C"></ons-icon>
-                                </ons-fab>
+                                <ons-button style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
+                                transform: scale(0.75);" disable-auto-styling modifier="quiet"
+                                            onclick="">
+                                    Edit
+                                </ons-button>
                             </ons-col>
                             <ons-col width="15%"></ons-col>
                         </ons-row>
