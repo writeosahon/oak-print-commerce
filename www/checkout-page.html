@@ -48,38 +48,36 @@
                         <ons-list-title>
                             <span class="zmdi zmdi-account-o" style="color: #3f51b5; font-size: 2em; margin-right: 0.1em"></span>
                             Personal Details
-                            <span class="utopiasoftware-checkout-success zmdi zmdi-utopiasoftware-icon-check-circle-outline" style="color: green; font-size: 1em; margin-left: 1em"></span>
-                            <span class="utopiasoftware-checkout-failure zmdi zmdi-alert-circle-o" style="color: orange; font-size: 1em; margin-left: 1em"></span>
+                            <span class="utopiasoftware-checkout-success zmdi zmdi-utopiasoftware-icon-check-circle-outline" style="color: green; font-size: 1.2em; margin-left: 1em"></span>
+                            <span class="utopiasoftware-checkout-failure zmdi zmdi-alert-circle-o" style="color: orange; font-size: 1.2em; margin-left: 1em"></span>
                         </ons-list-title>
                     </div>
                 </div>
 
                 <div> <!-- accordion panel container -->
-                    <div style="transform: scale(0.8);"> <!-- accordion content -->
+                    <div style="transform: scale(0.7);"> <!-- accordion content -->
                         <ons-row vertical-align="bottom" style="margin-bottom: 1.5em; text-align: center;">
-                            <ons-col width="5%"></ons-col>
                             <ons-col width="80%" style="border: 2px solid lightgray; border-radius: 6px;
                 background-color: lightgray !important; color: #3f51b5; font-size: 1.3em; padding-left: 0.5em;
                 padding-top:0.5em; padding-right: 0.5em">
-                                writeosahon@gmail.com
+                                <div style="color: blue; text-align: left; width: 100%">Email</div>
+                                <span id="checkout-personal-details-email">writeosahon@gmail.com</span>
                             </ons-col>
                             <ons-col width="15%"></ons-col>
                         </ons-row>
 
                         <ons-row vertical-align="bottom" style="margin-bottom: 1.5em; text-align: center;">
-                            <ons-col width="5%"></ons-col>
                             <ons-col width="80%" style="border: 2px solid lightgray; border-radius: 6px;
                 background-color: lightgray !important; color: #3f51b5; font-size: 1.3em; padding-left: 0.5em;
                 padding-top:0.5em; padding-right: 0.5em">
-                                Osahon
+                                <div style="color: blue; text-align: left; width: 100%">First Name</div>
+                                <span id="checkout-personal-details-first-name">Osahon</span>
                             </ons-col>
                             <ons-col width="15%"></ons-col>
                         </ons-row>
 
                         <ons-row vertical-align="bottom" style="margin-bottom: 1.5em; text-align: center;">
-                            <ons-col width="5%"></ons-col>
-                            <ons-col width="80%" style="border: 2px solid lightgray; border-radius: 6px;
-                background-color: lightgray !important; color: #3f51b5; font-size: 1.3em; padding-left: 0.5em;
+                            <ons-col width="80%" style="background-color: transparent !important; padding-left: 0.5em;
                 padding-top:0.5em; padding-right: 0.5em; text-align: right;">
                                 <ons-fab  modifier="mini"
                                          style="background-color: #ffffff; box-shadow: none; border: none"
@@ -188,7 +186,7 @@
 
 
     <ons-bottom-toolbar modifier="transparent" style="border-top: lightgray 1px solid">
-
+        <div style="text-align: center; width: 100%; margin-top: 6px;">
             <!-- button is disabled by default -->
             <button id="checkout-make-payment" type="button" disabled
                     style="color: #363E7C; background-color: #ffffff; box-shadow: none"
