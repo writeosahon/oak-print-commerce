@@ -239,3 +239,13 @@
 
   content: "\e906";
 }
+.zmdi-utopiasoftware-icon-check-circle-outline:before {
+  display: inline-block;
+  font: normal normal normal 14px/1 'utopiasoftware-font-icons';
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  content: "\e907";
+}

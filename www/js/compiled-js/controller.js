@@ -7402,6 +7402,236 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             }
         }
 
+    },
+
+    /**
+     * this is the view-model/controller for the Checkout page
+     */
+    checkoutPageViewModel: {
+
+
+        /**
+         * event is triggered when page is initialised
+         */
+        pageInit: function(event){
+
+            var $thisPage = $(event.target); // get the current page shown
+
+            // call the function used to initialise the app page if the app is fully loaded
+            loadPageOnAppReady();
+
+            //function is used to initialise the page if the app is fully ready for execution
+            async function loadPageOnAppReady() {
+                // check to see if onsen is ready and if all app loading has been completed
+                if (!ons.isReady() || utopiasoftware[utopiasoftware_app_namespace].model.isAppReady === false) {
+                    setTimeout(loadPageOnAppReady, 500); // call this function again after half a second
+                    return;
+                }
+
+                // listen for the back button event
+                $('#app-main-navigator').get(0).topPage.onDeviceBackButton =
+                    utopiasoftware[utopiasoftware_app_namespace].controller.
+                        checkoutPageViewModel.backButtonClicked;
+
+                try{
+
+                    // create the accorodion ej2 component used on the "Checkout" page
+                    new ej.navigations.Accordion({
+                        expandMode: 'Single'
+                    }).appendTo('#checkout-accordion');
+
+                    // create the "Make Payment" button
+                    new ej.splitbuttons.ProgressButton({
+                        cssClass: 'e-hide-spinner',
+                        duration: 10 * 60 * 60 * 1000 // set spinner/progress duration for 10 hr
+                    }).appendTo('#checkout-make-payment');
+
+                }
+                catch(err){
+                    console.log("CHECKOUT ERROR", err);
+                }
+                finally {
+
+                }
+            }
+
+        },
+
+        /**
+         * method is triggered when page is shown
+         */
+        pageShow: function(){
+            window.SoftInputMode.set('adjustResize');
+
+
+        },
+
+        /**
+         * method is triggered when page is hidden
+         */
+        pageHide: async function(){
+
+        },
+
+        /**
+         * method is triggered when page is destroyed
+         */
+        pageDestroy: function(){
+
+
+
+            // destroy the page accordion
+            $('#checkout-page #checkout-accordion').get(0).ej2_instances[0].destroy();
+
+            // destroy the "Make Payment"
+            $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].destroy();
+        },
+
+        /**
+         * method is triggered when the device back button is clicked OR a similar action is triggered
+         */
+        backButtonClicked(){
+            // get back to the previous page on the app-main navigator stack
+            $('#app-main-navigator').get(0).popPage();
+        },
+
+        /**
+         * method is triggered when the profile page is scrolled or the display window is resized by
+         * virtue of the device keyboard being displayed
+         *
+         * @returns {Promise<void>}
+         */
+        async scrollAndResizeEventListener(){
+            // place function execution in the event queue to be executed ASAP
+            window.setTimeout(function(){
+                // adjust the tooltips elements on the shipping form
+                $('#shipping-info-form textarea, #shipping-info-form ons-input, #shipping-info-form #shipping-info-country, #shipping-info-form #shipping-info-state').
+                each(function(index, element){
+                    document.getElementById('shipping-info-form').ej2_instances[index].refresh(element);
+                });
+
+            }, 0);
+
+        },
+
+
+        /**
+         * method is triggered when the user clicks the "Make Payment" button
+         *
+         * @returns {Promise<void>}
+         */
+        async makePaymentButtonClicked(){
+
+        },
+
+        /**
+         * method is used to load the current shipping info data into the shipping info form
+         * @returns {Promise<void>}
+         */
+        async displayContent(){
+
+            try{
+                // load the user profile details from the app database
+                let userDetails = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                loadData("user-details",
+                    utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
+
+                console.log("USER DETAILS", userDetails);
+
+                // display the user shipping info data in the shipping info form
+                $('#shipping-info-page #shipping-info-form #shipping-info-first-name').
+                val(userDetails.shipping && userDetails.shipping.first_name ? userDetails.shipping.first_name : "");
+                $('#shipping-info-page #shipping-info-form #shipping-info-last-name').
+                val(userDetails.shipping && userDetails.shipping.last_name ? userDetails.shipping.last_name : "");
+                $('#shipping-info-page #shipping-info-form #shipping-info-company').
+                val(userDetails.shipping && userDetails.shipping.company ? userDetails.shipping.company : "");
+                $('#shipping-info-page #shipping-info-form #shipping-info-address-1').
+                val(userDetails.shipping && userDetails.shipping.address_1 ? userDetails.shipping.address_1 : "");
+                $('#shipping-info-page #shipping-info-form #shipping-info-address-2').
+                val(userDetails.shipping && userDetails.shipping.address_2 ? userDetails.shipping.address_2 : "");
+                $('#shipping-info-page #shipping-info-form #shipping-info-postcode').
+                val(userDetails.shipping && userDetails.shipping.postcode ? userDetails.shipping.postcode : "");
+                $('#shipping-info-page #shipping-info-form #shipping-info-city').
+                val(userDetails.shipping && userDetails.shipping.city ? userDetails.shipping.city : "");
+
+                // get the country dropdownlist
+                var countryDropDownList = $('#shipping-info-page #shipping-info-form #shipping-info-country').get(0).ej2_instances[0];
+                // temporarily remove the select event listener for the country dropdownlist
+                countryDropDownList.removeEventListener("select");
+                // update the select dropdownlist for country
+                countryDropDownList.value = (userDetails.shipping && userDetails.shipping.country && userDetails.shipping.country !== "")
+                    ? userDetails.shipping.country : 'NG';
+                countryDropDownList.dataBind();
+
+                // update the select dropdownlist for state
+                let statesDropDownList = $('#shipping-info-page #shipping-info-form #shipping-info-state').get(0).ej2_instances[0];
+                statesDropDownList.dataSource = countryDropDownList.dataSource.find(function(countryElement){
+                    return countryElement.code === countryDropDownList.value;
+                }).states;
+                statesDropDownList.dataBind();
+                statesDropDownList.value = (userDetails.shipping && userDetails.shipping.state && userDetails.shipping.state !== "")
+                    ? userDetails.shipping.state : null;
+                statesDropDownList.dataBind();
+                // check if the state dropdownlist has a value
+                if(statesDropDownList.value){ // check if the state dropdownlist has a value
+                    statesDropDownList.enabled = true; // enable the state dropdownlist
+                    statesDropDownList.dataBind();
+                }
+                else if(countryDropDownList.value === 'NG'){ // if the country selected is nigeria
+                    statesDropDownList.enabled = true; // enable the state dropdownlist
+                    statesDropDownList.dataBind();
+                }
+                else { // the state dropdown has no value and the country selected is not nigeria
+                    statesDropDownList.enabled = false; // disable the state dropdownlist
+                    statesDropDownList.dataBind();
+                }
+                console.log("STATE VALUE", statesDropDownList.value);
+
+            }
+            finally {
+                // hide page preloader
+                $('#shipping-info-page .page-preloader').css("display", "none");
+                // hide page modal loader
+                $('#shipping-info-page .modal').css("display", "none");
+                // enable the "Update" button
+                $('#shipping-info-page #shipping-info-update').removeAttr("disabled");
+
+                // reinstate the country dropdownlist "select" listener in a separate event block
+                window.setTimeout(async function(){
+                    // reinstate the country dropdownlist "select" listener
+                    countryDropDownList.addEventListener("select", async function () { // listen for when dropdown list value is changed by selection
+                        let countryDropDownList = this; // holds this dropdown list
+
+                        // execute the task in a separate event block
+                        window.setTimeout(async function(){
+                            // get the country object and its states that represents the country value selected
+                            let countryStatesArray = countryDropDownList.getDataByValue(countryDropDownList.value).states;
+                            // get the state dropdownlist
+                            let stateDropDownList = $('#shipping-info-page #shipping-info-form #shipping-info-state').
+                            get(0).ej2_instances[0];
+                            // reset the selected value for the State
+                            stateDropDownList.value = null;
+                            // reset the dataSource for the State
+                            stateDropDownList.dataSource = countryStatesArray;
+
+                            if(countryStatesArray.length > 0 ){ // there are states in the selected country
+                                // enable the State dropdownlist for user selection
+                                stateDropDownList.enabled = true;
+                            }
+                            else{ // there are NO states in the selected country
+                                // disable the State dropdownlist for user selection
+                                stateDropDownList.enabled = false;
+                            }
+
+                            // bind/update all changes made to the State dropdownlist
+                            stateDropDownList.dataBind();
+
+                        }, 0);
+                    });
+                }, 0);
+            }
+        }
+
     }
 
 };
