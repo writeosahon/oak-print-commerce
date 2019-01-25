@@ -48,8 +48,8 @@
                         <ons-list-title>
                             <span class="zmdi zmdi-account-o" style="color: #3f51b5; font-size: 2em; margin-right: 0.1em"></span>
                             Personal Details
-                            <span class="utopiasoftware-checkout-success zmdi zmdi-utopiasoftware-icon-check-circle-outline" style="color: green; font-size: 1.5em; margin-left: 1em"></span>
-                            <span class="utopiasoftware-checkout-failure zmdi zmdi-alert-circle-o" style="color: orange; font-size: 1.5em; margin-left: 1em"></span>
+                            <span class="utopiasoftware-checkout-success zmdi zmdi-utopiasoftware-icon-check-circle-outline" style="color: green; font-size: 1.3em; margin-left: 1em"></span>
+                            <span class="utopiasoftware-checkout-failure zmdi zmdi-alert-circle-o" style="color: orange; font-size: 1.3em; margin-left: 1em"></span>
                         </ons-list-title>
                     </div>
                 </div>
@@ -80,7 +80,7 @@
                             <ons-col width="80%" style="border: 2px solid lightgray; border-radius: 6px;
                 background-color: lightgray !important; color: #3f51b5; font-size: 0.85em; padding-left: 0.5em;
                 padding-top:0.5em; padding-right: 0.5em">
-                                <div style="color: blue; text-align: left; width: 100%">First Name</div>
+                                <div style="color: blue; text-align: left; width: 100%">Last Name</div>
                                 <span id="checkout-personal-details-last-name">Okungbowa</span>
                             </ons-col>
                             <ons-col width="15%"></ons-col>
@@ -101,93 +101,122 @@
                 </div>
             </div>
 
-            <div> <!-- accordion item container -->
+            <div class="checkout-billing-information-item"> <!-- accordion item container -->
                 <div> <!-- accordion header container -->
                     <div><!-- accordion header -->
                         <ons-list-title>
-                            <span class="zmdi zmdi-utopiasoftware-icon-file-document-box-outline" style="color: #3f51b5; font-size: 2em; margin-right: 0.1em"></span>
-                            My Orders
+                            <span class="zmdi zmdi-utopiasoftware-icon-clipboard-text-outline" style="color: #3f51b5; font-size: 2em; margin-right: 0.1em"></span>
+                            Billing Information
+                            <span class="utopiasoftware-checkout-success zmdi zmdi-utopiasoftware-icon-check-circle-outline" style="color: green; font-size: 1.3em; margin-left: 1em"></span>
+                            <span class="utopiasoftware-checkout-failure zmdi zmdi-alert-circle-o" style="color: orange; font-size: 1.3em; margin-left: 1em"></span>
                         </ons-list-title>
                     </div>
                 </div>
 
                 <div> <!-- accordion panel container -->
                     <div> <!-- accordion content -->
-                        <ons-list id="account-order-list" style="display: block">
+                        <ons-row vertical-align="bottom" style="margin-bottom: 1.5em; text-align: left;">
+                            <ons-col width="80%" style="border: 2px solid lightgray; border-radius: 6px;
+                background-color: lightgray !important; color: #3f51b5; font-size: 0.85em; padding-left: 0.5em;
+                padding-top:0.5em; padding-right: 0.5em">
+                                <div style="color: blue; text-align: left; width: 100%">Address</div>
+                                <span id="checkout-billing-information-address">45 upper gra road</span>
+                            </ons-col>
+                            <ons-col width="15%"></ons-col>
+                        </ons-row>
 
-                            <ons-list-item modifier="longdivider" tappable lock-on-drag="true"
-                                           onclick="">
-                                <div class="center">
-                                    <span class="list-item__title">Completed Orders</span>
-                                </div>
-                            </ons-list-item>
+                        <ons-row vertical-align="bottom" style="margin-bottom: 1.5em; text-align: left;">
+                            <ons-col width="80%" style="border: 2px solid lightgray; border-radius: 6px;
+                background-color: lightgray !important; color: #3f51b5; font-size: 0.85em; padding-left: 0.5em;
+                padding-top:0.5em; padding-right: 0.5em">
+                                <div style="color: blue; text-align: left; width: 100%">City</div>
+                                <span id="checkout-billing-information-city">benin</span>
+                            </ons-col>
+                            <ons-col width="15%"></ons-col>
+                        </ons-row>
 
-                            <ons-list-item modifier="longdivider" tappable lock-on-drag="true"
-                                           onclick="">
-                                <div class="center">
-                                    <span class="list-item__title">Processing Orders</span>
-                                </div>
-                            </ons-list-item>
-
-                            <ons-list-item modifier="longdivider" tappable lock-on-drag="true"
-                                           onclick="">
-                                <div class="center">
-                                    <span class="list-item__title">Pending Orders</span>
-                                </div>
-                            </ons-list-item>
-
-                            <ons-list-item modifier="longdivider" tappable lock-on-drag="true"
-                                           onclick="">
-                                <div class="center">
-                                    <span class="list-item__title">Cancelled Orders</span>
-                                </div>
-                            </ons-list-item>
-
-                            <ons-list-item modifier="longdivider" tappable lock-on-drag="true"
-                                           onclick="">
-                                <div class="center">
-                                    <span class="list-item__title">Find Order</span>
-                                </div>
-                            </ons-list-item>
-
-                        </ons-list>
+                        <ons-row vertical-align="bottom" style="margin-bottom: 1.5em; text-align: center;">
+                            <ons-col width="80%" style="background-color: transparent !important; padding-left: 0.5em;
+                padding-top:0.5em; padding-right: 0.5em; text-align: right;">
+                                <ons-button style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
+                                transform: scale(0.75);" disable-auto-styling modifier="quiet"
+                                            onclick="">
+                                    Edit
+                                </ons-button>
+                            </ons-col>
+                            <ons-col width="15%"></ons-col>
+                        </ons-row>
                     </div>
                 </div>
-
             </div>
 
-            <div> <!-- accordion item container -->
+            <div class="checkout-shipping-information-item"> <!-- accordion item container -->
                 <div> <!-- accordion header container -->
                     <div><!-- accordion header -->
                         <ons-list-title>
-                            <span class="zmdi zmdi-utopiasoftware-icon-settings-outline" style="color: #3f51b5; font-size: 2em; margin-right: 0.1em"></span>
-                            Preferences
+                            <span class="zmdi zmdi-utopiasoftware-icon-truck-delivery" style="color: #3f51b5; font-size: 2em; margin-right: 0.1em"></span>
+                            Shipping Information
+                            <span class="utopiasoftware-checkout-success zmdi zmdi-utopiasoftware-icon-check-circle-outline" style="color: green; font-size: 1.3em; margin-left: 1em"></span>
+                            <span class="utopiasoftware-checkout-failure zmdi zmdi-alert-circle-o" style="color: orange; font-size: 1.3em; margin-left: 1em"></span>
                         </ons-list-title>
                     </div>
                 </div>
 
                 <div> <!-- accordion panel container -->
                     <div> <!-- accordion content -->
-                        <ons-list id="account-order-list" style="display: block">
+                        <ons-row vertical-align="bottom" style="margin-bottom: 1.5em; text-align: left;">
+                            <ons-col width="80%" style="border: 2px solid lightgray; border-radius: 6px;
+                background-color: lightgray !important; color: #3f51b5; font-size: 0.85em; padding-left: 0.5em;
+                padding-top:0.5em; padding-right: 0.5em">
+                                <div style="color: blue; text-align: left; width: 100%">First Name</div>
+                                <span id="checkout-shipping-information-first-name">Osahon</span>
+                            </ons-col>
+                            <ons-col width="15%"></ons-col>
+                        </ons-row>
 
-                            <ons-list-item modifier="longdivider" tappable lock-on-drag="true"
-                                           onclick="">
-                                <div class="center">
-                                    <span class="list-item__title">Push Notifications</span>
-                                </div>
-                            </ons-list-item>
+                        <ons-row vertical-align="bottom" style="margin-bottom: 1.5em; text-align: left;">
+                            <ons-col width="80%" style="border: 2px solid lightgray; border-radius: 6px;
+                background-color: lightgray !important; color: #3f51b5; font-size: 0.85em; padding-left: 0.5em;
+                padding-top:0.5em; padding-right: 0.5em">
+                                <div style="color: blue; text-align: left; width: 100%">Last Name</div>
+                                <span id="checkout-shipping-information-last-name">Okungbowa</span>
+                            </ons-col>
+                            <ons-col width="15%"></ons-col>
+                        </ons-row>
 
-                            <ons-list-item modifier="longdivider" tappable lock-on-drag="true"
-                                           onclick="">
-                                <div class="center">
-                                    <span class="list-item__title">Newsletter Subscription</span>
-                                </div>
-                            </ons-list-item>
+                        <ons-row vertical-align="bottom" style="margin-bottom: 1.5em; text-align: left;">
+                            <ons-col width="80%" style="border: 2px solid lightgray; border-radius: 6px;
+                background-color: lightgray !important; color: #3f51b5; font-size: 0.85em; padding-left: 0.5em;
+                padding-top:0.5em; padding-right: 0.5em">
+                                <div style="color: blue; text-align: left; width: 100%">Address</div>
+                                <span id="checkout-shipping-information-address">45 upper gra road</span>
+                            </ons-col>
+                            <ons-col width="15%"></ons-col>
+                        </ons-row>
 
-                        </ons-list>
+                        <ons-row vertical-align="bottom" style="margin-bottom: 1.5em; text-align: left;">
+                            <ons-col width="80%" style="border: 2px solid lightgray; border-radius: 6px;
+                background-color: lightgray !important; color: #3f51b5; font-size: 0.85em; padding-left: 0.5em;
+                padding-top:0.5em; padding-right: 0.5em">
+                                <div style="color: blue; text-align: left; width: 100%">City</div>
+                                <span id="checkout-shipping-information-city">benin</span>
+                            </ons-col>
+                            <ons-col width="15%"></ons-col>
+                        </ons-row>
+
+                        <ons-row vertical-align="bottom" style="margin-bottom: 1.5em; text-align: center;">
+                            <ons-col width="80%" style="background-color: transparent !important; padding-left: 0.5em;
+                padding-top:0.5em; padding-right: 0.5em; text-align: right;">
+                                <ons-button style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
+                                transform: scale(0.75);" disable-auto-styling modifier="quiet"
+                                            onclick="">
+                                    Edit
+                                </ons-button>
+                            </ons-col>
+                            <ons-col width="15%"></ons-col>
+                        </ons-row>
                     </div>
                 </div>
-
             </div>
 
         </div>
