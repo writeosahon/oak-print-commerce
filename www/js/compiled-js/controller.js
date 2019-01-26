@@ -3035,7 +3035,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         /**
          * property holds the current query parameter used to display the products on screen
          */
-        currentQueryParam: {},
+        currentQueryParam: {
+            status: "publish"
+        },
 
         /**
          * event is triggered when page is initialised
