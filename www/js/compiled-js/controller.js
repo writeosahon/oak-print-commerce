@@ -7440,6 +7440,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         expandMode: 'Single'
                     }).appendTo('#checkout-accordion');
 
+                    // create the Country dropdown list from the select input
+                    new ej.dropdowns.DropDownList(
+                        {
+                            cssClass: "shipping-method-dropdownlist",
+                            dataSource: [],
+                            fields: { value: 'method_id', text: 'method_title'},
+                            placeholder: "Shipping Method",
+                            floatLabelType: 'Auto',
+                            enabled: false,
+                            itemTemplate: '<span>${name}</span>',
+                            valueTemplate: '<span>${name}</span>'
+                        }).appendTo('#checkout-shipping-method-type');
+
                     // create the "Make Payment" button
                     new ej.splitbuttons.ProgressButton({
                         cssClass: 'e-hide-spinner',
@@ -7478,10 +7491,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         pageDestroy: function(){
 
-
-
             // destroy the page accordion
             $('#checkout-page #checkout-accordion').get(0).ej2_instances[0].destroy();
+
+            // destroy the shipping method dropdownlist
+            $('#checkout-shipping-method-type').get(0).ej2_instances[0].destroy();
 
             // destroy the "Make Payment"
             $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].destroy();
