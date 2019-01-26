@@ -7445,7 +7445,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         expandMode: 'Single'
                     }).appendTo('#checkout-accordion');
 
-                    // create the Country dropdown list from the select input
+                    // create the Shipping method dropdown list from the select input
                     new ej.dropdowns.DropDownList(
                         {
                             cssClass: "shipping-method-dropdownlist",
@@ -7454,9 +7454,22 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             placeholder: "Shipping Method",
                             floatLabelType: 'Auto',
                             enabled: false,
-                            itemTemplate: '<span>${name}</span>',
-                            valueTemplate: '<span>${name}</span>'
+                            itemTemplate: '<span>${method_title}</span>',
+                            valueTemplate: '<span>${method_title}</span>'
                         }).appendTo('#checkout-shipping-method-type');
+
+                    // create the payment method dropdown list from the select input
+                    new ej.dropdowns.DropDownList(
+                        {
+                            cssClass: "payment-method-dropdownlist",
+                            dataSource: [],
+                            fields: { value: 'id', text: 'method_title'},
+                            placeholder: "Payment Method",
+                            floatLabelType: 'Auto',
+                            enabled: false,
+                            itemTemplate: '<span>${method_title}</span>',
+                            valueTemplate: '<span>${method_title}</span>'
+                        }).appendTo('#checkout-payment-method-type');
 
                     // create the "Make Payment" button
                     new ej.splitbuttons.ProgressButton({
@@ -7501,6 +7514,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             // destroy the shipping method dropdownlist
             $('#checkout-shipping-method-type').get(0).ej2_instances[0].destroy();
+
+            // destroy the payment method dropdownlist
+            $('#checkout-payment-method-type').get(0).ej2_instances[0].destroy();
 
             // destroy the "Make Payment"
             $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].destroy();
