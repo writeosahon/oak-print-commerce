@@ -3411,6 +3411,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     Promise.resolve(utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
                     loadData(cachedDataId, utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)).
                     then(function(cachedProductsData){
+                        // update the current page being viewed
+                        utopiasoftware[utopiasoftware_app_namespace].
+                            controller.productsPageViewModel.currentPage = queryParam.page;
                         resolve(cachedProductsData.products); // resolve the parent promise with the cached products data
                     }).
                     catch(function(err){ // an error occurred
