@@ -696,10 +696,13 @@
 #checkout-page .shipping-info-dropdownlist.e-control-wrapper #label_checkout-shipping-method-type { /** label for shipping method dropdown select  **/
     color: #3F51B5;
 }
-/** style for the dropdown select */
+/** style for the shipping method dropdown select */
 #checkout-page .shipping-method-dropdownlist.e-float-input.e-control-wrapper {
     border: 2px solid lightgray;
     border-radius: 6px;
+}
+#checkout-page .shipping-method-dropdownlist.e-float-input.e-control-wrapper.e-disabled {
+    background-color: rgba(211, 211, 211, 0.4);
 }
 #checkout-page .shipping-method-dropdownlist.e-float-input.e-input-group:not(.e-float-icon-left) .e-float-line::before,
 #checkout-page .shipping-method-dropdownlist.e-float-input.e-input-group:not(.e-float-icon-left) .e-float-line::after,
