@@ -7482,7 +7482,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             mode: "Box",
                             showClearButton: false,
                             showDropDownIcon: false,
-                            enabled: true,
+                            enabled: false,
                             value: ["Voucher A", "Voucher B"]
                         }).appendTo('#checkout-payment-vouchers');
 
