@@ -741,7 +741,25 @@
 #checkout-page .payment-method-dropdownlist.e-float-input.e-control-wrapper.e-input-group.e-float-icon-left .e-input-in-wrap .e-float-line::after {
     background: transparent;
 }
-#checkout-page .payment-method-dropdownlist.e-control-wrapper #label_checkout-payment-vouchers { /** label for payment voucher dropdown multiselect  **/
+#checkout-page .payment-voucher-dropdownlist.e-multiselect #label_checkout-payment-vouchers { /** label for payment voucher dropdown multiselect  **/
     color: #3F51B5;
+}
+/** style for the payment voucher dropdown multiselect */
+#checkout-page .payment-voucher-dropdownlist.e-multiselect.e-float-input {
+    border: 2px solid lightgray;
+    border-radius: 6px;
+}
+#checkout-page .payment-voucher-dropdownlist.e-multiselect.e-float-input.e-disabled {
+    background-color: rgba(211, 211, 211, 0.4);
+}
+#checkout-page .payment-voucher-dropdownlist.e-float-input.e-input-group:not(.e-float-icon-left) .e-float-line::before,
+#checkout-page .payment-voucher-dropdownlist.e-float-input.e-input-group:not(.e-float-icon-left) .e-float-line::after,
+#checkout-page .payment-voucher-dropdownlist.e-float-input.e-input-group.e-float-icon-left .e-input-in-wrap .e-float-line::before,
+#checkout-page .payment-voucher-dropdownlist.e-float-input.e-input-group.e-float-icon-left .e-input-in-wrap .e-float-line::after,
+#checkout-page .payment-voucher-dropdownlist.e-float-input.e-control-wrapper.e-input-group:not(.e-float-icon-left) .e-float-line::before,
+#checkout-page .payment-voucher-dropdownlist.e-float-input.e-control-wrapper.e-input-group:not(.e-float-icon-left) .e-float-line::after,
+#checkout-page .payment-voucher-dropdownlist.e-float-input.e-control-wrapper.e-input-group.e-float-icon-left .e-input-in-wrap .e-float-line::before,
+#checkout-page .payment-voucher-dropdownlist.e-float-input.e-control-wrapper.e-input-group.e-float-icon-left .e-input-in-wrap .e-float-line::after {
+    background: transparent;
 }
 /** STYLE FOR CHECK OUT PAGE ENDS **/

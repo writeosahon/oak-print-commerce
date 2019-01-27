@@ -7474,7 +7474,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     // create the payment voucher multiselect dropdown list from the select input
                     new ej.dropdowns.MultiSelect(
                         {
-                            cssClass: "payment-method-dropdownlist",
+                            cssClass: "payment-voucher-dropdownlist",
                             dataSource: ["Voucher A", "Voucher B"],
                             //fields: { value: 'id', text: 'method_title'},
                             placeholder: "Payment Coupons",
