@@ -769,4 +769,12 @@
     caret-color: #3f51b5;
     background-image: none;
 }
+#checkout-page .address-label { /** used to style the label for the address text area **/
+    color: #3F51B5;
+    font-size: 10px;
+    line-height: 1;
+    display: block;
+    text-align: left;
+    padding-left: 65px;
+}
 /** STYLE FOR CHECK OUT PAGE ENDS **/
