@@ -7438,6 +7438,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     utopiasoftware[utopiasoftware_app_namespace].controller.
                         checkoutPageViewModel.backButtonClicked;
 
+                // listen for scroll event on the page to adjust the tooltips when page scrolls
+                $('#checkout-page .content').on("scroll", utopiasoftware[utopiasoftware_app_namespace].
+                    controller.checkoutPageViewModel.scrollAndResizeEventListener);
+
                 try{
 
                     // create the accorodion ej2 component used on the "Checkout" page
@@ -7475,15 +7479,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     new ej.dropdowns.MultiSelect(
                         {
                             cssClass: "payment-voucher-dropdownlist",
-                            dataSource: ["Voucher A", "Voucher B"],
+                            dataSource: [],
                             //fields: { value: 'id', text: 'method_title'},
                             placeholder: "Payment Coupons",
                             floatLabelType: 'Auto',
                             mode: "Box",
                             showClearButton: false,
                             showDropDownIcon: false,
-                            enabled: false,
-                            value: ["Voucher A", "Voucher B"]
+                            enabled: false
                         }).appendTo('#checkout-payment-vouchers');
 
                     // create the "Make Payment" button
@@ -7491,6 +7494,17 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         cssClass: 'e-hide-spinner',
                         duration: 10 * 60 * 60 * 1000 // set spinner/progress duration for 10 hr
                     }).appendTo('#checkout-make-payment');
+
+                    // create the tooltips for the checkout page
+                    $('.utopiasoftware-checkout-failure', $thisPage).
+                    each(function(index, element){
+                        // create the tool tips for every element being validated, but attach it to the html form object
+                        new ej.popups.Tooltip({
+                            cssClass: 'utopiasoftware-ej2-validation-tooltip',
+                            position: 'TopCenter',
+                            opensOn: 'Custom'
+                        }).appendTo(element);
+                    });
 
                 }
                 catch(err){
@@ -7509,7 +7523,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         pageShow: function(){
             window.SoftInputMode.set('adjustResize');
 
-
+            //add listener for when the window is resized by virtue of the device keyboard being shown
+            window.addEventListener("resize", utopiasoftware[utopiasoftware_app_namespace].controller.
+                checkoutPageViewModel.scrollAndResizeEventListener, false);
         },
 
         /**
@@ -7517,6 +7533,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         pageHide: async function(){
 
+            //add listener for when the window is resized by virtue of the device keyboard being shown
+            window.addEventListener("resize", utopiasoftware[utopiasoftware_app_namespace].controller.
+                checkoutPageViewModel.scrollAndResizeEventListener, false);
+
+            // close the tooltips on the page
+            $('#checkout-page .utopiasoftware-checkout-failure').
+            each(function(index, element){
+                // close tooltips
+                element.ej2_instances[0].close();
+            });
         },
 
         /**
@@ -7538,6 +7564,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             // destroy the "Make Payment"
             $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].destroy();
+
+            // destroy the tooltips on the page
+            $('#checkout-page .utopiasoftware-checkout-failure').
+            each(function(index, element){
+                // destroy tooltips
+                element.ej2_instances[0].destroy();
+            });
         },
 
         /**
@@ -7549,7 +7582,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         },
 
         /**
-         * method is triggered when the profile page is scrolled or the display window is resized by
+         * method is triggered when the page is scrolled or the display window is resized by
          * virtue of the device keyboard being displayed
          *
          * @returns {Promise<void>}
@@ -7558,9 +7591,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // place function execution in the event queue to be executed ASAP
             window.setTimeout(function(){
                 // adjust the tooltips elements on the shipping form
-                $('#shipping-info-form textarea, #shipping-info-form ons-input, #shipping-info-form #shipping-info-country, #shipping-info-form #shipping-info-state').
+                $('#checkout-page .utopiasoftware-checkout-failure').
                 each(function(index, element){
-                    document.getElementById('shipping-info-form').ej2_instances[index].refresh(element);
+                    element.ej2_instances[0].refresh(element);
                 });
 
             }, 0);
