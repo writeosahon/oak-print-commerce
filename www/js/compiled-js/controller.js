@@ -7611,7 +7611,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         },
 
         /**
-         * method is used to load the current shipping info data into the shipping info form
+         * method is used to load the current checkout/order data into the page
          * @returns {Promise<void>}
          */
         async displayContent(){
