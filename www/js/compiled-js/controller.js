@@ -7471,6 +7471,21 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             valueTemplate: '<span>${method_title}</span>'
                         }).appendTo('#checkout-payment-method-type');
 
+                    // create the payment voucher multiselect dropdown list from the select input
+                    new ej.dropdowns.MultiSelect(
+                        {
+                            cssClass: "payment-method-dropdownlist",
+                            dataSource: ["Voucher A", "Voucher B"],
+                            //fields: { value: 'id', text: 'method_title'},
+                            placeholder: "Payment Coupons",
+                            floatLabelType: 'Auto',
+                            mode: "Box",
+                            showClearButton: false,
+                            showDropDownIcon: false,
+                            enabled: true,
+                            value: ["Voucher A", "Voucher B"]
+                        }).appendTo('#checkout-payment-vouchers');
+
                     // create the "Make Payment" button
                     new ej.splitbuttons.ProgressButton({
                         cssClass: 'e-hide-spinner',
@@ -7517,6 +7532,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             // destroy the payment method dropdownlist
             $('#checkout-payment-method-type').get(0).ej2_instances[0].destroy();
+
+            // destroy the payment voucher multiselect dropdownlist
+            $('#checkout-payment-vouchers').get(0).ej2_instances[0].destroy();
 
             // destroy the "Make Payment"
             $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].destroy();

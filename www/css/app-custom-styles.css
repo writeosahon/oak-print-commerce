@@ -741,4 +741,7 @@
 #checkout-page .payment-method-dropdownlist.e-float-input.e-control-wrapper.e-input-group.e-float-icon-left .e-input-in-wrap .e-float-line::after {
     background: transparent;
 }
+#checkout-page .payment-method-dropdownlist.e-control-wrapper #label_checkout-payment-vouchers { /** label for payment voucher dropdown multiselect  **/
+    color: #3F51B5;
+}
 /** STYLE FOR CHECK OUT PAGE ENDS **/
