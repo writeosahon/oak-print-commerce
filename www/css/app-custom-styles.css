@@ -745,6 +745,9 @@
     color: #3F51B5;
 }
 /** style for the payment voucher dropdown multiselect */
+#checkout-page .payment-voucher-dropdownlist.e-multiselect.e-float-input {
+    border: none;
+}
 #checkout-page .payment-voucher-dropdownlist.e-multiselect.e-float-input.e-disabled {
     background-color: rgba(211, 211, 211, 0.4);
 }
@@ -758,8 +761,8 @@
 #checkout-page .payment-voucher-dropdownlist.e-float-input.e-control-wrapper.e-input-group.e-float-icon-left .e-input-in-wrap .e-float-line::after {
     background: transparent;
 }
-#checkout-page ons-input input {
-    /*font-size: 0.7em;*/
+#checkout-page ons-input * {
+    font-size: 0.8em;
     height: 1.2em;
     line-height: 1.2em;
     color: #3f51b5 !important;
