@@ -5654,9 +5654,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                     // check if the product being ordered has a variation
                     if(userCart[index].cartData.variation_id){ // this product has a variation
-                        // calculate the subtotal for this line item
-                        orderData.line_items[index].subtotal =
+                        if(!userCart[index].cartData.cart_item_data){ // if the product has no customisation data
+                            // calculate the subtotal for this line item
+                            orderData.line_items[index].subtotal =
                             "" + kendo.parseFloat(userCart[index].productVariation.price) * orderData.line_items[index].quantity;
+                        }
 
                         // add the variation attributes to the line item meta data
                         for(let key in userCart[index].cartData.variation){
@@ -5672,6 +5674,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                     // check if the product has any customisation data to attach
                     if(userCart[index].cartData.cart_item_data){
+                        console.log("ORDER ITEM", userCart[index].cartData);
+                        // calculate the subtotal for this line item
+                        orderData.line_items[index].subtotal =
+                            "" + kendo.parseFloat(userCart[index].cartData.cart_item_data.fpd_data.fpd_product_price)
+                            * orderData.line_items[index].quantity;
+
                         orderData.line_items[index].meta_data.push({
                             // add the customisation data for this product to the line items meta-data array.
                             key: "_fpd_data",
@@ -5681,6 +5689,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             key: "__fpd_print_order",
                             value: userCart[index].cartData.cart_item_data.fpd_data.fpd_print_order
                         });
+
+                        // delete the 'cart_item_data' property from the line item because it is not needed for submisssion
+                        delete orderData.line_items[index].cart_item_data;
                     }
                 }
 
