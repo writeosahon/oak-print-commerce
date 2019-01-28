@@ -5643,10 +5643,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     }
                 }
 
+                console.log("ORDER DATA", orderData);
+
                 // create the order on the remote server
                 orderData = await Promise.resolve($.ajax(
                     {
-                        url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + `/wp-json/wc/v3/customers/${userId}`,
+                        url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + `/wp-json/wc/v3/orders`,
                         type: "post",
                         contentType: "application/json",
                         beforeSend: function(jqxhr) {
