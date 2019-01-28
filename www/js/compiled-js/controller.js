@@ -5668,7 +5668,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     {data: {orderData}});
             }
             catch(err){
+                err = JSON.parse(err.responseText);
 
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast message
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.timeOut = 3000;
+                toast.content = `Checkout failed. ${err.message || ""}`;
+                toast.dataBind();
+                toast.show();
             }
             finally{
 
