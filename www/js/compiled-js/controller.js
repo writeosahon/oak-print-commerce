@@ -316,8 +316,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             // clear the timer
                             return;
                         }
-                        // a cell was clicked, so load the product-details page
-                        //  $('#app-main-navigator').get(0).pushPage("product-details-page.html", {animation: "lift"});
+
                     });
                     // assign the "New Product" carousel to the appropriate object
                     utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel =
@@ -5571,6 +5570,110 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // load the product customisation url
             await utopiasoftware[utopiasoftware_app_namespace].controller.
             customiseProductPageViewModel.loadProductCustomisation(productUrl, cartItemKey);
+        },
+
+        /**
+         * method is triggerd when the "Check Out" button is clicked
+         *
+         * @returns {Promise<void>}
+         */
+        async checkoutButtonClicked(){
+
+            let userDetails = null; // holds the user details
+            try{
+                // load the use details from the encrypted app database
+                userDetails = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                loadData("user-details",
+                    utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
+            }
+            catch(err){
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast to show that an error
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.timeOut = 3500;
+                toast.content = `Please sign in to checkout your product`;
+                toast.dataBind();
+                toast.show();
+
+                // send the user to the sign in oage
+                $('#app-main-navigator').get(0).pushPage('login-page.html');
+
+                return; // exit method
+            }
+
+            // check if there is Internet connection
+            if(navigator.connection.type === Connection.NONE){ // there is no Internet connection
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast to show that an error
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.timeOut = 3000;
+                toast.content = `Connect to the Internet to update your profile`;
+                toast.dataBind();
+                toast.show();
+
+                return; // exit method
+            }
+
+            // show the app loader modal
+            $('#loader-modal-message').html("Preparing Checkout...");
+            $('#loader-modal').get(0).show(); // show loader
+
+            // create the user's order object
+            var orderData = {
+                status: "pending", currency: "NGN", customer_id: userDetails.id, billing: userDetails.billing,
+                shipping: userDetails.shipping, line_items: []
+            };
+
+            try {
+                // get the current user's local cart
+                let userCart = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.loadData("user-cart",
+                    utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)).cart;
+
+                // loop through the user cart item to create the order items
+                for(let index = 0; index < userCart.length; index++){
+                    orderData.line_items[index] = userCart[index].cartData;
+                    if(userCart[index].product){ //
+                        orderData.line_items[index].name = userCart[index].product.name;
+                    }
+                }
+
+                // create the order on the remote server
+                orderData = await Promise.resolve($.ajax(
+                    {
+                        url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + `/wp-json/wc/v3/customers/${userId}`,
+                        type: "post",
+                        contentType: "application/json",
+                        beforeSend: function(jqxhr) {
+                            jqxhr.setRequestHeader("Authorization", "Basic " +
+                                utopiasoftware[utopiasoftware_app_namespace].accessor);
+                        },
+                        dataType: "json",
+                        timeout: 240000, // wait for 4 minutes before timeout of request
+                        processData: false,
+                        data: JSON.stringify(orderData)
+                    }
+                ));
+
+                // hide the app loader
+                $('#loader-modal').get(0).hide(); // hide loader
+
+                // display the products details page using the selected product
+                await $('#app-main-navigator').get(0).pushPage("checkout-page.html",
+                    {data: {orderData}});
+            }
+            catch(err){
+
+            }
+            finally{
+
+            }
+
         }
     },
 
