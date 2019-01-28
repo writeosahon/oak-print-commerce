@@ -5692,7 +5692,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                         // delete the 'cart_item_data' property from the line item because it is not needed for submisssion
                         delete orderData.line_items[index].cart_item_data;
-                    }
+                    } //todo
                 }
 
                 console.log("ORDER DATA", orderData);
