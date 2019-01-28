@@ -5594,7 +5594,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 let toast = $('.timed-page-toast').get(0).ej2_instances[0];
                 toast.cssClass = 'error-ej2-toast';
                 toast.timeOut = 3500;
-                toast.content = `Please sign in to checkout your product`;
+                toast.content = `Please sign in to checkout your cart`;
                 toast.dataBind();
                 toast.show();
 
@@ -5613,7 +5613,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 let toast = $('.timed-page-toast').get(0).ej2_instances[0];
                 toast.cssClass = 'error-ej2-toast';
                 toast.timeOut = 3000;
-                toast.content = `Connect to the Internet to update your profile`;
+                toast.content = `Connect to the Internet to checkout your cart`;
                 toast.dataBind();
                 toast.show();
 
@@ -5638,8 +5638,49 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // loop through the user cart item to create the order items
                 for(let index = 0; index < userCart.length; index++){
                     orderData.line_items[index] = userCart[index].cartData;
-                    if(userCart[index].product){ //
-                        orderData.line_items[index].name = userCart[index].product.name;
+
+                    // add the product name to the order line item
+                    if(userCart[index].product){ // this product was added to cart without customisation
+                        orderData.line_items[index].name = userCart[index].product.name; // add the product name
+                        // calculate the subtotal for this line item
+                        orderData.line_items[index].subtotal =
+                            "" + kendo.parseFloat(userCart[index].product.price) * orderData.line_items[index].quantity;
+                    }
+                    else{ // this product was added to cart via customisation
+                        orderData.line_items[index].name = userCart[index].product_name; // add the product name
+                    }
+
+                    orderData.line_items[index].meta_data = []; // create the meta-data array for each order line item
+
+                    // check if the product being ordered has a variation
+                    if(userCart[index].cartData.variation_id){ // this product has a variation
+                        // calculate the subtotal for this line item
+                        orderData.line_items[index].subtotal =
+                            "" + kendo.parseFloat(userCart[index].productVariation.price) * orderData.line_items[index].quantity;
+
+                        // add the variation attributes to the line item meta data
+                        for(let key in userCart[index].cartData.variation){
+
+                            orderData.line_items[index].meta_data.push({
+                                // add the variation attributes for this product to the line items meta-data array.
+                                // the meta-data object key value is gotten by splitting the variation key
+                                key: key.split("_")[1],
+                                value: userCart[index].cartData.variation[key]
+                            });
+                        }
+                    }
+
+                    // check if the product has any customisation data to attach
+                    if(userCart[index].cartData.cart_item_data){
+                        orderData.line_items[index].meta_data.push({
+                            // add the customisation data for this product to the line items meta-data array.
+                            key: "_fpd_data",
+                            value: userCart[index].cartData.cart_item_data.fpd_data.fpd_product
+                        }, {
+                            // add the customisation data for this product to the line items meta-data array.
+                            key: "__fpd_print_order",
+                            value: userCart[index].cartData.cart_item_data.fpd_data.fpd_print_order
+                        });
                     }
                 }
 
@@ -5666,8 +5707,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $('#loader-modal').get(0).hide(); // hide loader
 
                 // display the products details page using the selected product
-                await $('#app-main-navigator').get(0).pushPage("checkout-page.html",
-                    {data: {orderData}});
+                await $('#app-main-navigator').get(0).pushPage("checkout-page.html", {data: {orderData}});
             }
             catch(err){
                 err = JSON.parse(err.responseText);
