@@ -7708,7 +7708,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         pageHide: async function(){
 
             //add listener for when the window is resized by virtue of the device keyboard being shown
-            window.addEventListener("resize", utopiasoftware[utopiasoftware_app_namespace].controller.
+            window.removeEventListener("resize", utopiasoftware[utopiasoftware_app_namespace].controller.
                 checkoutPageViewModel.scrollAndResizeEventListener, false);
 
             // close the tooltips on the page
