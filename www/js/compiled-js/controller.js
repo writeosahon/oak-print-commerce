@@ -5626,7 +5626,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             // create the user's order object
             var orderData = {
-                status: "pending", currency: "NGN", customer_id: userDetails.id, billing: userDetails.billing,
+                status: "trash", currency: "NGN", customer_id: userDetails.id, billing: userDetails.billing,
                 shipping: userDetails.shipping, line_items: []
             };
 
@@ -5642,8 +5642,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     // add the product name to the order line item
                     if(userCart[index].product){ // this product was added to cart without customisation
                         orderData.line_items[index].name = userCart[index].product.name; // add the product name
-                        // calculate the subtotal for this line item
+                        // calculate the subtotal & total for this line item
                         orderData.line_items[index].subtotal =
+                            "" + kendo.parseFloat(userCart[index].product.price) * orderData.line_items[index].quantity;
+                        orderData.line_items[index].total =
                             "" + kendo.parseFloat(userCart[index].product.price) * orderData.line_items[index].quantity;
                     }
                     else{ // this product was added to cart via customisation
@@ -5655,9 +5657,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     // check if the product being ordered has a variation
                     if(userCart[index].cartData.variation_id){ // this product has a variation
                         if(!userCart[index].cartData.cart_item_data){ // if the product has no customisation data
-                            // calculate the subtotal for this line item
+                            // calculate the subtotal & total for this line item
                             orderData.line_items[index].subtotal =
                             "" + kendo.parseFloat(userCart[index].productVariation.price) * orderData.line_items[index].quantity;
+                            orderData.line_items[index].total =
+                                "" + kendo.parseFloat(userCart[index].productVariation.price) * orderData.line_items[index].quantity;
                         }
 
                         // add the variation attributes to the line item meta data
@@ -5675,8 +5679,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     // check if the product has any customisation data to attach
                     if(userCart[index].cartData.cart_item_data){
                         console.log("ORDER ITEM", userCart[index].cartData);
-                        // calculate the subtotal for this line item
+                        // calculate the subtotal & total for this line item
                         orderData.line_items[index].subtotal =
+                            "" + kendo.parseFloat(userCart[index].cartData.cart_item_data.fpd_data.fpd_product_price)
+                            * orderData.line_items[index].quantity;
+                        orderData.line_items[index].total =
                             "" + kendo.parseFloat(userCart[index].cartData.cart_item_data.fpd_data.fpd_product_price)
                             * orderData.line_items[index].quantity;
 
@@ -5692,7 +5699,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                         // delete the 'cart_item_data' property from the line item because it is not needed for submisssion
                         delete orderData.line_items[index].cart_item_data;
-                    } //todo
+                    }
                 }
 
                 console.log("ORDER DATA", orderData);
