@@ -7680,6 +7680,34 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         }).appendTo(element);
                     });
 
+                    //load the remote list of payment method for the app
+                    Promise.resolve($.ajax(
+                        {
+                            url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + `/wp-json/wc/v3/payment_gateways`,
+                            type: "get",
+                            //contentType: "application/json",
+                            beforeSend: function(jqxhr) {
+                                jqxhr.setRequestHeader("Authorization", "Basic " +
+                                    utopiasoftware[utopiasoftware_app_namespace].accessor);
+                            },
+                            dataType: "json",
+                            timeout: 240000, // wait for 4 minutes before timeout of request
+                            processData: true,
+                            data: {}
+                        }
+                    )).
+                    then(function(paymentMethodArray){
+                        // filter only pay method that are enabled
+                        paymentMethodArray = paymentMethodArray.filter(function(paymentElem){
+                            return paymentElem.enabled === true;
+                        });
+
+                        // assign the payment method array as the dataSource for the payment method dropdownlist
+                        $('#checkout-payment-method-type').get(0).ej2_instances[0].dataSource = paymentMethodArray;
+                        $('#checkout-payment-method-type').get(0).ej2_instances[0].dataBind();
+
+                    }).catch();
+
                 }
                 catch(err){
                     console.log("CHECKOUT ERROR", err);
@@ -7694,12 +7722,46 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         /**
          * method is triggered when page is shown
          */
-        pageShow: function(){
+        pageShow: async function(){
+            let paymentMethodDropDown = $('#checkout-payment-method-type').get(0).ej2_instances[0];
+
+            if(paymentMethodDropDown.dataSource.length == 0){ // payment method dropdown
+                // re-execute this method again after some time
+                window.setTimeout(utopiasoftware[utopiasoftware_app_namespace].controller.
+                    checkoutPageViewModel.pageShow, 0);
+
+                return;
+            }
+
             window.SoftInputMode.set('adjustResize');
 
             //add listener for when the window is resized by virtue of the device keyboard being shown
             window.addEventListener("resize", utopiasoftware[utopiasoftware_app_namespace].controller.
                 checkoutPageViewModel.scrollAndResizeEventListener, false);
+
+            try{
+                await utopiasoftware[utopiasoftware_app_namespace].controller.
+                    checkoutPageViewModel.displayContent();
+
+            }
+            catch(err){
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast message
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.timeOut = 3000;
+                toast.content = `Error preparing checkout.`;
+                toast.dataBind();
+                toast.show();
+            }
+            finally {
+                // hide page preloader
+                $('#checkout-page .page-preloader').css("display", "none");
+                // hide page modal loader
+                $('#checkout-page .modal').css("display", "none");
+            }
         },
 
         /**
@@ -7796,99 +7858,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 loadData("user-details",
                     utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
 
-                console.log("USER DETAILS", userDetails);
+                console.log("CHECK OUT USER DETAILS", userDetails);
 
-                // display the user shipping info data in the shipping info form
-                $('#shipping-info-page #shipping-info-form #shipping-info-first-name').
-                val(userDetails.shipping && userDetails.shipping.first_name ? userDetails.shipping.first_name : "");
-                $('#shipping-info-page #shipping-info-form #shipping-info-last-name').
-                val(userDetails.shipping && userDetails.shipping.last_name ? userDetails.shipping.last_name : "");
-                $('#shipping-info-page #shipping-info-form #shipping-info-company').
-                val(userDetails.shipping && userDetails.shipping.company ? userDetails.shipping.company : "");
-                $('#shipping-info-page #shipping-info-form #shipping-info-address-1').
-                val(userDetails.shipping && userDetails.shipping.address_1 ? userDetails.shipping.address_1 : "");
-                $('#shipping-info-page #shipping-info-form #shipping-info-address-2').
-                val(userDetails.shipping && userDetails.shipping.address_2 ? userDetails.shipping.address_2 : "");
-                $('#shipping-info-page #shipping-info-form #shipping-info-postcode').
-                val(userDetails.shipping && userDetails.shipping.postcode ? userDetails.shipping.postcode : "");
-                $('#shipping-info-page #shipping-info-form #shipping-info-city').
-                val(userDetails.shipping && userDetails.shipping.city ? userDetails.shipping.city : "");
+                // display the checkout data
+                $('#checkout-page #checkout-personal-details-email').html(userDetails.email);
+                $('#checkout-page #checkout-personal-details-first-name').html(userDetails.first_name);
+                $('#checkout-page #checkout-personal-details-last-name').html(userDetails.last_name);
 
-                // get the country dropdownlist
-                var countryDropDownList = $('#shipping-info-page #shipping-info-form #shipping-info-country').get(0).ej2_instances[0];
-                // temporarily remove the select event listener for the country dropdownlist
-                countryDropDownList.removeEventListener("select");
-                // update the select dropdownlist for country
-                countryDropDownList.value = (userDetails.shipping && userDetails.shipping.country && userDetails.shipping.country !== "")
-                    ? userDetails.shipping.country : 'NG';
-                countryDropDownList.dataBind();
-
-                // update the select dropdownlist for state
-                let statesDropDownList = $('#shipping-info-page #shipping-info-form #shipping-info-state').get(0).ej2_instances[0];
-                statesDropDownList.dataSource = countryDropDownList.dataSource.find(function(countryElement){
-                    return countryElement.code === countryDropDownList.value;
-                }).states;
-                statesDropDownList.dataBind();
-                statesDropDownList.value = (userDetails.shipping && userDetails.shipping.state && userDetails.shipping.state !== "")
-                    ? userDetails.shipping.state : null;
-                statesDropDownList.dataBind();
-                // check if the state dropdownlist has a value
-                if(statesDropDownList.value){ // check if the state dropdownlist has a value
-                    statesDropDownList.enabled = true; // enable the state dropdownlist
-                    statesDropDownList.dataBind();
-                }
-                else if(countryDropDownList.value === 'NG'){ // if the country selected is nigeria
-                    statesDropDownList.enabled = true; // enable the state dropdownlist
-                    statesDropDownList.dataBind();
-                }
-                else { // the state dropdown has no value and the country selected is not nigeria
-                    statesDropDownList.enabled = false; // disable the state dropdownlist
-                    statesDropDownList.dataBind();
-                }
-                console.log("STATE VALUE", statesDropDownList.value);
+                $('#checkout-page #checkout-billing-information-address').html(userDetails.billing.address_1);
 
             }
             finally {
-                // hide page preloader
-                $('#shipping-info-page .page-preloader').css("display", "none");
-                // hide page modal loader
-                $('#shipping-info-page .modal').css("display", "none");
-                // enable the "Update" button
-                $('#shipping-info-page #shipping-info-update').removeAttr("disabled");
 
-                // reinstate the country dropdownlist "select" listener in a separate event block
-                window.setTimeout(async function(){
-                    // reinstate the country dropdownlist "select" listener
-                    countryDropDownList.addEventListener("select", async function () { // listen for when dropdown list value is changed by selection
-                        let countryDropDownList = this; // holds this dropdown list
-
-                        // execute the task in a separate event block
-                        window.setTimeout(async function(){
-                            // get the country object and its states that represents the country value selected
-                            let countryStatesArray = countryDropDownList.getDataByValue(countryDropDownList.value).states;
-                            // get the state dropdownlist
-                            let stateDropDownList = $('#shipping-info-page #shipping-info-form #shipping-info-state').
-                            get(0).ej2_instances[0];
-                            // reset the selected value for the State
-                            stateDropDownList.value = null;
-                            // reset the dataSource for the State
-                            stateDropDownList.dataSource = countryStatesArray;
-
-                            if(countryStatesArray.length > 0 ){ // there are states in the selected country
-                                // enable the State dropdownlist for user selection
-                                stateDropDownList.enabled = true;
-                            }
-                            else{ // there are NO states in the selected country
-                                // disable the State dropdownlist for user selection
-                                stateDropDownList.enabled = false;
-                            }
-
-                            // bind/update all changes made to the State dropdownlist
-                            stateDropDownList.dataBind();
-
-                        }, 0);
-                    });
-                }, 0);
             }
         }
 
