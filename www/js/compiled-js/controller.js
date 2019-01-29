@@ -5626,7 +5626,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             // create the user's order object
             var orderData = {
-                status: "trash", currency: "NGN", customer_id: userDetails.id, billing: userDetails.billing,
+                status: "pending", currency: "NGN", customer_id: userDetails.id, billing: userDetails.billing,
                 shipping: userDetails.shipping, line_items: []
             };
 
