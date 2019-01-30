@@ -7723,12 +7723,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is shown
          */
         pageShow: async function(){
+            // get payment method dropdownlist component
             let paymentMethodDropDown = $('#checkout-payment-method-type').get(0).ej2_instances[0];
 
-            if(paymentMethodDropDown.dataSource.length == 0){ // payment method dropdown
+            if(paymentMethodDropDown.dataSource.length == 0){ // datasource for the payment method dropdownlist has not been set
                 // re-execute this method again after some time
                 window.setTimeout(utopiasoftware[utopiasoftware_app_namespace].controller.
-                    checkoutPageViewModel.pageShow, 0);
+                    checkoutPageViewModel.pageShow, 500);
 
                 return;
             }
@@ -7866,6 +7867,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $('#checkout-page #checkout-personal-details-last-name').html(userDetails.last_name);
 
                 $('#checkout-page #checkout-billing-information-address').html(userDetails.billing.address_1);
+                $('#checkout-page #checkout-billing-information-city').html(userDetails.billing.city);
 
             }
             finally {
