@@ -7629,6 +7629,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $('#checkout-page .content').on("scroll", utopiasoftware[utopiasoftware_app_namespace].
                     controller.checkoutPageViewModel.scrollAndResizeEventListener);
 
+                // set the order object to be used by this page
+                utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder =
+                $('#app-main-navigator').get(0).topPage.data.orderData;
+
                 try{
 
                     // create the accorodion ej2 component used on the "Checkout" page
@@ -7693,9 +7697,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         }).appendTo(element);
                     });
 
-                    //load the remote list of payment method for the app
-                    let promisesArray = [];
-                    Promise.resolve($.ajax(
+                    //load the remote list of payment methods, list of shipping zones & local list of countries for the app
+                    let promisesArray = []; // holds all created promises
+
+                    promisesArray.push(Promise.resolve($.ajax( // load the list of payment gateways
                         {
                             url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + `/wp-json/wc/v3/payment_gateways`,
                             type: "get",
@@ -7709,25 +7714,80 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             processData: true,
                             data: {}
                         }
-                    )).
-                    then(function(paymentMethodArray){
-                        // filter only pay method that are enabled
-                        paymentMethodArray = paymentMethodArray.filter(function(paymentElem){
-                            return paymentElem.enabled === true;
-                        });
+                    )));
+                    promisesArray.push(Promise.resolve($.ajax( // load the list of shipping zones
+                        {
+                            url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + `/wp-json/wc/v3/shipping/zones`,
+                            type: "get",
+                            //contentType: "application/json",
+                            beforeSend: function(jqxhr) {
+                                jqxhr.setRequestHeader("Authorization", "Basic " +
+                                    utopiasoftware[utopiasoftware_app_namespace].accessor);
+                            },
+                            dataType: "json",
+                            timeout: 240000, // wait for 4 minutes before timeout of request
+                            processData: true,
+                            data: {}
+                        }
+                    )));
+                    promisesArray.push(Promise.resolve($.ajax( // load the list of available countries
+                        {
+                            url: 'country-list.json',
+                            type: "get",
+                            //contentType: "application/json",
+                            beforeSend: function(jqxhr) {
+                                jqxhr.setRequestHeader("Authorization", "Basic " +
+                                    utopiasoftware[utopiasoftware_app_namespace].accessor);
+                            },
+                            dataType: "json",
+                            timeout: 240000, // wait for 4 minutes before timeout of request
+                            processData: true,
+                            data: {}
+                        }
+                    )));
 
-                        // assign the payment method array as the dataSource for the payment method dropdownlist
-                        $('#checkout-payment-method-type').get(0).ej2_instances[0].dataSource = paymentMethodArray;
-                        $('#checkout-payment-method-type').get(0).ej2_instances[0].dataBind();
+                    // wait for all promises to resolve
+                    promisesArray = await Promise.all(promisesArray);
 
-                    }).catch();
+                    // filter only pay method that are enabled
+                    promisesArray[0] = promisesArray[0].filter(function(paymentElem){
+                        return paymentElem.enabled === true;
+                    });
+
+                    // assign the payment method array as the dataSource for the payment method dropdownlist
+                    $('#checkout-payment-method-type').get(0).ej2_instances[0].dataSource = promisesArray[0];
+                    $('#checkout-payment-method-type').get(0).ej2_instances[0].dataBind();
+
+                    //store the list of shipping zones as a view-model property
+                    utopiasoftware[utopiasoftware_app_namespace].controller.
+                        checkoutPageViewModel.shoppingZonesArray = promisesArray[1];
+
+                    //store the list of countries as a view-model property
+                    utopiasoftware[utopiasoftware_app_namespace].controller.
+                        checkoutPageViewModel.countryArray = promisesArray[2];
 
                 }
                 catch(err){
+                    // get back to the previous page on the app-main navigator stack
+                    await $('#app-main-navigator').get(0).popPage();
+
                     console.log("CHECKOUT ERROR", err);
+                    // hide all previously displayed ej2 toast
+                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                    $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                    // display toast message
+                    let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                    toast.cssClass = 'error-ej2-toast';
+                    toast.timeOut = 3000;
+                    toast.content = `Error preparing checkout. Please retry`;
+                    toast.dataBind();
+                    toast.show();
                 }
                 finally {
-
+                    // hide page preloader
+                    $('#checkout-page .page-preloader').css("display", "none");
+                    // hide page modal loader
+                    $('#checkout-page .modal').css("display", "none");
                 }
             }
 
@@ -7737,11 +7797,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is shown
          */
         pageShow: async function(){
+            // check if the payment method element exists on page
+            if($('#checkout-page #checkout-payment-method-type').length == 0){ // if length is zero, element does not exist
+                return; // exit the method
+            }
+
             // get payment method dropdownlist component
-            let paymentMethodDropDown = $('#checkout-payment-method-type').get(0).ej2_instances[0];
+            var paymentMethodDropDown = $('#checkout-payment-method-type').get(0).ej2_instances[0];
 
             console.log("CHECKOUT DATASOURCE", paymentMethodDropDown.dataSource);
 
+
+            // check if the datasource for the payment method has been set
             if(paymentMethodDropDown.dataSource.length == 0){ // datasource for the payment method dropdownlist has not been set
                 // re-execute this method again after some time
                 window.setTimeout(utopiasoftware[utopiasoftware_app_namespace].controller.
@@ -7829,6 +7896,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // destroy tooltips
                 element.ej2_instances[0].destroy();
             });
+
+            // reset the view-model properties
+            utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder = null;
+            utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.countryArray = [];
+            utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.shoppingZonesArray = [];
         },
 
         /**
@@ -7879,6 +7951,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 let userDetails = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
                 loadData("user-details",
                     utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
+                // get the order object set on this page
+                let orderData = utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder;
 
                 console.log("CHECK OUT USER DETAILS", userDetails);
 
@@ -7887,13 +7961,60 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $('#checkout-page #checkout-personal-details-first-name').html(userDetails.first_name);
                 $('#checkout-page #checkout-personal-details-last-name').html(userDetails.last_name);
 
-                $('#checkout-page #checkout-billing-information-address').html(userDetails.billing.address_1);
-                $('#checkout-page #checkout-billing-information-city').html(userDetails.billing.city);
+                $('#checkout-page #checkout-billing-information-address').html(orderData.billing.address_1);
+                $('#checkout-page #checkout-billing-information-city').html(orderData.billing.city);
 
-                $('#checkout-page #checkout-shipping-information-first-name').html(userDetails.shipping.first_name);
-                $('#checkout-page #checkout-shipping-information-last-name').html(userDetails.shipping.last_name);
-                $('#checkout-page #checkout-shipping-information-address').html(userDetails.shipping.address_1);
-                $('#checkout-page #checkout-shipping-information-city').html(userDetails.shipping.city);
+                $('#checkout-page #checkout-shipping-information-first-name').html(orderData.shipping.first_name);
+                $('#checkout-page #checkout-shipping-information-last-name').html(orderData.shipping.last_name);
+                $('#checkout-page #checkout-shipping-information-address').html(orderData.shipping.address_1);
+                $('#checkout-page #checkout-shipping-information-city').html(orderData.shipping.city);
+
+                // get the shipping zone the of the user by checking the user's shipping country
+                let shippingCountryCode =  orderData.shipping.country == "" ? 'NG': orderData.shipping.country;
+                let shippingZoneId = 0; // set the shipping zone id to the default i.e. 'Rest of the world'
+                // find the country with the specified country code
+                let shippingCountry = utopiasoftware[utopiasoftware_app_namespace].controller.
+                    checkoutPageViewModel.countryArray.find(function(countryElem){
+                        return countryElem.code === shippingCountryCode;
+                });
+                // check if a shipping country was discovered
+                if(shippingCountry){ // a shipping country was discovered
+                    // get the shipping zone id which the shipping country belongs to
+                    let shippingZone = utopiasoftware[utopiasoftware_app_namespace].controller.
+                        checkoutPageViewModel.shoppingZonesArray.find(function(shippingZoneElem){
+                            return shippingZoneElem.name === shippingCountry.name;
+                    });
+                    if(shippingZone){ // a shipping zone was found
+                        //get the id of the discovered shipping zone
+                        shippingZoneId = shippingZone.id;
+                    }
+                }
+
+                // get the shipping methods attached to the discovered shipping zone
+                let shippingMethodsArray = await Promise.resolve($.ajax( // load the list of shipping zones
+                    {
+                        url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
+                            `/wp-json/wc/v3/shipping/zones/${shippingZoneId}/methods`,
+                        type: "get",
+                        //contentType: "application/json",
+                        beforeSend: function(jqxhr) {
+                            jqxhr.setRequestHeader("Authorization", "Basic " +
+                                utopiasoftware[utopiasoftware_app_namespace].accessor);
+                        },
+                        dataType: "json",
+                        timeout: 240000, // wait for 4 minutes before timeout of request
+                        processData: true,
+                        data: {}
+                    }
+                ));
+                // filter the shipping methods for only the methods that are enabled
+                shippingMethodsArray = shippingMethodsArray.filter(function(shippingMethodElem){
+                    return shippingMethodElem.enabled === true;
+                });
+                // set the shippingMethodArray as the datasource for the shipping method dropdownlist
+                let shippingMethodDropDown = $('#checkout-shipping-method-type').get(0).ej2_instances[0];
+                shippingMethodDropDown.dataSource = shippingMethodsArray;
+                // set the pre-selected shipping method (i.e. the shippingMethod dropdownlist value)
             }
             finally {
 
