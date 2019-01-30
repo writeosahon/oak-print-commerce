@@ -7726,6 +7726,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // get payment method dropdownlist component
             let paymentMethodDropDown = $('#checkout-payment-method-type').get(0).ej2_instances[0];
 
+            console.log("CHECKOUT DATASOURCE", paymentMethodDropDown.dataSource);
+
             if(paymentMethodDropDown.dataSource.length == 0){ // datasource for the payment method dropdownlist has not been set
                 // re-execute this method again after some time
                 window.setTimeout(utopiasoftware[utopiasoftware_app_namespace].controller.

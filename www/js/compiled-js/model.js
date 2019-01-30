@@ -199,10 +199,10 @@ $(document).on("destroy", "#shipping-info-page", utopiasoftware[utopiasoftware_a
 $(document).on("init", "#checkout-page", utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.pageInit);
 
 // listen for when the CHECKOUT page is shown
-/*$(document).on("show", "#checkout-page", utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.pageShow);
+$(document).on("show", "#checkout-page", utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.pageShow);
 
 // listen for when the CHECKOUT page is hidden
 $(document).on("hide", "#checkout-page", utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.pageHide);
 
 // listen for when the CHECKOUT is destroyed
-$(document).on("destroy", "#checkout-page", utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.pageDestroy);*/
+$(document).on("destroy", "#checkout-page", utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.pageDestroy);
