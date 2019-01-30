@@ -5721,9 +5721,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     }
                 ));
 
-                // hide the app loader
-                $('#loader-modal').get(0).hide(); // hide loader
-
                 // display the products details page using the selected product
                 await $('#app-main-navigator').get(0).pushPage("checkout-page.html", {data: {orderData}});
             }
@@ -5742,7 +5739,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 toast.show();
             }
             finally{
-
+                // hide the app loader
+                $('#loader-modal').get(0).hide(); // hide loader
             }
 
         }
@@ -7743,6 +7741,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 checkoutPageViewModel.scrollAndResizeEventListener, false);
 
             try{
+                // show page preloader
+                $('#checkout-page .page-preloader').css("display", "block");
+                // show page modal loader
+                $('#checkout-page .modal').css("display", "table");
+
                 await utopiasoftware[utopiasoftware_app_namespace].controller.
                     checkoutPageViewModel.displayContent();
 
@@ -7871,6 +7874,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $('#checkout-page #checkout-billing-information-address').html(userDetails.billing.address_1);
                 $('#checkout-page #checkout-billing-information-city').html(userDetails.billing.city);
 
+                $('#checkout-page #checkout-shipping-information-first-name').html(userDetails.shipping.first_name);
+                $('#checkout-page #checkout-shipping-information-last-name').html(userDetails.shipping.last_name);
+                $('#checkout-page #checkout-shipping-information-address').html(userDetails.shipping.address_1);
+                $('#checkout-page #checkout-shipping-information-city').html(userDetails.shipping.city);
             }
             finally {
 
