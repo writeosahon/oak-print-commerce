@@ -7588,6 +7588,21 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
 
         /**
+         * holds the user's Order object which will be sent to the server
+         */
+        chekoutOrder : null,
+
+        /**
+         * holds the array/list of countries where the user's shipping address can be located
+         */
+        countryArray: [],
+
+        /**
+         * holds the array/list of shipping zones where an order can be delivered
+         */
+        shoppingZonesArray: [],
+
+        /**
          * event is triggered when page is initialised
          */
         pageInit: function(event){
@@ -7679,6 +7694,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     });
 
                     //load the remote list of payment method for the app
+                    let promisesArray = [];
                     Promise.resolve($.ajax(
                         {
                             url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + `/wp-json/wc/v3/payment_gateways`,
