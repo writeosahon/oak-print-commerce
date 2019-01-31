@@ -8125,7 +8125,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         .get(0).ej2_instances[0];
                     tooltip.content = "incomplete personal details";
                     tooltip.dataBind();
-                    tooltip.open();
+                    tooltip.open( $('#checkout-page .checkout-personal-details-accordion-item .utopiasoftware-checkout-failure')
+                        .get(0));
                     // flag validation as failed
                     validationSuccessful = false;
                     reject();
