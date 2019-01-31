@@ -7687,7 +7687,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     }).appendTo('#checkout-make-payment');
 
                     // create the tooltips for the checkout page
-                    $('.utopiasoftware-checkout-failure', $thisPage).
+                    /*$('.utopiasoftware-checkout-failure', $thisPage).
                     each(function(index, element){
                         // create the tool tips for every element being validated, but attach it to the html form object
                         new ej.popups.Tooltip({
@@ -7695,7 +7695,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             position: 'TopCenter',
                             opensOn: 'Custom'
                         }).appendTo(element);
-                    });
+                    });*/
 
                     //load the remote list of payment methods, list of shipping zones & local list of countries for the app
                     let promisesArray = []; // holds all created promises
