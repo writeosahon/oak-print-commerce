@@ -7658,7 +7658,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         {
                             cssClass: "payment-method-dropdownlist",
                             dataSource: [],
-                            fields: { value: 'id', text: 'method_title'},
+                            fields: { value: 'id', text: 'title'},
                             placeholder: "Payment Method",
                             floatLabelType: 'Auto',
                             //enabled: false,
