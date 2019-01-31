@@ -8049,30 +8049,30 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         padding-top: 10px; padding-bottom: 10px">&times;${orderData.line_items[index].quantity}</div>
                         <div class="col-xs-4" style="text-align: left; padding-left: 5px;
                         padding-top: 10px; padding-bottom: 10px">
-                        ${kendo.toString(kendo.parseFloat(orderData.line_items[index].subtotal), "n2")}</div>`;
+                        &#x20a6;${kendo.toString(kendo.parseFloat(orderData.line_items[index].subtotal), "n2")}</div>`;
                 }
                 $('#checkout-page #checkout-order-items-container').html(orderItemsDisplayContent);
 
                 // display checkout totals
                 $('#checkout-page #checkout-page-items-cost').html(
-                `&#x20a6;${(kendo.parseFloat(orderData.total) - kendo.parseFloat(orderData.shipping_total) +
-                    kendo.parseFloat(orderData.discount_total))}`);
+                `&#x20a6;${kendo.toString((kendo.parseFloat(orderData.total) - kendo.parseFloat(orderData.shipping_total) +
+                    kendo.parseFloat(orderData.discount_total)), "n2")}`);
                 $('#checkout-page #checkout-page-shipping-cost').html(
-                    `&#x20a6;${kendo.parseFloat(orderData.shipping_total)}`
+                    `&#x20a6;${kendo.toString(kendo.parseFloat(orderData.shipping_total), "n2")}`
                 );
                 $('#checkout-page #checkout-page-discount-cost').html(
-                    `&#x20a6;${kendo.parseFloat(orderData.discount_total)}`
+                    `&#x20a6;${kendo.toString(kendo.parseFloat(orderData.discount_total), "n2")}`
                 );
                 $('#checkout-page #checkout-page-total-cost').html(
-                    `&#x20a6;${kendo.parseFloat(orderData.total)}`
+                    `&#x20a6;${kendo.toString(kendo.parseFloat(orderData.total), "n2")}`
                 );
                 if(kendo.parseFloat(orderData.discount_total) > 0){ // if the discount total value is > zero
                     // display the discount total to user
-                    $('#checkout-page .checkout-page-discount').css("visibility", "collapse");
+                    $('#checkout-page .checkout-page-discount').css("visibility", "visible");
                 }
                 else{ // the discount total is zero
                     // hide the discount total from user
-                    $('#checkout-page .checkout-page-discount').css("visibility", "visible");
+                    $('#checkout-page .checkout-page-discount').css("visibility", "collapse");
                 }
             }
             finally {
