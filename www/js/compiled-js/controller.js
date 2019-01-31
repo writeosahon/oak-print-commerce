@@ -8070,11 +8070,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 );
                 if(kendo.parseFloat(orderData.discount_total) > 0){ // if the discount total value is > zero
                     // display the discount total to user
-                    $('#checkout-page .checkout-page-discount').css("visibility", "visible");
+                    $('#checkout-page .checkout-page-discount').css("display", "block");
                 }
                 else{ // the discount total is zero
                     // hide the discount total from user
-                    $('#checkout-page .checkout-page-discount').css("visibility", "collapse");
+                    $('#checkout-page .checkout-page-discount').css("display", "none");
                 }
             }
             finally {
