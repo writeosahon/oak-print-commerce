@@ -7648,7 +7648,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             fields: { value: 'method_id', text: 'method_title'},
                             placeholder: "Shipping Method",
                             floatLabelType: 'Auto',
-                            enabled: false,
+                            //enabled: false,
                             itemTemplate: '<span>${method_title}</span>',
                             valueTemplate: '<span>${method_title}</span>'
                         }).appendTo('#checkout-shipping-method-type');
@@ -7661,9 +7661,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             fields: { value: 'id', text: 'method_title'},
                             placeholder: "Payment Method",
                             floatLabelType: 'Auto',
-                            enabled: false,
-                            itemTemplate: '<span>${method_title}</span>',
-                            valueTemplate: '<span>${method_title}</span>'
+                            //enabled: false,
+                            itemTemplate: '<span>${title}</span>',
+                            valueTemplate: '<span>${title}</span>'
                         }).appendTo('#checkout-payment-method-type');
 
                     // create the payment voucher multiselect dropdown list from the select input
@@ -8015,6 +8015,29 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 let shippingMethodDropDown = $('#checkout-shipping-method-type').get(0).ej2_instances[0];
                 shippingMethodDropDown.dataSource = shippingMethodsArray;
                 // set the pre-selected shipping method (i.e. the shippingMethod dropdownlist value)
+                // check if there are any shipping lines info available
+                if(orderData.shipping_lines.length > 0){ // if length is > 0, there are shipping lines info available
+                    // set the shipping method dropdownlist value
+                    shippingMethodDropDown.value = window.parseInt(orderData.shipping_lines[0].method_id);
+                }
+                shippingMethodDropDown.dataBind();
+
+                // set the pre-selected payment method for the order data
+                $('#checkout-payment-method-type').get(0).ej2_instances[0].value = orderData.payment_method;
+                $('#checkout-payment-method-type').get(0).ej2_instances[0].dataBind();
+
+                // set the order coupons
+                let couponsMultiSelectDropDown = $('#checkout-payment-vouchers').get(0).ej2_instances[0];
+                let couponsArray = orderData.coupon_lines.map(function(couponElem){
+                    return couponElem.code;
+                });
+                // set the datasource and the values for the coupons mulitselect dropdown
+                couponsMultiSelectDropDown.datasource = couponsArray;
+                couponsMultiSelectDropDown.value = couponsArray;
+                couponsMultiSelectDropDown.dataBind();
+
+                // set the order notes i.e. shipping instructions
+                $('#checkout-page #checkout-payment-order-note-text').val(orderData.customer_note);
             }
             finally {
 
