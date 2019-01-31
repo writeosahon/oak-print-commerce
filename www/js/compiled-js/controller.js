@@ -7836,6 +7836,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             }
             catch(err){
+                console.log("CHECKOUT SHOW ERROR", err);
                 // hide all previously displayed ej2 toast
                 $('.page-toast').get(0).ej2_instances[0].hide('All');
                 $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
@@ -8125,8 +8126,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         .get(0).ej2_instances[0];
                     tooltip.content = "incomplete personal details";
                     tooltip.dataBind();
-                    tooltip.open( $('#checkout-page .checkout-personal-details-accordion-item .utopiasoftware-checkout-failure')
-                        .get(0));
+                    /*tooltip.open( $('#checkout-page .checkout-personal-details-accordion-item .utopiasoftware-checkout-failure')
+                        .get(0));*/
                     // flag validation as failed
                     validationSuccessful = false;
                     reject();
