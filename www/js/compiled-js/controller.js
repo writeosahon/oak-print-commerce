@@ -7817,7 +7817,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 return;
             }
 
-            window.SoftInputMode.set('adjustResize');
+            window.SoftInputMode.set('adjustResize'); // adjust device input mode
 
             //add listener for when the window is resized by virtue of the device keyboard being shown
             window.addEventListener("resize", utopiasoftware[utopiasoftware_app_namespace].controller.
@@ -7831,6 +7831,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 await utopiasoftware[utopiasoftware_app_namespace].controller.
                     checkoutPageViewModel.displayContent();
+                await utopiasoftware[utopiasoftware_app_namespace].controller.
+                checkoutPageViewModel.validateOrderCheckout();
 
             }
             catch(err){
@@ -8078,7 +8080,58 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             finally {
 
             }
-        }
+        },
+
+        /**
+         * method is used to validate the order object/data i.e. the 'chekoutOrder' property of
+         * the view-model
+         *
+         * @returns {Promise<void>} the Promise resolves when the order data is successfully validated; it
+         * rejects when the validation fails.
+         */
+        async validateOrderCheckout(){
+
+            var validationSuccessful = true; // flag indicates if checkout validation was successful or not
+
+            return new Promise(async function(resolve, reject){
+                // validate the personal details segment
+                try{
+                    // load the user profile details from the app database
+                    let userDetails = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                    loadData("user-details",
+                        utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
+                    if(!userDetails.first_name || userDetails.first_name == ""){
+                        throw "validation error";
+                    }
+                    // user validation was successful
+                    $('#checkout-page .checkout-personal-details-accordion-item .utopiasoftware-checkout-success').
+                    css("display", "inline-block");
+                    $('#checkout-page .checkout-personal-details-accordion-item .utopiasoftware-checkout-failure').
+                    css("display", "none");
+                    // hide error tooltip for this segment
+                    let tooltip = $('#checkout-page .checkout-personal-details-accordion-item .utopiasoftware-checkout-failure')
+                        .get(0).ej2_instances[0];
+                    tooltip.close();
+                    resolve();
+                }
+                catch(err){
+                    // user details could not be loaded, so user validation failed
+                    $('#checkout-page .checkout-personal-details-accordion-item .utopiasoftware-checkout-success').
+                        css("display", "none");
+                    $('#checkout-page .checkout-personal-details-accordion-item .utopiasoftware-checkout-failure').
+                    css("display", "inline-block");
+                    // display error tooltip for this segment
+                    let tooltip = $('#checkout-page .checkout-personal-details-accordion-item .utopiasoftware-checkout-failure')
+                        .get(0).ej2_instances[0];
+                    tooltip.content = "incomplete personal details";
+                    tooltip.dataBind();
+                    tooltip.open();
+                    // flag validation as failed
+                    validationSuccessful = false;
+                    reject();
+                }
+            });
+        },
 
     }
 
