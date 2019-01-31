@@ -7648,7 +7648,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             fields: { value: 'method_id', text: 'method_title'},
                             placeholder: "Shipping Method",
                             floatLabelType: 'Auto',
-                            //enabled: false,
+                            enabled: false,
                             itemTemplate: '<span>${method_title}</span>',
                             valueTemplate: '<span>${method_title}</span>'
                         }).appendTo('#checkout-shipping-method-type');
@@ -7661,7 +7661,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             fields: { value: 'id', text: 'title'},
                             placeholder: "Payment Method",
                             floatLabelType: 'Auto',
-                            //enabled: false,
+                            enabled: false,
                             itemTemplate: '<span>${title}</span>',
                             valueTemplate: '<span>${title}</span>'
                         }).appendTo('#checkout-payment-method-type');
@@ -8038,6 +8038,42 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 // set the order notes i.e. shipping instructions
                 $('#checkout-page #checkout-payment-order-note-text').val(orderData.customer_note);
+
+                // display the order items
+                let orderItemsDisplayContent = ''; // holds the content to be displayed for the order items segment
+                for(let index = 0; index < orderData.line_items.length; index++){
+                    orderItemsDisplayContent +=
+                        `<div class="col-xs-6" style="text-align: right; padding-right: 5px;
+                        padding-top: 10px; padding-bottom: 10px">${orderData.line_items[index].name}</div>
+                        <div class="col-xs-2" style="text-align: left;
+                        padding-top: 10px; padding-bottom: 10px">&times;${orderData.line_items[index].quantity}</div>
+                        <div class="col-xs-4" style="text-align: left; padding-left: 5px;
+                        padding-top: 10px; padding-bottom: 10px">
+                        ${kendo.toString(kendo.parseFloat(orderData.line_items[index].subtotal), "n2")}</div>`;
+                }
+                $('#checkout-page #checkout-order-items-container').html(orderItemsDisplayContent);
+
+                // display checkout totals
+                $('#checkout-page #checkout-page-items-cost').html(
+                `&#x20a6;${(kendo.parseFloat(orderData.total) - kendo.parseFloat(orderData.shipping_total) +
+                    kendo.parseFloat(orderData.discount_total))}`);
+                $('#checkout-page #checkout-page-shipping-cost').html(
+                    `&#x20a6;${kendo.parseFloat(orderData.shipping_total)}`
+                );
+                $('#checkout-page #checkout-page-discount-cost').html(
+                    `&#x20a6;${kendo.parseFloat(orderData.discount_total)}`
+                );
+                $('#checkout-page #checkout-page-total-cost').html(
+                    `&#x20a6;${kendo.parseFloat(orderData.total)}`
+                );
+                if(kendo.parseFloat(orderData.discount_total) > 0){ // if the discount total value is > zero
+                    // display the discount total to user
+                    $('#checkout-page .checkout-page-discount').css("visibility", "collapse");
+                }
+                else{ // the discount total is zero
+                    // hide the discount total from user
+                    $('#checkout-page .checkout-page-discount').css("visibility", "visible");
+                }
             }
             finally {
 
