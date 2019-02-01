@@ -7914,7 +7914,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 checkoutPageViewModel.validateOrderCheckout();
             }
             catch(err){
-                console.log("CHECKOUT SHOW ERROR", err);
+                /*console.log("CHECKOUT SHOW ERROR", err);
                 // hide page preloader
                 $('#checkout-page .page-preloader').css("display", "none");
                 // hide page modal loader
@@ -7929,7 +7929,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 toast.timeOut = 3000;
                 toast.content = `Checkout error. Please retry or Pull Down to refresh`;
                 toast.dataBind();
-                toast.show();
+                toast.show();*/
 
             }
             finally {
@@ -8278,6 +8278,25 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     let tooltipIndex = $('#checkout-page .checkout-shipping-information-item .utopiasoftware-checkout-failure').
                     get(0)._utopiasoftware_validator_index;
                     $('#checkout-page').get(0).ej2_instances[tooltipIndex].close();
+                }
+
+                // validate the shipping method segment
+                if(! $('#checkout-page #checkout-shipping-method-type').get(0).ej2_instances[0].value){ // no shipping method
+                    // signal that shipping method validation failed
+                    $('#checkout-page .checkout-shipping-method-item .utopiasoftware-checkout-success').
+                    css("display", "none");
+                    $('#checkout-page .checkout-shipping-method-item .utopiasoftware-checkout-failure').
+                    css("display", "inline-block");
+                    // display error tooltip for this segment
+                    let tooltipIndex = $('#checkout-page .checkout-shipping-method-item .utopiasoftware-checkout-failure').
+                    get(0)._utopiasoftware_validator_index;
+                    let tooltip = $('#checkout-page').get(0).ej2_instances[tooltipIndex];
+                    tooltip.content = "shipping method required";
+                    tooltip.dataBind();
+                    tooltip.open( $('#checkout-page .checkout-shipping-information-item .utopiasoftware-checkout-failure')
+                        .get(0));
+                    // flag validation as failed
+                    validationSuccessful = false;
                 }
 
                 // check if the checkout order validation failed or succeeded
