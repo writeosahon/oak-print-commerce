@@ -5618,6 +5618,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 toast.show();
 
                 $('#app-main-navigator').get(0).pushPage('billing-info-page.html');
+
+                return; // exit method
             }
 
             // check if there is Internet connection
@@ -7861,7 +7863,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 let toast = $('.timed-page-toast').get(0).ej2_instances[0];
                 toast.cssClass = 'error-ej2-toast';
                 toast.timeOut = 3000;
-                toast.content = `Error preparing checkout.`;
+                toast.content = `Checkout error. Please retry or Pull Down to refresh`;
                 toast.dataBind();
                 toast.show();
             }
@@ -7938,10 +7940,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         async scrollAndResizeEventListener(){
             // place function execution in the event queue to be executed ASAP
             window.setTimeout(function(){
-                // adjust the tooltips elements on the shipping form
+                // adjust the tooltips elements on the checkout page
                 $('#checkout-page .utopiasoftware-checkout-failure').
                 each(function(index, element){
-                    element.ej2_instances[0].refresh(element);
+                    document.getElementById('checkout-page').ej2_instances[index].refresh(element);
                 });
 
             }, 0);
