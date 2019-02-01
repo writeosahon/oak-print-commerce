@@ -7880,6 +7880,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // hide page modal loader
                 $('#checkout-page .modal').css("display", "none");
             }
+
+            console.log("END OF CHECKOUT SHOW");
         },
 
         /**
@@ -7891,11 +7893,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             window.removeEventListener("resize", utopiasoftware[utopiasoftware_app_namespace].controller.
                 checkoutPageViewModel.scrollAndResizeEventListener, false);
 
-            // close the tooltips on the page
+            /*// close the tooltips on the page
             $('#checkout-page').get(0).ej2_instances.forEach(function(tooltipArrayElem){
                 // hide the tooltip
                 tooltipArrayElem.close();
-            });
+            });*/
+
+            console.log("END OF CHECKOUT HIDE");
         },
 
         /**
@@ -7928,6 +7932,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder = null;
             utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.countryArray = [];
             utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.shoppingZonesArray = [];
+
+            console.log("END OF CHECKOUT DESTROY");
         },
 
         /**
