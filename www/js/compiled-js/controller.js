@@ -5598,10 +5598,26 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 toast.dataBind();
                 toast.show();
 
-                // send the user to the sign in oage
+                // send the user to the sign in page
                 $('#app-main-navigator').get(0).pushPage('login-page.html');
 
                 return; // exit method
+            }
+
+            // check if a billing address has been provided
+            if(userDetails.billing.address_1 == ""){ // no billing address has been provided
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast to show that an error
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.timeOut = 3500;
+                toast.content = `Please update your billing address to checkout your cart`;
+                toast.dataBind();
+                toast.show();
+
+                $('#app-main-navigator').get(0).pushPage('billing-info-page.html');
             }
 
             // check if there is Internet connection
@@ -7687,15 +7703,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     }).appendTo('#checkout-make-payment');
 
                     // create the tooltips for the checkout page
-                    /*$('.utopiasoftware-checkout-failure', $thisPage).
+                    $('.utopiasoftware-checkout-failure', $thisPage).
                     each(function(index, element){
-                        // create the tool tips for every element being validated, but attach it to the html form object
+                        element._utopiasoftware_validator_index = index;
+                        // create the tool tips for every element being validated, but attach it to the page element
                         new ej.popups.Tooltip({
                             cssClass: 'utopiasoftware-ej2-validation-tooltip',
                             position: 'TopCenter',
                             opensOn: 'Custom'
-                        }).appendTo(element);
-                    });*/
+                        }).appendTo($thisPage.get(0));
+                    });
 
                     //load the remote list of payment methods, list of shipping zones & local list of countries for the app
                     let promisesArray = []; // holds all created promises
@@ -7866,10 +7883,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 checkoutPageViewModel.scrollAndResizeEventListener, false);
 
             // close the tooltips on the page
-            $('#checkout-page .utopiasoftware-checkout-failure').
-            each(function(index, element){
-                // close tooltips
-                element.ej2_instances[0].close();
+            $('#checkout-page').get(0).ej2_instances.forEach(function(tooltipArrayElem){
+                // hide the tooltip
+                tooltipArrayElem.close();
             });
         },
 
@@ -7894,10 +7910,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].destroy();
 
             // destroy the tooltips on the page
-            $('#checkout-page .utopiasoftware-checkout-failure').
-            each(function(index, element){
-                // destroy tooltips
-                element.ej2_instances[0].destroy();
+            $('#checkout-page').get(0).ej2_instances.forEach(function(tooltipArrayElem){
+                // destroy the tooltip
+                tooltipArrayElem.destroy();
             });
 
             // reset the view-model properties
@@ -8110,9 +8125,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     $('#checkout-page .checkout-personal-details-accordion-item .utopiasoftware-checkout-failure').
                     css("display", "none");
                     // hide error tooltip for this segment
-                    let tooltip = $('#checkout-page .checkout-personal-details-accordion-item .utopiasoftware-checkout-failure')
-                        .get(0).ej2_instances[0];
-                    tooltip.close();
+                    let tooltipIndex = $('#checkout-page .checkout-personal-details-accordion-item .utopiasoftware-checkout-failure').
+                        get(0)._utopiasoftware_validator_index;
+                    $('#checkout-page').get(0).ej2_instances[tooltipIndex].close();
                     resolve();
                 }
                 catch(err){
@@ -8122,12 +8137,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     $('#checkout-page .checkout-personal-details-accordion-item .utopiasoftware-checkout-failure').
                     css("display", "inline-block");
                     // display error tooltip for this segment
-                    let tooltip = $('#checkout-page .checkout-personal-details-accordion-item .utopiasoftware-checkout-failure')
-                        .get(0).ej2_instances[0];
+                    let tooltipIndex = $('#checkout-page .checkout-personal-details-accordion-item .utopiasoftware-checkout-failure').
+                    get(0)._utopiasoftware_validator_index;
+                    let tooltip = $('#checkout-page').get(0).ej2_instances[tooltipIndex];
                     tooltip.content = "incomplete personal details";
                     tooltip.dataBind();
-                    /*tooltip.open( $('#checkout-page .checkout-personal-details-accordion-item .utopiasoftware-checkout-failure')
-                        .get(0));*/
+                    tooltip.open( $('#checkout-page .checkout-personal-details-accordion-item .utopiasoftware-checkout-failure')
+                        .get(0));
                     // flag validation as failed
                     validationSuccessful = false;
                     reject();
