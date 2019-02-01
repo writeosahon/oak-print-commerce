@@ -6452,6 +6452,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 // temporary hold the user id
                 let userId = userDetails.id;
+                // delete the billing and shipping info from the userData object being updated because it's not needed.
+                // if the password change is successful, the response will include
+                // the billing and shipping retrieved from the server.
+                delete userDetails.billing;
+                delete userDetails.shipping;
 
                 // use the new password input to change/update the user password
                 userDetails.password = $('#change-password-page #change-password-form #change-password-new-password').val().trim();
@@ -6482,6 +6487,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // add the user's new password to the user details retrieved from the server
                 resultsArray[0].password =
                     $('#change-password-page #change-password-form #change-password-new-password').val().trim();
+
+                console.log("PASSWORD CHANGED", resultsArray[0]);
 
                 // save the created user details data to ENCRYPTED app database as cached data
                 await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
