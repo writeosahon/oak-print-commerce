@@ -7919,10 +7919,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].destroy();
 
             // destroy the tooltips on the page
-            $('#checkout-page').get(0).ej2_instances.forEach(function(tooltipArrayElem){
+            /*$('#checkout-page').get(0).ej2_instances.forEach(function(tooltipArrayElem){
                 // destroy the tooltip
                 tooltipArrayElem.destroy();
-            });
+            });*/
 
             // reset the view-model properties
             utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder = null;
