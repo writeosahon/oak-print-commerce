@@ -7876,20 +7876,24 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             window.addEventListener("resize", utopiasoftware[utopiasoftware_app_namespace].controller.
                 checkoutPageViewModel.scrollAndResizeEventListener, false);
 
-            try{
-                // show page preloader
-                $('#checkout-page .page-preloader').css("display", "block");
-                // show page modal loader
-                $('#checkout-page .modal').css("display", "table");
+            // show page preloader
+            $('#checkout-page .page-preloader').css("display", "block");
+            // show page modal loader
+            $('#checkout-page .modal').css("display", "table");
 
+
+            try{
+                // display the content of the checkout page
                 await utopiasoftware[utopiasoftware_app_namespace].controller.
                     checkoutPageViewModel.displayContent();
-                await utopiasoftware[utopiasoftware_app_namespace].controller.
-                checkoutPageViewModel.validateOrderCheckout();
-
             }
             catch(err){
                 console.log("CHECKOUT SHOW ERROR", err);
+                // hide page preloader
+                $('#checkout-page .page-preloader').css("display", "none");
+                // hide page modal loader
+                $('#checkout-page .modal').css("display", "none");
+
                 // hide all previously displayed ej2 toast
                 $('.page-toast').get(0).ej2_instances[0].hide('All');
                 $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
@@ -7900,6 +7904,33 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 toast.content = `Checkout error. Please retry or Pull Down to refresh`;
                 toast.dataBind();
                 toast.show();
+
+                return; // exit method
+            }
+
+
+            try{
+                await utopiasoftware[utopiasoftware_app_namespace].controller.
+                checkoutPageViewModel.validateOrderCheckout();
+            }
+            catch(err){
+                console.log("CHECKOUT SHOW ERROR", err);
+                // hide page preloader
+                $('#checkout-page .page-preloader').css("display", "none");
+                // hide page modal loader
+                $('#checkout-page .modal').css("display", "none");
+
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast message
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.timeOut = 3000;
+                toast.content = `Checkout error. Please retry or Pull Down to refresh`;
+                toast.dataBind();
+                toast.show();
+
             }
             finally {
                 // hide page preloader
@@ -8231,7 +8262,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     let tooltipIndex = $('#checkout-page .checkout-shipping-information-item .utopiasoftware-checkout-failure').
                     get(0)._utopiasoftware_validator_index;
                     let tooltip = $('#checkout-page').get(0).ej2_instances[tooltipIndex];
-                    tooltip.content = "incomplete billing details";
+                    tooltip.content = "incomplete shipping details";
                     tooltip.dataBind();
                     tooltip.open( $('#checkout-page .checkout-shipping-information-item .utopiasoftware-checkout-failure')
                         .get(0));
