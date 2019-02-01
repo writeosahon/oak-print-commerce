@@ -8293,7 +8293,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     let tooltip = $('#checkout-page').get(0).ej2_instances[tooltipIndex];
                     tooltip.content = "shipping method required";
                     tooltip.dataBind();
-                    tooltip.open( $('#checkout-page .checkout-shipping-information-item .utopiasoftware-checkout-failure')
+                    tooltip.open( $('#checkout-page .checkout-shipping-method-item .utopiasoftware-checkout-failure')
                         .get(0));
                     // flag validation as failed
                     validationSuccessful = false;
