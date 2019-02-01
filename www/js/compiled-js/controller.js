@@ -5580,6 +5580,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         async checkoutButtonClicked(){
 
             let userDetails = null; // holds the user details
+
+            // check if a user has signed in
             try{
                 // load the use details from the encrypted app database
                 userDetails = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
@@ -5600,6 +5602,31 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 // send the user to the sign in page
                 $('#app-main-navigator').get(0).pushPage('login-page.html');
+
+                return; // exit method
+            }
+
+            // check if the user has any item in cart
+            try{
+                let localCart = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                loadData("user-cart",
+                    utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)).cart;
+                if(localCart.length === 0){ // no item in user cart
+                    throw "error"; // throw error
+                }
+            }
+            catch(err){
+                // display message to inform user that cart is empty
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast to show that an error
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'default-ej2-toast';
+                toast.timeOut = 3000;
+                toast.content = `Your cart is empty. Go order some products!`;
+                toast.dataBind();
+                toast.show();
 
                 return; // exit method
             }
@@ -7910,36 +7937,28 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // destroy the shipping method dropdownlist
             $('#checkout-page #checkout-shipping-method-type').get(0).ej2_instances[0].destroy();
 
-            console.log("STEP 1");
             // destroy the payment method dropdownlist
             $('#checkout-page #checkout-payment-method-type').get(0).ej2_instances[0].destroy();
 
-            console.log("STEP 2");
             // destroy the payment voucher multiselect dropdownlist
             $('#checkout-page #checkout-payment-vouchers').get(0).ej2_instances[0].destroy();
 
-            console.log("STEP 3");
             // destroy the "Make Payment"
             $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].destroy();
 
-            console.log("STEP 4");
             // destroy the page accordion
             $('#checkout-page #checkout-accordion').get(0).ej2_instances[0].destroy();
 
-            console.log("STEP 5");
             // destroy the tooltips on the page
             $('#checkout-page').get(0).ej2_instances.forEach(function(tooltipArrayElem){
                 // destroy the tooltip
                 tooltipArrayElem.destroy();
             });
-            console.log("STEP 6");
 
             // reset the view-model properties
             utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder = null;
             utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.countryArray = [];
             utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.shoppingZonesArray = [];
-
-            console.log("END OF CHECKOUT DESTROY");
         },
 
         /**
@@ -8131,6 +8150,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             var validationSuccessful = true; // flag indicates if checkout validation was successful or not
 
             return new Promise(async function(resolve, reject){
+
+                // get the checkout Order object
+                var orderData = utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder;
+
                 // validate the personal details segment
                 try{
                     // load the user profile details from the app database
@@ -8149,7 +8172,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     let tooltipIndex = $('#checkout-page .checkout-personal-details-accordion-item .utopiasoftware-checkout-failure').
                         get(0)._utopiasoftware_validator_index;
                     $('#checkout-page').get(0).ej2_instances[tooltipIndex].close();
-                    resolve();
                 }
                 catch(err){
                     // user details could not be loaded, so user validation failed
@@ -8167,7 +8189,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         .get(0));
                     // flag validation as failed
                     validationSuccessful = false;
-                    reject();
+                }
+
+                // validate the billing details segment
+                if(!orderData.billing.address_1 || orderData.billing.address_1 == ""){ // the billing address has NOT been provided
+                    // signal that billing details validation failed
+
                 }
             });
         },
