@@ -8298,6 +8298,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     // flag validation as failed
                     validationSuccessful = false;
                 }
+                else{ // shipping method has been set
+                    $('#checkout-page .checkout-shipping-method-item .utopiasoftware-checkout-success').
+                    css("display", "inline-block");
+                    $('#checkout-page .checkout-shipping-method-item .utopiasoftware-checkout-failure').
+                    css("display", "none");
+                    // hide error tooltip for this segment
+                    let tooltipIndex = $('#checkout-page .checkout-shipping-method-item .utopiasoftware-checkout-failure').
+                    get(0)._utopiasoftware_validator_index;
+                    $('#checkout-page').get(0).ej2_instances[tooltipIndex].close();
+                }
 
                 // check if the checkout order validation failed or succeeded
                 if(validationSuccessful === true){ // validation was successful
