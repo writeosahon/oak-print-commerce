@@ -8194,7 +8194,69 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // validate the billing details segment
                 if(!orderData.billing.address_1 || orderData.billing.address_1 == ""){ // the billing address has NOT been provided
                     // signal that billing details validation failed
+                    $('#checkout-page .checkout-billing-information-item .utopiasoftware-checkout-success').
+                    css("display", "none");
+                    $('#checkout-page .checkout-billing-information-item .utopiasoftware-checkout-failure').
+                    css("display", "inline-block");
+                    // display error tooltip for this segment
+                    let tooltipIndex = $('#checkout-page .checkout-billing-information-item .utopiasoftware-checkout-failure').
+                    get(0)._utopiasoftware_validator_index;
+                    let tooltip = $('#checkout-page').get(0).ej2_instances[tooltipIndex];
+                    tooltip.content = "incomplete billing details";
+                    tooltip.dataBind();
+                    tooltip.open( $('#checkout-page .checkout-billing-information-item .utopiasoftware-checkout-failure')
+                        .get(0));
+                    // flag validation as failed
+                    validationSuccessful = false;
+                }
+                else{ // the billing address and other billing info have been provided
+                    $('#checkout-page .checkout-billing-information-item .utopiasoftware-checkout-success').
+                    css("display", "inline-block");
+                    $('#checkout-page .checkout-billing-information-item .utopiasoftware-checkout-failure').
+                    css("display", "none");
+                    // hide error tooltip for this segment
+                    let tooltipIndex = $('#checkout-page .checkout-billing-information-item .utopiasoftware-checkout-failure').
+                    get(0)._utopiasoftware_validator_index;
+                    $('#checkout-page').get(0).ej2_instances[tooltipIndex].close();
+                }
 
+                // validate the shipping details segment
+                if(!orderData.shipping.address_1 || orderData.shipping.address_1 == ""){ // the shipping address has NOT been provided
+                    // signal that shipping details validation failed
+                    $('#checkout-page .checkout-shipping-information-item .utopiasoftware-checkout-success').
+                    css("display", "none");
+                    $('#checkout-page .checkout-shipping-information-item .utopiasoftware-checkout-failure').
+                    css("display", "inline-block");
+                    // display error tooltip for this segment
+                    let tooltipIndex = $('#checkout-page .checkout-shipping-information-item .utopiasoftware-checkout-failure').
+                    get(0)._utopiasoftware_validator_index;
+                    let tooltip = $('#checkout-page').get(0).ej2_instances[tooltipIndex];
+                    tooltip.content = "incomplete billing details";
+                    tooltip.dataBind();
+                    tooltip.open( $('#checkout-page .checkout-shipping-information-item .utopiasoftware-checkout-failure')
+                        .get(0));
+                    // flag validation as failed
+                    validationSuccessful = false;
+                }
+                else{ // the billing address and other billing info have been provided
+                    $('#checkout-page .checkout-shipping-information-item .utopiasoftware-checkout-success').
+                    css("display", "inline-block");
+                    $('#checkout-page .checkout-shipping-information-item .utopiasoftware-checkout-failure').
+                    css("display", "none");
+                    // hide error tooltip for this segment
+                    let tooltipIndex = $('#checkout-page .checkout-shipping-information-item .utopiasoftware-checkout-failure').
+                    get(0)._utopiasoftware_validator_index;
+                    $('#checkout-page').get(0).ej2_instances[tooltipIndex].close();
+                }
+
+                // check if the checkout order validation failed or succeeded
+                if(validationSuccessful === true){ // validation was successful
+                    resolve(); // resolve validation promise
+                    return;
+                }
+                else{ // validation failed
+                    reject(); // reject validation promise
+                    return;
                 }
             });
         },
