@@ -7893,12 +7893,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             window.removeEventListener("resize", utopiasoftware[utopiasoftware_app_namespace].controller.
                 checkoutPageViewModel.scrollAndResizeEventListener, false);
 
-            /*// close the tooltips on the page
+
+            // close the tooltips on the page
             $('#checkout-page').get(0).ej2_instances.forEach(function(tooltipArrayElem){
                 // hide the tooltip
                 tooltipArrayElem.close();
-            });*/
-
+            });
             console.log("END OF CHECKOUT HIDE");
         },
 
@@ -7907,26 +7907,32 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         pageDestroy: function(){
 
-            // destroy the page accordion
-            $('#checkout-page #checkout-accordion').get(0).ej2_instances[0].destroy();
-
             // destroy the shipping method dropdownlist
-            $('#checkout-shipping-method-type').get(0).ej2_instances[0].destroy();
+            $('#checkout-page #checkout-shipping-method-type').get(0).ej2_instances[0].destroy();
 
+            console.log("STEP 1");
             // destroy the payment method dropdownlist
-            $('#checkout-payment-method-type').get(0).ej2_instances[0].destroy();
+            $('#checkout-page #checkout-payment-method-type').get(0).ej2_instances[0].destroy();
 
+            console.log("STEP 2");
             // destroy the payment voucher multiselect dropdownlist
-            $('#checkout-payment-vouchers').get(0).ej2_instances[0].destroy();
+            $('#checkout-page #checkout-payment-vouchers').get(0).ej2_instances[0].destroy();
 
+            console.log("STEP 3");
             // destroy the "Make Payment"
             $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].destroy();
 
+            console.log("STEP 4");
+            // destroy the page accordion
+            $('#checkout-page #checkout-accordion').get(0).ej2_instances[0].destroy();
+
+            console.log("STEP 5");
             // destroy the tooltips on the page
-            /*$('#checkout-page').get(0).ej2_instances.forEach(function(tooltipArrayElem){
+            $('#checkout-page').get(0).ej2_instances.forEach(function(tooltipArrayElem){
                 // destroy the tooltip
                 tooltipArrayElem.destroy();
-            });*/
+            });
+            console.log("STEP 6");
 
             // reset the view-model properties
             utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder = null;
