@@ -8309,6 +8309,35 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     $('#checkout-page').get(0).ej2_instances[tooltipIndex].close();
                 }
 
+                // validate the payment method segment
+                if(! $('#checkout-page #checkout-payment-method-type').get(0).ej2_instances[0].value){ // no shipping method
+                    // signal that payment method validation failed
+                    $('#checkout-page .checkout-payment-method-item .utopiasoftware-checkout-success').
+                    css("display", "none");
+                    $('#checkout-page .checkout-payment-method-item .utopiasoftware-checkout-failure').
+                    css("display", "inline-block");
+                    // display error tooltip for this segment
+                    let tooltipIndex = $('#checkout-page .checkout-payment-method-item .utopiasoftware-checkout-failure').
+                    get(0)._utopiasoftware_validator_index;
+                    let tooltip = $('#checkout-page').get(0).ej2_instances[tooltipIndex];
+                    tooltip.content = "payment method required";
+                    tooltip.dataBind();
+                    tooltip.open( $('#checkout-page .checkout-payment-method-item .utopiasoftware-checkout-failure')
+                        .get(0));
+                    // flag validation as failed
+                    validationSuccessful = false;
+                }
+                else{ // payment method has been set
+                    $('#checkout-page .checkout-payment-method-item .utopiasoftware-checkout-success').
+                    css("display", "inline-block");
+                    $('#checkout-page .checkout-payment-method-item .utopiasoftware-checkout-failure').
+                    css("display", "none");
+                    // hide error tooltip for this segment
+                    let tooltipIndex = $('#checkout-page .checkout-payment-method-item .utopiasoftware-checkout-failure').
+                    get(0)._utopiasoftware_validator_index;
+                    $('#checkout-page').get(0).ej2_instances[tooltipIndex].close();
+                }
+
                 // check if the checkout order validation failed or succeeded
                 if(validationSuccessful === true){ // validation was successful
                     resolve(); // resolve validation promise
