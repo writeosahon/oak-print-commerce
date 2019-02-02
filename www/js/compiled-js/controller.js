@@ -8181,6 +8181,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // remove the "select" event listener for the shipping method dropdownlist
                 let shippingMethodDropDown = $('#checkout-shipping-method-type').get(0).ej2_instances[0];
                 shippingMethodDropDown.removeEventListener("select");
+
                 // set the shippingMethodArray as the datasource for the shipping method dropdownlist
                 shippingMethodDropDown.dataSource = shippingMethodsArray;
                 // set the pre-selected shipping method (i.e. the shippingMethod dropdownlist value)
@@ -8190,19 +8191,72 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     shippingMethodDropDown.value = orderData.shipping_lines[0].method_id;
                 }
                 shippingMethodDropDown.dataBind();
+
                 // add the "select" event listener for the shipping method dropdownlist
                 shippingMethodDropDown.addEventListener("select", function(){
                     // handle the task in a separate event block
-                    window.setTimeout(function(){
-                        // update the shipping method for the checkout order
-                        utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder.
-                            shipping_lines[0] =
+                    window.setTimeout(async function(){
+
+                        // display the page loader modal
+                        $('#checkout-page .modal').css("display", "table");
+
+                        // get a local/deep-clone copy of the page's checkout order object
+                        let localOrderObject = JSON.parse(JSON.
+                        stringify(utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder));
+                        // update the shipping method for the local order object to be sent to the server
+                        localOrderObject.shipping_lines[0] =
                             {method_id: shippingMethodDropDown.value, method_title: shippingMethodDropDown.text};
-                        // disable the shipping method dropdownlist
-                        shippingMethodDropDown.enabled = false;
-                        shippingMethodDropDown.dataBind();
-                        // redisplay the page
-                        utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.pageShow();
+
+                        // update the checkout order data on the remote server
+                        try{
+                            localOrderObject = await Promise.resolve($.ajax(
+                                {
+                                    url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
+                                        `/wp-json/wc/v3/orders/${localOrderObject.id}`,
+                                    type: "put",
+                                    contentType: "application/json",
+                                    beforeSend: function(jqxhr) {
+                                        jqxhr.setRequestHeader("Authorization", "Basic " +
+                                            utopiasoftware[utopiasoftware_app_namespace].accessor);
+                                    },
+                                    dataType: "json",
+                                    timeout: 240000, // wait for 4 minutes before timeout of request
+                                    processData: false,
+                                    data: JSON.stringify(localOrderObject)
+                                }
+                            ));
+
+                            // update the page checkout order with the updated order from the server
+                            utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.
+                                chekoutOrder = localOrderObject;
+
+                            // disable the shipping method dropdownlist
+                            shippingMethodDropDown.enabled = false;
+                            shippingMethodDropDown.dataBind();
+
+                            // redisplay the page (redisplaying the page also hides the page loader when the process is complete)
+                            await utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.pageShow();
+                        }
+                        catch(err){
+                            console.log("CHECKOUT SHIPPING METHOD UPDATE ERROR", err);
+
+                            err = JSON.parse(err.responseText);
+
+                            // hide all previously displayed ej2 toast
+                            $('.page-toast').get(0).ej2_instances[0].hide('All');
+                            $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                            // display toast message
+                            let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                            toast.cssClass = 'error-ej2-toast';
+                            toast.timeOut = 3000;
+                            toast.content = `Shipping method not updated, retry. ${err.message || ""}`;
+                            toast.dataBind();
+                            toast.show();
+
+                            // display the page loader modal
+                            $('#checkout-page .modal').css("display", "table");
+                        }
+
                     }, 0);
                 });
 
