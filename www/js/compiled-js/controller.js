@@ -8062,6 +8062,22 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         },
 
         /**
+         * method is triggered when the "Edit" button for the shipping method is clicked
+         *
+         * @returns {Promise<void>}
+         */
+        async editShippingMethodButtonClicked(){
+
+            // handle the task in a separate event block
+            window.setTimeout(function(){
+                // enable the shipping method dropdownlist
+                let shippingMethodDropdownList = $('#checkout-page #checkout-shipping-method-type').get(0).ej2_instances[0];
+                shippingMethodDropdownList.enabled = true;
+                shippingMethodDropdownList.dataBind();
+            }, 0);
+        },
+
+        /**
          * method is triggered when the user clicks the "Make Payment" button
          *
          * @returns {Promise<void>}
@@ -8162,8 +8178,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 shippingMethodsArray = shippingMethodsArray.filter(function(shippingMethodElem){
                     return shippingMethodElem.enabled === true;
                 });
-                // set the shippingMethodArray as the datasource for the shipping method dropdownlist
+                // remove the "select" event listener for the shipping method dropdownlist
                 let shippingMethodDropDown = $('#checkout-shipping-method-type').get(0).ej2_instances[0];
+                shippingMethodDropDown.removeEventListener("select");
+                // set the shippingMethodArray as the datasource for the shipping method dropdownlist
                 shippingMethodDropDown.dataSource = shippingMethodsArray;
                 // set the pre-selected shipping method (i.e. the shippingMethod dropdownlist value)
                 // check if there are any shipping lines info available
@@ -8172,6 +8190,21 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     shippingMethodDropDown.value = window.parseInt(orderData.shipping_lines[0].method_id);
                 }
                 shippingMethodDropDown.dataBind();
+                // add the "select" event listener for the shipping method dropdownlist
+                shippingMethodDropDown.addEventListener("select", function(){
+                    // handle the task in a separate event block
+                    window.setTimeout(function(){
+                        // update the shipping method for the checkout order
+                        utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder.
+                            shipping_lines[0] =
+                            {method_id: shippingMethodDropDown.value, method_title: shippingMethodDropDown.text};
+                        // disable the shipping method dropdownlist
+                        shippingMethodDropDown.enabled = false;
+                        shippingMethodDropDown.dataBind();
+                        // redisplay the page
+                        utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.pageShow();
+                    }, 0);
+                });
 
                 // set the pre-selected payment method for the order data
                 $('#checkout-payment-method-type').get(0).ej2_instances[0].value = orderData.payment_method;
