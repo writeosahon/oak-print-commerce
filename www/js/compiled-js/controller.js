@@ -7709,12 +7709,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         {
                             cssClass: "shipping-method-dropdownlist",
                             dataSource: [],
-                            fields: { value: 'method_id', text: 'method_title'},
+                            fields: { value: 'method_id', text: 'title'},
                             placeholder: "Shipping Method",
                             floatLabelType: 'Auto',
                             enabled: false,
-                            itemTemplate: '<span>${method_title}</span>',
-                            valueTemplate: '<span>${method_title}</span>'
+                            itemTemplate: '<span>${title}</span>',
+                            valueTemplate: '<span>${title}</span>'
                         }).appendTo('#checkout-shipping-method-type');
 
                     // create the payment method dropdown list from the select input
@@ -8187,7 +8187,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // check if there are any shipping lines info available
                 if(orderData.shipping_lines.length > 0){ // if length is > 0, there are shipping lines info available
                     // set the shipping method dropdownlist value
-                    shippingMethodDropDown.value = window.parseInt(orderData.shipping_lines[0].method_id);
+                    shippingMethodDropDown.value = orderData.shipping_lines[0].method_id;
                 }
                 shippingMethodDropDown.dataBind();
                 // add the "select" event listener for the shipping method dropdownlist
