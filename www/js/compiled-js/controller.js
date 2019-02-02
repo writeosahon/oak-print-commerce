@@ -7655,6 +7655,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         shoppingZonesArray: [],
 
         /**
+         * flag whether to update the billing details for the
+         * checkout order data using the billing details of the current user
+         */
+        updateOrderBillingDetails: false,
+
+        /**
+         * flag whether to update the shipping details for the
+         * checkout order data using the shipping details of the current user
+         */
+        updateOrderShippingDetails: false,
+
+        /**
          * event is triggered when page is initialised
          */
         pageInit: function(event){
@@ -7990,6 +8002,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder = null;
             utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.countryArray = [];
             utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.shoppingZonesArray = [];
+            utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.
+                updateOrderBillingDetails = false;
+            utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.
+                updateOrderShippingDetails = false;
         },
 
         /**
@@ -8019,6 +8035,31 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
         },
 
+        /**
+         * method is triggered when the "Edit" button for the billing details is clicked
+         *
+         * @returns {Promise<void>}
+         */
+        async editBillingDetailsButtonClicked(){
+            // set the update billing details flag to true
+            utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.
+                updateOrderBillingDetails = true;
+            // display the billing details page
+            $('#app-main-navigator').get(0).pushPage('billing-info-page.html');
+        },
+
+        /**
+         * method is triggered when the "Edit" button for the shipping details is clicked
+         *
+         * @returns {Promise<void>}
+         */
+        async editShippingDetailsButtonClicked(){
+            // set the update shipping details flag to true
+            utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.
+                updateOrderShippingDetails = true;
+            // display the shipping details page
+            $('#app-main-navigator').get(0).pushPage('shipping-info-page.html');
+        },
 
         /**
          * method is triggered when the user clicks the "Make Payment" button
@@ -8040,6 +8081,27 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 let userDetails = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
                 loadData("user-details",
                     utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
+
+                // check if the checkout order billing data should be updated with the current user's billing
+                if(utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.
+                    updateOrderBillingDetails === true){ // billing data should be updated
+                    utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder.billing =
+                        userDetails.billing;
+                    // reset the flag
+                    utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.
+                        updateOrderBillingDetails = false;
+                }
+
+                // check if the checkout order shipping data should be updated with the current user's shipping
+                if(utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.
+                    updateOrderShippingDetails === true){ // shipping data should be updated
+                    utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder.shipping =
+                        userDetails.shipping;
+                    // reset the flag
+                    utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.
+                        updateOrderShippingDetails = false;
+                }
+
                 // get the order object set on this page
                 let orderData = utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder;
 
@@ -8348,7 +8410,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     return;
                 }
             });
-        },
+        }
 
     }
 
