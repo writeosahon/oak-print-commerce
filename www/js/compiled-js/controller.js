@@ -8078,6 +8078,22 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         },
 
         /**
+         * method is triggered when the "Edit" button for the payment method is clicked
+         *
+         * @returns {Promise<void>}
+         */
+        async editPaymentMethodButtonClicked(){
+
+            // handle the task in a separate event block
+            window.setTimeout(function(){
+                // enable the payment method dropdownlist
+                let paymentMethodDropdownList = $('#checkout-page #checkout-payment-method-type').get(0).ej2_instances[0];
+                paymentMethodDropdownList.enabled = true;
+                paymentMethodDropdownList.dataBind();
+            }, 0);
+        },
+
+        /**
          * method is triggered when the user clicks the "Make Payment" button
          *
          * @returns {Promise<void>}
@@ -8260,9 +8276,81 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     }, 0);
                 });
 
+                // remove the "select" event listener for the shipping method dropdownlist
+                let paymentMethodDropDown = $('#checkout-payment-method-type').get(0).ej2_instances[0];
+                paymentMethodDropDown.removeEventListener("select");
+
                 // set the pre-selected payment method for the order data
-                $('#checkout-payment-method-type').get(0).ej2_instances[0].value = orderData.payment_method;
-                $('#checkout-payment-method-type').get(0).ej2_instances[0].dataBind();
+                paymentMethodDropDown.value = orderData.payment_method;
+                paymentMethodDropDown.dataBind();
+
+                // add the "select" event listener for the payment method dropdownlist
+                paymentMethodDropDown.addEventListener("select", function(){
+                    // handle the task in a separate event block
+                    window.setTimeout(async function(){
+
+                        // display the page loader modal
+                        $('#checkout-page .modal').css("display", "table");
+
+                        // get a local/deep-clone copy of the page's checkout order object
+                        let localOrderObject = JSON.parse(JSON.
+                        stringify(utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder));
+                        // update the payment method for the local order object to be sent to the server
+                        localOrderObject.payment_method = paymentMethodDropDown.value;
+                        localOrderObject.payment_method_title = paymentMethodDropDown.text;
+
+                        // update the checkout order data on the remote server
+                        try{
+                            localOrderObject = await Promise.resolve($.ajax(
+                                {
+                                    url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
+                                        `/wp-json/wc/v3/orders/${localOrderObject.id}`,
+                                    type: "put",
+                                    contentType: "application/json",
+                                    beforeSend: function(jqxhr) {
+                                        jqxhr.setRequestHeader("Authorization", "Basic " +
+                                            utopiasoftware[utopiasoftware_app_namespace].accessor);
+                                    },
+                                    dataType: "json",
+                                    timeout: 240000, // wait for 4 minutes before timeout of request
+                                    processData: false,
+                                    data: JSON.stringify(localOrderObject)
+                                }
+                            ));
+
+                            // update the page checkout order with the updated order from the server
+                            utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.
+                                chekoutOrder = localOrderObject;
+
+                            // disable the payment method dropdownlist
+                            paymentMethodDropDown.enabled = false;
+                            paymentMethodDropDown.dataBind();
+
+                            // redisplay the page (redisplaying the page also hides the page loader when the process is complete)
+                            await utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.pageShow();
+                        }
+                        catch(err){
+                            console.log("CHECKOUT PAYMENT METHOD UPDATE ERROR", err);
+
+                            err = JSON.parse(err.responseText);
+
+                            // hide all previously displayed ej2 toast
+                            $('.page-toast').get(0).ej2_instances[0].hide('All');
+                            $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                            // display toast message
+                            let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                            toast.cssClass = 'error-ej2-toast';
+                            toast.timeOut = 3000;
+                            toast.content = `Payment method not updated, retry. ${err.message || ""}`;
+                            toast.dataBind();
+                            toast.show();
+
+                            // hide the page loader modal
+                            $('#checkout-page .modal').css("display", "none");
+                        }
+
+                    }, 0);
+                });
 
                 // set the order coupons
                 let couponsMultiSelectDropDown = $('#checkout-payment-vouchers').get(0).ej2_instances[0];
