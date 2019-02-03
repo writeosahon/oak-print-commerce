@@ -8179,6 +8179,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             }
             catch(err){
 
+                // hide the page loader modal
+                $('#checkout-page .modal').css("display", "none");
+
                 // hide all previously displayed ej2 toast
                 $('.page-toast').get(0).ej2_instances[0].hide('All');
                 $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
@@ -8189,11 +8192,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 toast.content = `Coupon not applied. Invalid coupon code`;
                 toast.dataBind();
                 toast.show();
-            }
-            finally{
-                // hide the page loader modal
-                $('#checkout-page .modal').css("display", "none");
-
             }
         },
 
