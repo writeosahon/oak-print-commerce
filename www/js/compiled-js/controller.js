@@ -8094,6 +8094,110 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         },
 
         /**
+         * method is triggerd when  the "Apply" coupon button is clicked
+         *
+         * @returns {Promise<void>}
+         */
+        async applyCouponButtonClicked(){
+
+            // check if there is Internet connection
+            if(navigator.connection.type === Connection.NONE){ // there is no Internet connection
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast to show that an error
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.timeOut = 3000;
+                toast.content = `Connect to the Internet to apply coupon`;
+                toast.dataBind();
+                toast.show();
+
+                return; // exit method
+            }
+
+            try{
+                // show the page loader modal
+                $('#checkout-page .modal').css("display", "table");
+
+                // check if the coupon is valid or not
+                let couponsArray = await Promise.resolve($.ajax( // load the list of shipping zones
+                    {
+                        url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
+                            `/wp-json/wc/v3/coupons`,
+                        type: "get",
+                        //contentType: "application/json",
+                        beforeSend: function(jqxhr) {
+                            jqxhr.setRequestHeader("Authorization", "Basic " +
+                                utopiasoftware[utopiasoftware_app_namespace].accessor);
+                        },
+                        dataType: "json",
+                        timeout: 240000, // wait for 4 minutes before timeout of request
+                        processData: true,
+                        data: {code: $('#checkout-page #checkout-payment-voucher-code').val().trim()}
+                    }
+                ));
+
+                // check if any coupons were found
+                if(couponsArray.length == 0){ // no coupons were found
+                    throw "error - no coupon found";
+                }
+
+                // get a local/deep-clone copy of the page's checkout order object
+                let localOrderObject = JSON.parse(JSON.
+                stringify(utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder));
+                // update the coupons for the local order object to be sent to the server
+                localOrderObject.coupon_lines.push({code: couponsArray[0].code});
+
+                // update the checkout order data on the remote server
+                localOrderObject = await Promise.resolve($.ajax(
+                    {
+                        url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
+                            `/wp-json/wc/v3/orders/${localOrderObject.id}`,
+                        type: "put",
+                        contentType: "application/json",
+                        beforeSend: function(jqxhr) {
+                            jqxhr.setRequestHeader("Authorization", "Basic " +
+                                utopiasoftware[utopiasoftware_app_namespace].accessor);
+                        },
+                        dataType: "json",
+                        timeout: 240000, // wait for 4 minutes before timeout of request
+                        processData: false,
+                        data: JSON.stringify(localOrderObject)
+                    }
+                ));
+
+                // update the page checkout order with the updated order from the server
+                utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.
+                    chekoutOrder = localOrderObject;
+
+                // clear the coupon code entered into the coupon/voucher input
+                $('#checkout-page #checkout-payment-voucher-code').val("");
+
+                // redisplay the page (redisplaying the page also hides the page loader when the process is complete)
+                await utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.pageShow();
+            }
+            catch(err){
+
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast to show that an error
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.timeOut = 3000;
+                toast.content = `Coupon not applied. Invalid coupon code`;
+                toast.dataBind();
+                toast.show();
+            }
+            finally{
+                // hide the page loader modal
+                $('#checkout-page .modal').css("display", "none");
+
+            }
+        },
+
+        /**
          * method is triggered when the user clicks the "Make Payment" button
          *
          * @returns {Promise<void>}
@@ -8213,6 +8317,22 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     // handle the task in a separate event block
                     window.setTimeout(async function(){
 
+                        // check if there is Internet connection
+                        if(navigator.connection.type === Connection.NONE){ // there is no Internet connection
+                            // hide all previously displayed ej2 toast
+                            $('.page-toast').get(0).ej2_instances[0].hide('All');
+                            $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                            // display toast to show that an error
+                            let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                            toast.cssClass = 'error-ej2-toast';
+                            toast.timeOut = 3000;
+                            toast.content = `Connect to the Internet to change shipping method`;
+                            toast.dataBind();
+                            toast.show();
+
+                            return; // exit method
+                        }
+
                         // display the page loader modal
                         $('#checkout-page .modal').css("display", "table");
 
@@ -8288,6 +8408,22 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 paymentMethodDropDown.addEventListener("select", function(){
                     // handle the task in a separate event block
                     window.setTimeout(async function(){
+
+                        // check if there is Internet connection
+                        if(navigator.connection.type === Connection.NONE){ // there is no Internet connection
+                            // hide all previously displayed ej2 toast
+                            $('.page-toast').get(0).ej2_instances[0].hide('All');
+                            $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                            // display toast to show that an error
+                            let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                            toast.cssClass = 'error-ej2-toast';
+                            toast.timeOut = 3000;
+                            toast.content = `Connect to the Internet to change payment method`;
+                            toast.dataBind();
+                            toast.show();
+
+                            return; // exit method
+                        }
 
                         // display the page loader modal
                         $('#checkout-page .modal').css("display", "table");
