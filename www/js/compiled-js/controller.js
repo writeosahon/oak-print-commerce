@@ -8205,8 +8205,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         stringify(utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder));
                         // update the shipping method for the local order object to be sent to the server
                         localOrderObject.shipping_lines[0] =
-                            shippingMethodDropDown.getDataByValue(shippingMethodDropDown.value);
-                            //{method_id: shippingMethodDropDown.value, method_title: shippingMethodDropDown.text};
+                            {method_id: shippingMethodDropDown.value, method_title: shippingMethodDropDown.text};
 
                         // update the checkout order data on the remote server
                         try{
@@ -8254,8 +8253,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             toast.dataBind();
                             toast.show();
 
-                            // display the page loader modal
-                            $('#checkout-page .modal').css("display", "table");
+                            // hide the page loader modal
+                            $('#checkout-page .modal').css("display", "none");
                         }
 
                     }, 0);
