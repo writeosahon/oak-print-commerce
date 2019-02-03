@@ -8205,7 +8205,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         stringify(utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder));
                         // update the shipping method for the local order object to be sent to the server
                         localOrderObject.shipping_lines[0] =
-                            {method_id: shippingMethodDropDown.value, method_title: shippingMethodDropDown.text};
+                            shippingMethodDropDown.getDataByValue(shippingMethodDropDown.value);
+                            //{method_id: shippingMethodDropDown.value, method_title: shippingMethodDropDown.text};
 
                         // update the checkout order data on the remote server
                         try{
