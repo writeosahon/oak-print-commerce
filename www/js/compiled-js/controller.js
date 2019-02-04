@@ -8291,6 +8291,67 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         async makePaymentButtonClicked(){
 
+            // view cart
+            await Promise.resolve($.ajax(
+                {
+                    url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + `/wp-json/wc/v2/cart`,
+                    type: "get",
+                    contentType: "application/json",
+                    beforeSend: function(jqxhr) {
+                        jqxhr.setRequestHeader("Authorization", "Basic " +
+                            Base64.encode(`writeosahon@yahoo.co.uk:password`));
+                    },
+                    crossDomain: true,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    dataType: "json",
+                    timeout: 240000, // wait for 4 minutes before timeout of request
+                    processData: false
+                }
+            ));
+
+            // add item to cart
+            await Promise.resolve($.ajax(
+                {
+                    url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + `/wp-json/wc/v2/cart`,
+                    type: "post",
+                    contentType: "application/json",
+                    beforeSend: function(jqxhr) {
+                        jqxhr.setRequestHeader("Authorization", "Basic " +
+                            Base64.encode(`writeosahon@yahoo.co.uk:password`));
+                    },
+                    crossDomain: true,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    dataType: "json",
+                    timeout: 240000, // wait for 4 minutes before timeout of request
+                    processData: false,
+                    data: JSON.stringify({product_id: 559, quantity: 3})
+                }
+            ));
+
+            let cartData = await Promise.resolve($.ajax(
+                {
+                    url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + `/wp-json/wc/v2/cart`,
+                    type: "get",
+                    contentType: "application/json",
+                    beforeSend: function(jqxhr) {
+                        jqxhr.setRequestHeader("Authorization", "Basic " +
+                            Base64.encode(`writeosahon@yahoo.co.uk:password`));
+                    },
+                    crossDomain: true,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    dataType: "json",
+                    timeout: 240000, // wait for 4 minutes before timeout of request
+                    processData: false
+                }
+            ));
+
+            console.log("VIEW CART", cartData);
         },
 
         /**
