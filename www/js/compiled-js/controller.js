@@ -8314,7 +8314,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // add item to cart
             await Promise.resolve($.ajax(
                 {
-                    url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + `/wp-json/wc/v2/cart`,
+                    url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + `/wp-json/wc/v2/cart/add`,
                     type: "post",
                     contentType: "application/json",
                     beforeSend: function(jqxhr) {
