@@ -7743,7 +7743,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             mode: "Box",
                             showClearButton: false,
                             showDropDownIcon: false,
-                            enabled: false
+                            readonly: true
                         }).appendTo('#checkout-payment-vouchers');
 
                     // create the "Make Payment" button
