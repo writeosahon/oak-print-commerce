@@ -8153,7 +8153,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     return {code: couponElem.code};
                 });
                 localOrderObject.coupon_lines.push({code: couponsArray[0].code}); // add the new coupon
-                console.log("ORDER WITH COUPONS", localOrderObject);
 
                 // update the checkout order data on the remote server
                 localOrderObject = await Promise.resolve($.ajax(
