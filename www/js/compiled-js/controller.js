@@ -7743,7 +7743,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             mode: "Box",
                             showClearButton: false,
                             showDropDownIcon: false,
-                            readonly: true
+                            enabled: false
                         }).appendTo('#checkout-payment-vouchers');
 
                     // create the "Make Payment" button
@@ -8149,7 +8149,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 let localOrderObject = JSON.parse(JSON.
                 stringify(utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder));
                 // update the coupons for the local order object to be sent to the server
-                localOrderObject.coupon_lines.push({code: couponsArray[0].code});
+                localOrderObject.coupon_lines = localOrderObject.coupon_lines.map(function(couponElem){
+                    return {code: couponElem.code};
+                });
+                localOrderObject.coupon_lines.push({code: couponsArray[0].code}); // add the new coupon
+                console.log("ORDER WITH COUPONS", localOrderObject);
 
                 // update the checkout order data on the remote server
                 localOrderObject = await Promise.resolve($.ajax(
