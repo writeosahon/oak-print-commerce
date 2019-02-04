@@ -7701,7 +7701,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                     // create the accorodion ej2 component used on the "Checkout" page
                     new ej.navigations.Accordion({
-                        expandMode: 'Single'
+                        expandMode: 'Single',
+                        expanded: utopiasoftware[utopiasoftware_app_namespace].
+                            controller.checkoutPageViewModel.scrollAndResizeEventListener
                     }).appendTo('#checkout-accordion');
 
                     // create the Shipping method dropdown list from the select input
@@ -8492,7 +8494,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     return couponElem.code;
                 });
                 // set the datasource and the values for the coupons mulitselect dropdown
-                couponsMultiSelectDropDown.datasource = couponsArray;
+                couponsMultiSelectDropDown.dataSource = couponsArray;
                 couponsMultiSelectDropDown.value = couponsArray;
                 couponsMultiSelectDropDown.dataBind();
 
