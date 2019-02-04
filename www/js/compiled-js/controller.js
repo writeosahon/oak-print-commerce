@@ -8225,11 +8225,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             try{
 
+                // show page loader
+                $('#checkout-page .modal').css("display", "table");
+
                 // get a local/deep-clone copy of the page's checkout order object
                 let localOrderObject = JSON.parse(JSON.
                 stringify(utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder));
                 // update the customer note for the local order object to be sent to the server
                 localOrderObject.customer_note = $('#checkout-page #checkout-payment-order-note-text').val().trim();
+                // update the coupons for the local order object to be sent to the server
+                localOrderObject.coupon_lines = localOrderObject.coupon_lines.map(function(couponElem){
+                    return {code: couponElem.code};
+                });
 
                 // update the checkout order data on the remote server
                 localOrderObject = await Promise.resolve($.ajax(
@@ -8422,6 +8429,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         // update the shipping method for the local order object to be sent to the server
                         localOrderObject.shipping_lines[0] =
                             {method_id: shippingMethodDropDown.value, method_title: shippingMethodDropDown.text};
+                        // update the coupons for the local order object to be sent to the server
+                        localOrderObject.coupon_lines = localOrderObject.coupon_lines.map(function(couponElem){
+                            return {code: couponElem.code};
+                        });
 
                         // update the checkout order data on the remote server
                         try{
@@ -8514,6 +8525,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         // update the payment method for the local order object to be sent to the server
                         localOrderObject.payment_method = paymentMethodDropDown.value;
                         localOrderObject.payment_method_title = paymentMethodDropDown.text;
+                        // update the coupons for the local order object to be sent to the server
+                        localOrderObject.coupon_lines = localOrderObject.coupon_lines.map(function(couponElem){
+                            return {code: couponElem.code};
+                        });
 
                         // update the checkout order data on the remote server
                         try{
