@@ -8201,6 +8201,83 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         },
 
         /**
+         * method is triggerd when  the "Add" note button is clicked
+         *
+         * @returns {Promise<void>}
+         */
+        async addNoteButtonClicked(){
+
+            // check if there is Internet connection
+            if(navigator.connection.type === Connection.NONE){ // there is no Internet connection
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast to show that an error
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.timeOut = 3000;
+                toast.content = `Connect to the Internet to add shipping notes to the order`;
+                toast.dataBind();
+                toast.show();
+
+                return; // exit method
+            }
+
+            try{
+
+                // get a local/deep-clone copy of the page's checkout order object
+                let localOrderObject = JSON.parse(JSON.
+                stringify(utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder));
+                // update the customer note for the local order object to be sent to the server
+                localOrderObject.customer_note = $('#checkout-page #checkout-payment-order-note-text').val().trim();
+
+                // update the checkout order data on the remote server
+                localOrderObject = await Promise.resolve($.ajax(
+                    {
+                        url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
+                            `/wp-json/wc/v3/orders/${localOrderObject.id}`,
+                        type: "put",
+                        contentType: "application/json",
+                        beforeSend: function(jqxhr) {
+                            jqxhr.setRequestHeader("Authorization", "Basic " +
+                                utopiasoftware[utopiasoftware_app_namespace].accessor);
+                        },
+                        dataType: "json",
+                        timeout: 240000, // wait for 4 minutes before timeout of request
+                        processData: false,
+                        data: JSON.stringify(localOrderObject)
+                    }
+                ));
+
+                // update the page checkout order with the updated order from the server
+                utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.
+                    chekoutOrder = localOrderObject;
+
+                // clear the coupon code entered into the coupon/voucher input
+                $('#checkout-page #checkout-payment-order-note-text').val("");
+
+                // redisplay the page (redisplaying the page also hides the page loader when the process is complete)
+                await utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.pageShow();
+            }
+            catch(err){
+
+                // hide the page loader modal
+                $('#checkout-page .modal').css("display", "none");
+
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast to show that an error
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.timeOut = 3000;
+                toast.content = `Shipping note could not added. Please retry`;
+                toast.dataBind();
+                toast.show();
+            }
+        },
+
+        /**
          * method is triggered when the user clicks the "Make Payment" button
          *
          * @returns {Promise<void>}
