@@ -8516,7 +8516,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     xhrFields: {
                                         withCredentials: true
                                     },
-                                    dataType: "json",
+                                    dataType: "text",
                                     timeout: 240000, // wait for 4 minutes before timeout of request
                                     processData: false,
                                     // send the shipping method data represented by selected shipping method value
@@ -8539,7 +8539,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     xhrFields: {
                                         withCredentials: true
                                     },
-                                    dataType: "json",
+                                    dataType: "text",
                                     timeout: 240000, // wait for 4 minutes before timeout of request
                                     processData: true,
                                     data: {}
@@ -8964,6 +8964,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         async createRemoteCartFromOrder(orderData = utopiasoftware[utopiasoftware_app_namespace].controller.
                                             checkoutPageViewModel.chekoutOrder){
+            // create a local copy odf the order object
+            orderData = JSON.parse(JSON.stringify(orderData));
 
             return new Promise(async function(resolve, reject){
                 try{
@@ -9000,39 +9002,37 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         console.log("1");
                         let cartItemData = {};
                         // use the line item meta data to create part of cartItemData
-                        /*orderData.line_items[index].meta_data.forEach(function(metaDataElem){
+                        orderData.line_items[index].meta_data.forEach(function(metaDataElem){
                             console.log("2");
-                            switch(metaDataElem.key){ // check the "key" property of the metaData object
-                                case "_fpd_data":
-                                    console.log("3");
-                                    if(!cartItemData.cart_item_data){ // if this property is not created
-                                        cartItemData.cart_item_data = {}; // create the property
-                                    }
-                                    console.log("4");
-                                    if(!cartItemData.cart_item_data.fpd_data){ // if this property is not created
-                                        cartItemData.cart_item_data.fpd_data = {}; // create the property
-                                    }
+                            if(metaDataElem.key === "_fpd_data"){ // check the "key" property of the metaData object
+                                console.log("3");
+                                if(!cartItemData.cart_item_data){ // if this property is not created
+                                    cartItemData.cart_item_data = {}; // create the property
+                                }
+                                console.log("4");
+                                if(!cartItemData.cart_item_data.fpd_data){ // if this property is not created
+                                    cartItemData.cart_item_data.fpd_data = {}; // create the property
+                                }
 
-                                    console.log("5");
-                                    // add custom data to the cart item
-                                    cartItemData.cart_item_data.fpd_data.fpd_product = metaDataElem.value;
-                                    cartItemData.cart_item_data.fpd_data.fpd_product_price =
-                                        ("" + orderData.line_items[index].price);
-                                break;
-
-                                case "_fpd_print_order":
-                                    if(!cartItemData.cart_item_data){ // if this property is not created
-                                        cartItemData.cart_item_data = {}; // create the property
-                                    }
-                                    if(!cartItemData.cart_item_data.fpd_data){ // if this property is not created
-                                        cartItemData.cart_item_data.fpd_data = {}; // create the property
-                                    }
-                                    console.log("6");
-                                    // add custom data to the cart item
-                                    cartItemData.cart_item_data.fpd_data.fpd_print_order = metaDataElem.value;
-                                    break;
+                                console.log("5");
+                                // add custom data to the cart item
+                                cartItemData.cart_item_data.fpd_data.fpd_product = metaDataElem.value;
+                                cartItemData.cart_item_data.fpd_data.fpd_product_price =
+                                    ("" + orderData.line_items[index].price);
                             }
-                        });*/
+
+                            if(metaDataElem.key === "_fpd_print_order"){
+                                if(!cartItemData.cart_item_data){ // if this property is not created
+                                    cartItemData.cart_item_data = {}; // create the property
+                                }
+                                if(!cartItemData.cart_item_data.fpd_data){ // if this property is not created
+                                    cartItemData.cart_item_data.fpd_data = {}; // create the property
+                                }
+                                console.log("6");
+                                // add custom data to the cart item
+                                cartItemData.cart_item_data.fpd_data.fpd_print_order = metaDataElem.value;
+                            }
+                        });
 
                         // add the other data for the cartItem
                         cartItemData.product_id = orderData.line_items[index].product_id;
