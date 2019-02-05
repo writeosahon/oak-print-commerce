@@ -8507,7 +8507,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 {
                                     url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + `/test.php`,
                                     type: "get",
-                                    contentType: "application/json",
+                                    //contentType: "application/json",
                                     beforeSend: function(jqxhr) {
                                         jqxhr.setRequestHeader("Authorization", "Basic " +
                                             Base64.encode(`${userDetails.email}:${userDetails.password}`));
@@ -8518,9 +8518,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     },
                                     dataType: "text",
                                     timeout: 240000, // wait for 4 minutes before timeout of request
-                                    processData: false,
+                                    processData: true,
                                     // send the shipping method data represented by selected shipping method value
-                                    data: JSON.stringify(shippingMethodDropDown.getDataByValue(shippingMethodDropDown.value))
+                                    data: shippingMethodDropDown.getDataByValue(shippingMethodDropDown.value)
                                 }
                             ));
 
