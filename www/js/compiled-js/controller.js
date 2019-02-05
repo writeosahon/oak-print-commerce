@@ -5738,7 +5738,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             value: userCart[index].cartData.cart_item_data.fpd_data.fpd_product
                         }, {
                             // add the customisation data for this product to the line items meta-data array.
-                            key: "__fpd_print_order",
+                            key: "_fpd_print_order",
                             value: userCart[index].cartData.cart_item_data.fpd_data.fpd_print_order
                         });
 
@@ -7813,6 +7813,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             data: {}
                         }
                     )));
+                    // create the user remote cart
                     promisesArray.push(utopiasoftware[utopiasoftware_app_namespace].controller.
                     checkoutPageViewModel.createRemoteCartFromOrder());
 
@@ -8996,18 +8997,23 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     // create a loop to add all the line items in the order data to the remote cache
                     let addToCartPromises = []; // holds all the promises used to add all items to the remote cart
                     for(let index = 0; index < orderData.line_items.length; index++){
+                        console.log("1");
                         let cartItemData = {};
                         // use the line item meta data to create part of cartItemData
                         orderData.line_items[index].meta_data.forEach(function(metaDataElem){
+                            console.log("2");
                             switch(metaDataElem.key){ // check the "key" property of the metaData object
                                 case "_fpd_data":
+                                    console.log("3");
                                     if(!cartItemData.cart_item_data){ // if this property is not created
                                         cartItemData.cart_item_data = {}; // create the property
                                     }
+                                    console.log("4");
                                     if(!cartItemData.cart_item_data.fpd_data){ // if this property is not created
                                         cartItemData.cart_item_data.fpd_data = {}; // create the property
                                     }
 
+                                    console.log("5");
                                     // add custom data to the cart item
                                     cartItemData.cart_item_data.fpd_data.fpd_product = metaDataElem.value;
                                     cartItemData.cart_item_data.fpd_data.fpd_product_price =
@@ -9021,7 +9027,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     if(!cartItemData.cart_item_data.fpd_data){ // if this property is not created
                                         cartItemData.cart_item_data.fpd_data = {}; // create the property
                                     }
-
+                                    console.log("6");
                                     // add custom data to the cart item
                                     cartItemData.cart_item_data.fpd_data.fpd_print_order = metaDataElem.value;
                                     break;
@@ -9032,6 +9038,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         cartItemData.product_id = orderData.line_items[index].product_id;
                         cartItemData.variation_id = orderData.line_items[index].variation_id;
                         cartItemData.quantity = orderData.line_items[index].quantity;
+                        console.log("7");
 
                         // add the created cartItemData to remote user cart
                         addToCartPromises.push(Promise.resolve($.ajax(
@@ -9053,6 +9060,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 data: JSON.stringify(cartItemData)
                             }
                         )));
+                        console.log("8");
                     } // end of for loop
 
                     // await for all items to be added to cart
