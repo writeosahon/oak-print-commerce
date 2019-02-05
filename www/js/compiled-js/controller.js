@@ -9000,7 +9000,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         console.log("1");
                         let cartItemData = {};
                         // use the line item meta data to create part of cartItemData
-                        orderData.line_items[index].meta_data.forEach(function(metaDataElem){
+                        /*orderData.line_items[index].meta_data.forEach(function(metaDataElem){
                             console.log("2");
                             switch(metaDataElem.key){ // check the "key" property of the metaData object
                                 case "_fpd_data":
@@ -9032,7 +9032,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     cartItemData.cart_item_data.fpd_data.fpd_print_order = metaDataElem.value;
                                     break;
                             }
-                        });
+                        });*/
 
                         // add the other data for the cartItem
                         cartItemData.product_id = orderData.line_items[index].product_id;
