@@ -7764,7 +7764,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         }).appendTo($thisPage.get(0));
                     });
 
-                    //load the remote list of payment methods, list of shipping zones & local list of countries for the app
+                    //load the remote list of payment methods, list of shipping zones & local list of
+                    // countries for the app; create a remote user cart containing the current checkout order for the user
                     let promisesArray = []; // holds all created promises
 
                     promisesArray.push(Promise.resolve($.ajax( // load the list of payment gateways
@@ -7812,6 +7813,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             data: {}
                         }
                     )));
+                    promisesArray.push(utopiasoftware[utopiasoftware_app_namespace].controller.
+                    checkoutPageViewModel.createRemoteCartFromOrder());
 
                     // wait for all promises to resolve
                     promisesArray = await Promise.all(promisesArray);
@@ -8349,7 +8352,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     timeout: 240000, // wait for 4 minutes before timeout of request
                     processData: false
                 }
-            ));
+            )); //todo
 
             console.log("VIEW CART", cartData);
         },
@@ -8362,7 +8365,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             try{
                 // load the user profile details from the app database
-                let userDetails = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                var userDetails = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
                 loadData("user-details",
                     utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
 
@@ -8495,8 +8498,79 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             return {code: couponElem.code};
                         });
 
-                        // update the checkout order data on the remote server
+                        // perform some remote /asynchronous tasks needed to update the order method
                         try{
+
+                            // change the user shipping method on the remote cart using a helper script
+                            await Promise.resolve($.ajax(
+                                {
+                                    url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + `/test.php`,
+                                    type: "get",
+                                    contentType: "application/json",
+                                    beforeSend: function(jqxhr) {
+                                        jqxhr.setRequestHeader("Authorization", "Basic " +
+                                            Base64.encode(`${userDetails.email}:${userDetails.password}`));
+                                    },
+                                    crossDomain: true,
+                                    xhrFields: {
+                                        withCredentials: true
+                                    },
+                                    dataType: "json",
+                                    timeout: 240000, // wait for 4 minutes before timeout of request
+                                    processData: false,
+                                    // send the shipping method data represented by selected shipping method value
+                                    data: JSON.stringify(shippingMethodDropDown.getDataByValue(shippingMethodDropDown.value))
+                                }
+                            ));
+
+                            // calculate all the totals for the remote user cart
+                            await Promise.resolve($.ajax(
+                                {
+                                    url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
+                                        `/wp-json/wc/v2/cart/calculate`,
+                                    type: "post",
+                                    contentType: "application/json",
+                                    beforeSend: function(jqxhr) {
+                                        jqxhr.setRequestHeader("Authorization", "Basic " +
+                                            Base64.encode(`${userDetails.email}:${userDetails.password}`));
+                                    },
+                                    crossDomain: true,
+                                    xhrFields: {
+                                        withCredentials: true
+                                    },
+                                    dataType: "json",
+                                    timeout: 240000, // wait for 4 minutes before timeout of request
+                                    processData: true,
+                                    data: {}
+                                }
+                            ));
+
+                            // get all the totals for the remote user cart
+                            let remoteCartTotals = await Promise.resolve($.ajax(
+                                {
+                                    url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
+                                        `/wp-json/wc/v2/cart/totals`,
+                                    type: "get",
+                                    contentType: "application/json",
+                                    beforeSend: function(jqxhr) {
+                                        jqxhr.setRequestHeader("Authorization", "Basic " +
+                                            Base64.encode(`${userDetails.email}:${userDetails.password}`));
+                                    },
+                                    crossDomain: true,
+                                    xhrFields: {
+                                        withCredentials: true
+                                    },
+                                    dataType: "json",
+                                    timeout: 240000, // wait for 4 minutes before timeout of request
+                                    processData: true,
+                                    data: {}
+                                }
+                            ));
+
+                            // update the shipping method for the local order object to be sent to the server
+                            localOrderObject.shipping_lines[0].total = "" + remoteCartTotals.shipping_total;
+
+                            // update the checkout order data on the remote server
                             localOrderObject = await Promise.resolve($.ajax(
                                 {
                                     url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
@@ -8528,7 +8602,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         catch(err){
                             console.log("CHECKOUT SHIPPING METHOD UPDATE ERROR", err);
 
-                            err = JSON.parse(err.responseText);
+                            err = JSON.parse(err.responseText.trim());
 
                             // hide all previously displayed ej2 toast
                             $('.page-toast').get(0).ej2_instances[0].hide('All');
@@ -8699,7 +8773,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         },
 
         /**
-         * method is used to validate the order object/data i.e. the 'chekoutOrder' property of
+         * method is a utility used to validate the order object/data i.e. the 'chekoutOrder' property of
          * the view-model
          *
          * @returns {Promise<void>} the Promise resolves when the order data is successfully validated; it
@@ -8876,6 +8950,119 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     reject(); // reject validation promise
                     return;
                 }
+            });
+        },
+
+        /**
+         * method is a utility which is used to create a remote cart object on
+         * the server using the order data provided.
+         * Creating a remote cart can help with things like shipping calculations etc
+         *
+         * @param orderData
+         * @returns {Promise<void>}
+         */
+        async createRemoteCartFromOrder(orderData = utopiasoftware[utopiasoftware_app_namespace].controller.
+                                            checkoutPageViewModel.chekoutOrder){
+
+            return new Promise(async function(resolve, reject){
+                try{
+
+                    // load the user profile details from the app database
+                    var userDetails = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                    loadData("user-details",
+                        utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
+
+                    // clear the current user cart
+                    await Promise.resolve($.ajax(
+                        {
+                            url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + `/wp-json/wc/v2/cart/clear`,
+                            type: "post",
+                            contentType: "application/json",
+                            beforeSend: function(jqxhr) {
+                                jqxhr.setRequestHeader("Authorization", "Basic " +
+                                    Base64.encode(`${userDetails.email}:${userDetails.password}`));
+                            },
+                            crossDomain: true,
+                            xhrFields: {
+                                withCredentials: true
+                            },
+                            dataType: "json",
+                            timeout: 240000, // wait for 4 minutes before timeout of request
+                            processData: true,
+                            data: {}
+                        }
+                    ));
+
+                    // create a loop to add all the line items in the order data to the remote cache
+                    let addToCartPromises = []; // holds all the promises used to add all items to the remote cart
+                    for(let index = 0; index < orderData.line_items.length; index++){
+                        let cartItemData = {};
+                        // use the line item meta data to create part of cartItemData
+                        orderData.line_items[index].meta_data.forEach(function(metaDataElem){
+                            switch(metaDataElem.key){ // check the "key" property of the metaData object
+                                case "_fpd_data":
+                                    if(!cartItemData.cart_item_data){ // if this property is not created
+                                        cartItemData.cart_item_data = {}; // create the property
+                                    }
+                                    if(!cartItemData.cart_item_data.fpd_data){ // if this property is not created
+                                        cartItemData.cart_item_data.fpd_data = {}; // create the property
+                                    }
+
+                                    // add custom data to the cart item
+                                    cartItemData.cart_item_data.fpd_data.fpd_product = metaDataElem.value;
+                                    cartItemData.cart_item_data.fpd_data.fpd_product_price =
+                                        ("" + orderData.line_items[index].price);
+                                break;
+
+                                case "_fpd_print_order":
+                                    if(!cartItemData.cart_item_data){ // if this property is not created
+                                        cartItemData.cart_item_data = {}; // create the property
+                                    }
+                                    if(!cartItemData.cart_item_data.fpd_data){ // if this property is not created
+                                        cartItemData.cart_item_data.fpd_data = {}; // create the property
+                                    }
+
+                                    // add custom data to the cart item
+                                    cartItemData.cart_item_data.fpd_data.fpd_print_order = metaDataElem.value;
+                                    break;
+                            }
+                        });
+
+                        // add the other data for the cartItem
+                        cartItemData.product_id = orderData.line_items[index].product_id;
+                        cartItemData.variation_id = orderData.line_items[index].variation_id;
+                        cartItemData.quantity = orderData.line_items[index].quantity;
+
+                        // add the created cartItemData to remote user cart
+                        addToCartPromises.push(Promise.resolve($.ajax(
+                            {
+                                url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + `/wp-json/wc/v2/cart/add`,
+                                type: "post",
+                                contentType: "application/json",
+                                beforeSend: function(jqxhr) {
+                                    jqxhr.setRequestHeader("Authorization", "Basic " +
+                                        Base64.encode(`${userDetails.email}:${userDetails.password}`));
+                                },
+                                crossDomain: true,
+                                xhrFields: {
+                                    withCredentials: true
+                                },
+                                dataType: "json",
+                                timeout: 240000, // wait for 4 minutes before timeout of request
+                                processData: false,
+                                data: JSON.stringify(cartItemData)
+                            }
+                        )));
+                    } // end of for loop
+
+                    // await for all items to be added to cart
+                    await Promise.all(addToCartPromises);
+                    resolve(); // resolve the parent promise
+                }
+                finally{
+
+                }
+
             });
         }
 
