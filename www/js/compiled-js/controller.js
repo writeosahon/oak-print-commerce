@@ -8492,8 +8492,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         let localOrderObject = JSON.parse(JSON.
                         stringify(utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder));
                         // update the shipping method for the local order object to be sent to the server
-                        localOrderObject.shipping_lines[0] =
-                            {method_id: shippingMethodDropDown.value, method_title: shippingMethodDropDown.text};
+                        localOrderObject.shipping_lines =
+                            [{method_id: shippingMethodDropDown.value, method_title: shippingMethodDropDown.text}];
                         // update the coupons for the local order object to be sent to the server
                         localOrderObject.coupon_lines = localOrderObject.coupon_lines.map(function(couponElem){
                             return {code: couponElem.code};
