@@ -8474,7 +8474,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     // set the shipping method dropdownlist value
                     shippingMethodDropDown.value = orderData.shipping_lines[0].method_id;
                     // check if the shipping method dropdownlist value is an empty string
-                    if(shippingMethodDropDown.value === ""){
+                    if(shippingMethodDropDown.value === ""){ // the value is an empty string
                         shippingMethodDropDown.value = null; // reset the shipping method dropdownlist value to null instead
                     }
                 }
