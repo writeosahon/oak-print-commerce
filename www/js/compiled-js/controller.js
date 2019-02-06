@@ -8807,6 +8807,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             return new Promise(async function(resolve, reject){
 
+                // disable the "Make Payment" button
+                $('#checkout-page #checkout-make-payment').attr("disabled", true);
+
                 // get the checkout Order object
                 var orderData = utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder;
 
@@ -8965,10 +8968,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 // check if the checkout order validation failed or succeeded
                 if(validationSuccessful === true){ // validation was successful
+                    // enable the "Make Payment" button
+                    $('#checkout-page #checkout-make-payment').removeAttr("disabled");
                     resolve(); // resolve validation promise
                     return;
                 }
                 else{ // validation failed
+                    // disable the "Make Payment" button
+                    $('#checkout-page #checkout-make-payment').attr("disabled", true);
                     reject(); // reject validation promise
                     return;
                 }
