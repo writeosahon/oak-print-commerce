@@ -8492,8 +8492,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         let localOrderObject = JSON.parse(JSON.
                         stringify(utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder));
                         // update the shipping method for the local order object to be sent to the server
-                        localOrderObject.shipping_lines =
-                            [{method_id: shippingMethodDropDown.value, method_title: shippingMethodDropDown.text}];
+                        localOrderObject.shipping_lines[0] = localOrderObject.shipping_lines[0] || {};
+                        Object.assign(localOrderObject.shipping_lines[0], {method_id: shippingMethodDropDown.value,
+                            method_title: shippingMethodDropDown.text,
+                            instance_id: "" + shippingMethodDropDown.
+                                                getDataByValue(shippingMethodDropDown.value).instance_id});
                         // update the coupons for the local order object to be sent to the server
                         localOrderObject.coupon_lines = localOrderObject.coupon_lines.map(function(couponElem){
                             return {code: couponElem.code};
@@ -8521,7 +8524,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     timeout: 240000, // wait for 4 minutes before timeout of request
                                     processData: true,
                                     // send the shipping method data represented by selected shipping method value
-                                    data: {id: shippingMethodDropDown.getDataByValue(shippingMethodDropDown.value).id,
+                                    data: {id: shippingMethodDropDown.getDataByValue(shippingMethodDropDown.value).instance_id,
                                     method_id: shippingMethodDropDown.getDataByValue(shippingMethodDropDown.value).method_id}
                                 }
                             ));
@@ -9043,7 +9046,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         console.log("7");
 
                         // add the created cartItemData to remote user cart
-                        addToCartPromises.push(Promise.resolve($.ajax(
+                        addToCartPromises.push(await Promise.resolve($.ajax(
                             {
                                 url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + `/wp-json/wc/v2/cart/add`,
                                 type: "post",
