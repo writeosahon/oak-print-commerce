@@ -8505,8 +8505,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             // change the user shipping method on the remote cart using a helper script
                             await Promise.resolve($.ajax(
                                 {
-                                    url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + `/test.php`,
-                                    type: "get",
+                                    url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
+                                        `/oakscripts/setshipping.php`,
+                                    type: "post",
                                     //contentType: "application/json",
                                     beforeSend: function(jqxhr) {
                                         jqxhr.setRequestHeader("Authorization", "Basic " +
@@ -8520,7 +8521,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     timeout: 240000, // wait for 4 minutes before timeout of request
                                     processData: true,
                                     // send the shipping method data represented by selected shipping method value
-                                    data: shippingMethodDropDown.getDataByValue(shippingMethodDropDown.value)
+                                    data: {id: shippingMethodDropDown.getDataByValue(shippingMethodDropDown.value).id,
+                                    method_id: shippingMethodDropDown.getDataByValue(shippingMethodDropDown.value).method_id}
                                 }
                             ));
 
@@ -8964,8 +8966,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         async createRemoteCartFromOrder(orderData = utopiasoftware[utopiasoftware_app_namespace].controller.
                                             checkoutPageViewModel.chekoutOrder){
-            // create a local copy odf the order object
-            orderData = JSON.parse(JSON.stringify(orderData));
+            /*// create a local copy odf the order object
+            orderData = JSON.parse(JSON.stringify(orderData));*/
 
             return new Promise(async function(resolve, reject){
                 try{
