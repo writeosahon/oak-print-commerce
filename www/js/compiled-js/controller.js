@@ -8383,8 +8383,20 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // check if the checkout order shipping data should be updated with the current user's shipping
                 if(utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.
                     updateOrderShippingDetails === true){ // shipping data should be updated
+                    // updatte the shipping data
                     utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder.shipping =
                         userDetails.shipping;
+                    // reset the shipping method to 'nothing' (to ensure the user chooses a shipping method for their new
+                    // shipping address)
+                    utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder.
+                        shipping_lines[0] = utopiasoftware[utopiasoftware_app_namespace].controller.
+                                                checkoutPageViewModel.chekoutOrder.shipping_lines[0] || {};
+                    Object.assign(utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.
+                                                    chekoutOrder.shipping_lines[0],
+                            {method_id: "", method_title: "", instance_id: "" });
+                    utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder.
+                        shipping_lines[0].total = "";
+
                     // reset the flag
                     utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.
                         updateOrderShippingDetails = false;
