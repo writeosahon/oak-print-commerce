@@ -8473,6 +8473,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 if(orderData.shipping_lines.length > 0){ // if length is > 0, there are shipping lines info available
                     // set the shipping method dropdownlist value
                     shippingMethodDropDown.value = orderData.shipping_lines[0].method_id;
+                    // check if the shipping method dropdownlist value is an empty string
+                    if(shippingMethodDropDown.value === ""){
+                        shippingMethodDropDown.value = null; // reset the shipping method dropdownlist value to null instead
+                    }
                 }
                 shippingMethodDropDown.dataBind();
 
