@@ -128,11 +128,11 @@
 
 <!-- modal is used to display sms notification confirmation for wallet transfers to unregistered users -->
 <ons-modal id="checkout-order-placement-modal" direction="up">
-    <div style="width: calc(100vw - 20vw); min-height: calc(50vh - 0px) !important; margin-left: 10vw; margin-right: 10vw;
+    <div style="width: calc(100vw - 20vw); min-height: auto !important; margin-left: 10vw; margin-right: 10vw;
     display: block; position: relative; overflow-y: visible; background: rgba(211, 211, 211, 1) !important;">
         <div style="width: 100%;top: -50px; display: block; z-index: 3 !important;
     overflow-y: visible; position: relative; text-align: center;">
-            <img src="css/app-images/sms-notification-icon.png"
+            <img src="css/app-images/order-package-img.png"
                  style="height: 100px; width: auto;">
 
             <div style="width: 100%; display: block; color: #000000; text-align: left;">
@@ -145,7 +145,7 @@
                     You will be notified of your order status and delivery date
                 </div>
             </div>
-            <div style="width: 50%; margin-left: 25%; margin-right: 25%; bottom: -25px; position: relative;">
+            <div style="width: 50%; margin-left: 25%; margin-right: 25%; margin-bottom: 2em; position: relative;">
                 <!-- event handler for the button is added by the controller code -->
                 <ons-button id="checkout-order-placement-modal-ok-button" disable-auto-styling modifier="large"
                             style="background-color: #363E7C; color: #ffffff; border-radius: 21px;">

@@ -8430,6 +8430,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             }
                         ));
 
+                        try{
+                            // delete user cart data
+                            await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                            removeData("user-details",
+                                utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase);
+                        }
+                        catch(err){}
+
+
                         // update the checkout-order-placement-modal with the checkout order number
                         $('#checkout-order-placement-modal .order-number').html(localOrderObject.number);
                         // show the 'checkout-order-placement-modal'
