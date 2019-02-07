@@ -8313,7 +8313,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // hide the spinner from the 'Make Payment'
                 $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
                 $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].dataBind();
-                $('checkout-page #checkout-make-payment').get(0).ej2_instances[0].stop();
+                $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].stop();
 
                 return; // exit method
             }
@@ -8465,7 +8465,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     // hide the spinner from the 'Make Payment'
                     $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
                     $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].dataBind();
-                    $('checkout-page #checkout-make-payment').get(0).ej2_instances[0].stop();
+                    $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].stop();
 
                     // hide loader
                     $('#loader-modal').get(0).hide();
