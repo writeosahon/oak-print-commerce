@@ -126,6 +126,35 @@
     <div id="loader-modal-message" style="text-align: center; margin-top: 0.5em; font-size: 1.2em; color: #ffffff;"></div>
 </ons-modal>
 
+<!-- modal is used to display sms notification confirmation for wallet transfers to unregistered users -->
+<ons-modal id="checkout-order-placement-modal" direction="up">
+    <div style="width: calc(100vw - 20vw); min-height: calc(50vh - 0px) !important; margin-left: 10vw; margin-right: 10vw;
+    display: block; position: relative; overflow-y: visible; background: rgba(211, 211, 211, 1) !important;">
+        <div style="width: 100%;top: -50px; display: block; z-index: 3 !important;
+    overflow-y: visible; position: relative; text-align: center;">
+            <img src="css/app-images/sms-notification-icon.png"
+                 style="height: 100px; width: auto;">
+
+            <div style="width: 100%; display: block; color: #000000; text-align: left;">
+                <h3 style="display: block; width: 100%; text-align: center; color: #363E7C;">
+                    Order Received
+                </h3>
+                <div style="padding: 1em; font-size: 1.01em; font-weight: 300;">
+                    Thank you. Your order
+                    <span style="font-weight: bold">#<span class="order-number"></span></span> has been received<br>
+                    You will be notified of your order status and delivery date
+                </div>
+            </div>
+            <div style="width: 50%; margin-left: 25%; margin-right: 25%; bottom: -25px; position: relative;">
+                <!-- event handler for the button is added by the controller code -->
+                <ons-button id="checkout-order-placement-modal-ok-button" disable-auto-styling modifier="large"
+                            style="background-color: #363E7C; color: #ffffff; border-radius: 21px;">
+                    OK</ons-button>
+            </div>
+        </div>
+    </div>
+</ons-modal>
+
 <!-- view reports additional popover -->
 <ons-popover id="search-page-search-input-popover" direction="down" cancelable mask-color="rgba(0,0,0,0)"
              style="width: calc(100vw - 17px - 20px);">
@@ -141,11 +170,13 @@
             <div class="center">
                 <div style="width: 100%; text-align: center;">
 
+                    <!-- event handler for the button is added by the controller code -->
                     <button id="view-cart-page-delete-cart-item-yes" type="button" style="color: #d64113;
                 box-shadow: none; margin-right: 1em; margin-bottom:0.5em">
                         <ons-ripple></ons-ripple>
                         Yes</button>
 
+                    <!-- event handler for the button is added by the controller code -->
                     <button id="view-cart-page-delete-cart-item-no" type="button" style="color: #3F51B5;
                 box-shadow: none; margin-right: 1em; margin-bottom:0.5em">
                         <ons-ripple></ons-ripple>
