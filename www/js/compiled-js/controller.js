@@ -8370,6 +8370,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 if(loadStartEvent.url.startsWith("https://shopoakexclusive.com/")){ // transaction was completed
                                     // set a flag to indicate that the transaction was completed
                                     transactionInAppBrowser._utopiasoftware_transaction_completed = true;
+                                    // retrieve the full transaction completed url
+                                    transactionInAppBrowser._utopiasoftware_transaction_completed_url = loadStartEvent.url;
                                     // exit/close the inapp browser
                                     transactionInAppBrowser.close();
                                 }
@@ -8381,7 +8383,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             transactionInAppBrowser.addEventListener("exit", function(exitEvent){
                                 // check if the transaction was completed or not
                                 if(transactionInAppBrowser._utopiasoftware_transaction_completed === true){ // transaction completed
-                                    resolve(exitEvent.url); // resolve parent promise
+                                    // resolve parent promise
+                                    resolve(transactionInAppBrowser._utopiasoftware_transaction_completed_url);
                                 }
                                 else{ // transaction was not completed
                                     reject(); // reject parent promise
