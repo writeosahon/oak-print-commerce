@@ -27,9 +27,14 @@ const utopiasoftware = {
         randomisationEngine: Random.engines.browserCrypto,
 
         /**
-         * holds the authorization Base64 encoded key
+         * holds the app authorization Base64 encoded key
          */
         accessor: "ZGV2ZWxvcGVyQHNob3BvYWtleGNsdXNpdmUuY29tOk9ha0RldmVsb3BlckAx",
+
+        /**
+         * holds the paystack authorization Base64 encode key. This key must be decoded before use
+         */
+        paystackAccessor: "c2tfdGVzdF8xMzQ4ZjNlNmEyYmNiMjdlZjFlYzk4MjQwNWNjZDg5ZmJlYWJlNzBi",
 
         /**
          * object is responsible for handling database operations for the app

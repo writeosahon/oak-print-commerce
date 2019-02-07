@@ -8295,67 +8295,102 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         async makePaymentButtonClicked(){
 
-            // view cart
-            await Promise.resolve($.ajax(
-                {
-                    url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + `/wp-json/wc/v2/cart`,
-                    type: "get",
-                    contentType: "application/json",
-                    beforeSend: function(jqxhr) {
-                        jqxhr.setRequestHeader("Authorization", "Basic " +
-                            Base64.encode(`writeosahon@yahoo.co.uk:password`));
-                    },
-                    crossDomain: true,
-                    xhrFields: {
-                        withCredentials: true
-                    },
-                    dataType: "json",
-                    timeout: 240000, // wait for 4 minutes before timeout of request
-                    processData: false
-                }
-            ));
+            // check if there is Internet connection
+            if(navigator.connection.type === Connection.NONE){ // there is no Internet connection
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast to show that an error
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.timeOut = 3000;
+                toast.content = `Connect to the Internet to make payment`;
+                toast.dataBind();
+                toast.show();
 
-            // add item to cart
-            await Promise.resolve($.ajax(
-                {
-                    url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + `/wp-json/wc/v2/cart/add`,
-                    type: "post",
-                    contentType: "application/json",
-                    beforeSend: function(jqxhr) {
-                        jqxhr.setRequestHeader("Authorization", "Basic " +
-                            Base64.encode(`writeosahon@yahoo.co.uk:password`));
-                    },
-                    crossDomain: true,
-                    xhrFields: {
-                        withCredentials: true
-                    },
-                    dataType: "json",
-                    timeout: 240000, // wait for 4 minutes before timeout of request
-                    processData: false,
-                    data: JSON.stringify({product_id: 559, quantity: 3})
-                }
-            ));
+                // enable the "Make Payment" button
+                $('#checkout-page #checkout-make-payment').removeAttr("disabled");
+                // hide the spinner from the 'Make Payment'
+                $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
+                $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].dataBind();
+                $('checkout-page #checkout-make-payment').get(0).ej2_instances[0].stop();
 
-            let cartData = await Promise.resolve($.ajax(
-                {
-                    url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + `/wp-json/wc/v2/cart`,
-                    type: "get",
-                    contentType: "application/json",
-                    beforeSend: function(jqxhr) {
-                        jqxhr.setRequestHeader("Authorization", "Basic " +
-                            Base64.encode(`writeosahon@yahoo.co.uk:password`));
-                    },
-                    crossDomain: true,
-                    xhrFields: {
-                        withCredentials: true
-                    },
-                    dataType: "json",
-                    timeout: 240000, // wait for 4 minutes before timeout of request
-                    processData: false
-                }
-            )); //todo
+                return; // exit method
+            }
 
-            console.log("VIEW CART", cartData);
+            // check what payment method is being used
+            if(utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.
+                chekoutOrder.payment_method === "paystack"){ // user selected the paystack (Pay With Card)
+
+                // disable the "Make Payment" button
+                $('#checkout-page #checkout-make-payment').attr("disabled", true);
+
+                // inform the user that payment gateway is being prepared
+                $('#loader-modal-message').html("Preparing Payment Channel...");
+                $('#loader-modal').get(0).show(); // show loader
+
+                try{
+                    // load the user profile details from the app database
+                    var userDetails = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                    loadData("user-details",
+                        utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
+
+                    // initialise a paystack (payment) transaction
+                    let payStackResponse = await Promise.resolve($.ajax(
+                        {
+                            url: `https://api.paystack.co/transaction/initialize`,
+                            type: "post",
+                            contentType: "application/json",
+                            beforeSend: function(jqxhr) {
+                                jqxhr.setRequestHeader("Authorization", "Bearer " +
+                                    Base64.decode(utopiasoftware[utopiasoftware_app_namespace].paystackAccessor));
+                            },
+                            dataType: "json",
+                            timeout: 240000, // wait for 4 minutes before timeout of request
+                            processData: false,
+                            data: JSON.stringify({email: userDetails.email,
+                            amount: "" + (kendo.parseFloat(utopiasoftware[utopiasoftware_app_namespace].controller.
+                                checkoutPageViewModel.chekoutOrder.total) * 100),
+                                callback_url: "https://shopoakexclusive.com/"})
+                        }
+                    ));
+
+                    if(payStackResponse.status === true){ // request for transaction initialisation was successful
+                        // open inapp browser for user to make payment (using the authorization_url from payStack response)
+                        cordova.InAppBrowser.open(window.encodeURI(payStackResponse.data.authorization_url), '_blank',
+                            'location=yes,clearcache=yes,clearsessioncache=yes,closebuttoncolor=#ffffff,hardwareback=no,hidenavigationbuttons=yes,hideurlbar=yes,zoom=no,toolbarcolor=#3f51b5');
+                    }
+                    else{ // request for transaction initialisation was NOT successful
+                        throw "error";
+                    }
+                }
+                catch(err){
+                    console.log("PAYMENT ERROR", err);
+                    // hide all previously displayed ej2 toast
+                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                    $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                    // display toast to show that an error
+                    let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                    toast.cssClass = 'error-ej2-toast';
+                    toast.timeOut = 3500;
+                    toast.content = `Error making payment for this order. Try again`;
+                    toast.dataBind();
+                    toast.show();
+                }
+                finally{
+                    // enable the "Make Payment" button
+                    $('#checkout-page #checkout-make-payment').removeAttr("disabled");
+                    // hide the spinner from the 'Make Payment'
+                    $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
+                    $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].dataBind();
+                    $('checkout-page #checkout-make-payment').get(0).ej2_instances[0].stop();
+
+                    // hide loader
+                    $('#loader-modal').get(0).hide();
+                }
+
+                return; // exit method
+            }
         },
 
         /**
