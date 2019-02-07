@@ -313,7 +313,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     newProductsCarousel.on("staticClick", function(event, pointer, cellElement, cellIndex){
                         // check if it was a cell that was clicked
                         if(! cellElement){ // it was not a slider cell that was clicked
-                            // clear the timer
+                            // do nothing
                             return;
                         }
 
@@ -8357,8 +8357,76 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                     if(payStackResponse.status === true){ // request for transaction initialisation was successful
                         // open inapp browser for user to make payment (using the authorization_url from payStack response)
-                        cordova.InAppBrowser.open(window.encodeURI(payStackResponse.data.authorization_url), '_blank',
-                            'location=yes,clearcache=yes,clearsessioncache=yes,closebuttoncolor=#ffffff,hardwareback=no,hidenavigationbuttons=yes,hideurlbar=yes,zoom=no,toolbarcolor=#3f51b5');
+                        let transactionCompletedUrl = await new Promise(function(resolve, reject){
+                            // create/open inapp browser
+                            let transactionInAppBrowser =
+                                cordova.InAppBrowser.open(window.encodeURI(payStackResponse.data.authorization_url), '_blank',
+                                    'location=yes,clearcache=yes,clearsessioncache=yes,closebuttoncolor=#ffffff,hardwareback=no,hidenavigationbuttons=yes,hideurlbar=yes,zoom=no,toolbarcolor=#3f51b5');
+
+                            // add event listeners for the transaction inapp browswer
+                            transactionInAppBrowser.addEventListener("loadstart", function(loadStartEvent){
+
+                                // check which url is being loaded
+                                if(loadStartEvent.url.startsWith("https://shopoakexclusive.com/")){ // transaction was completed
+                                    // set a flag to indicate that the transaction was completed
+                                    transactionInAppBrowser._utopiasoftware_transaction_completed = true;
+                                    // exit/close the inapp browser
+                                    transactionInAppBrowser.close();
+                                }
+                            });
+                            transactionInAppBrowser.addEventListener("loaderror", function(loadErrorEvent){
+                                // there is an error loading the transaction page, so exit/close inapp browser
+                                transactionInAppBrowser.close();
+                            });
+                            transactionInAppBrowser.addEventListener("exit", function(exitEvent){
+                                // check if the transaction was completed or not
+                                if(transactionInAppBrowser._utopiasoftware_transaction_completed === true){ // transaction completed
+                                    resolve(exitEvent.url); // resolve parent promise
+                                }
+                                else{ // transaction was not completed
+                                    reject(); // reject parent promise
+                                }
+                            });
+                        });
+
+                        // get the search parameters object from the transaction completed url
+                        let searchParams = new URLSearchParams(transactionCompletedUrl.split("?")[1]);
+                        // get the 'reference' search parameter value
+                        let completedTransactionReference = searchParams.get("reference");
+
+                        // inform the user that their order is being placed
+                        $('#loader-modal-message').html("Completing Order Placement...");
+
+                        // update the order status and transaction reference
+                        // get a local/deep-clone copy of the page's checkout order object
+                        let localOrderObject = JSON.parse(JSON.
+                        stringify(utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder));
+                        // update the order status and transaction reference
+                        localOrderObject.transaction_id = completedTransactionReference;
+                        localOrderObject.set_paid = true;
+                        // update the coupons for the local order object to be sent to the server
+                        localOrderObject.coupon_lines = localOrderObject.coupon_lines.map(function(couponElem){
+                            return {code: couponElem.code};
+                        });
+
+                        // update the checkout order data on the remote server
+                        localOrderObject = await Promise.resolve($.ajax(
+                            {
+                                url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
+                                    `/wp-json/wc/v3/orders/${localOrderObject.id}`,
+                                type: "put",
+                                contentType: "application/json",
+                                beforeSend: function(jqxhr) {
+                                    jqxhr.setRequestHeader("Authorization", "Basic " +
+                                        utopiasoftware[utopiasoftware_app_namespace].accessor);
+                                },
+                                dataType: "json",
+                                timeout: 240000, // wait for 4 minutes before timeout of request
+                                processData: false,
+                                data: JSON.stringify(localOrderObject)
+                            }
+                        )); //todo
+
                     }
                     else{ // request for transaction initialisation was NOT successful
                         throw "error";
