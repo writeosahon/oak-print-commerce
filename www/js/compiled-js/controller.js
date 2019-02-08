@@ -7084,11 +7084,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 stateDropDownList.enabled = true;
                             }
                             else{ // there are NO states in the selected country
-                                // hide the State dropdownlist tooltip
-                                $('#billing-info-page #billing-info-form').get(0).
-                                    ej2_instances[$('#billing-info-state').get(0)._utopiasoftware_validator_index].close();
                                 // disable the State dropdownlist for user selection
                                 stateDropDownList.enabled = false;
+                                // since the dropdownlist is disabled, remove any tooltip that is being displayed on this component
+                                $('#billing-info-page #billing-info-form').get(0).
+                                    ej2_instances[$('#billing-info-state').get(0)._utopiasoftware_validator_index].close();
                             }
 
                             // bind/update all changes made to the State dropdownlist
@@ -7623,6 +7623,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             else{ // there are NO states in the selected country
                                 // disable the State dropdownlist for user selection
                                 stateDropDownList.enabled = false;
+                                // since the dropdownlist is disabled, remove any tooltip that is being displayed on this component
+                                $('#shipping-info-page #shipping-info-form').get(0).
+                                    ej2_instances[$('#shipping-info-state').get(0)._utopiasoftware_validator_index].close();
                             }
 
                             // bind/update all changes made to the State dropdownlist
