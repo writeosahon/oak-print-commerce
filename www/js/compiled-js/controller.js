@@ -8433,8 +8433,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         try{
                             // delete user cart data
                             await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
-                            removeData("user-details",
-                                utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase);
+                            removeData("user-cart",
+                                utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
                         }
                         catch(err){}
 
