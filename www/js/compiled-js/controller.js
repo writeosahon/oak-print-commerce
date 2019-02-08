@@ -8446,9 +8446,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         // add the click handler for the 'checkout-order-placement-modal-ok-button'
                         $('#checkout-order-placement-modal #checkout-order-placement-modal-ok-button').get(0).
                             onclick = async function(){
-                            // pop all pages to the 1st page pf the app main navigator
-                            await $('#app-main-navigator').get(0).
-                            popPage({times: $('#app-main-navigator').get(0).pages.length - 1});
+                            // reload the app main page
+                            await $('ons-splitter').get(0).content.load("app-main-template");
                             // hide the 'checkout-order-placement-modal'
                             await $('#checkout-order-placement-modal').get(0).hide();
                         };
@@ -8498,12 +8497,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 try{
 
-
                     // get a local/deep-clone copy of the page's checkout order object
                     let localOrderObject = JSON.parse(JSON.
                     stringify(utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder));
                     // update the order status (by setting the order paid flag)
-                    localOrderObject.transaction_id = completedTransactionReference;
                     localOrderObject.set_paid = true;
                     // update the coupons for the local order object to be sent to the server
                     localOrderObject.coupon_lines = localOrderObject.coupon_lines.map(function(couponElem){
@@ -8545,9 +8542,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     // add the click handler for the 'checkout-order-placement-modal-ok-button'
                     $('#checkout-order-placement-modal #checkout-order-placement-modal-ok-button').get(0).
                         onclick = async function(){
-                        // pop all pages to the 1st page pf the app main navigator
-                        await $('#app-main-navigator').get(0).
-                        popPage({times: $('#app-main-navigator').get(0).pages.length - 1});
+                        // reload the app main page
+                        await $('ons-splitter').get(0).content.load("app-main-template");
                         // hide the 'checkout-order-placement-modal'
                         await $('#checkout-order-placement-modal').get(0).hide();
                     };

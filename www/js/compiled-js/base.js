@@ -32,9 +32,9 @@ const utopiasoftware = {
         accessor: "ZGV2ZWxvcGVyQHNob3BvYWtleGNsdXNpdmUuY29tOk9ha0RldmVsb3BlckAx",
 
         /**
-         * holds the paystack authorization Base64 encode key. This key must be decoded before use
+         * holds the paystack authorization Base64 encoded key. This key must be decoded before use
          */
-        paystackAccessor: "c2tfdGVzdF8xMzQ4ZjNlNmEyYmNiMjdlZjFlYzk4MjQwNWNjZDg5ZmJlYWJlNzBi",
+        paystackAccessor: "c2tfdGVzdF83YzkxMThiMzlhZmYzNmNlMGRlYTMyMzMzOTMwMDk1NjhlNWMyMDRl",
 
         /**
          * object is responsible for handling database operations for the app
