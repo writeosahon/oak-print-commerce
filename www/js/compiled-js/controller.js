@@ -7084,6 +7084,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 stateDropDownList.enabled = true;
                             }
                             else{ // there are NO states in the selected country
+                                // hide the State dropdownlist tooltip
+                                $('#billing-info-page #billing-info-form').get(0).
+                                    ej2_instances[$('#billing-info-state').get(0)._utopiasoftware_validator_index].close();
                                 // disable the State dropdownlist for user selection
                                 stateDropDownList.enabled = false;
                             }
