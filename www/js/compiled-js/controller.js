@@ -8506,8 +8506,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     // get a local/deep-clone copy of the page's checkout order object
                     let localOrderObject = JSON.parse(JSON.
                     stringify(utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder));
-                    // update the order status (by setting the order paid flag)
-                    localOrderObject.set_paid = true;
+                    // update the order status to "processing"
+                    localOrderObject.status = "processing";
                     // update the coupons for the local order object to be sent to the server
                     localOrderObject.coupon_lines = localOrderObject.coupon_lines.map(function(couponElem){
                         return {code: couponElem.code};
