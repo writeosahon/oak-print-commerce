@@ -81,12 +81,12 @@
 }
 .progress-bar--default-page-preloader.progress-bar--indeterminate:before {
     background-color: #ff0000;
-    background-color: rgba(255, 0, 0, 1);
+    background-color: rgba(255, 0, 0, 0.5);
     border-radius: 0;
 }
 .progress-bar--default-page-preloader.progress-bar--indeterminate:after {
     background-color: #ff0000;
-    background-color: rgba(255, 0, 0, 1);
+    background-color: rgba(255, 0, 0, 0.5);
     border-radius: 0;
 }
 /** STYLE FOR DEFAULT PAGE PRE-LOADERS ENDS **/
