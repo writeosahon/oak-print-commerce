@@ -3981,6 +3981,17 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $('#product-details-page .modal').css("display", "none");
             }
 
+            // set the handlers for the buttons on the "Rate Product" modal
+            $('#rate-product-modal #rate-product-cancel-button').get(0).onclick = async function(){ // handler for Cancel button
+                // hide "Rate Product" modal
+                await $('#rate-product-modal').get(0).hide();
+            };
+
+            $('#rate-product-modal #rate-product-rate-button').get(0).onclick = async function(){ // handler for Rate button
+                // hide "Rate Product" modal
+                await $('#rate-product-modal').get(0).hide();
+            };
+
             // display "Rate Product" modal
             await $('#rate-product-modal').get(0).show();
 
