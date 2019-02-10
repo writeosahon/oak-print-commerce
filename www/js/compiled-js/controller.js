@@ -3778,6 +3778,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             $('#product-details-page .product-details-variation-option').each(function(index, element){
                 element.ej2_instances[0].destroy(); // destroy the dropdown list component
             });
+
+            // destroy the product rater widget
+            $("#rate-product-modal #rate-product-rater-widget").rateYo("destroy");
         },
 
         /**
