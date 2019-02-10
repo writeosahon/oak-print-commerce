@@ -161,24 +161,25 @@
 <!-- modal is used to display rating product rating -->
 <ons-modal id="rate-product-modal" direction="up">
     <div style="width: calc(100vw - 20vw); min-height: auto !important; margin-left: 10vw; margin-right: 10vw;
-    display: block; position: relative; overflow-y: visible; background: rgba(211, 211, 211, 1) !important;">
+    display: block; position: relative; overflow-y: visible; background: rgba(255, 255, 255, 1) !important;">
         <div style="width: 100%; display: block; z-index: 3 !important;
     overflow-y: visible; position: relative; text-align: center;">
 
             <div style="width: 100%; display: block; color: #000000; text-align: center;">
-                <h4 style="display: block; width: 100%; text-align: center; color: #363E7C;">
+                <h4 style="display: block; width: 100%; padding-top: 1em; text-align: center; color: #363E7C;">
                     Rate Product
                 </h4>
-                <div id="rate-product-rater-widget" style="width: 90%; margin-left: 10%; margin-right: 10%; text-align: center">
+                <div id="rate-product-rater-widget" style="width: 80%; margin-left: auto; margin-right: auto; text-align: center">
                 </div>
 
-                <textarea id="rate-product-comment" class="textarea textarea--transparent" spellcheck="true" disabled
-                          style="font-size: 0.9em; width: 90%;
-                        caret-color: #3f51b5 !important; color: #3f51b5 !important; margin-left: 10%; margin-right: 10%;"
+                <textarea id="rate-product-comment" class="textarea" spellcheck="true" disabled
+                          style="font-size: 0.9em; width: 80%;
+                        caret-color: #3f51b5 !important; color: #3f51b5 !important; margin-top: 1em;
+                        margin-bottom: 1em; margin-left: 10%; margin-right: 10%;"
                           placeholder="Comment (Optional)" rows="2"></textarea>
 
             </div>
-            <div style="width: 100%; margin-bottom: 2em; text-align: center; position: relative;">
+            <div style="width: 100%; padding-bottom: 1em; text-align: center; position: relative;">
                 <!-- event handler for the button is added by the controller code -->
                 <ons-button id="rate-product-cancel-button" disable-auto-styling
                             style="color: #d64113; background-color: #ffffff; border-radius: 21px; transform: scale(0.85)">
