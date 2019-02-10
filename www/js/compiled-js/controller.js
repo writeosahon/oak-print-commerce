@@ -3698,7 +3698,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         precision: 0,
                         rating: 0,
                         fullStar: true,
-                        spacing: "5px",
+                        spacing: "10px",
                         onChange: async function(ratingValue, ratingWidgetInstance){
                             // enable the the comment input and "Rate" button
                             $('#rate-product-modal #rate-product-comment').removeAttr("disabled");
@@ -3969,8 +3969,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // display toast to show that an error
                 let toast = $('.timed-page-toast').get(0).ej2_instances[0];
                 toast.cssClass = 'error-ej2-toast';
-                toast.timeOut = 3000;
-                toast.content = `Sorry, this product must have been purchased by you before it can be rated`;
+                toast.timeOut = 3500;
+                toast.content = `Sorry, you need to have purchased this product before it can be rated`;
                 toast.dataBind();
                 toast.show();
 
