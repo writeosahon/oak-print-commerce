@@ -3950,10 +3950,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         dataType: "json",
                         timeout: 240000, // wait for 4 minutes before timeout of request
                         processData: true,
-                        data: JSON.stringify({status: "completed", customer: userDetails.id,
+                        data: {status: "completed", customer: userDetails.id,
                             product: utopiasoftware
                                 [utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
-                                currentProductDetails.id,})
+                                currentProductDetails.id,}
                     }
                 ));
 
@@ -3977,6 +3977,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 return; // exit method
             }
             finally{
+                // hide page preloader
+                $('#product-details-page .page-preloader').css("display", "none");
                 // hide page loader
                 $('#product-details-page .modal').css("display", "none");
             }
