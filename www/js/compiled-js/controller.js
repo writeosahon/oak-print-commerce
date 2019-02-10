@@ -3956,7 +3956,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         data: {status: "completed", customer: userDetails.id,
                             product: utopiasoftware
                                 [utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
-                                currentProductDetails.id,}
+                                currentProductDetails.id}
                     }
                 ));
 
@@ -3993,6 +3993,34 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             };
 
             $('#rate-product-modal #rate-product-rate-button').get(0).onclick = async function(){ // handler for Rate button
+                try{
+
+                    // inform uaer that review is being sent
+                    $('#loader-modal-message').html("Sending User Review...");
+                    await $('#loader-modal').get(0).show(); // show loader
+
+                    await Promise.resolve($.ajax(
+                        {
+                            url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
+                                `/wp-json/wc/v3/products/reviews`,
+                            type: "post",
+                            contentType: "application/json",
+                            beforeSend: function(jqxhr) {
+                                jqxhr.setRequestHeader("Authorization", "Basic " +
+                                    utopiasoftware[utopiasoftware_app_namespace].accessor);
+                            },
+                            dataType: "json",
+                            timeout: 240000, // wait for 4 minutes before timeout of request
+                            processData: false,
+                            data: JSON.stringify({product_id: utopiasoftware
+                                    [utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
+                                    currentProductDetails.id, status: "hold",
+                                reviewer: userDetails.first_name, reviewer_email: userDetails.first_name})
+                        }
+                    ));
+                }
+                catch(err){}
+                finally{}
                 // hide "Rate Product" modal
                 await $('#rate-product-modal').get(0).hide();
             };
