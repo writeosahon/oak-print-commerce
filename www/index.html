@@ -27,8 +27,8 @@
     <!--- flickity carousel style -->
     <link rel="stylesheet" href="css/flickity.2.1.2.min.css">
 
-    <!--- ViewerJS style library -->
-    <!--<link rel="stylesheet" href="css/viewer.min.css">-->
+    <!--- RateYo style library -->
+    <<link rel="stylesheet" href="css/jquery.rateyo.2.3.5.min.css">
 
     <!-- app custom font icons -->
     <link rel="stylesheet" href="css/app-custom-font-icons/css/app-custom-font-style.css">
@@ -59,6 +59,9 @@
 
     <!-- flickity carousel library -->
     <script src="js/flickity.pkgd2.1.2.min.js"></script>
+
+    <!-- RateYo js library -->
+    <script src="js/jquery.rateyo.2.3.5.min.js"></script>
 
     <!-- kendo libraries -->
     <script src="js/kendo.2018.2.530/kendo.core.min.js"></script>
@@ -126,7 +129,7 @@
     <div id="loader-modal-message" style="text-align: center; margin-top: 0.5em; font-size: 1.2em; color: #ffffff;"></div>
 </ons-modal>
 
-<!-- modal is used to display sms notification confirmation for wallet transfers to unregistered users -->
+<!-- modal is used to display order placement/receipt -->
 <ons-modal id="checkout-order-placement-modal" direction="up">
     <div style="width: calc(100vw - 20vw); min-height: auto !important; margin-left: 10vw; margin-right: 10vw;
     display: block; position: relative; overflow-y: visible; background: rgba(211, 211, 211, 1) !important;">
@@ -150,6 +153,41 @@
                 <ons-button id="checkout-order-placement-modal-ok-button" disable-auto-styling modifier="large"
                             style="background-color: #363E7C; color: #ffffff; border-radius: 21px;">
                     OK</ons-button>
+            </div>
+        </div>
+    </div>
+</ons-modal>
+
+<!-- modal is used to display rating product rating -->
+<ons-modal id="rate-product-modal" direction="up">
+    <div style="width: calc(100vw - 20vw); min-height: auto !important; margin-left: 10vw; margin-right: 10vw;
+    display: block; position: relative; overflow-y: visible; background: rgba(211, 211, 211, 1) !important;">
+        <div style="width: 100%; display: block; z-index: 3 !important;
+    overflow-y: visible; position: relative; text-align: center;">
+
+            <div style="width: 100%; display: block; color: #000000; text-align: center;">
+                <h4 style="display: block; width: 100%; text-align: center; color: #363E7C;">
+                    Rate Product
+                </h4>
+                <div id="rate-product-rater-widget" style="width: 90%; margin-left: 10%; margin-right: 10%; text-align: center">
+                </div>
+
+                <textarea id="rate-product-comment" class="textarea textarea--transparent" spellcheck="true" disabled
+                          style="font-size: 0.9em; width: 90%;
+                        caret-color: #3f51b5 !important; color: #3f51b5 !important; margin-left: 10%; margin-right: 10%;"
+                          placeholder="Comment (Optional)" rows="2"></textarea>
+
+            </div>
+            <div style="width: 100%; margin-bottom: 2em; text-align: center; position: relative;">
+                <!-- event handler for the button is added by the controller code -->
+                <ons-button id="rate-product-cancel-button" disable-auto-styling
+                            style="color: #d64113; background-color: #ffffff; border-radius: 21px; transform: scale(0.85)">
+                    CANCEL</ons-button>
+
+                <!-- event handler for the button is added by the controller code -->
+                <ons-button id="rate-product-rate-button" disabled disable-auto-styling
+                            style="color: #363E7C; background-color: #ffffff; border-radius: 21px;  transform: scale(0.85)">
+                    RATE</ons-button>
             </div>
         </div>
     </div>

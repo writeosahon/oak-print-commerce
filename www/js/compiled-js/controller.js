@@ -3689,6 +3689,23 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         iconPosition: "Left"
                     }).appendTo('#product-details-share');
 
+                    // create the product-rater widget. which is contained in the 'rate-product-modal'
+                    $('#rate-product-modal #rate-product-rater-widget').rateYo({
+                        starWidth: "20px",
+                        normalFill: "#808080",
+                        ratedFill: "#F39C12",
+                        numStars: 5,
+                        precision: 0,
+                        rating: 0,
+                        fullStar: true,
+                        spacing: "5px",
+                        onChange: async function(ratingValue, ratingWidgetInstance){
+                            // enable the the comment input and "Rate" button
+                            $('#rate-product-modal #rate-product-comment').removeAttr("disabled");
+                            $('#rate-product-modal #rate-product-rate-button').removeAttr("disabled");
+                        }
+                    });
+
                     // load product variations asynchronously without waiting for the response
                     utopiasoftware[utopiasoftware_app_namespace].controller.
                         productDetailsPageViewModel.loadProductVariations();
@@ -3858,6 +3875,115 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // open the device share dialog
                 window.plugins.socialsharing.shareWithOptions(shareOptions, function(){}, function(){});
             }, 0);
+        },
+
+        /**
+         * method is triggered when the "Rate" button is clicked
+         * @returns {Promise<void>}
+         */
+        async rateButtonClicked(){
+
+            let userDetails = null; // holds the user details
+
+            // display page preloader
+            $('#product-details-page .page-preloader').css("display", "block");
+
+            // check if a user has signed in
+            try{
+                // load the use details from the encrypted app database
+                userDetails = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                loadData("user-details",
+                    utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
+            }
+            catch(err){
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast to show that an error
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.timeOut = 3500;
+                toast.content = `Please sign in to rate this product`;
+                toast.dataBind();
+                toast.show();
+
+                // hide page preloader
+                $('#product-details-page .page-preloader').css("display", "none");
+
+                return; // exit method
+            }
+
+            // check if there is Internet connection
+            if(navigator.connection.type === Connection.NONE){ // there is no Internet connection
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast to show that an error
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.timeOut = 3000;
+                toast.content = `Connect to the Internet to rate this product`;
+                toast.dataBind();
+                toast.show();
+
+                // hide page preloader
+                $('#product-details-page .page-preloader').css("display", "none");
+
+                return; // exit method
+            }
+
+            try{
+                // display the page loader modal
+                $('#product-details-page .modal').css("display", "table");
+
+                // check if the current user has ever purchased this product before
+                let ordersArray = await Promise.resolve($.ajax(
+                    {
+                        url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
+                            `/wp-json/wc/v3/orders`,
+                        type: "get",
+                        //contentType: "application/json",
+                        beforeSend: function(jqxhr) {
+                            jqxhr.setRequestHeader("Authorization", "Basic " +
+                                utopiasoftware[utopiasoftware_app_namespace].accessor);
+                        },
+                        dataType: "json",
+                        timeout: 240000, // wait for 4 minutes before timeout of request
+                        processData: true,
+                        data: JSON.stringify({status: "completed", customer: userDetails.id,
+                            product: utopiasoftware
+                                [utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
+                                currentProductDetails.id,})
+                    }
+                ));
+
+                if(ordersArray.length === 0){ // user has NOT placed a completed order for this product before
+                    throw "error"; // throw error
+                }
+            }
+            catch(err){
+
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast to show that an error
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.timeOut = 3000;
+                toast.content = `Sorry, this product must have been purchased by you before it can be rated`;
+                toast.dataBind();
+                toast.show();
+
+                return; // exit method
+            }
+            finally{
+                // hide page loader
+                $('#product-details-page .modal').css("display", "none");
+            }
+
+            // display "Rate Product" modal
+            await $('#rate-product-modal').get(0).show();
+
         },
 
         /**
