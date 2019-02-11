@@ -309,7 +309,8 @@ document.addEventListener("online",utopiasoftware[utopiasoftware_app_namespace].
 document.removeEventListener("offline",utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.deviceOfflineListener,false);// remove listener for when the device has Internet connection
 document.removeEventListener("online",utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.deviceOnlineListener,false);case 2:case'end':return _context15.stop();}}},_callee15,this);}));function pageHide(){return _ref15.apply(this,arguments);}return pageHide;}(),/**
          * method is triggered when page is destroyed
-         */pageDestroy:function pageDestroy(){},/**
+         */pageDestroy:function pageDestroy(){// reset view-model properties
+utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.currentPage=0;utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.pageSize=100;utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.viewContentHeight=0;},/**
          * method is triggered when the device back button is clicked OR a similar action is triggered
          */backButtonClicked:function backButtonClicked(){// go to the "Home" page (tab)
 $('#app-main-tabbar').get(0).setActiveTab(0);},/**

@@ -1256,7 +1256,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is destroyed
          */
         pageDestroy: function(){
-
+            // reset view-model properties
+            utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.currentPage = 0;
+            utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.pageSize = 100;
+            utopiasoftware[utopiasoftware_app_namespace].controller.categoriesPageViewModel.viewContentHeight = 0;
         },
 
         /**
