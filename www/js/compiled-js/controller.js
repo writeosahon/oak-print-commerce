@@ -8661,8 +8661,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                         // update the checkout-order-placement-modal with the checkout order number
                         $('#checkout-order-placement-modal .order-number').html(localOrderObject.number);
-                        // show the 'checkout-order-placement-modal'
-                        await $('#checkout-order-placement-modal').get(0).show();
 
                         // add the click handler for the 'checkout-order-placement-modal-ok-button'
                         $('#checkout-order-placement-modal #checkout-order-placement-modal-ok-button').get(0).
@@ -8672,6 +8670,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             // hide the 'checkout-order-placement-modal'
                             await $('#checkout-order-placement-modal').get(0).hide();
                         };
+
+                        // show the 'checkout-order-placement-modal'
+                        await $('#checkout-order-placement-modal').get(0).show();
+
 
                     }
                     else{ // request for transaction initialisation was NOT successful
@@ -8757,8 +8759,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                     // update the checkout-order-placement-modal with the checkout order number
                     $('#checkout-order-placement-modal .order-number').html(localOrderObject.number);
-                    // show the 'checkout-order-placement-modal'
-                    await $('#checkout-order-placement-modal').get(0).show();
 
                     // add the click handler for the 'checkout-order-placement-modal-ok-button'
                     $('#checkout-order-placement-modal #checkout-order-placement-modal-ok-button').get(0).
@@ -8768,6 +8768,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         // hide the 'checkout-order-placement-modal'
                         await $('#checkout-order-placement-modal').get(0).hide();
                     };
+
+                    // show the 'checkout-order-placement-modal'
+                    await $('#checkout-order-placement-modal').get(0).show();
+
                 }
                 catch(err){
                     console.log("PAYMENT ERROR", err);
