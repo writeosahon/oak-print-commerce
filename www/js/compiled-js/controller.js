@@ -3781,6 +3781,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             // destroy the product rater widget
             $("#rate-product-modal #rate-product-rater-widget").rateYo("destroy");
+
+            // reset the review comment textarea
+            $('#rate-product-modal #rate-product-comment').val("");
+            $('#rate-product-modal #rate-product-comment').attr("disabled", true);
         },
 
         /**
@@ -3999,6 +4003,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     $('#loader-modal-message').html("Sending User Review...");
                     await $('#loader-modal').get(0).show(); // show loader
 
+                    // send the user's review to the server
                     await Promise.resolve($.ajax(
                         {
                             url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
@@ -4015,11 +4020,48 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             data: JSON.stringify({product_id: utopiasoftware
                                     [utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
                                     currentProductDetails.id, status: "hold",
-                                reviewer: userDetails.first_name, reviewer_email: userDetails.first_name})
+                                reviewer: userDetails.first_name, reviewer_email: userDetails.email,
+                                review: $('#rate-product-modal #rate-product-comment').val().trim(),
+                                rating: $('#rate-product-modal #rate-product-rater-widget').rateYo("rating"),
+                                verified: true})
                         }
                     ));
+
+                    // reset the review widget and the review comment textarea
+                    $('#rate-product-modal #rate-product-rater-widget').rateYo("rating", 0);
+                    $('#rate-product-modal #rate-product-comment').val("");
+                    $('#rate-product-modal #rate-product-comment').attr("disabled", true);
+
+                    // hide the loader
+                    await $('#loader-modal').get(0).hide(); // hide loader
+
+                    // hide all previously displayed ej2 toast
+                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                    $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                    // display toast to show success
+                    let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                    toast.cssClass = 'success-ej2-toast';
+                    toast.timeOut = 3500;
+                    toast.content = `Thank you. Your product review has been received`;
+                    toast.dataBind();
+                    toast.show();
                 }
-                catch(err){}
+                catch(err){
+
+                    // hide the loader
+                    await $('#loader-modal').get(0).hide(); // hide loader
+
+                    // hide all previously displayed ej2 toast
+                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                    $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                    // display toast to show error
+                    let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                    toast.cssClass = 'error-ej2-toast';
+                    toast.timeOut = 3500;
+                    toast.content = `Error. Your product review could not be sent. Please retry`;
+                    toast.dataBind();
+                    toast.show();
+                }
                 finally{}
                 // hide "Rate Product" modal
                 await $('#rate-product-modal').get(0).hide();
