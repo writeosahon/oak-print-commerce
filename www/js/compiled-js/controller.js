@@ -485,19 +485,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         pageDestroy: function(){
             // destroy the carousels
-            utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.
-            newProductsCarousel.destroy();
-            utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.
-                newProductsCarousel = null;
-            utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.
-                featuredProductsCarousel.destroy();
-            utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.
-                featuredProductsCarousel = null;
-            utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.
-                salesProductsCarousel.destroy();
-            utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.
-                salesProductsCarousel = null;
-            var x = 0;
+            utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.destroy();
+            utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel = null;
+            utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.featuredProductsCarousel.destroy();
+            utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.featuredProductsCarousel = null;
+            utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.salesProductsCarousel.destroy();
+            utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.salesProductsCarousel = null;
         },
 
         /**
