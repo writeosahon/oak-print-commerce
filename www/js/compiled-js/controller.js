@@ -497,6 +497,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 salesProductsCarousel.destroy();
             utopiasoftware[utopiasoftware_app_namespace].controller.homePageViewModel.newProductsCarousel.
                 salesProductsCarousel = null;
+            var x = 0;
         },
 
         /**
