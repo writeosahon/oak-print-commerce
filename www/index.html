@@ -2,6 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+
+    <!-- Content-Security-Policy tag -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' wss: ws: data: http: https: blob: edpms: file: gap 'unsafe-inline' 'unsafe-eval'">
+
     <title>Print Service</title>
 
     <!-- style library to incorporate bootstrap grid layout,helper classes & responsiveness -->
@@ -28,7 +32,7 @@
     <link rel="stylesheet" href="css/flickity.2.1.2.min.css">
 
     <!--- RateYo style library -->
-    <<link rel="stylesheet" href="css/jquery.rateyo.2.3.5.min.css">
+    <link rel="stylesheet" href="css/jquery.rateyo.2.3.5.min.css">
 
     <!-- app custom font icons -->
     <link rel="stylesheet" href="css/app-custom-font-icons/css/app-custom-font-style.css">
@@ -92,9 +96,6 @@
     <script src="js/compiled-js/controller-compiled.js"></script>
     <script src="js/compiled-js/model-compiled.js"></script>
 
-
-    <!-- Content-Security-Policy tag -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' wss: ws: data: http: https: blob: edpms: file: gap 'unsafe-inline' 'unsafe-eval'">
 </head>
 <body>
 

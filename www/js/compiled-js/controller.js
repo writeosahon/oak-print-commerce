@@ -3999,7 +3999,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             $('#rate-product-modal #rate-product-rate-button').get(0).onclick = async function(){ // handler for Rate button
                 try{
 
-                    // inform uaer that review is being sent
+                    // hide "Rate Product" modal
+                    await $('#rate-product-modal').get(0).hide();
+
+                    // inform user that review is being sent
                     $('#loader-modal-message').html("Sending User Review...");
                     await $('#loader-modal').get(0).show(); // show loader
 
@@ -4050,6 +4053,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                     // hide the loader
                     await $('#loader-modal').get(0).hide(); // hide loader
+
+                    // display "Rate Product" modal
+                    await $('#rate-product-modal').get(0).show();
 
                     // hide all previously displayed ej2 toast
                     $('.page-toast').get(0).ej2_instances[0].hide('All');
