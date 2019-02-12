@@ -1,0 +1,44 @@
+<!-- track order page -->
+<ons-page id="track-order-page">
+
+    <ons-toolbar modifier="noshadow"
+                 static style="color: #ffffff !important; background-color: #3f51b5 !important;
+    box-shadow: none !important; border-bottom: lightgray 1px solid">
+        <div class="left" style="color: #ffffff !important; background-color: #3f51b5 !important;">
+            <ons-toolbar-button onclick="utopiasoftware[utopiasoftware_app_namespace].controller.productDetailsPageViewModel.backButtonClicked();"
+                                style="color: #ffffff !important; background-color: #3f51b5 !important;">
+                <ons-icon icon="md-long-arrow-left"></ons-icon>
+            </ons-toolbar-button>
+        </div>
+        <div class="center title-bar" style="color: #ffffff !important; background-color: #3f51b5 !important; text-align: center;">
+            Track Order
+        </div>
+
+        <div class="right" style="color: #ffffff !important; background-color: #3f51b5 !important;">
+            <!--<ons-toolbar-button style="background-color: #3f51b5 !important; color: #d70000 !important;"-->
+            <!--icon="md-favorite"></ons-toolbar-button>-->
+
+            <ons-toolbar-button onclick="utopiasoftware[utopiasoftware_app_namespace].controller.viewCartPageViewModel.viewCartPage()"
+                                style="color: #ffffff !important; background-color: #3f51b5 !important;">
+                <ons-icon icon="md-shopping-cart" style="position: relative;">
+                    <span class="cart-count e-badge e-badge-overlap
+                            e-badge-notification e-badge-circle e-badge-danger"
+                          style="font-size: 0.5em;">0</span>
+                </ons-icon>
+            </ons-toolbar-button>
+        </div>
+    </ons-toolbar>
+    <div class="track-order-page-input-container"
+         style="color: #3f51b5 !important; background-color: #ffffff !important; text-align: center;
+                position: fixed; width: calc(100% - 40px); margin-right: 20px; margin-left: 20px; z-index: 2">
+        <input id="track-order-page-input" onkeypress="utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.enterButtonClicked(event);" style="width: 100%; margin-top: 0.0em;"
+               type="search">
+    </div>
+
+    <div class="content"> <!-- page content -->
+        <ons-list id="search-list" style="display: block;">
+
+        </ons-list>
+
+    </div>
+</ons-page>

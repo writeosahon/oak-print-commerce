@@ -777,3 +777,72 @@
     text-align: left;
 }
 /** STYLE FOR CHECK OUT PAGE ENDS **/
+
+/** STYLE FOR CATEGORIES PAGE ENDS **/
+
+/** STYLE FOR TRACK ORDER PAGE START **/
+#track-order-page .page__background,
+#track-order-page .page--material__background {
+    background-color: #ffffff;
+}
+/** style for search input on the track order page begins **/
+#track-order-page #track-order-page-input {
+    border: none !important;
+    vertical-align: top !important;
+    outline: none !important;
+    line-height: 1 !important;
+    box-sizing: border-box !important;
+    height: 28px !important;
+    font-size: 14px !important;
+    background-color: #030303 !important;
+    background-color: rgba(3, 3, 3, .09) !important;
+    box-shadow: none !important;
+    color: #1f1f21 !important;
+    line-height: 1.3 !important;
+    padding: 0 8px 0 28px !important;
+    margin: 0 !important;
+    border-radius: 5.5px !important;
+    background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iMTNweCIgaGVpZ2h0PSIxNHB4IiB2aWV3Qm94PSIwIDAgMTMgMTQiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8IS0tIEdlbmVyYXRvcjogU2tldGNoIDQyICgzNjc4MSkgLSBodHRwOi8vd3d3LmJvaGVtaWFuY29kaW5nLmNvbS9za2V0Y2ggLS0+CiAgICA8dGl0bGU+aW9zLXNlYXJjaC1pbnB1dC1pY29uPC90aXRsZT4KICAgIDxkZXNjPkNyZWF0ZWQgd2l0aCBTa2V0Y2guPC9kZXNjPgogICAgPGRlZnM+PC9kZWZzPgogICAgPGcgaWQ9ImNvbXBvbmVudHMiIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPgogICAgICAgIDxnIGlkPSJpb3Mtc2VhcmNoLWlucHV0IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNDguMDAwMDAwLCAtNDMuMDAwMDAwKSIgZmlsbD0iIzdBNzk3QiI+CiAgICAgICAgICAgIDxnIGlkPSJHcm91cCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNDAuMDAwMDAwLCAzNi4wMDAwMDApIj4KICAgICAgICAgICAgICAgIDxwYXRoIGQ9Ik0xNi45OTcyNDgyLDE1LjUwNDE0NjYgQzE3LjA3NzM2NTcsMTUuNTQwNTkzOCAxNy4xNTIyNzMxLDE1LjU5MTYxMjkgMTcuMjE3NzUxNiwxNS42NTcwOTE0IEwyMC42NDk5OTEsMTkuMDg5MzMwOCBDMjAuOTQ0ODQ0OSwxOS4zODQxODQ3IDIwLjk0ODQ3NjQsMTkuODU4NjA2IDIwLjY1MzU0MTIsMjAuMTUzNTQxMiBDMjAuMzYwNjQ4LDIwLjQ0NjQzNDQgMTkuODgxMjcxNiwyMC40NDE5MzE3IDE5LjU4OTMzMDgsMjAuMTQ5OTkxIEwxNi4xNTcwOTE0LDE2LjcxNzc1MTYgQzE2LjA5MTM3LDE2LjY1MjAzMDEgMTYuMDQwMTE3MSwxNi41NzczODc0IDE2LjAwMzQxNDEsMTYuNDk3Nzk5NSBDMTUuMTY3MTY5NCwxNy4xMjcwNDExIDE0LjEyNzEzOTMsMTcuNSAxMywxNy41IEMxMC4yMzg1NzYzLDE3LjUgOCwxNS4yNjE0MjM3IDgsMTIuNSBDOCw5LjczODU3NjI1IDEwLjIzODU3NjMsNy41IDEzLDcuNSBDMTUuNzYxNDIzNyw3LjUgMTgsOS43Mzg1NzYyNSAxOCwxMi41IEMxOCwxMy42Mjc0Njg1IDE3LjYyNjgyMzIsMTQuNjY3Nzc2OCAxNi45OTcyNDgyLDE1LjUwNDE0NjYgWiBNMTMsMTYuNSBDMTUuMjA5MTM5LDE2LjUgMTcsMTQuNzA5MTM5IDE3LDEyLjUgQzE3LDEwLjI5MDg2MSAxNS4yMDkxMzksOC41IDEzLDguNSBDMTAuNzkwODYxLDguNSA5LDEwLjI5MDg2MSA5LDEyLjUgQzksMTQuNzA5MTM5IDEwLjc5MDg2MSwxNi41IDEzLDE2LjUgWiIgaWQ9Imlvcy1zZWFyY2gtaW5wdXQtaWNvbiI+PC9wYXRoPgogICAgICAgICAgICA8L2c+CiAgICAgICAgPC9nPgogICAgPC9nPgo8L3N2Zz4=') !important;
+    background-position: 8px center !important;
+    background-repeat: no-repeat !important;
+    background-size: 13px !important;
+    font-weight: 400 !important;
+    display: inline-block;
+    text-indent: 0 !important;
+}
+
+#track-order-page .track-order-page-input-container .e-input-group.e-input-focus:hover:not(.e-success):not(.e-warning):not(.e-error):not(.e-disabled):not(.e-float-icon-left),
+#track-order-page .track-order-page-input-container .e-input-group.e-control-wrapper.e-input-focus:hover:not(.e-success):not(.e-warning):not(.e-error):not(.e-disabled):not(.e-float-icon-left),
+#track-order-page .track-order-page-input-container .e-float-input.e-input-focus:hover:not(.e-success):not(.e-warning):not(.e-error):not(.e-disabled):not(.e-float-icon-left),
+#track-order-page .track-order-page-input-container .e-float-input.e-control-wrapper.e-input-focus:hover:not(.e-success):not(.e-warning):not(.e-error):not(.e-disabled):not(.e-float-icon-left),
+#track-order-page .track-order-page-input-container .e-input-group.e-input-focus.e-float-icon-left:not(.e-success):not(.e-warning):not(.e-error):not(.e-disabled) .e-input-in-wrap:hover,
+#track-order-page .track-order-page-input-container .e-input-group.e-control-wrapper.e-input-focus.e-float-icon-left:not(.e-success):not(.e-warning):not(.e-error):not(.e-disabled) .e-input-in-wrap:hover,
+#track-order-page .track-order-page-input-container .e-float-input.e-input-focus.e-float-icon-left:not(.e-success):not(.e-warning):not(.e-error):not(.e-disabled) .e-input-in-wrap:hover,
+#track-order-page .track-order-page-input-container .e-float-input.e-input-focus:hover:not(.e-input-group):not(.e-success):not(.e-warning):not(.e-error):not(.e-disabled) input:not([disabled]),
+#track-order-page .track-order-page-input-container .e-float-input.e-control-wrapper.e-input-focus.e-float-icon-left:not(.e-success):not(.e-warning):not(.e-error):not(.e-disabled) .e-input-in-wrap:hover,
+#track-order-page .track-order-page-input-container .e-float-input.e-control-wrapper.e-input-focus:hover:not(.e-input-group):not(.e-success):not(.e-warning):not(.e-error):not(.e-disabled) input:not([disabled]){
+    border-color: transparent;
+}
+
+#track-order-page .track-order-page-input-container .e-input-group:not(.e-success):not(.e-warning):not(.e-error):not(.e-float-icon-left),
+#track-order-page .track-order-page-input-container .e-input-group.e-float-icon-left:not(.e-success):not(.e-warning):not(.e-error) .e-input-in-wrap,
+#track-order-page .track-order-page-input-container .e-input-group.e-control-wrapper:not(.e-success):not(.e-warning):not(.e-error):not(.e-float-icon-left),
+#track-order-page .track-order-page-input-container .e-input-group.e-control-wrapper.e-float-icon-left:not(.e-success):not(.e-warning):not(.e-error) .e-input-in-wrap,
+#track-order-page .track-order-page-input-container .e-float-input.e-float-icon-left:not(.e-success):not(.e-warning):not(.e-error) .e-input-in-wrap,
+#track-order-page .track-order-page-input-container .e-float-input.e-control-wrapper.e-float-icon-left:not(.e-success):not(.e-warning):not(.e-error) .e-input-in-wrap {
+    border-color: transparent;
+}
+
+#track-order-page .track-order-page-input-container .e-input-group:not(.e-float-icon-left):not(.e-float-input)::before,
+#track-order-page .track-order-page-input-container .e-input-group:not(.e-float-icon-left):not(.e-float-input)::after,
+#track-order-page .track-order-page-input-container .e-input-group.e-float-icon-left:not(.e-float-input) .e-input-in-wrap::before,
+#track-order-page .track-order-page-input-container .e-input-group.e-float-icon-left:not(.e-float-input) .e-input-in-wrap::after,
+#track-order-page .track-order-page-input-container .e-input-group.e-control-wrapper:not(.e-float-icon-left):not(.e-float-input)::before,
+#track-order-page .track-order-page-input-container .e-input-group.e-control-wrapper:not(.e-float-icon-left):not(.e-float-input)::after,
+#track-order-page .track-order-page-input-container .e-input-group.e-control-wrapper.e-float-icon-left:not(.e-float-input) .e-input-in-wrap::before,
+#track-order-page .track-order-page-input-container .e-input-group.e-control-wrapper.e-float-icon-left:not(.e-float-input) .e-input-in-wrap::after {
+    background: transparent;
+}
+/** style for search input on the order page ends **/
+
+/** STYLE FOR TRACK ORDER PAGE ENDS **/

@@ -2268,6 +2268,46 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     }
                 }, 0);
             });
+        },
+
+        /**
+         * method is triggered when the user clicks on the "Track Order" list item
+         *
+         * @returns {Promise<void>}
+         */
+        async trackOrderListItemClicked(){
+
+            // handle the user sign-in check inside a promise
+            return new Promise(function(resolve, reject){
+                window.setTimeout(async function(){
+                    try{
+                        // check if user has been signed in
+                        let hasUserDetails = await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                        loadData("user-details", utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase);
+
+                        // user has been signed in, so display the track
+                        await $('#app-main-navigator').get(0).pushPage('track-order-page.html');
+
+                        resolve(); // resolve the promise
+                    }
+                    catch(err){
+                        // inform user they need to sign in before viewing the track order page
+                        // hide all previously displayed ej2 toast
+                        $('.page-toast').get(0).ej2_instances[0].hide('All');
+                        $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                        // display toast message
+                        let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                        toast.cssClass = 'default-ej2-toast';
+                        toast.timeOut = 3000;
+                        toast.content = `Sign in to track an order`;
+                        toast.dataBind();
+                        toast.show();
+
+                        // resolve the promise
+                        resolve(); // resolve the promise
+                    }
+                }, 0);
+            });
         }
     },
 
