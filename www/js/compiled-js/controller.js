@@ -9597,7 +9597,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
     trackOrderPageViewModel: {
 
         /**
-         * holds the array of products for the search result that was just run by the user
+         * holds the array of orders for the search result that was just run by the user
          */
         trackOrderResultsArray: null,
 
@@ -9660,11 +9660,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             window.setTimeout(async function() {
                                 var searchResultsArray = [];
                                 try{
+                                    // load the user profile details from the app database
+                                    var userDetails = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                                    loadData("user-details",
+                                        utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
+
                                     searchResultsArray = await utopiasoftware[utopiasoftware_app_namespace].controller.
                                     trackOrderPageViewModel.
-                                    loadProducts({"order": "desc", "orderby": "date", "status": "publish",
-                                        "type": "variable", "stock_status": "instock", "page": 1, "per_page": 3,
-                                        "search": searchValue});
+                                    loadOrders({"page": 1, "per_page": 20, "order": "desc", "orderby": "date",
+                                        "customer": userDetails.id, "search": searchValue});
                                     await utopiasoftware[utopiasoftware_app_namespace].controller.trackOrderPageViewModel.
                                     displayPageContent(searchResultsArray[0]);
                                 }
@@ -9698,7 +9702,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is shown
          */
         pageShow: function(){
-            $('#app-main-page ons-toolbar div.title-bar').html("Search"); // update the title of the page
             // update cart count
             $('#app-main-page .cart-count').html(utopiasoftware[utopiasoftware_app_namespace].model.cartCount);
 
@@ -9795,7 +9798,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         },
 
         /**
-         * method is used to load products to the page
+         * method is used to load orders to the page
          *
          * @param pageToAccess {Integer} the page within the paginated categories to retrieve
          *
@@ -9806,20 +9809,20 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          *
          * @returns {Promise<void>}
          */
-        async loadProducts(queryParam, pageToAccess = queryParam.page || 1,
-                           pageSize = queryParam.per_page || 3){
+        async loadOrders(queryParam, pageToAccess = queryParam.page || 1,
+                           pageSize = queryParam.per_page || 20){
             queryParam.page = pageToAccess;
             queryParam.per_page = pageSize;
 
-            var productPromisesArray = []; // holds the array for the promises used to load the products
+            var promisesArray = []; // holds the array for the promises used to load the orders
 
             // check if there is internet connection or not
             if(navigator.connection.type !== Connection.NONE){ // there is internet connection
                 // load the requested products list from the server
-                productPromisesArray.push(new Promise(function(resolve, reject){
+                promisesArray.push(new Promise(function(resolve, reject){
                     Promise.resolve($.ajax(
                         {
-                            url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + "/wp-json/wc/v3/products",
+                            url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + "/wp-json/wc/v3/orders",
                             type: "get",
                             //contentType: "application/x-www-form-urlencoded",
                             beforeSend: function(jqxhr) {
@@ -9831,15 +9834,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             processData: true,
                             data: queryParam
                         }
-                    )).then(function(productsArray){
-                        // check if the productsArray contains products
-                        if(productsArray.length > 0){ // there are products
+                    )).then(function(ordersArray){
+                        // check if the ordersArray contains orders
+                        if(ordersArray.length > 0){ // there are products
                             // update the current search results array with the productsArray
-                            utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.
-                                currentSearchResultsArray = productsArray;
+                            utopiasoftware[utopiasoftware_app_namespace].controller.trackOrderPageViewModel.
+                                trackOrderResultsArray = ordersArray;
                         }
 
-                        resolve(productsArray); // resolve the parent promise with the data gotten from the server
+                        resolve(ordersArray); // resolve the parent promise with the data gotten from the server
 
                     }).catch(function(err){ // an error occurred
 
@@ -9849,10 +9852,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             } // end of loading products with Internet Connection
             else{ // there is no internet connection
-                productPromisesArray.push(Promise.reject("no internet connection"));
+                promisesArray.push(Promise.reject("no internet connection"));
             }
 
-            return Promise.all(productPromisesArray); // return a promise which resolves when all promises in the array resolve
+            return Promise.all(promisesArray); // return a promise which resolves when all promises in the array resolve
         },
 
         /**
