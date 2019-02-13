@@ -9790,7 +9790,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // get the search autocomplete component
                 let searchAutoComplete = $('#track-order-page #track-order-page-input').get(0).ej2_instances[0];
                 // update the value of the retrieved component
-                searchAutoComplete.value = $('#search-page #search-page-input').val();
+                searchAutoComplete.value = $('#track-order-page #track-order-page-input').val();
                 searchAutoComplete._allowRemoteSearch = true; // flag the remote search can occur
                 searchAutoComplete.dataBind(); // bind new value to the component
                 searchAutoComplete.change(); // trigger the change method
