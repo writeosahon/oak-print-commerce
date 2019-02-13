@@ -1666,6 +1666,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         pageDestroy: function(){
             // destroy the search input autocomplete component
             $('#search-page #search-page-input').get(0).ej2_instances[0].destroy();
+            // reset the view-model properties
+            utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.currentSearchResultsArray = null;
 
         },
 
