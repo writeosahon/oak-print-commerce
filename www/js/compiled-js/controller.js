@@ -9861,64 +9861,73 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         /**
          * method is used to display the retrieved products on the search popover
          *
-         * @param productsArray
+         * @param ordersArray
          *
          * @returns {Promise<void>}
          */
-        async displayPageContent(productsArray){
+        async displayPageContent(ordersArray){
 
             var displayCompletedPromise = new Promise(function(resolve, reject){
 
-                let productsContent = ""; // holds the contents for the products
+                let ordersContent = ""; // holds the contents for the orders
 
-                // check if the productsArray is empty or not
-                if(productsArray.length <= 0){ // there are no new content to display
-                    // inform the user that no result for the search was founc'
-                    $('#search-page-search-input-popover #search-input-popover-list').
-                    html(`<ons-list-item modifier="nodivider" lock-on-drag="true">
-                                <div class="center">
-                                    <div style="text-align: center; width: 100%;">
-                                        No Results Found
-                                    </div>
-                                </div>
-                            </ons-list-item>`);
-                    resolve(productsArray.length); // resolve promise with the length of the products array
+                // check if the ordersArray is empty or not
+                if(ordersArray.length <= 0){ // there are no new content to display
+                    // inform the user that no result for the search was found'
+                    // hide all previously displayed ej2 toast
+                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                    $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                    // display toast to show that an error
+                    let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                    toast.cssClass = 'default-ej2-toast';
+                    toast.timeOut = 3000;
+                    toast.content = `Sorry, no order was found.`;
+                    toast.dataBind();
+                    toast.show();
+
+                    resolve(ordersArray.length); // resolve promise with the length of the orders array
                 }
-                else{ // there are some products to display
+                else{ // there are some orders to display
 
                     // loop through the array content and display it
-                    for(let index = 0; index < productsArray.length; index++){
+                    for(let index = 0; index < ordersArray.length; index++){
 
-                        productsContent +=
-                            `<ons-list-item modifier="nodivider" tappable lock-on-drag="true" 
-                              onclick="utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.
-                              searchAutocompletePopOverItemClicked(${index})">
-                                <div class="left">
-                                    <div class="search-result-image" style="background-image: url('${productsArray[index].images[0].src}'); 
-                                                            width: 2em; height: 2em"></div>
-                                </div>
-                                <div class="center">
-                                    <div style="text-align: center;">
-                                        ${productsArray[index].name}
-                                    </div>
-                                </div>
-                            </ons-list-item>`;
+                        if(ordersArray[index].status === "pending"){
+                            ordersContent += ` <div class="row" style="font-size: 1em; font-weight: 300;
+                            border-bottom: 1px lightgray solid; color: #6d6d72;">
+                            <div class="col-xs-2" style=" word-wrap: break-word; text-align: center; 
+                            padding-left: 5px; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">${ordersArray[index].id}</div>
+                            <div class="col-xs-4" style=" word-wrap: break-word; 
+                            text-align: center; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">
+                            ${kendo.toString(kendo.parseFloat(ordersArray[index].total), "n2")}
+                            </div>
+                            <div class="col-xs-6" style="text-align: center; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 1px">
+                            <span style="display: block; text-transform: uppercase; color: brown">
+                                ${ordersArray[index].status}
+                            </span>
+                            <ons-button disable-auto-styling modifier="quiet" onclick=""
+                            style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
+                                    margin: 0; padding: 0; transform: scale(0.75);">
+                                Reorder
+                            </ons-button>
+                            </div>
+                            </div>`;
+                        }
+                        else if(ordersArray[index].status === "processing"){}
+                        else if(ordersArray[index].status === "on-hold"){}
+                        else if(ordersArray[index].status === "completed"){}
+                        else if(ordersArray[index].status === "cancelled"){}
+                        else{}
                     }
 
-                    // append the "Load More" search item
-                    productsContent +=
-                        `<ons-list-item modifier="nodivider" tappable lock-on-drag="true" 
-                          onclick="utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.findMoreClicked();">
-                                <div class="center">
-                                    <div style="text-align: center; width: 100%; font-weight: bold;">
-                                        Find More...
-                                    </div>
-                                </div>
-                            </ons-list-item>`;
-                    // attach the new search results to the search popover
-                    $('#search-page-search-input-popover #search-input-popover-list').html(productsContent);
 
-                    resolve(productsArray.length); // resolve the promise with length of the productsArray
+                    // attach the new orders to the page
+                    $('#track-order-page #track-order-page-orders-container').html(ordersContent);
+
+                    resolve(ordersArray.length); // resolve the promise with length of the ordersArray
                 }
 
             });
