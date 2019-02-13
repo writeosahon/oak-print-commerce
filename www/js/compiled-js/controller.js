@@ -9589,6 +9589,409 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             });
         }
 
+    },
+
+    /**
+     * this is the view-model/controller for the Track Order page
+     */
+    trackOrderPageViewModel: {
+
+        /**
+         * holds the array of products for the search result that was just run by the user
+         */
+        trackOrderResultsArray: null,
+
+        /**
+         * event is triggered when page is initialised
+         */
+        pageInit: function(event){
+
+            var $thisPage = $(event.target); // get the current page shown
+
+            // call the function used to initialise the app page if the app is fully loaded
+            loadPageOnAppReady();
+
+            //function is used to initialise the page if the app is fully ready for execution
+            async function loadPageOnAppReady() {
+                // check to see if onsen is ready and if all app loading has been completed
+                if (!ons.isReady() || utopiasoftware[utopiasoftware_app_namespace].model.isAppReady === false) {
+                    setTimeout(loadPageOnAppReady, 500); // call this function again after half a second
+                    return;
+                }
+
+                // listen for the back button event
+                event.target.onDeviceBackButton =
+                    utopiasoftware[utopiasoftware_app_namespace].controller.trackOrderPageViewModel.backButtonClicked;
+
+                try{
+
+                    //instantiate the autocomplete widget for the search input
+                    let searchAutoComplete = new ej.dropdowns.AutoComplete({
+                        floatLabelType: "Never",
+                        placeholder: "Enter Order Number",
+                        allowCustom: true,
+                        filterType: "Contains",
+                        minLength: 10000, // minimum number of characters that will automatically trigger autocomplete search
+                        suggestionCount: 20, // specified how many items will be in the popup
+                        dataSource: [],
+                        blur: function(){ // track when the component has lost focus
+                            this._allowRemoteSearch = false; // set that remote search is NOT allowed
+                        },
+                        change: function(){ // track when the component's value has changed
+
+                            let searchValue = ""; // holds the term to be searched for
+
+                            // check if the search component can perform a remote search
+                            if(this._allowRemoteSearch !== true){  // remote search is NOT allowed
+                                this._allowRemoteSearch = false; // set that remote search is NOT allowed
+                                return; // exit function
+                            }
+
+                            // check that there is actually a search term entered in the search component
+                            if(!this.value || this.value.trim() === ""){ // no search term
+                                this._allowRemoteSearch = false; // set that remote search is NOT allowed
+                                return; // exit function
+                            }
+
+                            // update the search term value
+                            searchValue = this.value.trim();
+
+                            // run the actual search in a different event queue
+                            window.setTimeout(async function() {
+                                var searchResultsArray = [];
+                                try{
+                                    searchResultsArray = await utopiasoftware[utopiasoftware_app_namespace].controller.
+                                    trackOrderPageViewModel.
+                                    loadProducts({"order": "desc", "orderby": "date", "status": "publish",
+                                        "type": "variable", "stock_status": "instock", "page": 1, "per_page": 3,
+                                        "search": searchValue});
+                                    await utopiasoftware[utopiasoftware_app_namespace].controller.trackOrderPageViewModel.
+                                    displayPageContent(searchResultsArray[0]);
+                                }
+                                catch(err){
+
+                                    // remove the focus from the search autocomplete component
+                                    $('#track-order-page #track-order-page-input').get(0).ej2_instances[0].focusOut();
+                                    // hide all previously displayed ej2 toast
+                                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                                    $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                                    // display toast to show that an error
+                                    let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                                    toast.cssClass = 'error-ej2-toast';
+                                    toast.timeOut = 3000;
+                                    toast.content = `Sorry, a search error occurred.${navigator.connection.type === Connection.NONE ? " Connect to the Internet." : ""}`;
+                                    toast.dataBind();
+                                    toast.show();
+                                }
+                            }, 0);
+
+                        }
+                    }).appendTo('#track-order-page-input');
+
+                }
+                catch(err){}
+            }
+
+        },
+
+        /**
+         * method is triggered when page is shown
+         */
+        pageShow: function(){
+            $('#app-main-page ons-toolbar div.title-bar').html("Search"); // update the title of the page
+            // update cart count
+            $('#app-main-page .cart-count').html(utopiasoftware[utopiasoftware_app_namespace].model.cartCount);
+
+            window.SoftInputMode.set('adjustPan');
+
+            // listen for when the device does not have Internet connection
+            document.addEventListener("offline",
+                utopiasoftware[utopiasoftware_app_namespace].controller.trackOrderPageViewModel.deviceOfflineListener, false);
+            // listen for when the device has Internet connection
+            document.addEventListener("online",
+                utopiasoftware[utopiasoftware_app_namespace].controller.trackOrderPageViewModel.deviceOnlineListener, false);
+
+        },
+
+
+        /**
+         * method is triggered when page is hidden
+         */
+        pageHide: async function(){
+            // remove listener for when the device does not have Internet connection
+            document.removeEventListener("offline",
+                utopiasoftware[utopiasoftware_app_namespace].controller.trackOrderPageViewModel.deviceOfflineListener, false);
+            // remove listener for when the device has Internet connection
+            document.removeEventListener("online",
+                utopiasoftware[utopiasoftware_app_namespace].controller.trackOrderPageViewModel.deviceOnlineListener, false);
+
+        },
+
+        /**
+         * method is triggered when page is destroyed
+         */
+        pageDestroy: function(){
+            // destroy the search input autocomplete component
+            $('#track-order-page #track-order-page-input').get(0).ej2_instances[0].destroy();
+            // reset the view-model properties
+            utopiasoftware[utopiasoftware_app_namespace].controller.trackOrderPageViewModel.trackOrderResultsArray = null;
+
+        },
+
+        /**
+         * method is triggered when the device back button is clicked OR a similar action is triggered
+         */
+        backButtonClicked(){
+            // go to the previous page on the stack
+            $('#app-main-navigator').get(0).popPage();
+        },
+
+        /**
+         * method is triggered whenever the user's device is offline
+         */
+        deviceOfflineListener(){
+            // display toast to show that there is no internet connection
+            let toast = $('.page-toast').get(0).ej2_instances[0];
+            toast.hide('All'); // hide all previously displayed ej2 toast
+            toast.cssClass = 'default-ej2-toast';
+            toast.content = "No Internet connection. Connect to the Internet to track orders";
+            toast.dataBind();
+            toast.show();// show ej2 toast
+        },
+
+        /**
+         * method is triggered whenever the user's device is online
+         */
+        deviceOnlineListener(){
+            // hide all previously displayed ej2 toast
+            $('.page-toast').get(0).ej2_instances[0].hide('All');
+        },
+
+        /**
+         * method is triggered when the enter button is clicked on the device keyboard
+         *
+         * @param keyEvent
+         * @returns {Promise<void>}
+         */
+        async enterButtonClicked(keyEvent){
+            // check which key was pressed
+            if(keyEvent.which === kendo.keys.ENTER) // if the enter key was pressed
+            {
+                // prevent the default action from occurring
+                keyEvent.preventDefault();
+                keyEvent.stopImmediatePropagation();
+                keyEvent.stopPropagation();
+                // hide the device keyboard
+                Keyboard.hide();
+
+                // get the search autocomplete component
+                let searchAutoComplete = $('#track-order-page #track-order-page-input').get(0).ej2_instances[0];
+                // update the value of the retrieved component
+                searchAutoComplete.value = $('#search-page #search-page-input').val();
+                searchAutoComplete._allowRemoteSearch = true; // flag the remote search can occur
+                searchAutoComplete.dataBind(); // bind new value to the component
+                searchAutoComplete.change(); // trigger the change method
+            }
+        },
+
+        /**
+         * method is used to load products to the page
+         *
+         * @param pageToAccess {Integer} the page within the paginated categories to retrieve
+         *
+         * @param pageSize {Integer} the size of the page i.e. the number of category items to retrieve
+         *
+         * @param queryParam {Object} holds the objects that contains the query
+         * params for the type of products to retrieve
+         *
+         * @returns {Promise<void>}
+         */
+        async loadProducts(queryParam, pageToAccess = queryParam.page || 1,
+                           pageSize = queryParam.per_page || 3){
+            queryParam.page = pageToAccess;
+            queryParam.per_page = pageSize;
+
+            var productPromisesArray = []; // holds the array for the promises used to load the products
+
+            // check if there is internet connection or not
+            if(navigator.connection.type !== Connection.NONE){ // there is internet connection
+                // load the requested products list from the server
+                productPromisesArray.push(new Promise(function(resolve, reject){
+                    Promise.resolve($.ajax(
+                        {
+                            url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + "/wp-json/wc/v3/products",
+                            type: "get",
+                            //contentType: "application/x-www-form-urlencoded",
+                            beforeSend: function(jqxhr) {
+                                jqxhr.setRequestHeader("Authorization", "Basic " +
+                                    utopiasoftware[utopiasoftware_app_namespace].accessor);
+                            },
+                            dataType: "json",
+                            timeout: 240000, // wait for 4 minutes before timeout of request
+                            processData: true,
+                            data: queryParam
+                        }
+                    )).then(function(productsArray){
+                        // check if the productsArray contains products
+                        if(productsArray.length > 0){ // there are products
+                            // update the current search results array with the productsArray
+                            utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.
+                                currentSearchResultsArray = productsArray;
+                        }
+
+                        resolve(productsArray); // resolve the parent promise with the data gotten from the server
+
+                    }).catch(function(err){ // an error occurred
+
+                        reject(err); // reject the parent promise with the error
+                    });
+                }));
+
+            } // end of loading products with Internet Connection
+            else{ // there is no internet connection
+                productPromisesArray.push(Promise.reject("no internet connection"));
+            }
+
+            return Promise.all(productPromisesArray); // return a promise which resolves when all promises in the array resolve
+        },
+
+        /**
+         * method is used to display the retrieved products on the search popover
+         *
+         * @param productsArray
+         *
+         * @returns {Promise<void>}
+         */
+        async displayPageContent(productsArray){
+
+            var displayCompletedPromise = new Promise(function(resolve, reject){
+
+                let productsContent = ""; // holds the contents for the products
+
+                // check if the productsArray is empty or not
+                if(productsArray.length <= 0){ // there are no new content to display
+                    // inform the user that no result for the search was founc'
+                    $('#search-page-search-input-popover #search-input-popover-list').
+                    html(`<ons-list-item modifier="nodivider" lock-on-drag="true">
+                                <div class="center">
+                                    <div style="text-align: center; width: 100%;">
+                                        No Results Found
+                                    </div>
+                                </div>
+                            </ons-list-item>`);
+                    resolve(productsArray.length); // resolve promise with the length of the products array
+                }
+                else{ // there are some products to display
+
+                    // loop through the array content and display it
+                    for(let index = 0; index < productsArray.length; index++){
+
+                        productsContent +=
+                            `<ons-list-item modifier="nodivider" tappable lock-on-drag="true" 
+                              onclick="utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.
+                              searchAutocompletePopOverItemClicked(${index})">
+                                <div class="left">
+                                    <div class="search-result-image" style="background-image: url('${productsArray[index].images[0].src}'); 
+                                                            width: 2em; height: 2em"></div>
+                                </div>
+                                <div class="center">
+                                    <div style="text-align: center;">
+                                        ${productsArray[index].name}
+                                    </div>
+                                </div>
+                            </ons-list-item>`;
+                    }
+
+                    // append the "Load More" search item
+                    productsContent +=
+                        `<ons-list-item modifier="nodivider" tappable lock-on-drag="true" 
+                          onclick="utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.findMoreClicked();">
+                                <div class="center">
+                                    <div style="text-align: center; width: 100%; font-weight: bold;">
+                                        Find More...
+                                    </div>
+                                </div>
+                            </ons-list-item>`;
+                    // attach the new search results to the search popover
+                    $('#search-page-search-input-popover #search-input-popover-list').html(productsContent);
+
+                    resolve(productsArray.length); // resolve the promise with length of the productsArray
+                }
+
+            });
+
+            return displayCompletedPromise; // return the promise object ot indicate if the display has been completed or not
+
+        },
+
+        /**
+         * method is triggered when the user clicks an item from the search autocomplete popover
+         *
+         * @param productIndex {Integer} holds the index position for the product that was clicked.
+         * The index position is gotten from the array returned by the product search
+         *
+         * @returns {Promise<void>}
+         */
+        async searchAutocompletePopOverItemClicked(productIndex){
+            // get the product the user clicked on from the search autocomplete popover
+            var selectedProduct = utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.
+                currentSearchResultsArray[productIndex];
+            window.setTimeout(async function(){
+                try{
+                    // display the products details page using the selected product
+                    await $('#app-main-navigator').get(0).pushPage("product-details-page.html",
+                        {animation: "lift", data: {product : selectedProduct}});
+
+                    // save the selected product in recent products app cache
+                    await utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.
+                    saveRecentSearchItem(selectedProduct);
+
+                    // update the value of the search autocomplete input to that which the user clicked on from the popover
+                    $('#search-page #search-page-input').val(selectedProduct.name);
+
+                }
+                catch(err){
+
+                }
+            }, 0);
+        },
+
+        /**
+         * method is triggered when the "Find More" option is
+         * tapped within the search input popover
+         *
+         * @returns {Promise<void>}
+         */
+        async findMoreClicked(){
+            // load the products page in a separate event queue
+            window.setTimeout(async function(){
+                try{
+                    // navigate to the products page
+                    await $('#app-main-tabbar').get(0).setActiveTab(4, {animation: 'none'});
+                    // request for products using the user's search term
+                    let productArray = await utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.
+                    loadProducts({"order": "desc", "orderby": "date", "status": "publish",
+                        "type": "variable", "stock_status": "instock", "page": 1, "per_page": 20, "search":
+                            $('#search-page #search-page-input').get(0).ej2_instances[0].value.trim()});
+                    await utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.displayPageContent(productArray[0]);
+                }
+                catch(err){
+
+                    // hide all previously displayed ej2 toast
+                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                    // display toast to show that an error
+                    let toast = $('.page-toast').get(0).ej2_instances[0];
+                    toast.cssClass = 'error-ej2-toast';
+                    toast.content = `Sorry, an error occurred.${navigator.connection.type === Connection.NONE ? " Connect to the Internet." : ""} Pull down to refresh and try again`;
+                    toast.dataBind();
+                    toast.show();
+                }
+                finally{
+                    // hide the preloader for the products page
+                    $('#products-page .page-preloader').css("display", "none");
+                }
+            }, 0);
+        }
     }
 
 };

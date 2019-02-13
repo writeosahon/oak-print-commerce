@@ -206,3 +206,15 @@ $(document).on("hide", "#checkout-page", utopiasoftware[utopiasoftware_app_names
 
 // listen for when the CHECKOUT is destroyed
 $(document).on("destroy", "#checkout-page", utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.pageDestroy);
+
+// listen for the initialisation of the TRACK ORDER page
+$(document).on("init", "#track-order-page", utopiasoftware[utopiasoftware_app_namespace].controller.trackOrderPageViewModel.pageInit);
+
+// listen for when the TRACK ORDER page is shown
+$(document).on("show", "#track-order-page", utopiasoftware[utopiasoftware_app_namespace].controller.trackOrderPageViewModel.pageShow);
+
+// listen for when the TRACK ORDER page is hidden
+$(document).on("hide", "#track-order-page", utopiasoftware[utopiasoftware_app_namespace].controller.trackOrderPageViewModel.pageHide);
+
+// listen for when the TRACK ORDER is destroyed
+$(document).on("destroy", "#track-order-page", utopiasoftware[utopiasoftware_app_namespace].controller.trackOrderPageViewModel.pageDestroy);
