@@ -9641,6 +9641,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                             let searchValue = ""; // holds the term to be searched for
 
+                            // remove the focus from the search autocomplete component
+                            this.focusOut();
+
                             // check if the search component can perform a remote search
                             if(this._allowRemoteSearch !== true){  // remote search is NOT allowed
                                 this._allowRemoteSearch = false; // set that remote search is NOT allowed

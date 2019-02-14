@@ -2563,7 +2563,8 @@ dataSource:[],blur:function blur(){// track when the component has lost focus
 this._allowRemoteSearch=false;// set that remote search is NOT allowed
 },change:function change(){// track when the component's value has changed
 var searchValue="";// holds the term to be searched for
-// check if the search component can perform a remote search
+// remove the focus from the search autocomplete component
+this.focusOut();// check if the search component can perform a remote search
 if(this._allowRemoteSearch!==true){// remote search is NOT allowed
 this._allowRemoteSearch=false;// set that remote search is NOT allowed
 return;// exit function
