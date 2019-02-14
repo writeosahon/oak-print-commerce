@@ -9719,7 +9719,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // update cart count
             $('#app-main-page .cart-count').html(utopiasoftware[utopiasoftware_app_namespace].model.cartCount);
 
-            window.SoftInputMode.set('adjustPan');
+            window.SoftInputMode.set('adjustResize');
 
             // listen for when the device does not have Internet connection
             document.addEventListener("offline",
@@ -9887,6 +9887,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 // check if the ordersArray is empty or not
                 if(ordersArray.length <= 0){ // there are no new content to display
+
+                    // hide the previously displayed orders info
+                    $('#track-order-page .row').css("display", "none");
+                    // show the page loader
+                    $('#track-order-page .modal').css("display", "table");
+
                     // inform the user that no result for the search was found'
                     // hide all previously displayed ej2 toast
                     $('.page-toast').get(0).ej2_instances[0].hide('All');
@@ -10059,7 +10065,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
 
                     // attach the new orders to the page
-                    $('#track-order-page #track-order-page-orders-container').html(ordersContent); //todo
+                    $('#track-order-page #track-order-page-orders-container').html(ordersContent);
 
                     resolve(ordersArray.length); // resolve the promise with length of the ordersArray
                 }
