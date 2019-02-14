@@ -9873,8 +9873,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         }
                     )).then(function(ordersArray){
                         // check if the ordersArray contains orders
-                        if(ordersArray.length > 0){ // there are products
-                            // update the current search results array with the productsArray
+                        if(ordersArray.length > 0){ // there are orders
+                            // update the current search results array with the ordersArray
                             utopiasoftware[utopiasoftware_app_namespace].controller.trackOrderPageViewModel.
                                 trackOrderResultsArray = ordersArray;
                         }
@@ -10080,75 +10080,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             return displayCompletedPromise; // return the promise object ot indicate if the display has been completed or not
 
-        },
-
-        /**
-         * method is triggered when the user clicks an item from the search autocomplete popover
-         *
-         * @param productIndex {Integer} holds the index position for the product that was clicked.
-         * The index position is gotten from the array returned by the product search
-         *
-         * @returns {Promise<void>}
-         */
-        async searchAutocompletePopOverItemClicked(productIndex){
-            // get the product the user clicked on from the search autocomplete popover
-            var selectedProduct = utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.
-                currentSearchResultsArray[productIndex];
-            window.setTimeout(async function(){
-                try{
-                    // display the products details page using the selected product
-                    await $('#app-main-navigator').get(0).pushPage("product-details-page.html",
-                        {animation: "lift", data: {product : selectedProduct}});
-
-                    // save the selected product in recent products app cache
-                    await utopiasoftware[utopiasoftware_app_namespace].controller.searchPageViewModel.
-                    saveRecentSearchItem(selectedProduct);
-
-                    // update the value of the search autocomplete input to that which the user clicked on from the popover
-                    $('#search-page #search-page-input').val(selectedProduct.name);
-
-                }
-                catch(err){
-
-                }
-            }, 0);
-        },
-
-        /**
-         * method is triggered when the "Find More" option is
-         * tapped within the search input popover
-         *
-         * @returns {Promise<void>}
-         */
-        async findMoreClicked(){
-            // load the products page in a separate event queue
-            window.setTimeout(async function(){
-                try{
-                    // navigate to the products page
-                    await $('#app-main-tabbar').get(0).setActiveTab(4, {animation: 'none'});
-                    // request for products using the user's search term
-                    let productArray = await utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.
-                    loadProducts({"order": "desc", "orderby": "date", "status": "publish",
-                        "type": "variable", "stock_status": "instock", "page": 1, "per_page": 20, "search":
-                            $('#search-page #search-page-input').get(0).ej2_instances[0].value.trim()});
-                    await utopiasoftware[utopiasoftware_app_namespace].controller.productsPageViewModel.displayPageContent(productArray[0]);
-                }
-                catch(err){
-
-                    // hide all previously displayed ej2 toast
-                    $('.page-toast').get(0).ej2_instances[0].hide('All');
-                    // display toast to show that an error
-                    let toast = $('.page-toast').get(0).ej2_instances[0];
-                    toast.cssClass = 'error-ej2-toast';
-                    toast.content = `Sorry, an error occurred.${navigator.connection.type === Connection.NONE ? " Connect to the Internet." : ""} Pull down to refresh and try again`;
-                    toast.dataBind();
-                    toast.show();
-                }
-                finally{
-                    // hide the preloader for the products page
-                    $('#products-page .page-preloader').css("display", "none");
-                }
-            }, 0);
         }
     }
 
