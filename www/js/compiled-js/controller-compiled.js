@@ -2567,11 +2567,11 @@ var searchValue="";// holds the term to be searched for
 if(this._allowRemoteSearch!==true){// remote search is NOT allowed
 this._allowRemoteSearch=false;// set that remote search is NOT allowed
 return;// exit function
-}// check that there is actually a search term entered in the search component
-if(!this.value||this.value.trim()===""){// no search term
-this._allowRemoteSearch=false;// set that remote search is NOT allowed
-return;// exit function
-}// update the search term value
+}/*// check that there is actually a search term entered in the search component
+                            if(!this.value || this.value.trim() === ""){ // no search term
+                                this._allowRemoteSearch = false; // set that remote search is NOT allowed
+                                return; // exit function
+                            }*/// update the search term value
 searchValue=this.value.trim();// remove the focus from the search autocomplete component
 this.focusOut();// run the actual search in a different event queue
 window.setTimeout(_asyncToGenerator(/*#__PURE__*/regeneratorRuntime.mark(function _callee154(){var searchResultsArray,userDetails,toast,_toast28;return regeneratorRuntime.wrap(function _callee154$(_context154){while(1){switch(_context154.prev=_context154.next){case 0:searchResultsArray=[];_context154.prev=1;// hide the previously displayed orders info

@@ -9647,11 +9647,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 return; // exit function
                             }
 
-                            // check that there is actually a search term entered in the search component
+                            /*// check that there is actually a search term entered in the search component
                             if(!this.value || this.value.trim() === ""){ // no search term
                                 this._allowRemoteSearch = false; // set that remote search is NOT allowed
                                 return; // exit function
-                            }
+                            }*/
 
                             // update the search term value
                             searchValue = this.value.trim();
