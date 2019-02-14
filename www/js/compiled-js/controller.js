@@ -10299,25 +10299,73 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             $('.page-toast').get(0).ej2_instances[0].hide('All');
 
             try{
-                // display the loaded product details
-                await utopiasoftware[utopiasoftware_app_namespace].controller.viewCartPageViewModel.displayUserCart();
-            }
-            catch(err){ // an error occurred
+                // show the page loader
+                $('#completed-orders-page .modal').css("display", "table");
 
-                // display toast to show that error
-                let toast = $('.page-toast').get(0).ej2_instances[0];
+                // load the user profile details from the app database
+                var userDetails = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                loadData("user-details",
+                    utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
+
+                let searchResultsArray = await utopiasoftware[utopiasoftware_app_namespace].controller.
+                completedOrdersPageViewModel.
+                loadOrders({"page": 1, "per_page": 20, "order": "desc", "orderby": "date",
+                    "customer": userDetails.id, "status": "completed"});
+                await utopiasoftware[utopiasoftware_app_namespace].controller.completedOrdersPageViewModel.
+                displayPageContent(searchResultsArray[0]);
+
+                if(searchResultsArray[0].length == 0){ // no orders were found
+                    // hide the page preloader
+                    $('#completed-orders-page .page-preloader').css("display", "none");
+                    // hide the previously displayed orders info
+                    $('#completed-orders-page .row').css("display", "none");
+                    // hide the page loader
+                    $('#completed-orders-page .modal').css("display", "none");
+
+                    // inform the user that no result for the search was found'
+                    // hide all previously displayed ej2 toast
+                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                    $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                    // display toast to show that an error
+                    let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                    toast.cssClass = 'default-ej2-toast';
+                    toast.timeOut = 3000;
+                    toast.content = `Sorry, no order was found.`;
+                    toast.dataBind();
+                    toast.show();
+                }
+                else{ // orders were found
+                    // hide the page preloader
+                    $('#completed-orders-page .page-preloader').css("display", "none");
+                    // show the orders info
+                    $('#completed-orders-page .row').css("display", "block");
+                    // hide the page loader
+                    $('#completed-orders-page .modal').css("display", "none");
+                }
+
+            }
+            catch(err){
+                // hide the page preloader
+                $('#completed-orders-page .page-preloader').css("display", "none");
+                // show the page loader
+                $('#completed-orders-page .modal').css("display", "none");
+
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast to show that an error
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
                 toast.cssClass = 'error-ej2-toast';
-                toast.content = "Sorry, an error occurred. Refresh to try again";
+                toast.timeOut = 3000;
+                toast.content = `Sorry, a search error occurred.${navigator.connection.type === Connection.NONE ? " Connect to the Internet." : ""}`;
                 toast.dataBind();
                 toast.show();
             }
             finally{
                 // enable pull-to-refresh widget till loading is done
-                $('#view-cart-page #view-cart-page-pull-hook').removeAttr("disabled");
-                // enable the "Checkout" button
-                $('#view-cart-page #view-cart-checkout').removeAttr("disabled");
+                $('#completed-orders-page #completed-orders-page-pull-hook').removeAttr("disabled");
                 // hide the preloader
-                $('#view-cart-page .page-preloader').css("display", "none");
+                $('#completed-orders-page .page-preloader').css("display", "none");
                 // signal that loading is done
                 doneCallBack();
             }

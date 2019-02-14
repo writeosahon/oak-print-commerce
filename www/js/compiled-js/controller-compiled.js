@@ -2734,15 +2734,29 @@ $('.page-toast').get(0).ej2_instances[0].hide('All');},/**
          *
          * @param doneCallBack
          * @returns {Promise<void>}
-         */pagePullHookAction:function(){var _ref165=_asyncToGenerator(/*#__PURE__*/regeneratorRuntime.mark(function _callee162(){var doneCallBack=arguments.length>0&&arguments[0]!==undefined?arguments[0]:function(){};var toast;return regeneratorRuntime.wrap(function _callee162$(_context162){while(1){switch(_context162.prev=_context162.next){case 0:// disable pull-to-refresh widget till loading is done
+         */pagePullHookAction:function(){var _ref165=_asyncToGenerator(/*#__PURE__*/regeneratorRuntime.mark(function _callee162(){var doneCallBack=arguments.length>0&&arguments[0]!==undefined?arguments[0]:function(){};var userDetails,searchResultsArray,toast,_toast30;return regeneratorRuntime.wrap(function _callee162$(_context162){while(1){switch(_context162.prev=_context162.next){case 0:// disable pull-to-refresh widget till loading is done
 $('#completed-orders-page #completed-orders-page-pull-hook').attr("disabled",true);// hide all previously displayed ej2 toast
-$('.page-toast').get(0).ej2_instances[0].hide('All');_context162.prev=2;_context162.next=5;return utopiasoftware[utopiasoftware_app_namespace].controller.viewCartPageViewModel.displayUserCart();case 5:_context162.next=14;break;case 7:_context162.prev=7;_context162.t0=_context162['catch'](2);// an error occurred
-// display toast to show that error
-toast=$('.page-toast').get(0).ej2_instances[0];toast.cssClass='error-ej2-toast';toast.content="Sorry, an error occurred. Refresh to try again";toast.dataBind();toast.show();case 14:_context162.prev=14;// enable pull-to-refresh widget till loading is done
-$('#view-cart-page #view-cart-page-pull-hook').removeAttr("disabled");// enable the "Checkout" button
-$('#view-cart-page #view-cart-checkout').removeAttr("disabled");// hide the preloader
-$('#view-cart-page .page-preloader').css("display","none");// signal that loading is done
-doneCallBack();return _context162.finish(14);case 20:case'end':return _context162.stop();}}},_callee162,this,[[2,7,14,20]]);}));function pagePullHookAction(){return _ref165.apply(this,arguments);}return pagePullHookAction;}(),/**
+$('.page-toast').get(0).ej2_instances[0].hide('All');_context162.prev=2;// show the page loader
+$('#completed-orders-page .modal').css("display","table");// load the user profile details from the app database
+_context162.next=6;return utopiasoftware[utopiasoftware_app_namespace].databaseOperations.loadData("user-details",utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase);case 6:userDetails=_context162.sent.userDetails;_context162.next=9;return utopiasoftware[utopiasoftware_app_namespace].controller.completedOrdersPageViewModel.loadOrders({"page":1,"per_page":20,"order":"desc","orderby":"date","customer":userDetails.id,"status":"completed"});case 9:searchResultsArray=_context162.sent;_context162.next=12;return utopiasoftware[utopiasoftware_app_namespace].controller.completedOrdersPageViewModel.displayPageContent(searchResultsArray[0]);case 12:if(searchResultsArray[0].length==0){// no orders were found
+// hide the page preloader
+$('#completed-orders-page .page-preloader').css("display","none");// hide the previously displayed orders info
+$('#completed-orders-page .row').css("display","none");// hide the page loader
+$('#completed-orders-page .modal').css("display","none");// inform the user that no result for the search was found'
+// hide all previously displayed ej2 toast
+$('.page-toast').get(0).ej2_instances[0].hide('All');$('.timed-page-toast').get(0).ej2_instances[0].hide('All');// display toast to show that an error
+toast=$('.timed-page-toast').get(0).ej2_instances[0];toast.cssClass='default-ej2-toast';toast.timeOut=3000;toast.content='Sorry, no order was found.';toast.dataBind();toast.show();}else{// orders were found
+// hide the page preloader
+$('#completed-orders-page .page-preloader').css("display","none");// show the orders info
+$('#completed-orders-page .row').css("display","block");// hide the page loader
+$('#completed-orders-page .modal').css("display","none");}_context162.next=27;break;case 15:_context162.prev=15;_context162.t0=_context162['catch'](2);// hide the page preloader
+$('#completed-orders-page .page-preloader').css("display","none");// show the page loader
+$('#completed-orders-page .modal').css("display","none");// hide all previously displayed ej2 toast
+$('.page-toast').get(0).ej2_instances[0].hide('All');$('.timed-page-toast').get(0).ej2_instances[0].hide('All');// display toast to show that an error
+_toast30=$('.timed-page-toast').get(0).ej2_instances[0];_toast30.cssClass='error-ej2-toast';_toast30.timeOut=3000;_toast30.content='Sorry, a search error occurred.'+(navigator.connection.type===Connection.NONE?" Connect to the Internet.":"");_toast30.dataBind();_toast30.show();case 27:_context162.prev=27;// enable pull-to-refresh widget till loading is done
+$('#completed-orders-page #completed-orders-page-pull-hook').removeAttr("disabled");// hide the preloader
+$('#completed-orders-page .page-preloader').css("display","none");// signal that loading is done
+doneCallBack();return _context162.finish(27);case 32:case'end':return _context162.stop();}}},_callee162,this,[[2,15,27,32]]);}));function pagePullHookAction(){return _ref165.apply(this,arguments);}return pagePullHookAction;}(),/**
          * method is used to load orders to the page
          *
          * @param pageToAccess {Integer} the page within the paginated categories to retrieve
