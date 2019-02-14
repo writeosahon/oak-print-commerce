@@ -10115,6 +10115,35 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 event.target.onDeviceBackButton =
                     utopiasoftware[utopiasoftware_app_namespace].controller.completedOrdersPageViewModel.backButtonClicked;
 
+                // add method to handle the loading action of the pull-to-refresh widget
+                $('#completed-orders-page-pull-hook', $thisPage).get(0).onAction =
+                    utopiasoftware[utopiasoftware_app_namespace].controller.completedOrdersPageViewModel.pagePullHookAction;
+
+                // register listener for the pull-to-refresh widget
+                $('#completed-orders-page-pull-hook', $thisPage).on("changestate", function(event){
+
+                    // check the state of the pull-to-refresh widget
+                    switch (event.originalEvent.state){
+                        case 'initial':
+                            // update the displayed content
+                            $('#completed-orders-page-pull-hook-fab', event.originalEvent.pullHook).
+                            html('<ons-icon icon="md-long-arrow-down" size="24px" style="color: #363E7C"></ons-icon>');
+                            break;
+
+                        case 'preaction':
+                            // update the displayed content
+                            $('#completed-orders-page-pull-hook-fab', event.originalEvent.pullHook).
+                            html('<ons-icon icon="md-long-arrow-up" size="24px" style="color: #363E7C"></ons-icon>');
+                            break;
+
+                        case 'action':
+                            // update the displayed content
+                            $('#completed-orders-page-pull-hook-fab', event.originalEvent.pullHook).
+                            html('<ons-progress-circular indeterminate modifier="pull-hook"></ons-progress-circular>');
+                            break;
+                    }
+                });
+
                 try{
 
                     // hide the previously displayed orders info
@@ -10256,7 +10285,43 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             $('.page-toast').get(0).ej2_instances[0].hide('All');
         },
 
+        /**
+         * method is triggered when the pull-hook on the page is active
+         *
+         * @param doneCallBack
+         * @returns {Promise<void>}
+         */
+        async pagePullHookAction(doneCallBack = function(){}){
+            // disable pull-to-refresh widget till loading is done
+            $('#completed-orders-page #completed-orders-page-pull-hook').attr("disabled", true);
 
+            // hide all previously displayed ej2 toast
+            $('.page-toast').get(0).ej2_instances[0].hide('All');
+
+            try{
+                // display the loaded product details
+                await utopiasoftware[utopiasoftware_app_namespace].controller.viewCartPageViewModel.displayUserCart();
+            }
+            catch(err){ // an error occurred
+
+                // display toast to show that error
+                let toast = $('.page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.content = "Sorry, an error occurred. Refresh to try again";
+                toast.dataBind();
+                toast.show();
+            }
+            finally{
+                // enable pull-to-refresh widget till loading is done
+                $('#view-cart-page #view-cart-page-pull-hook').removeAttr("disabled");
+                // enable the "Checkout" button
+                $('#view-cart-page #view-cart-checkout').removeAttr("disabled");
+                // hide the preloader
+                $('#view-cart-page .page-preloader').css("display", "none");
+                // signal that loading is done
+                doneCallBack();
+            }
+        },
 
         /**
          * method is used to load orders to the page
