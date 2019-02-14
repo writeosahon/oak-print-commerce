@@ -2658,8 +2658,8 @@ promisesArray.push(Promise.reject("no internet connection"));}return _context158
 // check if the ordersArray is empty or not
 if(ordersArray.length<=0){// there are no new content to display
 // hide the previously displayed orders info
-$('#track-order-page .row').css("display","none");// show the page loader
-$('#track-order-page .modal').css("display","table");// inform the user that no result for the search was found'
+$('#track-order-page .row').css("display","none");// hide the page loader
+$('#track-order-page .modal').css("display","none");// inform the user that no result for the search was found'
 // hide all previously displayed ej2 toast
 $('.page-toast').get(0).ej2_instances[0].hide('All');$('.timed-page-toast').get(0).ej2_instances[0].hide('All');// display toast to show that an error
 var toast=$('.timed-page-toast').get(0).ej2_instances[0];toast.cssClass='default-ej2-toast';toast.timeOut=3000;toast.content='Sorry, no order was found.';toast.dataBind();toast.show();resolve(ordersArray.length);// resolve promise with the length of the orders array

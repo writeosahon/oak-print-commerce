@@ -9890,8 +9890,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                     // hide the previously displayed orders info
                     $('#track-order-page .row').css("display", "none");
-                    // show the page loader
-                    $('#track-order-page .modal').css("display", "table");
+                    // hide the page loader
+                    $('#track-order-page .modal').css("display", "none");
 
                     // inform the user that no result for the search was found'
                     // hide all previously displayed ej2 toast
