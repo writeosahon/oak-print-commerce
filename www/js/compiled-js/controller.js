@@ -10117,110 +10117,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 try{
 
-                    //instantiate the autocomplete widget for the search input
-                    let searchAutoComplete = new ej.dropdowns.AutoComplete({
-                        floatLabelType: "Never",
-                        placeholder: "Enter Order Number",
-                        allowCustom: true,
-                        filterType: "Contains",
-                        minLength: 10000, // minimum number of characters that will automatically trigger autocomplete search
-                        suggestionCount: 20, // specified how many items will be in the popup
-                        dataSource: [],
-                        blur: function(){ // track when the component has lost focus
-                            this._allowRemoteSearch = false; // set that remote search is NOT allowed
-                        },
-                        change: function(){ // track when the component's value has changed
-
-                            let searchValue = ""; // holds the term to be searched for
-
-                            // check if the search component can perform a remote search
-                            if(this._allowRemoteSearch !== true){  // remote search is NOT allowed
-                                this._allowRemoteSearch = false; // set that remote search is NOT allowed
-                                return; // exit function
-                            }
-
-                            /*// check that there is actually a search term entered in the search component
-                            if(!this.value || this.value.trim() === ""){ // no search term
-                                this._allowRemoteSearch = false; // set that remote search is NOT allowed
-                                return; // exit function
-                            }*/
-
-                            // update the search term value
-                            searchValue = this.value.trim();
-
-                            // remove the focus from the search autocomplete component
-                            this.focusOut();
-
-                            // run the actual search in a different event queue
-                            window.setTimeout(async function() {
-                                var searchResultsArray = [];
-                                try{
-                                    // hide the previously displayed orders info
-                                    $('#track-order-page .row').css("display", "none");
-                                    // show the page loader
-                                    $('#track-order-page .modal').css("display", "table");
-
-                                    // load the user profile details from the app database
-                                    var userDetails = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
-                                    loadData("user-details",
-                                        utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
-
-                                    searchResultsArray = await utopiasoftware[utopiasoftware_app_namespace].controller.
-                                    trackOrderPageViewModel.
-                                    loadOrders({"page": 1, "per_page": 20, "order": "desc", "orderby": "date",
-                                        "customer": userDetails.id, "search": searchValue});
-                                    await utopiasoftware[utopiasoftware_app_namespace].controller.trackOrderPageViewModel.
-                                    displayPageContent(searchResultsArray[0]);
-
-                                    if(searchResultsArray[0].length == 0){ // no orders were found
-                                        // hide the previously displayed orders info
-                                        $('#track-order-page .row').css("display", "none");
-                                        // hide the page loader
-                                        $('#track-order-page .modal').css("display", "none");
-
-                                        // inform the user that no result for the search was found'
-                                        // hide all previously displayed ej2 toast
-                                        $('.page-toast').get(0).ej2_instances[0].hide('All');
-                                        $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
-                                        // display toast to show that an error
-                                        let toast = $('.timed-page-toast').get(0).ej2_instances[0];
-                                        toast.cssClass = 'default-ej2-toast';
-                                        toast.timeOut = 3000;
-                                        toast.content = `Sorry, no order was found.`;
-                                        toast.dataBind();
-                                        toast.show();
-                                    }
-                                    else{ // orders were found
-                                        // show the orders info
-                                        $('#track-order-page .row').css("display", "block");
-                                        // hide the page loader
-                                        $('#track-order-page .modal').css("display", "none");
-                                    }
-                                }
-                                catch(err){
-                                    // hide the previously displayed orders info
-                                    $('#track-order-page .row').css("display", "none");
-                                    // show the page loader
-                                    $('#track-order-page .modal').css("display", "none");
-
-                                    // remove the focus from the search autocomplete component
-                                    $('#track-order-page #track-order-page-input').get(0).ej2_instances[0].focusOut();
-                                    // hide all previously displayed ej2 toast
-                                    $('.page-toast').get(0).ej2_instances[0].hide('All');
-                                    $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
-                                    // display toast to show that an error
-                                    let toast = $('.timed-page-toast').get(0).ej2_instances[0];
-                                    toast.cssClass = 'error-ej2-toast';
-                                    toast.timeOut = 3000;
-                                    toast.content = `Sorry, a search error occurred.${navigator.connection.type === Connection.NONE ? " Connect to the Internet." : ""}`;
-                                    toast.dataBind();
-                                    toast.show();
-                                }
-                            }, 0);
-
-                        }
-                    }).appendTo('#track-order-page-input');
-
                     // hide the previously displayed orders info
                     $('#completed-orders-page .row').css("display", "none");
                     // show the page loader
@@ -10302,10 +10198,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             // listen for when the device does not have Internet connection
             document.addEventListener("offline",
-                utopiasoftware[utopiasoftware_app_namespace].controller.trackOrderPageViewModel.deviceOfflineListener, false);
+                utopiasoftware[utopiasoftware_app_namespace].controller.completedOrdersPageViewModel.deviceOfflineListener, false);
             // listen for when the device has Internet connection
             document.addEventListener("online",
-                utopiasoftware[utopiasoftware_app_namespace].controller.trackOrderPageViewModel.deviceOnlineListener, false);
+                utopiasoftware[utopiasoftware_app_namespace].controller.completedOrdersPageViewModel.deviceOnlineListener, false);
 
         },
 
@@ -10316,10 +10212,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         pageHide: async function(){
             // remove listener for when the device does not have Internet connection
             document.removeEventListener("offline",
-                utopiasoftware[utopiasoftware_app_namespace].controller.trackOrderPageViewModel.deviceOfflineListener, false);
+                utopiasoftware[utopiasoftware_app_namespace].controller.completedOrdersPageViewModel.deviceOfflineListener, false);
             // remove listener for when the device has Internet connection
             document.removeEventListener("online",
-                utopiasoftware[utopiasoftware_app_namespace].controller.trackOrderPageViewModel.deviceOnlineListener, false);
+                utopiasoftware[utopiasoftware_app_namespace].controller.completedOrdersPageViewModel.deviceOnlineListener, false);
 
         },
 
@@ -10327,11 +10223,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when page is destroyed
          */
         pageDestroy: function(){
-            // destroy the search input autocomplete component
-            $('#track-order-page #track-order-page-input').get(0).ej2_instances[0].destroy();
             // reset the view-model properties
-            utopiasoftware[utopiasoftware_app_namespace].controller.trackOrderPageViewModel.trackOrderResultsArray = null;
-
+            utopiasoftware[utopiasoftware_app_namespace].controller.completedOrdersPageViewModel.ordersResultsArray = null;
         },
 
         /**
@@ -10350,7 +10243,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             let toast = $('.page-toast').get(0).ej2_instances[0];
             toast.hide('All'); // hide all previously displayed ej2 toast
             toast.cssClass = 'default-ej2-toast';
-            toast.content = "No Internet connection. Connect to the Internet to track orders";
+            toast.content = "No Internet connection. Connect to the Internet to view orders";
             toast.dataBind();
             toast.show();// show ej2 toast
         },
@@ -10363,32 +10256,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             $('.page-toast').get(0).ej2_instances[0].hide('All');
         },
 
-        /**
-         * method is triggered when the enter button is clicked on the device keyboard
-         *
-         * @param keyEvent
-         * @returns {Promise<void>}
-         */
-        async enterButtonClicked(keyEvent){
-            // check which key was pressed
-            if(keyEvent.which === kendo.keys.ENTER) // if the enter key was pressed
-            {
-                // prevent the default action from occurring
-                keyEvent.preventDefault();
-                keyEvent.stopImmediatePropagation();
-                keyEvent.stopPropagation();
-                // hide the device keyboard
-                Keyboard.hide();
 
-                // get the search autocomplete component
-                let searchAutoComplete = $('#track-order-page #track-order-page-input').get(0).ej2_instances[0];
-                // update the value of the retrieved component
-                searchAutoComplete.value = $('#track-order-page #track-order-page-input').val();
-                searchAutoComplete._allowRemoteSearch = true; // flag the remote search can occur
-                searchAutoComplete.dataBind(); // bind new value to the component
-                searchAutoComplete.change(); // trigger the change method
-            }
-        },
 
         /**
          * method is used to load orders to the page
@@ -10431,8 +10299,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         // check if the ordersArray contains orders
                         if(ordersArray.length > 0){ // there are orders
                             // update the current search results array with the ordersArray
-                            utopiasoftware[utopiasoftware_app_namespace].controller.trackOrderPageViewModel.
-                                trackOrderResultsArray = ordersArray;
+                            utopiasoftware[utopiasoftware_app_namespace].controller.completedOrdersPageViewModel.
+                                ordersResultsArray = ordersArray;
                         }
 
                         resolve(ordersArray); // resolve the parent promise with the data gotten from the server
@@ -10627,7 +10495,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
 
                     // attach the new orders to the page
-                    $('#track-order-page #track-order-page-orders-container').html(ordersContent);
+                    $('#completed-orders-page #completed-orders-page-orders-container').html(ordersContent);
 
                     resolve(ordersArray.length); // resolve the promise with length of the ordersArray
                 }

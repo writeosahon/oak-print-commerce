@@ -218,3 +218,15 @@ $(document).on("hide", "#track-order-page", utopiasoftware[utopiasoftware_app_na
 
 // listen for when the TRACK ORDER is destroyed
 $(document).on("destroy", "#track-order-page", utopiasoftware[utopiasoftware_app_namespace].controller.trackOrderPageViewModel.pageDestroy);
+
+// listen for the initialisation of the COMPLETED ORDERS page
+$(document).on("init", "#completed-orders-page", utopiasoftware[utopiasoftware_app_namespace].controller.completedOrdersPageViewModel.pageInit);
+
+// listen for when the COMPLETED ORDERS page is shown
+$(document).on("show", "#completed-orders-page", utopiasoftware[utopiasoftware_app_namespace].controller.completedOrdersPageViewModel.pageShow);
+
+// listen for when the COMPLETED ORDERS page is hidden
+$(document).on("hide", "#completed-orders-page", utopiasoftware[utopiasoftware_app_namespace].controller.completedOrdersPageViewModel.pageHide);
+
+// listen for when the COMPLETED ORDERS is destroyed
+$(document).on("destroy", "#completed-orders-page", utopiasoftware[utopiasoftware_app_namespace].controller.completedOrdersPageViewModel.pageDestroy);
