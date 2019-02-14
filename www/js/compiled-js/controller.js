@@ -9709,7 +9709,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // hide the previously displayed orders info
                                     $('#track-order-page .row').css("display", "none");
                                     // show the page loader
-                                    $('#track-order-page .modal').css("display", "table");
+                                    $('#track-order-page .modal').css("display", "none");
 
                                     // remove the focus from the search autocomplete component
                                     $('#track-order-page #track-order-page-input').get(0).ej2_instances[0].focusOut();

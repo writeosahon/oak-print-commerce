@@ -2588,7 +2588,7 @@ toast=$('.timed-page-toast').get(0).ej2_instances[0];toast.cssClass='default-ej2
 $('#track-order-page .row').css("display","block");// hide the page loader
 $('#track-order-page .modal').css("display","none");}_context154.next=28;break;case 15:_context154.prev=15;_context154.t0=_context154['catch'](1);// hide the previously displayed orders info
 $('#track-order-page .row').css("display","none");// show the page loader
-$('#track-order-page .modal').css("display","table");// remove the focus from the search autocomplete component
+$('#track-order-page .modal').css("display","none");// remove the focus from the search autocomplete component
 $('#track-order-page #track-order-page-input').get(0).ej2_instances[0].focusOut();// hide all previously displayed ej2 toast
 $('.page-toast').get(0).ej2_instances[0].hide('All');$('.timed-page-toast').get(0).ej2_instances[0].hide('All');// display toast to show that an error
 _toast28=$('.timed-page-toast').get(0).ej2_instances[0];_toast28.cssClass='error-ej2-toast';_toast28.timeOut=3000;_toast28.content='Sorry, a search error occurred.'+(navigator.connection.type===Connection.NONE?" Connect to the Internet.":"");_toast28.dataBind();_toast28.show();case 28:case'end':return _context154.stop();}}},_callee154,this,[[1,15]]);})),0);}}).appendTo('#track-order-page-input');}catch(err){}case 5:case'end':return _context155.stop();}}},_callee155,this);}));return function loadPageOnAppReady(){return _ref157.apply(this,arguments);};}();var $thisPage=$(event.target);// get the current page shown

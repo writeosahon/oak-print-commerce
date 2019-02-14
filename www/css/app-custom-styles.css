@@ -778,8 +778,6 @@
 }
 /** STYLE FOR CHECK OUT PAGE ENDS **/
 
-/** STYLE FOR CATEGORIES PAGE ENDS **/
-
 /** STYLE FOR TRACK ORDER PAGE START **/
 #track-order-page .page__background,
 #track-order-page .page--material__background {
@@ -846,3 +844,10 @@
 /** style for search input on the order page ends **/
 
 /** STYLE FOR TRACK ORDER PAGE ENDS **/
+
+/** STYLE FOR COMPLETED ORDERS PAGE STARTS **/
+#completed-orders-page .page__background,
+#completed-orders-page .page--material__background {
+    background-color: #ffffff;
+}
+/** STYLE FOR COMPLETED ORDERS PAGE ENDS **/
