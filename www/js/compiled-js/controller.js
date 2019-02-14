@@ -9660,6 +9660,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             window.setTimeout(async function() {
                                 var searchResultsArray = [];
                                 try{
+                                    // hide the previously displayed orders info
+                                    $('#track-order-page .row').css("display", "none");
+                                    // show the page loader
+                                    $('#track-order-page .modal').css("display", "table");
+
                                     // load the user profile details from the app database
                                     var userDetails = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
                                     loadData("user-details",
@@ -9671,8 +9676,17 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         "customer": userDetails.id, "search": searchValue});
                                     await utopiasoftware[utopiasoftware_app_namespace].controller.trackOrderPageViewModel.
                                     displayPageContent(searchResultsArray[0]);
+
+                                    // show the orders info
+                                    $('#track-order-page .row').css("display", "block");
+                                    // hide the page loader
+                                    $('#track-order-page .modal').css("display", "none");
                                 }
                                 catch(err){
+                                    // hide the previously displayed orders info
+                                    $('#track-order-page .row').css("display", "none");
+                                    // show the page loader
+                                    $('#track-order-page .modal').css("display", "table");
 
                                     // remove the focus from the search autocomplete component
                                     $('#track-order-page #track-order-page-input').get(0).ej2_instances[0].focusOut();
@@ -9911,21 +9925,141 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             <ons-button disable-auto-styling modifier="quiet" onclick=""
                             style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
                                     margin: 0; padding: 0; transform: scale(0.75);">
+                                Checkout
+                            </ons-button>
+                            <ons-button disable-auto-styling modifier="quiet" onclick=""
+                            style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
+                                    margin: 0; padding: 0; transform: scale(0.75);">
+                                Cancel
+                            </ons-button>
+                            </div>
+                            </div>`;
+                        }
+                        else if(ordersArray[index].status === "processing"){
+                            ordersContent += ` <div class="row" style="font-size: 1em; font-weight: 300;
+                            border-bottom: 1px lightgray solid; color: #6d6d72;">
+                            <div class="col-xs-2" style=" word-wrap: break-word; text-align: center; 
+                            padding-left: 5px; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">${ordersArray[index].id}</div>
+                            <div class="col-xs-4" style=" word-wrap: break-word; 
+                            text-align: center; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">
+                            ${kendo.toString(kendo.parseFloat(ordersArray[index].total), "n2")}
+                            </div>
+                            <div class="col-xs-6" style="text-align: center; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 1px">
+                            <span style="display: block; text-transform: uppercase; color: goldenrod">
+                                ${ordersArray[index].status}
+                            </span>
+                            <ons-button disable-auto-styling modifier="quiet" onclick=""
+                            style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
+                                    margin: 0; padding: 0; transform: scale(0.75);">
                                 Reorder
                             </ons-button>
                             </div>
                             </div>`;
                         }
-                        else if(ordersArray[index].status === "processing"){}
-                        else if(ordersArray[index].status === "on-hold"){}
-                        else if(ordersArray[index].status === "completed"){}
-                        else if(ordersArray[index].status === "cancelled"){}
-                        else{}
+                        else if(ordersArray[index].status === "on-hold"){
+                            ordersContent += ` <div class="row" style="font-size: 1em; font-weight: 300;
+                            border-bottom: 1px lightgray solid; color: #6d6d72;">
+                            <div class="col-xs-2" style=" word-wrap: break-word; text-align: center; 
+                            padding-left: 5px; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">${ordersArray[index].id}</div>
+                            <div class="col-xs-4" style=" word-wrap: break-word; 
+                            text-align: center; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">
+                            ${kendo.toString(kendo.parseFloat(ordersArray[index].total), "n2")}
+                            </div>
+                            <div class="col-xs-6" style="text-align: center; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 1px">
+                            <span style="display: block; text-transform: uppercase; color: black">
+                                ${ordersArray[index].status}
+                            </span>
+                            <ons-button disable-auto-styling modifier="quiet" onclick=""
+                            style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
+                                    margin: 0; padding: 0; transform: scale(0.75);">
+                                Checkout
+                            </ons-button>
+                            <ons-button disable-auto-styling modifier="quiet" onclick=""
+                            style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
+                                    margin: 0; padding: 0; transform: scale(0.75);">
+                                Cancel
+                            </ons-button>
+                            </div>
+                            </div>`;
+                        }
+                        else if(ordersArray[index].status === "completed"){
+                            ordersContent += ` <div class="row" style="font-size: 1em; font-weight: 300;
+                            border-bottom: 1px lightgray solid; color: #6d6d72;">
+                            <div class="col-xs-2" style=" word-wrap: break-word; text-align: center; 
+                            padding-left: 5px; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">${ordersArray[index].id}</div>
+                            <div class="col-xs-4" style=" word-wrap: break-word; 
+                            text-align: center; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">
+                            ${kendo.toString(kendo.parseFloat(ordersArray[index].total), "n2")}
+                            </div>
+                            <div class="col-xs-6" style="text-align: center; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 1px">
+                            <span style="display: block; text-transform: uppercase; color: green">
+                                ${ordersArray[index].status}
+                            </span>
+                            <ons-button disable-auto-styling modifier="quiet" onclick=""
+                            style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
+                                    margin: 0; padding: 0; transform: scale(0.75);">
+                                Reorder
+                            </ons-button>
+                            </div>
+                            </div>`;
+                        }
+                        else if(ordersArray[index].status === "cancelled"){
+                            ordersContent += ` <div class="row" style="font-size: 1em; font-weight: 300;
+                            border-bottom: 1px lightgray solid; color: #6d6d72;">
+                            <div class="col-xs-2" style=" word-wrap: break-word; text-align: center; 
+                            padding-left: 5px; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">${ordersArray[index].id}</div>
+                            <div class="col-xs-4" style=" word-wrap: break-word; 
+                            text-align: center; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">
+                            ${kendo.toString(kendo.parseFloat(ordersArray[index].total), "n2")}
+                            </div>
+                            <div class="col-xs-6" style="text-align: center; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 1px">
+                            <span style="display: block; text-transform: uppercase; color: #d64113">
+                                ${ordersArray[index].status}
+                            </span>
+                            <ons-button disable-auto-styling modifier="quiet" onclick=""
+                            style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
+                                    margin: 0; padding: 0; transform: scale(0.75);">
+                                Reorder
+                            </ons-button>
+                            </div>
+                            </div>`;
+                        }
+                        else{
+                            ordersContent += ` <div class="row" style="font-size: 1em; font-weight: 300;
+                            border-bottom: 1px lightgray solid; color: #6d6d72;">
+                            <div class="col-xs-2" style=" word-wrap: break-word; text-align: center; 
+                            padding-left: 5px; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">${ordersArray[index].id}</div>
+                            <div class="col-xs-4" style=" word-wrap: break-word; 
+                            text-align: center; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">
+                            ${kendo.toString(kendo.parseFloat(ordersArray[index].total), "n2")}
+                            </div>
+                            <div class="col-xs-6" style="text-align: center; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 1px">
+                            <span style="display: block; text-transform: uppercase; color: black">
+                                ${ordersArray[index].status}
+                            </span>
+                            </div>
+                            </div>`;
+                        }
                     }
 
 
                     // attach the new orders to the page
-                    $('#track-order-page #track-order-page-orders-container').html(ordersContent);
+                    $('#track-order-page #track-order-page-orders-container').html(ordersContent); //todo
 
                     resolve(ordersArray.length); // resolve the promise with length of the ordersArray
                 }
