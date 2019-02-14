@@ -9740,7 +9740,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         pageShow: function(){
             // update cart count
-            $('#app-main-page .cart-count').html(utopiasoftware[utopiasoftware_app_namespace].model.cartCount);
+            $('#track-order-page .cart-count').html(utopiasoftware[utopiasoftware_app_namespace].model.cartCount);
 
             window.SoftInputMode.set('adjustResize');
 
@@ -10221,7 +10221,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         pageShow: function(){
             // update cart count
-            $('#app-main-page .cart-count').html(utopiasoftware[utopiasoftware_app_namespace].model.cartCount);
+            $('#completed-orders-page .cart-count').html(utopiasoftware[utopiasoftware_app_namespace].model.cartCount);
 
             window.SoftInputMode.set('adjustResize');
 

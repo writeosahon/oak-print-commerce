@@ -2596,7 +2596,7 @@ _toast28=$('.timed-page-toast').get(0).ej2_instances[0];_toast28.cssClass='error
 loadPageOnAppReady();},/**
          * method is triggered when page is shown
          */pageShow:function pageShow(){// update cart count
-$('#app-main-page .cart-count').html(utopiasoftware[utopiasoftware_app_namespace].model.cartCount);window.SoftInputMode.set('adjustResize');// listen for when the device does not have Internet connection
+$('#track-order-page .cart-count').html(utopiasoftware[utopiasoftware_app_namespace].model.cartCount);window.SoftInputMode.set('adjustResize');// listen for when the device does not have Internet connection
 document.addEventListener("offline",utopiasoftware[utopiasoftware_app_namespace].controller.trackOrderPageViewModel.deviceOfflineListener,false);// listen for when the device has Internet connection
 document.addEventListener("online",utopiasoftware[utopiasoftware_app_namespace].controller.trackOrderPageViewModel.deviceOnlineListener,false);},/**
          * method is triggered when page is hidden
@@ -2709,7 +2709,7 @@ _toast29=$('.timed-page-toast').get(0).ej2_instances[0];_toast29.cssClass='error
 loadPageOnAppReady();},/**
          * method is triggered when page is shown
          */pageShow:function pageShow(){// update cart count
-$('#app-main-page .cart-count').html(utopiasoftware[utopiasoftware_app_namespace].model.cartCount);window.SoftInputMode.set('adjustResize');// listen for when the device does not have Internet connection
+$('#completed-orders-page .cart-count').html(utopiasoftware[utopiasoftware_app_namespace].model.cartCount);window.SoftInputMode.set('adjustResize');// listen for when the device does not have Internet connection
 document.addEventListener("offline",utopiasoftware[utopiasoftware_app_namespace].controller.completedOrdersPageViewModel.deviceOfflineListener,false);// listen for when the device has Internet connection
 document.addEventListener("online",utopiasoftware[utopiasoftware_app_namespace].controller.completedOrdersPageViewModel.deviceOnlineListener,false);},/**
          * method is triggered when page is hidden
