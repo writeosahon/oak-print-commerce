@@ -9936,7 +9936,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             </span>
                             <ons-button disable-auto-styling modifier="quiet" 
                             onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
-                            trackOrderPageViewModel.checkoutButtonClicked()"
+                            trackOrderPageViewModel.checkoutButtonClicked(this)"
                             style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
                                     margin: 0; padding: 0; transform: scale(0.75);" data-order-index="${index}">
                                 Checkout
@@ -10089,10 +10089,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * method is triggered when the "Check Out" button on the
          * Orders Collection is clicked
          *
+         * @buttonElem {HTMLButton}
+         *
          * @returns {Promise<void>}
          */
-        async checkoutButtonClicked(){
-            var buttonElement = $(this); // get a jQuery reference to the button element that was clicked
+        async checkoutButtonClicked(buttonElem){
+            var $buttonElement = $(buttonElem); // get a jQuery reference to the button element that was clicked
 
             // show the page loader
             $('#track-order-page .modal').css("display", "table");
@@ -10101,9 +10103,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             window.setTimeout(async function(){
                 // get the selected order to be checked out
                 var selectedOrder = utopiasoftware[utopiasoftware_app_namespace].controller.
-                    trackOrderPageViewModel.trackOrderResultsArray[window.parseInt(buttonElement.attr("data-order-index"))];
+                    trackOrderPageViewModel.trackOrderResultsArray[window.parseInt($buttonElement.attr("data-order-index"))];
 
-                console.log("ORDER INDEX", buttonElement.attr("data-order-index"));
+                console.log("ORDER INDEX", $buttonElement.attr("data-order-index"));
 
                 console.log("SELECTED ORDER", selectedOrder);
 
