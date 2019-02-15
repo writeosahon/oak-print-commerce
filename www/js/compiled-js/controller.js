@@ -9654,7 +9654,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             }*/
 
                             // update the search term value
-                            searchValue = this.value.trim();
+                            searchValue = this.value ? this.value.trim() : "";
 
                             // remove the focus from the search autocomplete component
                             this.focusOut();

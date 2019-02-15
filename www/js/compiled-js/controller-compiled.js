@@ -2572,7 +2572,7 @@ return;// exit function
                                 this._allowRemoteSearch = false; // set that remote search is NOT allowed
                                 return; // exit function
                             }*/// update the search term value
-searchValue=this.value.trim();// remove the focus from the search autocomplete component
+searchValue=this.value?this.value.trim():"";// remove the focus from the search autocomplete component
 this.focusOut();// run the actual search in a different event queue
 window.setTimeout(_asyncToGenerator(/*#__PURE__*/regeneratorRuntime.mark(function _callee154(){var searchResultsArray,userDetails,toast,_toast28;return regeneratorRuntime.wrap(function _callee154$(_context154){while(1){switch(_context154.prev=_context154.next){case 0:searchResultsArray=[];_context154.prev=1;// hide the previously displayed orders info
 $('#track-order-page .row').css("display","none");// show the page loader
