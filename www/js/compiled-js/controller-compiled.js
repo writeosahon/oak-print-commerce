@@ -20,18 +20,20 @@ new ej.notifications.Toast({content:'',cssClass:'default-ej2-toast',target:docum
 new ej.notifications.Toast({content:'',cssClass:'default-ej2-toast',target:document.body,position:{X:"Center",Y:"Bottom"},width:"100%",timeOut:4000,// default 4 sec
 extendedTimeout:0,showCloseButton:true}).appendTo($('.timed-page-toast').get(0));// create the "Yes" button on the the Delete Cart Item action sheet
 new ej.buttons.Button({cssClass:'e-flat e-small',iconPosition:"Left"}).appendTo('#view-cart-page-delete-cart-item-yes');// create the "No" button on the the Delete Cart Item action sheet
-new ej.buttons.Button({cssClass:'e-flat e-small',iconPosition:"Left"}).appendTo('#view-cart-page-delete-cart-item-no');// START ALL CORDOVA PLUGINS CONFIGURATIONS
+new ej.buttons.Button({cssClass:'e-flat e-small',iconPosition:"Left"}).appendTo('#view-cart-page-delete-cart-item-no');// create the "Yes" button on the Cancel Order action sheet
+new ej.buttons.Button({cssClass:'e-flat e-small',iconPosition:"Left"}).appendTo('#cancel-order-yes');// create the "No" button on the Cancel Order action sheet
+new ej.buttons.Button({cssClass:'e-flat e-small',iconPosition:"Left"}).appendTo('#cancel-order-no');// START ALL CORDOVA PLUGINS CONFIGURATIONS
 try{// lock the orientation of the device to 'PORTRAIT'
-screen.orientation.lock('portrait');}catch(err){}_context.prev=9;// START ALL THE CORDOVA PLUGINS CONFIGURATION WHICH REQUIRE PROMISE SYNTAX
+screen.orientation.lock('portrait');}catch(err){}_context.prev=11;// START ALL THE CORDOVA PLUGINS CONFIGURATION WHICH REQUIRE PROMISE SYNTAX
 // create the pouchdb app database
 utopiasoftware[utopiasoftware_app_namespace].model.appDatabase=new PouchDB('PrintServiceEcommerce.db',{adapter:'cordova-sqlite',location:'default',androidDatabaseImplementation:2});// create the encrypted pouchdb app database
 utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase=new PouchDB('PrintServiceEcommerceEncrypted.db',{adapter:'cordova-sqlite',location:'default',androidDatabaseImplementation:2});// generate a password for encrypting the app database (if it does NOT already exist)
-secureKey=null;_context.prev=13;_context.next=16;return new Promise(function(resolve,reject){NativeStorage.getItem("utopiasoftware-oak-print-service-secure-key",resolve,reject);});case 16:secureKey=_context.sent;_context.next=24;break;case 19:_context.prev=19;_context.t0=_context['catch'](13);_context.next=23;return new Promise(function(resolve,reject){NativeStorage.setItem("utopiasoftware-oak-print-service-secure-key",{password:Random.uuid4(utopiasoftware[utopiasoftware_app_namespace].randomisationEngine)},resolve,reject);});case 23:secureKey=_context.sent;case 24:_context.next=26;return new Promise(function(resolve,reject){utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase.crypto(secureKey.password,{ignore:['_attachments','_deleted','docType'],cb:function cb(err,key){if(err){// there is an error
+secureKey=null;_context.prev=15;_context.next=18;return new Promise(function(resolve,reject){NativeStorage.getItem("utopiasoftware-oak-print-service-secure-key",resolve,reject);});case 18:secureKey=_context.sent;_context.next=26;break;case 21:_context.prev=21;_context.t0=_context['catch'](15);_context.next=25;return new Promise(function(resolve,reject){NativeStorage.setItem("utopiasoftware-oak-print-service-secure-key",{password:Random.uuid4(utopiasoftware[utopiasoftware_app_namespace].randomisationEngine)},resolve,reject);});case 25:secureKey=_context.sent;case 26:_context.next=28;return new Promise(function(resolve,reject){utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase.crypto(secureKey.password,{ignore:['_attachments','_deleted','docType'],cb:function cb(err,key){if(err){// there is an error
 reject(err);// reject Promise
 }else{// no error
 resolve(key);// resolve Promise
-}}});});case 26:_context.prev=26;_context.next=29;return utopiasoftware[utopiasoftware_app_namespace].databaseOperations.loadData("user-cart",utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);case 29:utopiasoftware[utopiasoftware_app_namespace].model.cartCount=_context.sent.cart.length;_context.next=34;break;case 32:_context.prev=32;_context.t1=_context['catch'](26);case 34://register the listener for app database changes
-utopiasoftware[utopiasoftware_app_namespace].controller.appDatabaseChangesListenerViewModel.changesEventEmitter=utopiasoftware[utopiasoftware_app_namespace].model.appDatabase.changes({live:true,include_docs:true,since:'now',doc_ids:['user-cart']}).on("change",utopiasoftware[utopiasoftware_app_namespace].controller.appDatabaseChangesListenerViewModel.userCartChanged);_context.next=40;break;case 37:_context.prev=37;_context.t2=_context['catch'](9);console.log("APP LOADING ERROR",_context.t2);case 40:_context.prev=40;// load the initial content of the app
+}}});});case 28:_context.prev=28;_context.next=31;return utopiasoftware[utopiasoftware_app_namespace].databaseOperations.loadData("user-cart",utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);case 31:utopiasoftware[utopiasoftware_app_namespace].model.cartCount=_context.sent.cart.length;_context.next=36;break;case 34:_context.prev=34;_context.t1=_context['catch'](28);case 36://register the listener for app database changes
+utopiasoftware[utopiasoftware_app_namespace].controller.appDatabaseChangesListenerViewModel.changesEventEmitter=utopiasoftware[utopiasoftware_app_namespace].model.appDatabase.changes({live:true,include_docs:true,since:'now',doc_ids:['user-cart']}).on("change",utopiasoftware[utopiasoftware_app_namespace].controller.appDatabaseChangesListenerViewModel.userCartChanged);_context.next=42;break;case 39:_context.prev=39;_context.t2=_context['catch'](11);console.log("APP LOADING ERROR",_context.t2);case 42:_context.prev=42;// load the initial content of the app
 if(true){// there is a previous logged in user
 // load the app main page
 $('ons-splitter').get(0).content.load("app-main-template");}else{// there is no previously logged in user
@@ -39,7 +41,7 @@ $('ons-splitter').get(0).content.load("app-main-template");}else{// there is no 
 $('ons-splitter').get(0).content.load("login-template");}// set status bar color
 StatusBar.backgroundColorByHexString("#363E7C");navigator.splashscreen.hide();// hide the splashscreen
 utopiasoftware[utopiasoftware_app_namespace].model.isAppReady=true;// flag that app is fully loaded and ready
-return _context.finish(40);case 46:case'end':return _context.stop();}}},_callee,this,[[9,37,40,46],[13,19],[26,32]]);})));// end of ons.ready()
+return _context.finish(42);case 48:case'end':return _context.stop();}}},_callee,this,[[11,39,42,48],[15,21],[28,34]]);})));// end of ons.ready()
 },/**
      * this view-model is used to house the listeners and data/properties which listen for
      * changes in the app database

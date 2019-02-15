@@ -68,6 +68,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 iconPosition: "Left"
             }).appendTo('#view-cart-page-delete-cart-item-no');
 
+            // create the "Yes" button on the Cancel Order action sheet
+            new ej.buttons.Button({
+                cssClass: 'e-flat e-small',
+                iconPosition: "Left"
+            }).appendTo('#cancel-order-yes');
+
+            // create the "No" button on the Cancel Order action sheet
+            new ej.buttons.Button({
+                cssClass: 'e-flat e-small',
+                iconPosition: "Left"
+            }).appendTo('#cancel-order-no');
+
 
             // START ALL CORDOVA PLUGINS CONFIGURATIONS
             try{

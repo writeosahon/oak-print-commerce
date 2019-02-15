@@ -229,6 +229,33 @@
     </ons-list>
 </ons-action-sheet>
 
+<!-- create action sheet for canceling an order -->
+<ons-action-sheet cancelable disable-auto-styling id="cancel-order-action-sheet" title="cancel order?">
+    <ons-list disable-auto-styling id="cancel-order-list" style="display: block">
+
+        <ons-list-item disable-auto-styling lock-on-drag="true" modifier="nodivider">
+            <div class="center">
+                <div style="width: 100%; text-align: center;">
+
+                    <!-- event handler for the button is added by the controller code -->
+                    <button id="cancel-order-yes" style="color: #d64113;
+                box-shadow: none; margin-right: 1em; margin-bottom:0.5em" type="button">
+                        <ons-ripple></ons-ripple>
+                        Yes</button>
+
+                    <!-- event handler for the button is added by the controller code -->
+                    <button id="cancel-order-no" style="color: #3F51B5;
+                box-shadow: none; margin-right: 1em; margin-bottom:0.5em" type="button">
+                        <ons-ripple></ons-ripple>
+                        No</button>
+
+                </div>
+            </div>
+        </ons-list-item>
+
+    </ons-list>
+</ons-action-sheet>
+
 <!-- container for app ej2 bottom toast -->
 <div class="page-toast"></div>
 
