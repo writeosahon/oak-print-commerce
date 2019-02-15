@@ -10142,7 +10142,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     $('#track-order-page .modal').css("display", "none");
                 }
             }, 0);
-        }
+        },
+
+        /**
+         * method is triggered when the "Cancel" button on the
+         * Orders Collection is clicked
+         *
+         * @returns {Promise<void>}
+         */
+        async cancelButtonClicked(buttonElem){}
     },
 
     /**
