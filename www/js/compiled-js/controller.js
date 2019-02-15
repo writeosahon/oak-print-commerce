@@ -6023,7 +6023,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     }
                 ));
 
-                // display the products details page using the selected product
+                // display the checkout page using the selected order
                 await $('#app-main-navigator').get(0).pushPage("checkout-page.html", {data: {orderData}});
             }
             catch(err){
@@ -9934,9 +9934,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             <span style="display: block; text-transform: uppercase; color: brown">
                                 ${ordersArray[index].status}
                             </span>
-                            <ons-button disable-auto-styling modifier="quiet" onclick=""
+                            <ons-button disable-auto-styling modifier="quiet" 
+                            onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
+                            trackOrderPageViewModel.checkoutButtonClicked()"
                             style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
-                                    margin: 0; padding: 0; transform: scale(0.75);">
+                                    margin: 0; padding: 0; transform: scale(0.75);" data-order-index="${index}">
                                 Checkout
                             </ons-button>
                             <ons-button disable-auto-styling modifier="quiet" onclick=""
@@ -10080,6 +10082,48 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             return displayCompletedPromise; // return the promise object ot indicate if the display has been completed or not
 
+        },
+
+
+        /**
+         * method is triggered when the "Check Out" button on the
+         * Orders Collection is clicked
+         *
+         * @returns {Promise<void>}
+         */
+        async checkoutButtonClicked(){
+            var buttonElement = $(this); // get a jQuery reference to the button element that was clicked
+
+            // show the page loader
+            $('#track-order-page .modal').css("display", "table");
+
+            // handle the tasks in a separate queue
+            window.setTimeout(async function(){
+                // get the selected order to be checked out
+                var selectedOrder = utopiasoftware[utopiasoftware_app_namespace].controller.
+                    trackOrderPageViewModel.trackOrderResultsArray[window.parseInt(buttonElement.attr("data-order-index"))];
+
+                try{
+                    // display the checkout page using the selected order
+                    await $('#app-main-navigator').get(0).pushPage("checkout-page.html", {data: {orderData: selectedOrder}});
+                }
+                catch(err){
+                    // hide all previously displayed ej2 toast
+                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                    $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                    // display toast message
+                    let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                    toast.cssClass = 'error-ej2-toast';
+                    toast.timeOut = 3000;
+                    toast.content = `Order checkout failed. Please retry`;
+                    toast.dataBind();
+                    toast.show();
+                }
+                finally {
+                    // hide the page loader
+                    $('#track-order-page .modal').css("display", "none");
+                }
+            }, 0);
         }
     },
 
