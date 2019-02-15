@@ -10103,6 +10103,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 var selectedOrder = utopiasoftware[utopiasoftware_app_namespace].controller.
                     trackOrderPageViewModel.trackOrderResultsArray[window.parseInt(buttonElement.attr("data-order-index"))];
 
+                console.log("ORDER INDEX", buttonElement.attr("data-order-index"));
+
+                console.log("SELECTED ORDER", selectedOrder);
+
                 try{
                     // display the checkout page using the selected order
                     await $('#app-main-navigator').get(0).pushPage("checkout-page.html", {data: {orderData: selectedOrder}});
