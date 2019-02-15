@@ -230,3 +230,15 @@ $(document).on("hide", "#completed-orders-page", utopiasoftware[utopiasoftware_a
 
 // listen for when the COMPLETED ORDERS is destroyed
 $(document).on("destroy", "#completed-orders-page", utopiasoftware[utopiasoftware_app_namespace].controller.completedOrdersPageViewModel.pageDestroy);
+
+// listen for the initialisation of the PENDING ORDERS page
+$(document).on("init", "#pending-orders-page", utopiasoftware[utopiasoftware_app_namespace].controller.pendingOrdersPageViewModel.pageInit);
+
+// listen for when the PENDING ORDERS page is shown
+$(document).on("show", "#pending-orders-page", utopiasoftware[utopiasoftware_app_namespace].controller.pendingOrdersPageViewModel.pageShow);
+
+// listen for when the PENDING ORDERS page is hidden
+$(document).on("hide", "#pending-orders-page", utopiasoftware[utopiasoftware_app_namespace].controller.pendingOrdersPageViewModel.pageHide);
+
+// listen for when the PENDING ORDERS is destroyed
+$(document).on("destroy", "#pending-orders-page", utopiasoftware[utopiasoftware_app_namespace].controller.pendingOrdersPageViewModel.pageDestroy);

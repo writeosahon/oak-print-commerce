@@ -10618,6 +10618,543 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             return displayCompletedPromise; // return the promise object ot indicate if the display has been completed or not
 
         }
+    },
+
+    /**
+     * this is the view-model/controller for the Pending Orders page
+     */
+    pendingOrdersPageViewModel: {
+
+        /**
+         * holds the array of orders for the search result that was just run by the user
+         */
+        ordersResultsArray: null,
+
+        /**
+         * event is triggered when page is initialised
+         */
+        pageInit: function(event){
+
+            var $thisPage = $(event.target); // get the current page shown
+
+            // call the function used to initialise the app page if the app is fully loaded
+            loadPageOnAppReady();
+
+            //function is used to initialise the page if the app is fully ready for execution
+            async function loadPageOnAppReady() {
+                // check to see if onsen is ready and if all app loading has been completed
+                if (!ons.isReady() || utopiasoftware[utopiasoftware_app_namespace].model.isAppReady === false) {
+                    setTimeout(loadPageOnAppReady, 500); // call this function again after half a second
+                    return;
+                }
+
+                // listen for the back button event
+                event.target.onDeviceBackButton =
+                    utopiasoftware[utopiasoftware_app_namespace].controller.pendingOrdersPageViewModel.backButtonClicked;
+
+                // add method to handle the loading action of the pull-to-refresh widget
+                $('#pending-orders-page-pull-hook', $thisPage).get(0).onAction =
+                    utopiasoftware[utopiasoftware_app_namespace].controller.pendingOrdersPageViewModel.pagePullHookAction;
+
+                // register listener for the pull-to-refresh widget
+                $('#pending-orders-page-pull-hook', $thisPage).on("changestate", function(event){
+
+                    // check the state of the pull-to-refresh widget
+                    switch (event.originalEvent.state){
+                        case 'initial':
+                            // update the displayed content
+                            $('#pending-orders-page-pull-hook-fab', event.originalEvent.pullHook).
+                            html('<ons-icon icon="md-long-arrow-down" size="24px" style="color: #363E7C"></ons-icon>');
+                            break;
+
+                        case 'preaction':
+                            // update the displayed content
+                            $('#pending-orders-page-pull-hook-fab', event.originalEvent.pullHook).
+                            html('<ons-icon icon="md-long-arrow-up" size="24px" style="color: #363E7C"></ons-icon>');
+                            break;
+
+                        case 'action':
+                            // update the displayed content
+                            $('#pending-orders-page-pull-hook-fab', event.originalEvent.pullHook).
+                            html('<ons-progress-circular indeterminate modifier="pull-hook"></ons-progress-circular>');
+                            break;
+                    }
+                });
+
+                try{
+
+                    // hide the previously displayed orders info
+                    $('#pending-orders-page .row').css("display", "none");
+                    // show the page loader
+                    $('#pending-orders-page .modal').css("display", "table");
+
+                    // load the user profile details from the app database
+                    var userDetails = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                    loadData("user-details",
+                        utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
+
+                    let searchResultsArray = await utopiasoftware[utopiasoftware_app_namespace].controller.
+                    pendingOrdersPageViewModel.
+                    loadOrders({"page": 1, "per_page": 20, "order": "desc", "orderby": "date",
+                        "customer": userDetails.id, "status": "completed"});
+                    await utopiasoftware[utopiasoftware_app_namespace].controller.pendingOrdersPageViewModel.
+                    displayPageContent(searchResultsArray[0]);
+
+                    if(searchResultsArray[0].length == 0){ // no orders were found
+                        // hide the page preloader
+                        $('#pending-orders-page .page-preloader').css("display", "none");
+                        // hide the previously displayed orders info
+                        $('#pending-orders-page .row').css("display", "none");
+                        // hide the page loader
+                        $('#pending-orders-page .modal').css("display", "none");
+
+                        // inform the user that no result for the search was found'
+                        // hide all previously displayed ej2 toast
+                        $('.page-toast').get(0).ej2_instances[0].hide('All');
+                        $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                        // display toast to show that an error
+                        let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                        toast.cssClass = 'default-ej2-toast';
+                        toast.timeOut = 3000;
+                        toast.content = `Sorry, no order was found.`;
+                        toast.dataBind();
+                        toast.show();
+                    }
+                    else{ // orders were found
+                        // hide the page preloader
+                        $('#pending-orders-page .page-preloader').css("display", "none");
+                        // show the orders info
+                        $('#pending-orders-page .row').css("display", "block");
+                        // hide the page loader
+                        $('#pending-orders-page .modal').css("display", "none");
+                    }
+
+                }
+                catch(err){
+                    // hide the page preloader
+                    $('#pending-orders-page .page-preloader').css("display", "none");
+                    // hide the previously displayed orders info
+                    $('#pending-orders-page .row').css("display", "none");
+                    // show the page loader
+                    $('#pending-orders-page .modal').css("display", "none");
+
+                    // hide all previously displayed ej2 toast
+                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                    $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                    // display toast to show that an error
+                    let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                    toast.cssClass = 'error-ej2-toast';
+                    toast.timeOut = 3000;
+                    toast.content = `Sorry, a search error occurred.${navigator.connection.type === Connection.NONE ? " Connect to the Internet." : ""}`;
+                    toast.dataBind();
+                    toast.show();
+                }
+            }
+
+        },
+
+        /**
+         * method is triggered when page is shown
+         */
+        pageShow: function(){
+            // update cart count
+            $('#pending-orders-page .cart-count').html(utopiasoftware[utopiasoftware_app_namespace].model.cartCount);
+
+            window.SoftInputMode.set('adjustResize');
+
+            // listen for when the device does not have Internet connection
+            document.addEventListener("offline",
+                utopiasoftware[utopiasoftware_app_namespace].controller.pendingOrdersPageViewModel.deviceOfflineListener, false);
+            // listen for when the device has Internet connection
+            document.addEventListener("online",
+                utopiasoftware[utopiasoftware_app_namespace].controller.pendingOrdersPageViewModel.deviceOnlineListener, false);
+
+        },
+
+
+        /**
+         * method is triggered when page is hidden
+         */
+        pageHide: async function(){
+            // remove listener for when the device does not have Internet connection
+            document.removeEventListener("offline",
+                utopiasoftware[utopiasoftware_app_namespace].controller.pendingOrdersPageViewModel.deviceOfflineListener, false);
+            // remove listener for when the device has Internet connection
+            document.removeEventListener("online",
+                utopiasoftware[utopiasoftware_app_namespace].controller.pendingOrdersPageViewModel.deviceOnlineListener, false);
+
+        },
+
+        /**
+         * method is triggered when page is destroyed
+         */
+        pageDestroy: function(){
+            // reset the view-model properties
+            utopiasoftware[utopiasoftware_app_namespace].controller.pendingOrdersPageViewModel.ordersResultsArray = null;
+        },
+
+        /**
+         * method is triggered when the device back button is clicked OR a similar action is triggered
+         */
+        backButtonClicked(){
+            // go to the previous page on the stack
+            $('#app-main-navigator').get(0).popPage();
+        },
+
+        /**
+         * method is triggered whenever the user's device is offline
+         */
+        deviceOfflineListener(){
+            // display toast to show that there is no internet connection
+            let toast = $('.page-toast').get(0).ej2_instances[0];
+            toast.hide('All'); // hide all previously displayed ej2 toast
+            toast.cssClass = 'default-ej2-toast';
+            toast.content = "No Internet connection. Connect to the Internet to view orders";
+            toast.dataBind();
+            toast.show();// show ej2 toast
+        },
+
+        /**
+         * method is triggered whenever the user's device is online
+         */
+        deviceOnlineListener(){
+            // hide all previously displayed ej2 toast
+            $('.page-toast').get(0).ej2_instances[0].hide('All');
+        },
+
+        /**
+         * method is triggered when the pull-hook on the page is active
+         *
+         * @param doneCallBack
+         * @returns {Promise<void>}
+         */
+        async pagePullHookAction(doneCallBack = function(){}){
+            // disable pull-to-refresh widget till loading is done
+            $('#pending-orders-page #pending-orders-page-pull-hook').attr("disabled", true);
+
+            // hide all previously displayed ej2 toast
+            $('.page-toast').get(0).ej2_instances[0].hide('All');
+
+            try{
+                // show the page loader
+                $('#pending-orders-page .modal').css("display", "table");
+
+                // load the user profile details from the app database
+                var userDetails = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                loadData("user-details",
+                    utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
+
+                let searchResultsArray = await utopiasoftware[utopiasoftware_app_namespace].controller.
+                pendingOrdersPageViewModel.
+                loadOrders({"page": 1, "per_page": 20, "order": "desc", "orderby": "date",
+                    "customer": userDetails.id, "status": "completed"});
+                await utopiasoftware[utopiasoftware_app_namespace].controller.pendingOrdersPageViewModel.
+                displayPageContent(searchResultsArray[0]);
+
+                if(searchResultsArray[0].length == 0){ // no orders were found
+                    // hide the page preloader
+                    $('#pending-orders-page .page-preloader').css("display", "none");
+                    // hide the previously displayed orders info
+                    $('#pending-orders-page .row').css("display", "none");
+                    // hide the page loader
+                    $('#pending-orders-page .modal').css("display", "none");
+
+                    // inform the user that no result for the search was found'
+                    // hide all previously displayed ej2 toast
+                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                    $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                    // display toast to show that an error
+                    let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                    toast.cssClass = 'default-ej2-toast';
+                    toast.timeOut = 3000;
+                    toast.content = `Sorry, no order was found.`;
+                    toast.dataBind();
+                    toast.show();
+                }
+                else{ // orders were found
+                    // hide the page preloader
+                    $('#pending-orders-page .page-preloader').css("display", "none");
+                    // show the orders info
+                    $('#pending-orders-page .row').css("display", "block");
+                    // hide the page loader
+                    $('#pending-orders-page .modal').css("display", "none");
+                }
+
+            }
+            catch(err){
+                // hide the page preloader
+                $('#pending-orders-page .page-preloader').css("display", "none");
+                // show the page loader
+                $('#pending-orders-page .modal').css("display", "none");
+
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast to show that an error
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.timeOut = 3000;
+                toast.content = `Sorry, a search error occurred.${navigator.connection.type === Connection.NONE ? " Connect to the Internet." : ""}`;
+                toast.dataBind();
+                toast.show();
+            }
+            finally{
+                // enable pull-to-refresh widget till loading is done
+                $('#pending-orders-page #pending-orders-page-pull-hook').removeAttr("disabled");
+                // hide the preloader
+                $('#pending-orders-page .page-preloader').css("display", "none");
+                // signal that loading is done
+                doneCallBack();
+            }
+        },
+
+        /**
+         * method is used to load orders to the page
+         *
+         * @param pageToAccess {Integer} the page within the paginated categories to retrieve
+         *
+         * @param pageSize {Integer} the size of the page i.e. the number of category items to retrieve
+         *
+         * @param queryParam {Object} holds the objects that contains the query
+         * params for the type of products to retrieve
+         *
+         * @returns {Promise<void>}
+         */
+        async loadOrders(queryParam, pageToAccess = queryParam.page || 1,
+                         pageSize = queryParam.per_page || 20){
+            queryParam.page = pageToAccess;
+            queryParam.per_page = pageSize;
+
+            var promisesArray = []; // holds the array for the promises used to load the orders
+
+            // check if there is internet connection or not
+            if(navigator.connection.type !== Connection.NONE){ // there is internet connection
+                // load the requested products list from the server
+                promisesArray.push(new Promise(function(resolve, reject){
+                    Promise.resolve($.ajax(
+                        {
+                            url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + "/wp-json/wc/v3/orders",
+                            type: "get",
+                            //contentType: "application/x-www-form-urlencoded",
+                            beforeSend: function(jqxhr) {
+                                jqxhr.setRequestHeader("Authorization", "Basic " +
+                                    utopiasoftware[utopiasoftware_app_namespace].accessor);
+                            },
+                            dataType: "json",
+                            timeout: 240000, // wait for 4 minutes before timeout of request
+                            processData: true,
+                            data: queryParam
+                        }
+                    )).then(function(ordersArray){
+                        // check if the ordersArray contains orders
+                        if(ordersArray.length > 0){ // there are orders
+                            // update the current search results array with the ordersArray
+                            utopiasoftware[utopiasoftware_app_namespace].controller.pendingOrdersPageViewModel.
+                                ordersResultsArray = ordersArray;
+                        }
+
+                        resolve(ordersArray); // resolve the parent promise with the data gotten from the server
+
+                    }).catch(function(err){ // an error occurred
+
+                        reject(err); // reject the parent promise with the error
+                    });
+                }));
+
+            } // end of loading products with Internet Connection
+            else{ // there is no internet connection
+                promisesArray.push(Promise.reject("no internet connection"));
+            }
+
+            return Promise.all(promisesArray); // return a promise which resolves when all promises in the array resolve
+        },
+
+        /**
+         * method is used to display the retrieved products on the search popover
+         *
+         * @param ordersArray
+         *
+         * @returns {Promise<void>}
+         */
+        async displayPageContent(ordersArray){
+
+            var displayCompletedPromise = new Promise(function(resolve, reject){
+
+                let ordersContent = ""; // holds the contents for the orders
+
+                // check if the ordersArray is empty or not
+                if(ordersArray.length <= 0){ // there are no new content to display
+
+                    resolve(ordersArray.length); // resolve promise with the length of the orders array
+                }
+                else{ // there are some orders to display
+
+                    // loop through the array content and display it
+                    for(let index = 0; index < ordersArray.length; index++){
+
+                        if(ordersArray[index].status === "pending"){
+                            ordersContent += ` <div class="row" style="font-size: 1em; font-weight: 300;
+                            border-bottom: 1px lightgray solid; color: #6d6d72;">
+                            <div class="col-xs-2" style=" word-wrap: break-word; text-align: center; 
+                            padding-left: 5px; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">${ordersArray[index].id}</div>
+                            <div class="col-xs-4" style=" word-wrap: break-word; 
+                            text-align: center; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">
+                            ${kendo.toString(kendo.parseFloat(ordersArray[index].total), "n2")}
+                            </div>
+                            <div class="col-xs-6" style="text-align: center; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 1px">
+                            <span style="display: block; text-transform: uppercase; color: brown">
+                                ${ordersArray[index].status}
+                            </span>
+                            <ons-button disable-auto-styling modifier="quiet" onclick=""
+                            style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
+                                    margin: 0; padding: 0; transform: scale(0.75);">
+                                Checkout
+                            </ons-button>
+                            <ons-button disable-auto-styling modifier="quiet" onclick=""
+                            style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
+                                    margin: 0; padding: 0; transform: scale(0.75);">
+                                Cancel
+                            </ons-button>
+                            </div>
+                            </div>`;
+                        }
+                        else if(ordersArray[index].status === "processing"){
+                            ordersContent += ` <div class="row" style="font-size: 1em; font-weight: 300;
+                            border-bottom: 1px lightgray solid; color: #6d6d72;">
+                            <div class="col-xs-2" style=" word-wrap: break-word; text-align: center; 
+                            padding-left: 5px; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">${ordersArray[index].id}</div>
+                            <div class="col-xs-4" style=" word-wrap: break-word; 
+                            text-align: center; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">
+                            ${kendo.toString(kendo.parseFloat(ordersArray[index].total), "n2")}
+                            </div>
+                            <div class="col-xs-6" style="text-align: center; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 1px">
+                            <span style="display: block; text-transform: uppercase; color: goldenrod">
+                                ${ordersArray[index].status}
+                            </span>
+                            <ons-button disable-auto-styling modifier="quiet" onclick=""
+                            style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
+                                    margin: 0; padding: 0; transform: scale(0.75);">
+                                Reorder
+                            </ons-button>
+                            </div>
+                            </div>`;
+                        }
+                        else if(ordersArray[index].status === "on-hold"){
+                            ordersContent += ` <div class="row" style="font-size: 1em; font-weight: 300;
+                            border-bottom: 1px lightgray solid; color: #6d6d72;">
+                            <div class="col-xs-2" style=" word-wrap: break-word; text-align: center; 
+                            padding-left: 5px; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">${ordersArray[index].id}</div>
+                            <div class="col-xs-4" style=" word-wrap: break-word; 
+                            text-align: center; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">
+                            ${kendo.toString(kendo.parseFloat(ordersArray[index].total), "n2")}
+                            </div>
+                            <div class="col-xs-6" style="text-align: center; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 1px">
+                            <span style="display: block; text-transform: uppercase; color: black">
+                                ${ordersArray[index].status}
+                            </span>
+                            <ons-button disable-auto-styling modifier="quiet" onclick=""
+                            style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
+                                    margin: 0; padding: 0; transform: scale(0.75);">
+                                Checkout
+                            </ons-button>
+                            <ons-button disable-auto-styling modifier="quiet" onclick=""
+                            style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
+                                    margin: 0; padding: 0; transform: scale(0.75);">
+                                Cancel
+                            </ons-button>
+                            </div>
+                            </div>`;
+                        }
+                        else if(ordersArray[index].status === "completed"){
+                            ordersContent += ` <div class="row" style="font-size: 1em; font-weight: 300;
+                            border-bottom: 1px lightgray solid; color: #6d6d72;">
+                            <div class="col-xs-2" style=" word-wrap: break-word; text-align: center; 
+                            padding-left: 5px; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">${ordersArray[index].id}</div>
+                            <div class="col-xs-4" style=" word-wrap: break-word; 
+                            text-align: center; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">
+                            ${kendo.toString(kendo.parseFloat(ordersArray[index].total), "n2")}
+                            </div>
+                            <div class="col-xs-6" style="text-align: center; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 1px">
+                            <span style="display: block; text-transform: uppercase; color: green">
+                                ${ordersArray[index].status}
+                            </span>
+                            <ons-button disable-auto-styling modifier="quiet" onclick=""
+                            style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
+                                    margin: 0; padding: 0; transform: scale(0.75);">
+                                Reorder
+                            </ons-button>
+                            </div>
+                            </div>`;
+                        }
+                        else if(ordersArray[index].status === "cancelled"){
+                            ordersContent += ` <div class="row" style="font-size: 1em; font-weight: 300;
+                            border-bottom: 1px lightgray solid; color: #6d6d72;">
+                            <div class="col-xs-2" style=" word-wrap: break-word; text-align: center; 
+                            padding-left: 5px; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">${ordersArray[index].id}</div>
+                            <div class="col-xs-4" style=" word-wrap: break-word; 
+                            text-align: center; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">
+                            ${kendo.toString(kendo.parseFloat(ordersArray[index].total), "n2")}
+                            </div>
+                            <div class="col-xs-6" style="text-align: center; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 1px">
+                            <span style="display: block; text-transform: uppercase; color: #d64113">
+                                ${ordersArray[index].status}
+                            </span>
+                            <ons-button disable-auto-styling modifier="quiet" onclick=""
+                            style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
+                                    margin: 0; padding: 0; transform: scale(0.75);">
+                                Reorder
+                            </ons-button>
+                            </div>
+                            </div>`;
+                        }
+                        else{
+                            ordersContent += ` <div class="row" style="font-size: 1em; font-weight: 300;
+                            border-bottom: 1px lightgray solid; color: #6d6d72;">
+                            <div class="col-xs-2" style=" word-wrap: break-word; text-align: center; 
+                            padding-left: 5px; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">${ordersArray[index].id}</div>
+                            <div class="col-xs-4" style=" word-wrap: break-word; 
+                            text-align: center; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">
+                            ${kendo.toString(kendo.parseFloat(ordersArray[index].total), "n2")}
+                            </div>
+                            <div class="col-xs-6" style="text-align: center; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 1px">
+                            <span style="display: block; text-transform: uppercase; color: black">
+                                ${ordersArray[index].status}
+                            </span>
+                            </div>
+                            </div>`;
+                        }
+                    }
+
+
+                    // attach the new orders to the page
+                    $('#pending-orders-page #pending-orders-page-orders-container').html(ordersContent);
+
+                    resolve(ordersArray.length); // resolve the promise with length of the ordersArray
+                }
+
+            });
+
+            return displayCompletedPromise; // return the promise object ot indicate if the display has been completed or not
+
+        }
     }
 
 };

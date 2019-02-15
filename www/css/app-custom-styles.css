@@ -851,3 +851,10 @@
     background-color: #ffffff;
 }
 /** STYLE FOR COMPLETED ORDERS PAGE ENDS **/
+
+/** STYLE FOR PENDING ORDERS PAGE STARTS **/
+#pending-orders-page .page__background,
+#pending-orders-page .page--material__background {
+    background-color: #ffffff;
+}
+/** STYLE FOR PENDING ORDERS PAGE ENDS **/
