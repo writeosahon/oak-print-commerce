@@ -10696,7 +10696,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     let searchResultsArray = await utopiasoftware[utopiasoftware_app_namespace].controller.
                     pendingOrdersPageViewModel.
                     loadOrders({"page": 1, "per_page": 20, "order": "desc", "orderby": "date",
-                        "customer": userDetails.id, "status": "completed"});
+                        "customer": userDetails.id, "status": "pending"});
                     await utopiasoftware[utopiasoftware_app_namespace].controller.pendingOrdersPageViewModel.
                     displayPageContent(searchResultsArray[0]);
 
@@ -10847,7 +10847,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 let searchResultsArray = await utopiasoftware[utopiasoftware_app_namespace].controller.
                 pendingOrdersPageViewModel.
                 loadOrders({"page": 1, "per_page": 20, "order": "desc", "orderby": "date",
-                    "customer": userDetails.id, "status": "completed"});
+                    "customer": userDetails.id, "status": "pending"});
                 await utopiasoftware[utopiasoftware_app_namespace].controller.pendingOrdersPageViewModel.
                 displayPageContent(searchResultsArray[0]);
 
