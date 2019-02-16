@@ -10340,6 +10340,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     await $('#app-main-navigator').get(0).pushPage("checkout-page.html", {data: {orderData: newOrder}});
                 }
                 catch(err){
+                    console.log(err, "REORDER ERROR");
+
                     // hide all previously displayed ej2 toast
                     $('.page-toast').get(0).ej2_instances[0].hide('All');
                     $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
