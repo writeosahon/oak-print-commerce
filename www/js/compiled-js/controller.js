@@ -9953,7 +9953,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     margin: 0; padding: 0; transform: scale(0.75);" data-order-index="${index}">
                                 Checkout
                             </ons-button>
-                            <ons-button disable-auto-styling modifier="quiet" onclick=""
+                            <ons-button disable-auto-styling modifier="quiet" 
+                            onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
+                            trackOrderPageViewModel.cancelButtonClicked(this)"
                             style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
                                     margin: 0; padding: 0; transform: scale(0.75);">
                                 Cancel
