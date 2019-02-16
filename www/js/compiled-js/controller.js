@@ -8401,6 +8401,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // show the page loader modal
                 $('#checkout-page .modal').css("display", "table");
 
+                // check if user has entered any  coupon code
+                if($('#checkout-page #checkout-payment-voucher-code').val().trim() === ""){ // no coupon code entered
+                    throw "error - no coupon code provided"; // throw error
+                }
+
                 // check if the coupon is valid or not
                 let couponsArray = await Promise.resolve($.ajax( // load the list of shipping zones
                     {
@@ -10307,8 +10312,35 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 try{
                     // create a new order object
                     var newOrder = JSON.parse(JSON.stringify(selectedOrder));
+                    // delete and reset all necessary properties for the new order
                     delete newOrder.id;
+                    newOrder.transaction_id = "";
+                    newOrder.line_items.forEach(function(lineItem){
+                        delete lineItem.id;
+                        for(let index = 0; index < lineItem.meta_data.length; index++){
+                            delete lineItem.meta_data[index].id;
+                        }
+                    });
+                    newOrder.tax_lines.forEach(function(item){
+                        delete item.id;
+                        for(let index = 0; index < item.meta_data.length; index++){
+                            delete item.meta_data[index].id;
+                        }
+                    });
+                    newOrder.shipping_lines.forEach(function(item){
+                        delete item.id;
+                        for(let index = 0; index < item.meta_data.length; index++){
+                            delete item.meta_data[index].id;
+                        }
+                    });
+                    newOrder.fee_lines.forEach(function(item){
+                        delete item.id;
+                        for(let index = 0; index < item.meta_data.length; index++){
+                            delete item.meta_data[index].id;
+                        }
+                    });
                     delete newOrder.coupon_lines;
+                    newOrder.set_paid = false;
 
                     // update the status of the new order to "pending"
                     newOrder.status = "pending";
