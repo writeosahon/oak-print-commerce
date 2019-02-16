@@ -10317,6 +10317,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     newOrder.transaction_id = "";
                     newOrder.line_items.forEach(function(lineItem){
                         delete lineItem.id;
+                        lineItem.total = lineItem.subtotal; // remove any discounts
                         for(let index = 0; index < lineItem.meta_data.length; index++){
                             delete lineItem.meta_data[index].id;
                         }
@@ -10365,10 +10366,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         }
                     ));
 
-                    // load the user profile details from the app database
-                    var userDetails = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
-                    loadData("user-details",
-                        utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
 
                     // display the checkout page using the selected order
                     await $('#app-main-navigator').get(0).pushPage("checkout-page.html", {data: {orderData: newOrder}});
