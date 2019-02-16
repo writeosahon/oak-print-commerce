@@ -10340,6 +10340,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         }
                     });
                     delete newOrder.coupon_lines;
+                    delete newOrder.discount_total;
+                    delete newOrder.discount_tax;
                     newOrder.set_paid = false;
 
                     // update the status of the new order to "pending"
