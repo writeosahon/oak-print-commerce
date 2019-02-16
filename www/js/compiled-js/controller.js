@@ -9957,7 +9957,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
                             trackOrderPageViewModel.cancelButtonClicked(this)"
                             style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
-                                    margin: 0; padding: 0; transform: scale(0.75);">
+                                    margin: 0; padding: 0; transform: scale(0.75);" data-order-index="${index}">
                                 Cancel
                             </ons-button>
                             </div>
@@ -10154,6 +10154,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         async cancelButtonClicked(buttonElem){
 
+            var $buttonElement = $(buttonElem); // get a jQuery reference to the button element that was clicked
+
             // check if there is Internet connection
             if(navigator.connection.type === Connection.NONE){ // there is no Internet connection
                 // hide all previously displayed ej2 toast
@@ -10184,8 +10186,75 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // function for "Accept/Yes" button
             $('#cancel-order-action-sheet #cancel-order-yes').get(0).onclick =
                 async function(){
-                    // hide the action sheet
-                    await document.getElementById('cancel-order-action-sheet').hide();
+                    // display the page loader
+                    $('#track-order-page .modal').css("display", "table");
+                    try{
+                        // hide the action sheet
+                        await document.getElementById('cancel-order-action-sheet').hide();
+                        // get the order that was selected for cancellation
+                        var selectedOrder = utopiasoftware[utopiasoftware_app_namespace].controller.
+                            trackOrderPageViewModel.trackOrderResultsArray[window.parseInt($buttonElement.attr("data-order-index"))];
+                        // change the selectedOrder status to "cancelled"
+                        selectedOrder.status = "cancelled";
+                        // update the selectedOrder status remotely
+                        await Promise.resolve($.ajax(
+                            {
+                                url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
+                                    `/wp-json/wc/v3/orders/${selectedOrder.id}`,
+                                type: "put",
+                                contentType: "application/json",
+                                beforeSend: function(jqxhr) {
+                                    jqxhr.setRequestHeader("Authorization", "Basic " +
+                                        utopiasoftware[utopiasoftware_app_namespace].accessor);
+                                },
+                                dataType: "json",
+                                timeout: 240000, // wait for 4 minutes before timeout of request
+                                processData: false,
+                                data: JSON.stringify(selectedOrder)
+                            }
+                        ));
+
+                        // load the user profile details from the app database
+                        var userDetails = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                        loadData("user-details",
+                            utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
+
+                        // refresh the contents of the track order page
+                        let searchResultsArray = await utopiasoftware[utopiasoftware_app_namespace].controller.
+                        trackOrderPageViewModel.
+                        loadOrders({"page": 1, "per_page": 20, "order": "desc", "orderby": "date",
+                            "customer": userDetails.id,
+                            "search": $('#track-order-page #track-order-page-input').get(0).ej2_instances[0].value || ""});
+                        await utopiasoftware[utopiasoftware_app_namespace].controller.trackOrderPageViewModel.
+                        displayPageContent(searchResultsArray[0]);
+                        // inform the user that the order has been cancelled
+                        // hide all previously displayed ej2 toast
+                        $('.page-toast').get(0).ej2_instances[0].hide('All');
+                        $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                        // display toast to show that an error
+                        let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                        toast.cssClass = 'default-ej2-toast';
+                        toast.timeOut = 2000;
+                        toast.content = `Order #${selectedOrder.id} has been cancelled`;
+                        toast.dataBind();
+                        toast.show();
+                    }
+                    catch(err){
+                        // hide all previously displayed ej2 toast
+                        $('.page-toast').get(0).ej2_instances[0].hide('All');
+                        $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                        // display toast to show that an error
+                        let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                        toast.cssClass = 'error-ej2-toast';
+                        toast.timeOut = 3500;
+                        toast.content = `Error cancelling order #${selectedOrder.id}. Try again`;
+                        toast.dataBind();
+                        toast.show();
+                    }
+                    finally{
+                        // display the page loader
+                        $('#track-order-page .modal').css("display", "none");
+                    }
                 };
 
             // display the cancel order action sheet
