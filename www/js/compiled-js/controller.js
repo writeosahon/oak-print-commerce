@@ -9979,9 +9979,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             <span style="display: block; text-transform: uppercase; color: goldenrod">
                                 ${ordersArray[index].status}
                             </span>
-                            <ons-button disable-auto-styling modifier="quiet" onclick=""
+                            <ons-button disable-auto-styling modifier="quiet" 
+                            onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
+                            trackOrderPageViewModel.reorderButtonClicked(this)"
                             style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
-                                    margin: 0; padding: 0; transform: scale(0.75);">
+                                    margin: 0; padding: 0; transform: scale(0.75);" data-order-index="${index}">
                                 Reorder
                             </ons-button>
                             </div>
@@ -10260,7 +10262,101 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // display the cancel order action sheet
             await document.getElementById('cancel-order-action-sheet').show();
 
-        }
+        },
+
+        /**
+         * method is triggered when the "Reorder" button on the
+         * Orders Collection is clicked
+         *
+         * @buttonElem {HTMLButton}
+         *
+         * @returns {Promise<void>}
+         */
+        async reorderButtonClicked(buttonElem){
+            var $buttonElement = $(buttonElem); // get a jQuery reference to the button element that was clicked
+
+            // check if there is Internet connection
+            if(navigator.connection.type === Connection.NONE){ // there is no Internet connection
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast to show that an error
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'default-ej2-toast';
+                toast.timeOut = 3000;
+                toast.content = `Connect to the Internet to make a reorder`;
+                toast.dataBind();
+                toast.show();
+
+                return; // exit method
+            }
+
+            // show the page loader
+            $('#track-order-page .modal').css("display", "table");
+
+            // handle the tasks in a separate queue
+            window.setTimeout(async function(){
+                // get the selected order to be checked out
+                var selectedOrder = utopiasoftware[utopiasoftware_app_namespace].controller.
+                    trackOrderPageViewModel.trackOrderResultsArray[window.parseInt($buttonElement.attr("data-order-index"))];
+
+                console.log("ORDER INDEX", $buttonElement.attr("data-order-index"));
+
+                console.log("SELECTED ORDER", selectedOrder);
+
+                try{
+                    // create a new order object
+                    var newOrder = JSON.parse(JSON.stringify(selectedOrder));
+                    delete newOrder.id;
+                    delete newOrder.coupon_lines;
+
+                    // update the status of the new order to "pending"
+                    newOrder.status = "pending";
+
+                    // update the selectedOrder status remotely
+                    newOrder = await Promise.resolve($.ajax(
+                        {
+                            url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
+                                `/wp-json/wc/v3/orders`,
+                            type: "post",
+                            contentType: "application/json",
+                            beforeSend: function(jqxhr) {
+                                jqxhr.setRequestHeader("Authorization", "Basic " +
+                                    utopiasoftware[utopiasoftware_app_namespace].accessor);
+                            },
+                            dataType: "json",
+                            timeout: 240000, // wait for 4 minutes before timeout of request
+                            processData: false,
+                            data: JSON.stringify(newOrder)
+                        }
+                    ));
+
+                    // load the user profile details from the app database
+                    var userDetails = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                    loadData("user-details",
+                        utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
+
+                    // display the checkout page using the selected order
+                    await $('#app-main-navigator').get(0).pushPage("checkout-page.html", {data: {orderData: newOrder}});
+                }
+                catch(err){
+                    // hide all previously displayed ej2 toast
+                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                    $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                    // display toast message
+                    let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                    toast.cssClass = 'error-ej2-toast';
+                    toast.timeOut = 3000;
+                    toast.content = `Placing new order failed. Please retry`;
+                    toast.dataBind();
+                    toast.show();
+                }
+                finally {
+                    // hide the page loader
+                    $('#track-order-page .modal').css("display", "none");
+                }
+            }, 0);
+        },
     },
 
     /**
