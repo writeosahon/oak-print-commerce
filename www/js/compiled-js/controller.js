@@ -10150,7 +10150,46 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          *
          * @returns {Promise<void>}
          */
-        async cancelButtonClicked(buttonElem){}
+        async cancelButtonClicked(buttonElem){
+
+            // check if there is Internet connection
+            if(navigator.connection.type === Connection.NONE){ // there is no Internet connection
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast to show that an error
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'default-ej2-toast';
+                toast.timeOut = 3000;
+                toast.content = `Connect to the Internet to cancel this order`;
+                toast.dataBind();
+                toast.show();
+
+                return; // exit method
+            }
+
+            // attach functions to handle the "Reject/No" and "Accept/Yes" buttons click event.
+            // These buttons are located in the 'Cancel Order Action Sheet'.
+            // Click event handlers must always be defined for these buttons when using this action sheet
+
+            // function for "Reject/No" button
+            $('#cancel-order-action-sheet #cancel-order-no').get(0).onclick =
+                async function(){
+                    // hide the action sheet
+                    await document.getElementById('cancel-order-action-sheet').hide();
+                };
+
+            // function for "Accept/Yes" button
+            $('#cancel-order-action-sheet #cancel-order-yes').get(0).onclick =
+                async function(){
+                    // hide the action sheet
+                    await document.getElementById('cancel-order-action-sheet').hide();
+                };
+
+            // display the cancel order action sheet
+            await document.getElementById('cancel-order-action-sheet').show();
+
+        }
     },
 
     /**
