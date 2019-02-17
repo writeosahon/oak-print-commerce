@@ -92,7 +92,7 @@
 /** STYLE FOR DEFAULT PAGE PRE-LOADERS ENDS **/
 
 /** STYLE FOR PAGE LOADERS BEGINS **/
-.page > .content > .modal {
+.page > .page__content > .modal {
     position: fixed;
 }
 /** STYLE FOR PAGE LOADERS ENDS **/
