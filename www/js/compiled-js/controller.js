@@ -11626,14 +11626,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             </span>
                             <ons-button disable-auto-styling modifier="quiet" 
                             onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
-                            trackOrderPageViewModel.checkoutButtonClicked(this)"
+                            pendingOrdersPageViewModel.checkoutButtonClicked(this)"
                             style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
                                     margin: 0; padding: 0; transform: scale(0.75);" data-order-index="${index}">
                                 Checkout
                             </ons-button>
                             <ons-button disable-auto-styling modifier="quiet" 
                             onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
-                            trackOrderPageViewModel.cancelButtonClicked(this)"
+                            pendingOrdersPageViewModel.cancelButtonClicked(this)"
                             style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
                                     margin: 0; padding: 0; transform: scale(0.75);" data-order-index="${index}">
                                 Cancel
@@ -11659,7 +11659,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             </span>
                             <ons-button disable-auto-styling modifier="quiet" 
                             onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
-                            trackOrderPageViewModel.reorderButtonClicked(this)"
+                            pendingOrdersPageViewModel.reorderButtonClicked(this)"
                             style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
                                     margin: 0; padding: 0; transform: scale(0.75);" data-order-index="${index}">
                                 Reorder
@@ -11685,14 +11685,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             </span>
                             <ons-button disable-auto-styling modifier="quiet" 
                             onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
-                            trackOrderPageViewModel.checkoutButtonClicked(this)"
+                            pendingOrdersPageViewModel.checkoutButtonClicked(this)"
                             style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
                                     margin: 0; padding: 0; transform: scale(0.75);" data-order-index="${index}">
                                 Checkout
                             </ons-button>
                             <ons-button disable-auto-styling modifier="quiet" 
                             onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
-                            trackOrderPageViewModel.cancelButtonClicked(this)"
+                            pendingOrdersPageViewModel.cancelButtonClicked(this)"
                             style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
                                     margin: 0; padding: 0; transform: scale(0.75);" data-order-index="${index}">
                                 Cancel
@@ -11718,7 +11718,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             </span>
                             <ons-button disable-auto-styling modifier="quiet" 
                             onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
-                            trackOrderPageViewModel.reorderButtonClicked(this)"
+                            pendingOrdersPageViewModel.reorderButtonClicked(this)"
                             style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
                                     margin: 0; padding: 0; transform: scale(0.75);" data-order-index="${index}">
                                 Reorder
@@ -11744,7 +11744,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             </span>
                             <ons-button disable-auto-styling modifier="quiet" 
                             onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
-                            trackOrderPageViewModel.reorderButtonClicked(this)"
+                            pendingOrdersPageViewModel.reorderButtonClicked(this)"
                             style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
                                     margin: 0; padding: 0; transform: scale(0.75);" data-order-index="${index}">
                                 Reorder
