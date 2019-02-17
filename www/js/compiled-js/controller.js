@@ -10790,14 +10790,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             </span>
                             <ons-button disable-auto-styling modifier="quiet" 
                             onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
-                            trackOrderPageViewModel.checkoutButtonClicked(this)"
+                            completedOrdersPageViewModel.checkoutButtonClicked(this)"
                             style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
                                     margin: 0; padding: 0; transform: scale(0.75);" data-order-index="${index}">
                                 Checkout
                             </ons-button>
                             <ons-button disable-auto-styling modifier="quiet" 
                             onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
-                            trackOrderPageViewModel.cancelButtonClicked(this)"
+                            completedOrdersPageViewModel.cancelButtonClicked(this)"
                             style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
                                     margin: 0; padding: 0; transform: scale(0.75);" data-order-index="${index}">
                                 Cancel
@@ -10823,7 +10823,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             </span>
                             <ons-button disable-auto-styling modifier="quiet" 
                             onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
-                            trackOrderPageViewModel.reorderButtonClicked(this)"
+                            completedOrdersPageViewModel.reorderButtonClicked(this)"
                             style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
                                     margin: 0; padding: 0; transform: scale(0.75);" data-order-index="${index}">
                                 Reorder
@@ -10849,14 +10849,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             </span>
                             <ons-button disable-auto-styling modifier="quiet" 
                             onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
-                            trackOrderPageViewModel.checkoutButtonClicked(this)"
+                            completedOrdersPageViewModel.checkoutButtonClicked(this)"
                             style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
                                     margin: 0; padding: 0; transform: scale(0.75);" data-order-index="${index}">
                                 Checkout
                             </ons-button>
                             <ons-button disable-auto-styling modifier="quiet" 
                             onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
-                            trackOrderPageViewModel.cancelButtonClicked(this)"
+                            completedOrdersPageViewModel.cancelButtonClicked(this)"
                             style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
                                     margin: 0; padding: 0; transform: scale(0.75);" data-order-index="${index}">
                                 Cancel
@@ -10882,7 +10882,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             </span>
                             <ons-button disable-auto-styling modifier="quiet" 
                             onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
-                            trackOrderPageViewModel.reorderButtonClicked(this)"
+                            completedOrdersPageViewModel.reorderButtonClicked(this)"
                             style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
                                     margin: 0; padding: 0; transform: scale(0.75);" data-order-index="${index}">
                                 Reorder
@@ -10908,7 +10908,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             </span>
                             <ons-button disable-auto-styling modifier="quiet" 
                             onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
-                            trackOrderPageViewModel.reorderButtonClicked(this)"
+                            completedOrdersPageViewModel.reorderButtonClicked(this)"
                             style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
                                     margin: 0; padding: 0; transform: scale(0.75);" data-order-index="${index}">
                                 Reorder
@@ -10948,6 +10948,291 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             return displayCompletedPromise; // return the promise object ot indicate if the display has been completed or not
 
+        },
+
+        /**
+         * method is triggered when the "Check Out" button on the
+         * Orders Collection is clicked
+         *
+         * @buttonElem {HTMLButton}
+         *
+         * @returns {Promise<void>}
+         */
+        async checkoutButtonClicked(buttonElem){
+            var $buttonElement = $(buttonElem); // get a jQuery reference to the button element that was clicked
+
+            // show the page loader
+            $('#completed-orders-page .modal').css("display", "table");
+
+            // handle the tasks in a separate queue
+            window.setTimeout(async function(){
+                // get the selected order to be checked out
+                var selectedOrder = utopiasoftware[utopiasoftware_app_namespace].controller.
+                    completedOrdersPageViewModel.ordersResultsArray[window.parseInt($buttonElement.attr("data-order-index"))];
+
+                console.log("ORDER INDEX", $buttonElement.attr("data-order-index"));
+
+                console.log("SELECTED ORDER", selectedOrder);
+
+                try{
+                    // display the checkout page using the selected order
+                    await $('#app-main-navigator').get(0).pushPage("checkout-page.html", {data: {orderData: selectedOrder}});
+                }
+                catch(err){
+                    // hide all previously displayed ej2 toast
+                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                    $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                    // display toast message
+                    let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                    toast.cssClass = 'error-ej2-toast';
+                    toast.timeOut = 3000;
+                    toast.content = `Order checkout failed. Please retry`;
+                    toast.dataBind();
+                    toast.show();
+                }
+                finally {
+                    // hide the page loader
+                    $('#completed-orders-page .modal').css("display", "none");
+                }
+            }, 0);
+        },
+
+        /**
+         * method is triggered when the "Cancel" button on the
+         * Orders Collection is clicked
+         *
+         * @returns {Promise<void>}
+         */
+        async cancelButtonClicked(buttonElem){
+
+            var $buttonElement = $(buttonElem); // get a jQuery reference to the button element that was clicked
+
+            // check if there is Internet connection
+            if(navigator.connection.type === Connection.NONE){ // there is no Internet connection
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast to show that an error
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'default-ej2-toast';
+                toast.timeOut = 3000;
+                toast.content = `Connect to the Internet to cancel this order`;
+                toast.dataBind();
+                toast.show();
+
+                return; // exit method
+            }
+
+            // attach functions to handle the "Reject/No" and "Accept/Yes" buttons click event.
+            // These buttons are located in the 'Cancel Order Action Sheet'.
+            // Click event handlers must always be defined for these buttons when using this action sheet
+
+            // function for "Reject/No" button
+            $('#cancel-order-action-sheet #cancel-order-no').get(0).onclick =
+                async function(){
+                    // hide the action sheet
+                    await document.getElementById('cancel-order-action-sheet').hide();
+                };
+
+            // function for "Accept/Yes" button
+            $('#cancel-order-action-sheet #cancel-order-yes').get(0).onclick =
+                async function(){
+                    // display the page loader
+                    $('#completed-orders-page .modal').css("display", "table");
+                    try{
+                        // hide the action sheet
+                        await document.getElementById('cancel-order-action-sheet').hide();
+                        // get the order that was selected for cancellation
+                        var selectedOrder = utopiasoftware[utopiasoftware_app_namespace].controller.
+                            completedOrdersPageViewModel.ordersResultsArray[window.parseInt($buttonElement.attr("data-order-index"))];
+                        // change the selectedOrder status to "cancelled"
+                        selectedOrder.status = "cancelled";
+                        // update the selectedOrder status remotely
+                        await Promise.resolve($.ajax(
+                            {
+                                url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
+                                    `/wp-json/wc/v3/orders/${selectedOrder.id}`,
+                                type: "put",
+                                contentType: "application/json",
+                                beforeSend: function(jqxhr) {
+                                    jqxhr.setRequestHeader("Authorization", "Basic " +
+                                        utopiasoftware[utopiasoftware_app_namespace].accessor);
+                                },
+                                dataType: "json",
+                                timeout: 240000, // wait for 4 minutes before timeout of request
+                                processData: false,
+                                data: JSON.stringify(selectedOrder)
+                            }
+                        ));
+
+                        // load the user profile details from the app database
+                        var userDetails = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                        loadData("user-details",
+                            utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
+
+                        // refresh the contents of the completed orders page
+                        let searchResultsArray = await utopiasoftware[utopiasoftware_app_namespace].controller.
+                        trackOrderPageViewModel.
+                        loadOrders({"page": 1, "per_page": 20, "order": "desc", "orderby": "date",
+                            "customer": userDetails.id,
+                            "status": "completed"});
+                        await utopiasoftware[utopiasoftware_app_namespace].controller.completedOrdersPageViewModel.
+                        displayPageContent(searchResultsArray[0]);
+                        // inform the user that the order has been cancelled
+                        // hide all previously displayed ej2 toast
+                        $('.page-toast').get(0).ej2_instances[0].hide('All');
+                        $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                        // display toast to show that an error
+                        let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                        toast.cssClass = 'default-ej2-toast';
+                        toast.timeOut = 2000;
+                        toast.content = `Order #${selectedOrder.id} has been cancelled`;
+                        toast.dataBind();
+                        toast.show();
+                    }
+                    catch(err){
+                        // hide all previously displayed ej2 toast
+                        $('.page-toast').get(0).ej2_instances[0].hide('All');
+                        $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                        // display toast to show that an error
+                        let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                        toast.cssClass = 'error-ej2-toast';
+                        toast.timeOut = 3500;
+                        toast.content = `Error cancelling order #${selectedOrder.id}. Try again`;
+                        toast.dataBind();
+                        toast.show();
+                    }
+                    finally{
+                        // display the page loader
+                        $('#completed-orders-page .modal').css("display", "none");
+                    }
+                };
+
+            // display the cancel order action sheet
+            await document.getElementById('cancel-order-action-sheet').show();
+
+        },
+
+        /**
+         * method is triggered when the "Reorder" button on the
+         * Orders Collection is clicked
+         *
+         * @buttonElem {HTMLButton}
+         *
+         * @returns {Promise<void>}
+         */
+        async reorderButtonClicked(buttonElem){
+            var $buttonElement = $(buttonElem); // get a jQuery reference to the button element that was clicked
+
+            // check if there is Internet connection
+            if(navigator.connection.type === Connection.NONE){ // there is no Internet connection
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast to show that an error
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'default-ej2-toast';
+                toast.timeOut = 3000;
+                toast.content = `Connect to the Internet to make a reorder`;
+                toast.dataBind();
+                toast.show();
+
+                return; // exit method
+            }
+
+            // show the page loader
+            $('#completed-orders-page .modal').css("display", "table");
+
+            // handle the tasks in a separate queue
+            window.setTimeout(async function(){
+                // get the selected order to be checked out
+                var selectedOrder = utopiasoftware[utopiasoftware_app_namespace].controller.
+                    trackOrderPageViewModel.trackOrderResultsArray[window.parseInt($buttonElement.attr("data-order-index"))];
+
+                console.log("ORDER INDEX", $buttonElement.attr("data-order-index"));
+
+                console.log("SELECTED ORDER", selectedOrder);
+
+                try{
+                    // create a new order object
+                    var newOrder = JSON.parse(JSON.stringify(selectedOrder));
+                    // delete and reset all necessary properties for the new order
+                    delete newOrder.id;
+                    newOrder.transaction_id = "";
+                    newOrder.line_items.forEach(function(lineItem){
+                        delete lineItem.id;
+                        lineItem.total = lineItem.subtotal; // remove any discounts
+                        for(let index = 0; index < lineItem.meta_data.length; index++){
+                            delete lineItem.meta_data[index].id;
+                        }
+                    });
+                    newOrder.tax_lines.forEach(function(item){
+                        delete item.id;
+                        for(let index = 0; index < item.meta_data.length; index++){
+                            delete item.meta_data[index].id;
+                        }
+                    });
+                    newOrder.shipping_lines.forEach(function(item){
+                        delete item.id;
+                        for(let index = 0; index < item.meta_data.length; index++){
+                            delete item.meta_data[index].id;
+                        }
+                    });
+                    newOrder.fee_lines.forEach(function(item){
+                        delete item.id;
+                        for(let index = 0; index < item.meta_data.length; index++){
+                            delete item.meta_data[index].id;
+                        }
+                    });
+                    delete newOrder.coupon_lines;
+                    delete newOrder.discount_total;
+                    delete newOrder.discount_tax;
+                    newOrder.set_paid = false;
+
+                    // update the status of the new order to "pending"
+                    newOrder.status = "pending";
+
+                    // update the selectedOrder status remotely
+                    newOrder = await Promise.resolve($.ajax(
+                        {
+                            url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
+                                `/wp-json/wc/v3/orders`,
+                            type: "post",
+                            contentType: "application/json",
+                            beforeSend: function(jqxhr) {
+                                jqxhr.setRequestHeader("Authorization", "Basic " +
+                                    utopiasoftware[utopiasoftware_app_namespace].accessor);
+                            },
+                            dataType: "json",
+                            timeout: 240000, // wait for 4 minutes before timeout of request
+                            processData: false,
+                            data: JSON.stringify(newOrder)
+                        }
+                    ));
+
+
+                    // display the checkout page using the selected order
+                    await $('#app-main-navigator').get(0).pushPage("checkout-page.html", {data: {orderData: newOrder}});
+                }
+                catch(err){
+                    console.log(err, "REORDER ERROR");
+
+                    // hide all previously displayed ej2 toast
+                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                    $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                    // display toast message
+                    let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                    toast.cssClass = 'error-ej2-toast';
+                    toast.timeOut = 3000;
+                    toast.content = `Placing new order failed. Please retry`;
+                    toast.dataBind();
+                    toast.show();
+                }
+                finally {
+                    // hide the page loader
+                    $('#track-order-page .modal').css("display", "none");
+                }
+            }, 0);
         }
     },
 
