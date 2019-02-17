@@ -91,6 +91,12 @@
 }
 /** STYLE FOR DEFAULT PAGE PRE-LOADERS ENDS **/
 
+/** STYLE FOR PAGE LOADERS BEGINS **/
+.page > .content > .modal {
+    position: fixed;
+}
+/** STYLE FOR PAGE LOADERS ENDS **/
+
 /** STYLE FOR LOADER MODAL BEGINS **/
 #loader-modal ons-icon[spin] {
     -webkit-animation: ons-icon-spin 0.6s infinite linear;
