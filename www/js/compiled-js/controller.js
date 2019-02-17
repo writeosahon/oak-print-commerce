@@ -11147,7 +11147,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             window.setTimeout(async function(){
                 // get the selected order to be checked out
                 var selectedOrder = utopiasoftware[utopiasoftware_app_namespace].controller.
-                    trackOrderPageViewModel.trackOrderResultsArray[window.parseInt($buttonElement.attr("data-order-index"))];
+                    completedOrdersPageViewModel.ordersResultsArray[window.parseInt($buttonElement.attr("data-order-index"))];
 
                 console.log("ORDER INDEX", $buttonElement.attr("data-order-index"));
 
@@ -11230,7 +11230,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 }
                 finally {
                     // hide the page loader
-                    $('#track-order-page .modal').css("display", "none");
+                    $('#completed-orders-page .modal').css("display", "none");
                 }
             }, 0);
         }
