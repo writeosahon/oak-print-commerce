@@ -9991,6 +9991,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     margin: 0; padding: 0; transform: scale(0.75);" data-order-index="${index}">
                                 Reorder
                             </ons-button>
+                            <ons-button disable-auto-styling modifier="quiet" 
+                            onclick="$('#app-main-navigator').get(0).pushPage('order-details-page.html')"
+                            style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
+                                    margin: 0; padding: 0; transform: scale(0.75);" data-order-index="${index}">
+                                Details
+                            </ons-button>
                             </div>
                             </div>`;
                         }
