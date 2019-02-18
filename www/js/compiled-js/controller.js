@@ -12534,7 +12534,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 html(`#${orderData.id}`);
                 $('#order-details-page #order-details-list .order-details-order-status').
                 html(`${orderData.status}`);
-                // check if the order created (in GMT) has a pending 'Z' appended to the time
+                // check if the order created date (in GMT) has a pending 'Z' appended to the time
                 if(! orderData.date_created_gmt.endsWith("Z")){ // no pending 'Z', so add the 'Z'
                     // add the pending 'Z' to ensure the date meets the ISO format
                     orderData.date_created_gmt += 'Z';
@@ -12548,14 +12548,33 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $('#order-details-page #order-details-list .order-details-shipping-method').
                 html(`${orderData.shipping_lines[0].method_title}`);
 
-                $('#checkout-page #checkout-billing-information-address').html(orderData.billing.address_1);
-                $('#checkout-page #checkout-billing-information-city').html(orderData.billing.city);
+                // update the order shipping updates/notes
+                let shippingUpdateOrderNotesContent = ''; // holds the contents for the order notes
+                for(let index = 0; index < utopiasoftware[utopiasoftware_app_namespace].controller.
+                    orderDetailsPageViewModel.orderNotesArray.length; index++){ // attach the order updates/notes
 
-                $('#checkout-page #checkout-shipping-information-first-name').html(orderData.shipping.first_name);
-                $('#checkout-page #checkout-shipping-information-last-name').html(orderData.shipping.last_name);
-                $('#checkout-page #checkout-shipping-information-address').html(orderData.shipping.address_1);
-                $('#checkout-page #checkout-shipping-information-city').html(orderData.shipping.city);
+                    let orderNote = utopiasoftware[utopiasoftware_app_namespace].controller.
+                        orderDetailsPageViewModel.orderNotesArray[index]; // get the current order note object
 
+                    shippingUpdateOrderNotesContent += `
+                    <div class="col-xs-6" style="text-align: right; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px;
+                            text-transform: lowercase; word-wrap: break-word">${orderNote[index].note}</div>`;
+
+                    // check if the order note created date (in GMT) has a pending 'Z' appended to the time
+                    if(! orderNote.date_created_gmt.endsWith("Z")){ // no pending 'Z', so add the 'Z'
+                        // add the pending 'Z' to ensure the date meets the ISO format
+                        orderNote.date_created_gmt += 'Z';
+                    }
+
+                    shippingUpdateOrderNotesContent += `
+                    <div class="col-xs-6" style="text-align: left; padding-left: 5px;
+                            padding-top: 10px; padding-bottom: 10px;
+                            text-transform: lowercase; word-wrap: break-word">
+                    ${kendo.toString(new Date(orderNote.date_created_gmt), "MMMM dd, yyyy")}        
+                    </div>`;
+
+                }
                 // get the shipping zone the of the user by checking the user's shipping country
                 let shippingCountryCode =  orderData.shipping.country == "" ? 'NG': orderData.shipping.country;
                 let shippingZoneId = 0; // set the shipping zone id to the default i.e. 'Rest of the world'
