@@ -12076,6 +12076,860 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 }
             }, 0);
         }
+    },
+
+    /**
+     * this is the view-model/controller for the Order Details page
+     */
+    orderDetailsPageViewModel: {
+
+
+        /**
+         * holds the Order object which contains details to be displayed
+         */
+        orderDetails : null,
+
+        /**
+         * holds the array containing order notes belonging to
+         * the specified order object (i.e. orderDetails)
+         */
+        orderNotesArray: [],
+
+        /**
+         * event is triggered when page is initialised
+         */
+        pageInit: function(event){
+
+            var $thisPage = $(event.target); // get the current page shown
+
+            // call the function used to initialise the app page if the app is fully loaded
+            loadPageOnAppReady();
+
+            //function is used to initialise the page if the app is fully ready for execution
+            async function loadPageOnAppReady() {
+                // check to see if onsen is ready and if all app loading has been completed
+                if (!ons.isReady() || utopiasoftware[utopiasoftware_app_namespace].model.isAppReady === false) {
+                    setTimeout(loadPageOnAppReady, 500); // call this function again after half a second
+                    return;
+                }
+
+                // listen for the back button event
+                $('#app-main-navigator').get(0).topPage.onDeviceBackButton =
+                    utopiasoftware[utopiasoftware_app_namespace].controller.
+                        orderDetailsPageViewModel.backButtonClicked;
+
+                // set the order object to be used by this page
+                utopiasoftware[utopiasoftware_app_namespace].controller.orderDetailsPageViewModel.orderDetails =
+                    $('#app-main-navigator').get(0).topPage.data.orderData;
+
+                try{
+
+                    // create the "Reorder" button
+                    new ej.splitbuttons.ProgressButton({
+                        cssClass: 'e-hide-spinner',
+                        duration: 10 * 60 * 60 * 1000 // set spinner/progress duration for 10 hr
+                    }).appendTo('#order-details-reorder');
+
+
+                    // load the order notes attached to the loaded order details
+                    let promisesArray = []; // holds all created promises
+                    let orderId = utopiasoftware[utopiasoftware_app_namespace].controller.
+                        orderDetailsPageViewModel.orderDetails.id; // get the id for the specified order object
+
+                    promisesArray.push(Promise.resolve($.ajax( // load the order notes for the specified order object
+                        {
+                            url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
+                                `/wp-json/wc/v3/orders/${orderId}/notes`,
+                            type: "get",
+                            //contentType: "application/json",
+                            beforeSend: function(jqxhr) {
+                                jqxhr.setRequestHeader("Authorization", "Basic " +
+                                    utopiasoftware[utopiasoftware_app_namespace].accessor);
+                            },
+                            dataType: "json",
+                            timeout: 240000, // wait for 4 minutes before timeout of request
+                            processData: true,
+                            data: {"type": "any"}
+                        }
+                    )));
+
+                    // wait for all promises to resolve
+                    promisesArray = await Promise.all(promisesArray);
+                    // get the order notes belonging to the specified order object
+                    utopiasoftware[utopiasoftware_app_namespace].controller.
+                        orderDetailsPageViewModel.orderNotesArray = promisesArray[0];
+
+                    // enable the "Reorder" button
+                    $('#order-details-page #order-details-reorder').removeAttr("disabled");
+
+                }
+                catch(err){
+                    // hide all previously displayed ej2 toast
+                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                    // display toast to show that an error
+                    let toast = $('.page-toast').get(0).ej2_instances[0];
+                    toast.cssClass = 'error-ej2-toast';
+                    toast.content = `Sorry, an error occurred.${navigator.connection.type === Connection.NONE ? " Connect to the Internet." : ""} Pull down to refresh and try again`;
+                    toast.dataBind();
+                    toast.show();
+                }
+                finally {
+                    // hide page preloader
+                    $('#order-details-page .page-preloader').css("display", "none");
+                    // hide page modal loader
+                    $('#order-details-page .modal').css("display", "none");
+                }
+            }
+
+        },
+
+        /**
+         * method is triggered when page is shown
+         */
+        pageShow: async function(){
+
+            window.SoftInputMode.set('adjustPan'); // adjust device input mode
+
+            // update cart count
+            $('#order-details-page .cart-count').html(utopiasoftware[utopiasoftware_app_namespace].model.cartCount);
+        },
+
+        /**
+         * method is triggered when page is hidden
+         */
+        pageHide: async function(){
+
+        },
+
+        /**
+         * method is triggered when page is destroyed
+         */
+        pageDestroy: function(){
+
+            // destroy the "Reorder" button
+            $('#order-details-page #order-details-reorder').get(0).ej2_instances[0].destroy();
+
+
+            // reset the view-model properties
+            utopiasoftware[utopiasoftware_app_namespace].controller.orderDetailsPageViewModel.orderDetails = null;
+            utopiasoftware[utopiasoftware_app_namespace].controller.orderDetailsPageViewModel.orderNotesArray = [];
+        },
+
+        /**
+         * method is triggered when the device back button is clicked OR a similar action is triggered
+         */
+        backButtonClicked(){
+            // get back to the previous page on the app-main navigator stack
+            $('#app-main-navigator').get(0).popPage();
+        },
+
+
+        /**
+         * method is triggered when the user clicks the "Reorder" button
+         *
+         * @returns {Promise<void>}
+         */
+        async reorderButtonClicked(){
+
+            // check if there is Internet connection
+            if(navigator.connection.type === Connection.NONE){ // there is no Internet connection
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast to show that an error
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.timeOut = 3000;
+                toast.content = `Connect to the Internet to make payment`;
+                toast.dataBind();
+                toast.show();
+
+                // enable the "Make Payment" button
+                $('#checkout-page #checkout-make-payment').removeAttr("disabled");
+                // hide the spinner from the 'Make Payment'
+                $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
+                $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].dataBind();
+                $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].stop();
+
+                return; // exit method
+            }
+
+            // check what payment method is being used
+            if(utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.
+                chekoutOrder.payment_method === "paystack"){ // user selected the paystack (Pay With Card)
+
+                // disable the "Make Payment" button
+                $('#checkout-page #checkout-make-payment').attr("disabled", true);
+
+                // inform the user that payment gateway is being prepared
+                $('#loader-modal-message').html("Preparing Payment Channel...");
+                $('#loader-modal').get(0).show(); // show loader
+
+                try{
+                    // load the user profile details from the app database
+                    var userDetails = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                    loadData("user-details",
+                        utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
+
+                    // initialise a paystack (payment) transaction
+                    let payStackResponse = await Promise.resolve($.ajax(
+                        {
+                            url: `https://api.paystack.co/transaction/initialize`,
+                            type: "post",
+                            contentType: "application/json",
+                            beforeSend: function(jqxhr) {
+                                jqxhr.setRequestHeader("Authorization", "Bearer " +
+                                    Base64.decode(utopiasoftware[utopiasoftware_app_namespace].paystackAccessor));
+                            },
+                            dataType: "json",
+                            timeout: 240000, // wait for 4 minutes before timeout of request
+                            processData: false,
+                            data: JSON.stringify({email: userDetails.email,
+                                amount: "" + (kendo.parseFloat(utopiasoftware[utopiasoftware_app_namespace].controller.
+                                    checkoutPageViewModel.chekoutOrder.total) * 100),
+                                callback_url: "https://shopoakexclusive.com/"})
+                        }
+                    ));
+
+                    if(payStackResponse.status === true){ // request for transaction initialisation was successful
+                        // open inapp browser for user to make payment (using the authorization_url from payStack response)
+                        let transactionCompletedUrl = await new Promise(function(resolve, reject){
+                            // create/open inapp browser
+                            let transactionInAppBrowser =
+                                cordova.InAppBrowser.open(window.encodeURI(payStackResponse.data.authorization_url), '_blank',
+                                    'location=yes,clearcache=yes,clearsessioncache=yes,closebuttoncolor=#ffffff,hardwareback=no,hidenavigationbuttons=yes,hideurlbar=yes,zoom=no,toolbarcolor=#3f51b5');
+
+                            // add event listeners for the transaction inapp browswer
+                            transactionInAppBrowser.addEventListener("loadstart", function(loadStartEvent){
+
+                                // check which url is being loaded
+                                if(loadStartEvent.url.startsWith("https://shopoakexclusive.com/")){ // transaction was completed
+                                    // set a flag to indicate that the transaction was completed
+                                    transactionInAppBrowser._utopiasoftware_transaction_completed = true;
+                                    // retrieve the full transaction completed url
+                                    transactionInAppBrowser._utopiasoftware_transaction_completed_url = loadStartEvent.url;
+                                    // exit/close the inapp browser
+                                    transactionInAppBrowser.close();
+                                }
+                            });
+                            transactionInAppBrowser.addEventListener("loaderror", function(loadErrorEvent){
+                                // there is an error loading the transaction page, so exit/close inapp browser
+                                transactionInAppBrowser.close();
+                            });
+                            transactionInAppBrowser.addEventListener("exit", function(exitEvent){
+                                // check if the transaction was completed or not
+                                if(transactionInAppBrowser._utopiasoftware_transaction_completed === true){ // transaction completed
+                                    // resolve parent promise
+                                    resolve(transactionInAppBrowser._utopiasoftware_transaction_completed_url);
+                                }
+                                else{ // transaction was not completed
+                                    reject(); // reject parent promise
+                                }
+                            });
+                        });
+
+                        // get the search parameters object from the transaction completed url
+                        let searchParams = new URLSearchParams(transactionCompletedUrl.split("?")[1]);
+                        // get the 'reference' search parameter value
+                        let completedTransactionReference = searchParams.get("reference");
+
+                        // inform the user that their order is being placed
+                        $('#loader-modal-message').html("Completing Order Placement...");
+
+                        // get a local/deep-clone copy of the page's checkout order object
+                        let localOrderObject = JSON.parse(JSON.
+                        stringify(utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder));
+                        // update the order status (by setting the order paid flag) and transaction reference
+                        localOrderObject.transaction_id = completedTransactionReference;
+                        localOrderObject.set_paid = true;
+                        // update the coupons for the local order object to be sent to the server
+                        localOrderObject.coupon_lines = localOrderObject.coupon_lines.map(function(couponElem){
+                            return {code: couponElem.code};
+                        });
+
+                        // update the checkout order data on the remote server
+                        localOrderObject = await Promise.resolve($.ajax(
+                            {
+                                url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
+                                    `/wp-json/wc/v3/orders/${localOrderObject.id}`,
+                                type: "put",
+                                contentType: "application/json",
+                                beforeSend: function(jqxhr) {
+                                    jqxhr.setRequestHeader("Authorization", "Basic " +
+                                        utopiasoftware[utopiasoftware_app_namespace].accessor);
+                                },
+                                dataType: "json",
+                                timeout: 240000, // wait for 4 minutes before timeout of request
+                                processData: false,
+                                data: JSON.stringify(localOrderObject)
+                            }
+                        ));
+
+                        try{
+                            // delete user cart data
+                            await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                            removeData("user-cart",
+                                utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
+                        }
+                        catch(err){}
+
+
+                        // update the checkout-order-placement-modal with the checkout order number
+                        $('#checkout-order-placement-modal .order-number').html(localOrderObject.number);
+
+                        // add the click handler for the 'checkout-order-placement-modal-ok-button'
+                        $('#checkout-order-placement-modal #checkout-order-placement-modal-ok-button').get(0).
+                            onclick = async function(){
+                            // reload the app main page
+                            await $('ons-splitter').get(0).content.load("app-main-template");
+                            // hide the 'checkout-order-placement-modal'
+                            await $('#checkout-order-placement-modal').get(0).hide();
+                        };
+
+                        // show the 'checkout-order-placement-modal'
+                        await $('#checkout-order-placement-modal').get(0).show();
+
+
+                    }
+                    else{ // request for transaction initialisation was NOT successful
+                        throw "error";
+                    }
+                }
+                catch(err){
+                    console.log("PAYMENT ERROR", err);
+                    // hide all previously displayed ej2 toast
+                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                    $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                    // display toast to show that an error
+                    let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                    toast.cssClass = 'error-ej2-toast';
+                    toast.timeOut = 3500;
+                    toast.content = `Error making payment for this order. Try again`;
+                    toast.dataBind();
+                    toast.show();
+                }
+                finally{
+                    // enable the "Make Payment" button
+                    $('#checkout-page #checkout-make-payment').removeAttr("disabled");
+                    // hide the spinner from the 'Make Payment'
+                    $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
+                    $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].dataBind();
+                    $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].stop();
+
+                    // hide loader
+                    $('#loader-modal').get(0).hide();
+                }
+
+                return; // exit method
+            }
+
+            if(utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.
+                chekoutOrder.payment_method === "cod"){ // user selected the cod (Cash on Delivery)
+
+                // disable the "Make Payment" button
+                $('#checkout-page #checkout-make-payment').attr("disabled", true);
+
+                // inform the user that their order is being placed
+                $('#loader-modal-message').html("Completing Order Placement...");
+                await $('#loader-modal').get(0).show(); // show loader
+
+                try{
+
+                    // get a local/deep-clone copy of the page's checkout order object
+                    let localOrderObject = JSON.parse(JSON.
+                    stringify(utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder));
+                    // update the order status to "processing"
+                    localOrderObject.status = "processing";
+                    // update the coupons for the local order object to be sent to the server
+                    localOrderObject.coupon_lines = localOrderObject.coupon_lines.map(function(couponElem){
+                        return {code: couponElem.code};
+                    });
+
+                    // update the checkout order data on the remote server
+                    localOrderObject = await Promise.resolve($.ajax(
+                        {
+                            url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
+                                `/wp-json/wc/v3/orders/${localOrderObject.id}`,
+                            type: "put",
+                            contentType: "application/json",
+                            beforeSend: function(jqxhr) {
+                                jqxhr.setRequestHeader("Authorization", "Basic " +
+                                    utopiasoftware[utopiasoftware_app_namespace].accessor);
+                            },
+                            dataType: "json",
+                            timeout: 240000, // wait for 4 minutes before timeout of request
+                            processData: false,
+                            data: JSON.stringify(localOrderObject)
+                        }
+                    ));
+
+                    try{
+                        // delete user cart data
+                        await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                        removeData("user-cart",
+                            utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
+                    }
+                    catch(err){}
+
+
+                    // update the checkout-order-placement-modal with the checkout order number
+                    $('#checkout-order-placement-modal .order-number').html(localOrderObject.number);
+
+                    // add the click handler for the 'checkout-order-placement-modal-ok-button'
+                    $('#checkout-order-placement-modal #checkout-order-placement-modal-ok-button').get(0).
+                        onclick = async function(){
+                        // reload the app main page
+                        await $('ons-splitter').get(0).content.load("app-main-template");
+                        // hide the 'checkout-order-placement-modal'
+                        await $('#checkout-order-placement-modal').get(0).hide();
+                    };
+
+                    // show the 'checkout-order-placement-modal'
+                    await $('#checkout-order-placement-modal').get(0).show();
+
+                }
+                catch(err){
+                    console.log("PAYMENT ERROR", err);
+                    // hide all previously displayed ej2 toast
+                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                    $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                    // display toast to show that an error
+                    let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                    toast.cssClass = 'error-ej2-toast';
+                    toast.timeOut = 3500;
+                    toast.content = `Error placing this order. Try again`;
+                    toast.dataBind();
+                    toast.show();
+                }
+                finally{
+                    // enable the "Make Payment" button
+                    $('#checkout-page #checkout-make-payment').removeAttr("disabled");
+                    // hide the spinner from the 'Make Payment'
+                    $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
+                    $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].dataBind();
+                    $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].stop();
+
+                    // hide loader
+                    $('#loader-modal').get(0).hide();
+                }
+
+                return; // exit method
+            }
+
+        },
+
+        /**
+         * method is used to load the order details data into the page
+         * @returns {Promise<void>}
+         */
+        async displayContent(){
+
+            try{
+
+                // get the order object set on this page
+                let orderData = utopiasoftware[utopiasoftware_app_namespace].controller.orderDetailsPageViewModel.orderDetails;
+
+                // display the orderDetails data
+                $('#order-details-page #order-details-list .order-details-order-number').
+                html(`#${orderData.id}`);
+                $('#order-details-page #order-details-list .order-details-order-status').
+                html(`${orderData.status}`);
+                // check if the order created (in GMT) has a pending 'Z' appended to the time
+                if(! orderData.date_created_gmt.endsWith("Z")){ // no pending 'Z', so add the 'Z'
+                    // add the pending 'Z' to ensure the date meets the ISO format
+                    orderData.date_created_gmt += 'Z';
+                }
+                $('#order-details-page #order-details-list .order-details-order-date').
+                html(`${kendo.toString(new Date(orderData.date_created_gmt), "MMMM dd, yyyy")}`);
+                $('#order-details-page #order-details-list .order-details-order-total').
+                html(`&#x20a6;${kendo.toString(kendo.parseFloat(orderData.total), "n2")}`);
+                $('#order-details-page #order-details-list .order-details-payment-method').
+                html(`${orderData.payment_method_title}`);
+                $('#order-details-page #order-details-list .order-details-shipping-method').
+                html(`${orderData.shipping_lines[0].method_title}`);
+
+                $('#checkout-page #checkout-billing-information-address').html(orderData.billing.address_1);
+                $('#checkout-page #checkout-billing-information-city').html(orderData.billing.city);
+
+                $('#checkout-page #checkout-shipping-information-first-name').html(orderData.shipping.first_name);
+                $('#checkout-page #checkout-shipping-information-last-name').html(orderData.shipping.last_name);
+                $('#checkout-page #checkout-shipping-information-address').html(orderData.shipping.address_1);
+                $('#checkout-page #checkout-shipping-information-city').html(orderData.shipping.city);
+
+                // get the shipping zone the of the user by checking the user's shipping country
+                let shippingCountryCode =  orderData.shipping.country == "" ? 'NG': orderData.shipping.country;
+                let shippingZoneId = 0; // set the shipping zone id to the default i.e. 'Rest of the world'
+                // find the country with the specified country code
+                let shippingCountry = utopiasoftware[utopiasoftware_app_namespace].controller.
+                checkoutPageViewModel.countryArray.find(function(countryElem){
+                    return countryElem.code === shippingCountryCode;
+                });
+                // check if a shipping country was discovered
+                if(shippingCountry){ // a shipping country was discovered
+                    // get the shipping zone id which the shipping country belongs to
+                    let shippingZone = utopiasoftware[utopiasoftware_app_namespace].controller.
+                    checkoutPageViewModel.shoppingZonesArray.find(function(shippingZoneElem){
+                        return shippingZoneElem.name === shippingCountry.name;
+                    });
+                    if(shippingZone){ // a shipping zone was found
+                        //get the id of the discovered shipping zone
+                        shippingZoneId = shippingZone.id;
+                    }
+                }
+
+                // get the shipping methods attached to the discovered shipping zone
+                let shippingMethodsArray = await Promise.resolve($.ajax( // load the list of shipping zones
+                    {
+                        url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
+                            `/wp-json/wc/v3/shipping/zones/${shippingZoneId}/methods`,
+                        type: "get",
+                        //contentType: "application/json",
+                        beforeSend: function(jqxhr) {
+                            jqxhr.setRequestHeader("Authorization", "Basic " +
+                                utopiasoftware[utopiasoftware_app_namespace].accessor);
+                        },
+                        dataType: "json",
+                        timeout: 240000, // wait for 4 minutes before timeout of request
+                        processData: true,
+                        data: {}
+                    }
+                ));
+                // filter the shipping methods for only the methods that are enabled
+                shippingMethodsArray = shippingMethodsArray.filter(function(shippingMethodElem){
+                    return shippingMethodElem.enabled === true;
+                });
+                // remove the "select" event listener for the shipping method dropdownlist
+                let shippingMethodDropDown = $('#checkout-shipping-method-type').get(0).ej2_instances[0];
+                shippingMethodDropDown.removeEventListener("select");
+
+                // set the shippingMethodArray as the datasource for the shipping method dropdownlist
+                shippingMethodDropDown.dataSource = shippingMethodsArray;
+                // set the pre-selected shipping method (i.e. the shippingMethod dropdownlist value)
+                // check if there are any shipping lines info available
+                if(orderData.shipping_lines.length > 0){ // if length is > 0, there are shipping lines info available
+                    // set the shipping method dropdownlist value
+                    shippingMethodDropDown.value = orderData.shipping_lines[0].method_id;
+                    // check if the shipping method dropdownlist value is an empty string
+                    if(shippingMethodDropDown.value === ""){ // the value is an empty string
+                        shippingMethodDropDown.value = null; // reset the shipping method dropdownlist value to null instead
+                    }
+                }
+                shippingMethodDropDown.dataBind();
+
+                // add the "select" event listener for the shipping method dropdownlist
+                shippingMethodDropDown.addEventListener("select", function(){
+                    // handle the task in a separate event block
+                    window.setTimeout(async function(){
+
+                        // check if there is Internet connection
+                        if(navigator.connection.type === Connection.NONE){ // there is no Internet connection
+                            // hide all previously displayed ej2 toast
+                            $('.page-toast').get(0).ej2_instances[0].hide('All');
+                            $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                            // display toast to show that an error
+                            let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                            toast.cssClass = 'error-ej2-toast';
+                            toast.timeOut = 3000;
+                            toast.content = `Connect to the Internet to change shipping method`;
+                            toast.dataBind();
+                            toast.show();
+
+                            return; // exit method
+                        }
+
+                        // display the page loader modal
+                        $('#checkout-page .modal').css("display", "table");
+
+                        // get a local/deep-clone copy of the page's checkout order object
+                        let localOrderObject = JSON.parse(JSON.
+                        stringify(utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder));
+                        // update the shipping method for the local order object to be sent to the server
+                        localOrderObject.shipping_lines[0] = localOrderObject.shipping_lines[0] || {};
+                        Object.assign(localOrderObject.shipping_lines[0], {method_id: shippingMethodDropDown.value,
+                            method_title: shippingMethodDropDown.text,
+                            instance_id: "" + shippingMethodDropDown.
+                            getDataByValue(shippingMethodDropDown.value).instance_id});
+                        // update the coupons for the local order object to be sent to the server
+                        localOrderObject.coupon_lines = localOrderObject.coupon_lines.map(function(couponElem){
+                            return {code: couponElem.code};
+                        });
+
+                        // perform some remote /asynchronous tasks needed to update the order method
+                        try{
+
+                            // change the user shipping method on the remote cart using a helper script
+                            await Promise.resolve($.ajax(
+                                {
+                                    url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
+                                        `/oakscripts/setshipping.php`,
+                                    type: "post",
+                                    //contentType: "application/json",
+                                    beforeSend: function(jqxhr) {
+                                        jqxhr.setRequestHeader("Authorization", "Basic " +
+                                            Base64.encode(`${userDetails.email}:${userDetails.password}`));
+                                    },
+                                    crossDomain: true,
+                                    xhrFields: {
+                                        withCredentials: true
+                                    },
+                                    dataType: "text",
+                                    timeout: 240000, // wait for 4 minutes before timeout of request
+                                    processData: true,
+                                    // send the shipping method data represented by selected shipping method value
+                                    data: {id: shippingMethodDropDown.getDataByValue(shippingMethodDropDown.value).instance_id,
+                                        method_id: shippingMethodDropDown.getDataByValue(shippingMethodDropDown.value).method_id}
+                                }
+                            ));
+
+                            // calculate all the totals for the remote user cart
+                            await Promise.resolve($.ajax(
+                                {
+                                    url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
+                                        `/wp-json/wc/v2/cart/calculate`,
+                                    type: "post",
+                                    contentType: "application/json",
+                                    beforeSend: function(jqxhr) {
+                                        jqxhr.setRequestHeader("Authorization", "Basic " +
+                                            Base64.encode(`${userDetails.email}:${userDetails.password}`));
+                                    },
+                                    crossDomain: true,
+                                    xhrFields: {
+                                        withCredentials: true
+                                    },
+                                    dataType: "text",
+                                    timeout: 240000, // wait for 4 minutes before timeout of request
+                                    processData: true,
+                                    data: {}
+                                }
+                            ));
+
+                            // get all the totals for the remote user cart
+                            let remoteCartTotals = await Promise.resolve($.ajax(
+                                {
+                                    url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
+                                        `/wp-json/wc/v2/cart/totals`,
+                                    type: "get",
+                                    contentType: "application/json",
+                                    beforeSend: function(jqxhr) {
+                                        jqxhr.setRequestHeader("Authorization", "Basic " +
+                                            Base64.encode(`${userDetails.email}:${userDetails.password}`));
+                                    },
+                                    crossDomain: true,
+                                    xhrFields: {
+                                        withCredentials: true
+                                    },
+                                    dataType: "json",
+                                    timeout: 240000, // wait for 4 minutes before timeout of request
+                                    processData: true,
+                                    data: {}
+                                }
+                            ));
+
+                            // update the shipping method for the local order object to be sent to the server
+                            localOrderObject.shipping_lines[0].total = "" + remoteCartTotals.shipping_total;
+
+                            // update the checkout order data on the remote server
+                            localOrderObject = await Promise.resolve($.ajax(
+                                {
+                                    url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
+                                        `/wp-json/wc/v3/orders/${localOrderObject.id}`,
+                                    type: "put",
+                                    contentType: "application/json",
+                                    beforeSend: function(jqxhr) {
+                                        jqxhr.setRequestHeader("Authorization", "Basic " +
+                                            utopiasoftware[utopiasoftware_app_namespace].accessor);
+                                    },
+                                    dataType: "json",
+                                    timeout: 240000, // wait for 4 minutes before timeout of request
+                                    processData: false,
+                                    data: JSON.stringify(localOrderObject)
+                                }
+                            ));
+
+                            // update the page checkout order with the updated order from the server
+                            utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.
+                                chekoutOrder = localOrderObject;
+
+                            // disable the shipping method dropdownlist
+                            shippingMethodDropDown.enabled = false;
+                            shippingMethodDropDown.dataBind();
+
+                            // redisplay the page (redisplaying the page also hides the page loader when the process is complete)
+                            await utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.pageShow();
+                        }
+                        catch(err){
+                            console.log("CHECKOUT SHIPPING METHOD UPDATE ERROR", err);
+
+                            err = JSON.parse(err.responseText.trim());
+
+                            // hide all previously displayed ej2 toast
+                            $('.page-toast').get(0).ej2_instances[0].hide('All');
+                            $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                            // display toast message
+                            let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                            toast.cssClass = 'error-ej2-toast';
+                            toast.timeOut = 3000;
+                            toast.content = `Shipping method not updated, retry. ${err.message || ""}`;
+                            toast.dataBind();
+                            toast.show();
+
+                            // hide the page loader modal
+                            $('#checkout-page .modal').css("display", "none");
+                        }
+
+                    }, 0);
+                });
+
+                // remove the "select" event listener for the shipping method dropdownlist
+                let paymentMethodDropDown = $('#checkout-payment-method-type').get(0).ej2_instances[0];
+                paymentMethodDropDown.removeEventListener("select");
+
+                // set the pre-selected payment method for the order data
+                paymentMethodDropDown.value = orderData.payment_method;
+                paymentMethodDropDown.dataBind();
+
+                // add the "select" event listener for the payment method dropdownlist
+                paymentMethodDropDown.addEventListener("select", function(){
+                    // handle the task in a separate event block
+                    window.setTimeout(async function(){
+
+                        // check if there is Internet connection
+                        if(navigator.connection.type === Connection.NONE){ // there is no Internet connection
+                            // hide all previously displayed ej2 toast
+                            $('.page-toast').get(0).ej2_instances[0].hide('All');
+                            $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                            // display toast to show that an error
+                            let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                            toast.cssClass = 'error-ej2-toast';
+                            toast.timeOut = 3000;
+                            toast.content = `Connect to the Internet to change payment method`;
+                            toast.dataBind();
+                            toast.show();
+
+                            return; // exit method
+                        }
+
+                        // display the page loader modal
+                        $('#checkout-page .modal').css("display", "table");
+
+                        // get a local/deep-clone copy of the page's checkout order object
+                        let localOrderObject = JSON.parse(JSON.
+                        stringify(utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder));
+                        // update the payment method for the local order object to be sent to the server
+                        localOrderObject.payment_method = paymentMethodDropDown.value;
+                        localOrderObject.payment_method_title = paymentMethodDropDown.text;
+                        // update the coupons for the local order object to be sent to the server
+                        localOrderObject.coupon_lines = localOrderObject.coupon_lines.map(function(couponElem){
+                            return {code: couponElem.code};
+                        });
+
+                        // update the checkout order data on the remote server
+                        try{
+                            localOrderObject = await Promise.resolve($.ajax(
+                                {
+                                    url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
+                                        `/wp-json/wc/v3/orders/${localOrderObject.id}`,
+                                    type: "put",
+                                    contentType: "application/json",
+                                    beforeSend: function(jqxhr) {
+                                        jqxhr.setRequestHeader("Authorization", "Basic " +
+                                            utopiasoftware[utopiasoftware_app_namespace].accessor);
+                                    },
+                                    dataType: "json",
+                                    timeout: 240000, // wait for 4 minutes before timeout of request
+                                    processData: false,
+                                    data: JSON.stringify(localOrderObject)
+                                }
+                            ));
+
+                            // update the page checkout order with the updated order from the server
+                            utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.
+                                chekoutOrder = localOrderObject;
+
+                            // disable the payment method dropdownlist
+                            paymentMethodDropDown.enabled = false;
+                            paymentMethodDropDown.dataBind();
+
+                            // redisplay the page (redisplaying the page also hides the page loader when the process is complete)
+                            await utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.pageShow();
+                        }
+                        catch(err){
+                            console.log("CHECKOUT PAYMENT METHOD UPDATE ERROR", err);
+
+                            err = JSON.parse(err.responseText);
+
+                            // hide all previously displayed ej2 toast
+                            $('.page-toast').get(0).ej2_instances[0].hide('All');
+                            $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                            // display toast message
+                            let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                            toast.cssClass = 'error-ej2-toast';
+                            toast.timeOut = 3000;
+                            toast.content = `Payment method not updated, retry. ${err.message || ""}`;
+                            toast.dataBind();
+                            toast.show();
+
+                            // hide the page loader modal
+                            $('#checkout-page .modal').css("display", "none");
+                        }
+
+                    }, 0);
+                });
+
+                // set the order coupons
+                let couponsMultiSelectDropDown = $('#checkout-payment-vouchers').get(0).ej2_instances[0];
+                let couponsArray = orderData.coupon_lines.map(function(couponElem){
+                    return couponElem.code;
+                });
+                // set the datasource and the values for the coupons mulitselect dropdown
+                couponsMultiSelectDropDown.dataSource = couponsArray;
+                couponsMultiSelectDropDown.value = couponsArray;
+                couponsMultiSelectDropDown.dataBind();
+
+                // set the order notes i.e. shipping instructions
+                $('#checkout-page #checkout-payment-order-note-text').val(orderData.customer_note);
+
+                // display the order items
+                let orderItemsDisplayContent = ''; // holds the content to be displayed for the order items segment
+                for(let index = 0; index < orderData.line_items.length; index++){
+                    orderItemsDisplayContent +=
+                        `<div class="col-xs-6" style="text-align: right; padding-right: 5px;
+                        padding-top: 10px; padding-bottom: 10px">${orderData.line_items[index].name}</div>
+                        <div class="col-xs-2" style="text-align: left;
+                        padding-top: 10px; padding-bottom: 10px">&times;${orderData.line_items[index].quantity}</div>
+                        <div class="col-xs-4" style="text-align: left; padding-left: 5px;
+                        padding-top: 10px; padding-bottom: 10px">
+                        &#x20a6;${kendo.toString(kendo.parseFloat(orderData.line_items[index].subtotal), "n2")}</div>`;
+                }
+                $('#checkout-page #checkout-order-items-container').html(orderItemsDisplayContent);
+
+                // display checkout totals
+                $('#checkout-page #checkout-page-items-cost').html(
+                    `&#x20a6;${kendo.toString((kendo.parseFloat(orderData.total) - kendo.parseFloat(orderData.shipping_total) +
+                        kendo.parseFloat(orderData.discount_total)), "n2")}`);
+                $('#checkout-page #checkout-page-shipping-cost').html(
+                    `&#x20a6;${kendo.toString(kendo.parseFloat(orderData.shipping_total), "n2")}`
+                );
+                $('#checkout-page #checkout-page-discount-cost').html(
+                    `&#x20a6;${kendo.toString(kendo.parseFloat(orderData.discount_total), "n2")}`
+                );
+                $('#checkout-page #checkout-page-total-cost').html(
+                    `&#x20a6;${kendo.toString(kendo.parseFloat(orderData.total), "n2")}`
+                );
+                if(kendo.parseFloat(orderData.discount_total) > 0){ // if the discount total value is > zero
+                    // display the discount total to user
+                    $('#checkout-page .checkout-page-discount').css("display", "block");
+                }
+                else{ // the discount total is zero
+                    // hide the discount total from user
+                    $('#checkout-page .checkout-page-discount').css("display", "none");
+                }
+            }
+            finally {
+
+            }
+        }
+
     }
 
 };

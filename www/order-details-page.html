@@ -35,7 +35,7 @@
                           style="position: fixed; z-index: 2; width: 100%; display: block;"></ons-progress-bar>
 
         <!-- page modal loader -->
-        <div class="modal" style="z-index: 2; background-color: transparent; display: none;">
+        <div class="modal" style="z-index: 2; background-color: transparent; display: table;">
             <div class="modal__content">
                 <ons-progress-circular indeterminate modifier="pull-hook" style="transform: scale(1.5);"></ons-progress-circular>
             </div>
@@ -45,13 +45,13 @@
 
             <ons-list-item modifier="longdivider" lock-on-drag="true"
                            onclick="">
-                <div class="center row">
+                <div class="center row" style="font-size: 1.1em;">
                     <div class="col-xs-6" style="text-align: right">
                         <span class="list-item__title" style="color: #3F51B5; padding-left:10px;">ORDER</span>
                     </div>
                     <div class="col-xs-6" style="text-align: left">
                         <span class="list-item__title order-details-order-number"
-                              style="color: #3F51B5; padding-left:10px; word-wrap: break-word;">#4568</span>
+                              style="color: #3F51B5; padding-left:10px; word-wrap: break-word;"></span>
                     </div>
                 </div>
             </ons-list-item>
@@ -63,9 +63,9 @@
                         <span class="list-item__title" style="color: #000000; padding-left:10px;">Order Status</span>
                     </div>
                     <div class="col-xs-6" style="text-align: left">
-                        <span class="list-item__title order-details-order-number"
+                        <span class="list-item__title order-details-order-status"
                               style="color: #000000; padding-left:10px; word-wrap: break-word;
-                              text-transform: capitalize">completed</span>
+                              text-transform: uppercase"></span>
                     </div>
                 </div>
             </ons-list-item>
@@ -74,12 +74,12 @@
                            onclick="">
                 <div class="center row">
                     <div class="col-xs-6" style="text-align: left">
-                        <span class="list-item__title" style="color: #000000; padding-left:10px;">Order Received</span>
+                        <span class="list-item__title" style="color: #000000; padding-left:10px;">Order Date</span>
                     </div>
                     <div class="col-xs-6" style="text-align: left">
                         <span class="list-item__title order-details-order-date"
                               style="color: #000000; padding-left:10px; word-wrap: break-word;
-                              text-transform: capitalize">February 20, 2019</span>
+                              text-transform: capitalize"></span>
                     </div>
                 </div>
             </ons-list-item>
@@ -93,7 +93,7 @@
                     <div class="col-xs-6" style="text-align: left">
                         <span class="list-item__title order-details-order-total"
                               style="color: #000000; padding-left:10px; word-wrap: break-word;
-                              text-transform: capitalize">&#x20a6;35,560.00</span>
+                              text-transform: capitalize"></span>
                     </div>
                 </div>
             </ons-list-item>
@@ -107,7 +107,7 @@
                     <div class="col-xs-6" style="text-align: left">
                         <span class="list-item__title order-details-payment-method"
                               style="color: #000000; padding-left:10px; word-wrap: break-word;
-                              text-transform: capitalize">Pay with card</span>
+                              text-transform: capitalize"></span>
                     </div>
                 </div>
             </ons-list-item>
@@ -119,7 +119,7 @@
                         <span class="list-item__title" style="color: #000000; padding-left:10px;">Shipping Method</span>
                     </div>
                     <div class="col-xs-6" style="text-align: left">
-                        <span class="list-item__title order-details-payment-method"
+                        <span class="list-item__title order-details-shipping-method"
                               style="color: #000000; padding-left:10px; word-wrap: break-word;
                               text-transform: capitalize">local pickup</span>
                     </div>
