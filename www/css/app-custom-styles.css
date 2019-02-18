@@ -864,3 +864,10 @@
     background-color: #ffffff;
 }
 /** STYLE FOR PENDING ORDERS PAGE ENDS **/
+
+/** STYLE FOR ORDER DETAILS PAGE BEGINS **/
+#order-details-page .page__background,
+#order-details-page .page--material__background {
+    background-color: #ffffff;
+}
+/** STYLE FOR ORDER DETAILS PAGE ENDS **/
