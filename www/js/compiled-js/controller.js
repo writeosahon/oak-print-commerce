@@ -12181,6 +12181,35 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     utopiasoftware[utopiasoftware_app_namespace].controller.
                         orderDetailsPageViewModel.backButtonClicked;
 
+                // add method to handle the loading action of the pull-to-refresh widget
+                $('#order-details-page-pull-hook', $thisPage).get(0).onAction =
+                    utopiasoftware[utopiasoftware_app_namespace].controller.orderDetailsPageViewModel.pagePullHookAction;
+
+                // register listener for the pull-to-refresh widget
+                $('#order-details-page-pull-hook', $thisPage).on("changestate", function(event){
+
+                    // check the state of the pull-to-refresh widget
+                    switch (event.originalEvent.state){
+                        case 'initial':
+                            // update the displayed content
+                            $('#order-details-page-pull-hook-fab', event.originalEvent.pullHook).
+                            html('<ons-icon icon="md-long-arrow-down" size="24px" style="color: #363E7C"></ons-icon>');
+                            break;
+
+                        case 'preaction':
+                            // update the displayed content
+                            $('#order-details-page-pull-hook-fab', event.originalEvent.pullHook).
+                            html('<ons-icon icon="md-long-arrow-up" size="24px" style="color: #363E7C"></ons-icon>');
+                            break;
+
+                        case 'action':
+                            // update the displayed content
+                            $('#order-details-page-pull-hook-fab', event.originalEvent.pullHook).
+                            html('<ons-progress-circular indeterminate modifier="pull-hook"></ons-progress-circular>');
+                            break;
+                    }
+                });
+
                 // set the order object to be used by this page
                 utopiasoftware[utopiasoftware_app_namespace].controller.orderDetailsPageViewModel.orderDetails =
                     $('#app-main-navigator').get(0).topPage.data.orderData;
@@ -12290,6 +12319,80 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             $('#app-main-navigator').get(0).popPage();
         },
 
+        /**
+         * method is triggered when the pull-hook on the page is active
+         *
+         * @param doneCallBack
+         * @returns {Promise<void>}
+         */
+        async pagePullHookAction(doneCallBack = function(){}){
+            // disable pull-to-refresh widget till loading is done
+            $('#order-details-page #order-details-page-pull-hook').attr("disabled", true);
+
+            // hide all previously displayed ej2 toast
+            $('.page-toast').get(0).ej2_instances[0].hide('All');
+
+            try{
+                // load the order notes attached to the loaded order details
+                let promisesArray = []; // holds all created promises
+                let orderId = utopiasoftware[utopiasoftware_app_namespace].controller.
+                    orderDetailsPageViewModel.orderDetails.id; // get the id for the specified order object
+
+                promisesArray.push(Promise.resolve($.ajax( // load the order notes for the specified order object
+                    {
+                        url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
+                            `/wp-json/wc/v3/orders/${orderId}/notes`,
+                        type: "get",
+                        //contentType: "application/json",
+                        beforeSend: function(jqxhr) {
+                            jqxhr.setRequestHeader("Authorization", "Basic " +
+                                utopiasoftware[utopiasoftware_app_namespace].accessor);
+                        },
+                        dataType: "json",
+                        timeout: 240000, // wait for 4 minutes before timeout of request
+                        processData: true,
+                        data: {"type": "any"}
+                    }
+                )));
+
+                // wait for all promises to resolve
+                promisesArray = await Promise.all(promisesArray);
+                // get the order notes belonging to the specified order object
+                utopiasoftware[utopiasoftware_app_namespace].controller.
+                    orderDetailsPageViewModel.orderNotesArray = promisesArray[0];
+                // display the order details
+                await utopiasoftware[utopiasoftware_app_namespace].controller.
+                orderDetailsPageViewModel.displayContent();
+
+                // enable the "Reorder" button
+                $('#order-details-page #order-details-reorder').removeAttr("disabled");
+
+            }
+            catch(err){
+                // hide the page preloader
+                $('#order-details-page .page-preloader').css("display", "none");
+                // show the page loader
+                $('#order-details-page .modal').css("display", "none");
+
+                console.log("ORDER DETAILS ERROR", err);
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast to show that an error
+                let toast = $('.page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.content = `Sorry, an error occurred.${navigator.connection.type === Connection.NONE ? " Connect to the Internet." : ""} Pull down to refresh and try again`;
+                toast.dataBind();
+                toast.show();
+            }
+            finally{
+                // enable pull-to-refresh widget till loading is done
+                $('#order-details-page #order-details-page-pull-hook').removeAttr("disabled");
+                // hide the preloader
+                $('#order-details-page .page-preloader').css("display", "none");
+                // signal that loading is done
+                doneCallBack();
+            }
+        },
 
         /**
          * method is triggered when the user clicks the "Reorder" button
