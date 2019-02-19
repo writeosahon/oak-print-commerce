@@ -12408,219 +12408,83 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
                 // display toast to show that an error
                 let toast = $('.timed-page-toast').get(0).ej2_instances[0];
-                toast.cssClass = 'error-ej2-toast';
+                toast.cssClass = 'default-ej2-toast';
                 toast.timeOut = 3000;
-                toast.content = `Connect to the Internet to make payment`;
+                toast.content = `Connect to the Internet to make a reorder`;
                 toast.dataBind();
                 toast.show();
 
-                // enable the "Make Payment" button
-                $('#checkout-page #checkout-make-payment').removeAttr("disabled");
-                // hide the spinner from the 'Make Payment'
-                $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
-                $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].dataBind();
-                $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].stop();
+                // enable the "Reorder" button
+                $('#order-details-page #order-details-reorder').removeAttr("disabled");
+                // hide the spinner from the 'Reorder' button
+                $('#order-details-page #order-details-reorder').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
+                $('#order-details-page #order-details-reorder').get(0).ej2_instances[0].dataBind();
+                $('#order-details-page #order-details-reorder').get(0).ej2_instances[0].stop();
 
                 return; // exit method
             }
 
-            // check what payment method is being used
-            if(utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.
-                chekoutOrder.payment_method === "paystack"){ // user selected the paystack (Pay With Card)
+            // show the page loader
+            $('#order-details-page .modal').css("display", "table");
 
-                // disable the "Make Payment" button
-                $('#checkout-page #checkout-make-payment').attr("disabled", true);
+            // disable the "Reorder" button
+            $('#order-details-page #order-details-reorder').attr("disabled", true);
+            // add the spinner from the 'Reorder'
+            $('#order-details-page #order-details-reorder').get(0).ej2_instances[0].cssClass = '';
+            $('#order-details-page #order-details-reorder').get(0).ej2_instances[0].dataBind();
+            $('#order-details-page #order-details-reorder').get(0).ej2_instances[0].start();
 
-                // inform the user that payment gateway is being prepared
-                $('#loader-modal-message').html("Preparing Payment Channel...");
-                $('#loader-modal').get(0).show(); // show loader
-
-                try{
-                    // load the user profile details from the app database
-                    var userDetails = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
-                    loadData("user-details",
-                        utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
-
-                    // initialise a paystack (payment) transaction
-                    let payStackResponse = await Promise.resolve($.ajax(
-                        {
-                            url: `https://api.paystack.co/transaction/initialize`,
-                            type: "post",
-                            contentType: "application/json",
-                            beforeSend: function(jqxhr) {
-                                jqxhr.setRequestHeader("Authorization", "Bearer " +
-                                    Base64.decode(utopiasoftware[utopiasoftware_app_namespace].paystackAccessor));
-                            },
-                            dataType: "json",
-                            timeout: 240000, // wait for 4 minutes before timeout of request
-                            processData: false,
-                            data: JSON.stringify({email: userDetails.email,
-                                amount: "" + (kendo.parseFloat(utopiasoftware[utopiasoftware_app_namespace].controller.
-                                    checkoutPageViewModel.chekoutOrder.total) * 100),
-                                callback_url: "https://shopoakexclusive.com/"})
-                        }
-                    ));
-
-                    if(payStackResponse.status === true){ // request for transaction initialisation was successful
-                        // open inapp browser for user to make payment (using the authorization_url from payStack response)
-                        let transactionCompletedUrl = await new Promise(function(resolve, reject){
-                            // create/open inapp browser
-                            let transactionInAppBrowser =
-                                cordova.InAppBrowser.open(window.encodeURI(payStackResponse.data.authorization_url), '_blank',
-                                    'location=yes,clearcache=yes,clearsessioncache=yes,closebuttoncolor=#ffffff,hardwareback=no,hidenavigationbuttons=yes,hideurlbar=yes,zoom=no,toolbarcolor=#3f51b5');
-
-                            // add event listeners for the transaction inapp browswer
-                            transactionInAppBrowser.addEventListener("loadstart", function(loadStartEvent){
-
-                                // check which url is being loaded
-                                if(loadStartEvent.url.startsWith("https://shopoakexclusive.com/")){ // transaction was completed
-                                    // set a flag to indicate that the transaction was completed
-                                    transactionInAppBrowser._utopiasoftware_transaction_completed = true;
-                                    // retrieve the full transaction completed url
-                                    transactionInAppBrowser._utopiasoftware_transaction_completed_url = loadStartEvent.url;
-                                    // exit/close the inapp browser
-                                    transactionInAppBrowser.close();
-                                }
-                            });
-                            transactionInAppBrowser.addEventListener("loaderror", function(loadErrorEvent){
-                                // there is an error loading the transaction page, so exit/close inapp browser
-                                transactionInAppBrowser.close();
-                            });
-                            transactionInAppBrowser.addEventListener("exit", function(exitEvent){
-                                // check if the transaction was completed or not
-                                if(transactionInAppBrowser._utopiasoftware_transaction_completed === true){ // transaction completed
-                                    // resolve parent promise
-                                    resolve(transactionInAppBrowser._utopiasoftware_transaction_completed_url);
-                                }
-                                else{ // transaction was not completed
-                                    reject(); // reject parent promise
-                                }
-                            });
-                        });
-
-                        // get the search parameters object from the transaction completed url
-                        let searchParams = new URLSearchParams(transactionCompletedUrl.split("?")[1]);
-                        // get the 'reference' search parameter value
-                        let completedTransactionReference = searchParams.get("reference");
-
-                        // inform the user that their order is being placed
-                        $('#loader-modal-message').html("Completing Order Placement...");
-
-                        // get a local/deep-clone copy of the page's checkout order object
-                        let localOrderObject = JSON.parse(JSON.
-                        stringify(utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder));
-                        // update the order status (by setting the order paid flag) and transaction reference
-                        localOrderObject.transaction_id = completedTransactionReference;
-                        localOrderObject.set_paid = true;
-                        // update the coupons for the local order object to be sent to the server
-                        localOrderObject.coupon_lines = localOrderObject.coupon_lines.map(function(couponElem){
-                            return {code: couponElem.code};
-                        });
-
-                        // update the checkout order data on the remote server
-                        localOrderObject = await Promise.resolve($.ajax(
-                            {
-                                url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
-                                    `/wp-json/wc/v3/orders/${localOrderObject.id}`,
-                                type: "put",
-                                contentType: "application/json",
-                                beforeSend: function(jqxhr) {
-                                    jqxhr.setRequestHeader("Authorization", "Basic " +
-                                        utopiasoftware[utopiasoftware_app_namespace].accessor);
-                                },
-                                dataType: "json",
-                                timeout: 240000, // wait for 4 minutes before timeout of request
-                                processData: false,
-                                data: JSON.stringify(localOrderObject)
-                            }
-                        ));
-
-                        try{
-                            // delete user cart data
-                            await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
-                            removeData("user-cart",
-                                utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
-                        }
-                        catch(err){}
-
-
-                        // update the checkout-order-placement-modal with the checkout order number
-                        $('#checkout-order-placement-modal .order-number').html(localOrderObject.number);
-
-                        // add the click handler for the 'checkout-order-placement-modal-ok-button'
-                        $('#checkout-order-placement-modal #checkout-order-placement-modal-ok-button').get(0).
-                            onclick = async function(){
-                            // reload the app main page
-                            await $('ons-splitter').get(0).content.load("app-main-template");
-                            // hide the 'checkout-order-placement-modal'
-                            await $('#checkout-order-placement-modal').get(0).hide();
-                        };
-
-                        // show the 'checkout-order-placement-modal'
-                        await $('#checkout-order-placement-modal').get(0).show();
-
-
-                    }
-                    else{ // request for transaction initialisation was NOT successful
-                        throw "error";
-                    }
-                }
-                catch(err){
-                    console.log("PAYMENT ERROR", err);
-                    // hide all previously displayed ej2 toast
-                    $('.page-toast').get(0).ej2_instances[0].hide('All');
-                    $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
-                    // display toast to show that an error
-                    let toast = $('.timed-page-toast').get(0).ej2_instances[0];
-                    toast.cssClass = 'error-ej2-toast';
-                    toast.timeOut = 3500;
-                    toast.content = `Error making payment for this order. Try again`;
-                    toast.dataBind();
-                    toast.show();
-                }
-                finally{
-                    // enable the "Make Payment" button
-                    $('#checkout-page #checkout-make-payment').removeAttr("disabled");
-                    // hide the spinner from the 'Make Payment'
-                    $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
-                    $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].dataBind();
-                    $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].stop();
-
-                    // hide loader
-                    $('#loader-modal').get(0).hide();
-                }
-
-                return; // exit method
-            }
-
-            if(utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.
-                chekoutOrder.payment_method === "cod"){ // user selected the cod (Cash on Delivery)
-
-                // disable the "Make Payment" button
-                $('#checkout-page #checkout-make-payment').attr("disabled", true);
-
-                // inform the user that their order is being placed
-                $('#loader-modal-message').html("Completing Order Placement...");
-                await $('#loader-modal').get(0).show(); // show loader
+            // handle the tasks in a separate queue
+            window.setTimeout(async function(){
+                // get the selected order to be checked out
+                var selectedOrder = utopiasoftware[utopiasoftware_app_namespace].controller.
+                    orderDetailsPageViewModel.orderDetails;
 
                 try{
-
-                    // get a local/deep-clone copy of the page's checkout order object
-                    let localOrderObject = JSON.parse(JSON.
-                    stringify(utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder));
-                    // update the order status to "processing"
-                    localOrderObject.status = "processing";
-                    // update the coupons for the local order object to be sent to the server
-                    localOrderObject.coupon_lines = localOrderObject.coupon_lines.map(function(couponElem){
-                        return {code: couponElem.code};
+                    // create a new order object
+                    var newOrder = JSON.parse(JSON.stringify(selectedOrder));
+                    // delete and reset all necessary properties for the new order
+                    delete newOrder.id;
+                    newOrder.transaction_id = "";
+                    newOrder.line_items.forEach(function(lineItem){
+                        delete lineItem.id;
+                        lineItem.total = lineItem.subtotal; // remove any discounts
+                        for(let index = 0; index < lineItem.meta_data.length; index++){
+                            delete lineItem.meta_data[index].id;
+                        }
                     });
+                    newOrder.tax_lines.forEach(function(item){
+                        delete item.id;
+                        for(let index = 0; index < item.meta_data.length; index++){
+                            delete item.meta_data[index].id;
+                        }
+                    });
+                    newOrder.shipping_lines.forEach(function(item){
+                        delete item.id;
+                        for(let index = 0; index < item.meta_data.length; index++){
+                            delete item.meta_data[index].id;
+                        }
+                    });
+                    newOrder.fee_lines.forEach(function(item){
+                        delete item.id;
+                        for(let index = 0; index < item.meta_data.length; index++){
+                            delete item.meta_data[index].id;
+                        }
+                    });
+                    delete newOrder.coupon_lines;
+                    delete newOrder.discount_total;
+                    delete newOrder.discount_tax;
+                    newOrder.set_paid = false;
 
-                    // update the checkout order data on the remote server
-                    localOrderObject = await Promise.resolve($.ajax(
+                    // update the status of the new order to "pending"
+                    newOrder.status = "pending";
+
+                    // update the selectedOrder status remotely
+                    newOrder = await Promise.resolve($.ajax(
                         {
                             url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
-                                `/wp-json/wc/v3/orders/${localOrderObject.id}`,
-                            type: "put",
+                                `/wp-json/wc/v3/orders`,
+                            type: "post",
                             contentType: "application/json",
                             beforeSend: function(jqxhr) {
                                 jqxhr.setRequestHeader("Authorization", "Basic " +
@@ -12629,63 +12493,40 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             dataType: "json",
                             timeout: 240000, // wait for 4 minutes before timeout of request
                             processData: false,
-                            data: JSON.stringify(localOrderObject)
+                            data: JSON.stringify(newOrder)
                         }
                     ));
 
-                    try{
-                        // delete user cart data
-                        await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
-                        removeData("user-cart",
-                            utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);
-                    }
-                    catch(err){}
 
-
-                    // update the checkout-order-placement-modal with the checkout order number
-                    $('#checkout-order-placement-modal .order-number').html(localOrderObject.number);
-
-                    // add the click handler for the 'checkout-order-placement-modal-ok-button'
-                    $('#checkout-order-placement-modal #checkout-order-placement-modal-ok-button').get(0).
-                        onclick = async function(){
-                        // reload the app main page
-                        await $('ons-splitter').get(0).content.load("app-main-template");
-                        // hide the 'checkout-order-placement-modal'
-                        await $('#checkout-order-placement-modal').get(0).hide();
-                    };
-
-                    // show the 'checkout-order-placement-modal'
-                    await $('#checkout-order-placement-modal').get(0).show();
-
+                    // display the checkout page using the selected order
+                    await $('#app-main-navigator').get(0).replacePage("checkout-page.html", {data: {orderData: newOrder}});
                 }
                 catch(err){
-                    console.log("PAYMENT ERROR", err);
+                    console.log(err, "REORDER ERROR");
+
                     // hide all previously displayed ej2 toast
                     $('.page-toast').get(0).ej2_instances[0].hide('All');
                     $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
-                    // display toast to show that an error
+                    // display toast message
                     let toast = $('.timed-page-toast').get(0).ej2_instances[0];
                     toast.cssClass = 'error-ej2-toast';
-                    toast.timeOut = 3500;
-                    toast.content = `Error placing this order. Try again`;
+                    toast.timeOut = 3000;
+                    toast.content = `Placing new order failed. Please retry`;
                     toast.dataBind();
                     toast.show();
                 }
-                finally{
-                    // enable the "Make Payment" button
-                    $('#checkout-page #checkout-make-payment').removeAttr("disabled");
-                    // hide the spinner from the 'Make Payment'
-                    $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
-                    $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].dataBind();
-                    $('#checkout-page #checkout-make-payment').get(0).ej2_instances[0].stop();
+                finally {
+                    // hide the page loader
+                    $('#order-details-page .modal').css("display", "none");
 
-                    // hide loader
-                    $('#loader-modal').get(0).hide();
+                    // disable the "Reorder" button
+                    $('#order-details-page #order-details-reorder').attr("disabled", true);
+                    // add the spinner from the 'Reorder'
+                    $('#order-details-page #order-details-reorder').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
+                    $('#order-details-page #order-details-reorder').get(0).ej2_instances[0].dataBind();
+                    $('#order-details-page #order-details-reorder').get(0).ej2_instances[0].stop();
                 }
-
-                return; // exit method
-            }
-
+            }, 0);
         },
 
         /**
