@@ -244,4 +244,16 @@ $(document).on("hide", "#pending-orders-page", utopiasoftware[utopiasoftware_app
 // listen for when the PENDING ORDERS is destroyed
 $(document).on("destroy", "#pending-orders-page", utopiasoftware[utopiasoftware_app_namespace].controller.pendingOrdersPageViewModel.pageDestroy);
 
+// listen for the initialisation of the ORDER DETAILS page
+$(document).on("init", "#order-details-page", utopiasoftware[utopiasoftware_app_namespace].controller.orderDetailsPageViewModel.pageInit);
+
+// listen for when the ORDER DETAILS page is shown
+$(document).on("show", "#order-details-page", utopiasoftware[utopiasoftware_app_namespace].controller.orderDetailsPageViewModel.pageShow);
+
+// listen for when the ORDER DETAILS page is hidden
+$(document).on("hide", "#order-details-page", utopiasoftware[utopiasoftware_app_namespace].controller.orderDetailsPageViewModel.pageHide);
+
+// listen for when the ORDER DETAILS is destroyed
+$(document).on("destroy", "#order-details-page", utopiasoftware[utopiasoftware_app_namespace].controller.orderDetailsPageViewModel.pageDestroy);
+
 //# sourceMappingURL=model-compiled.js.map
