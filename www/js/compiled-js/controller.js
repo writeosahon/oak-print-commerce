@@ -10897,6 +10897,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     margin: 0; padding: 0; transform: scale(0.75);" data-order-index="${index}">
                                 Reorder
                             </ons-button>
+                            <ons-button disable-auto-styling modifier="quiet" 
+                            onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
+                            completedOrdersPageViewModel.detailsButtonClicked(this)"
+                            style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
+                                    margin: 0; padding: 0; transform: scale(0.75);" data-order-index="${index}">
+                                Details
+                            </ons-button>
                             </div>
                             </div>`;
                         }
@@ -10956,6 +10963,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     margin: 0; padding: 0; transform: scale(0.75);" data-order-index="${index}">
                                 Reorder
                             </ons-button>
+                            <ons-button disable-auto-styling modifier="quiet" 
+                            onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
+                            completedOrdersPageViewModel.detailsButtonClicked(this)"
+                            style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
+                                    margin: 0; padding: 0; transform: scale(0.75);" data-order-index="${index}">
+                                Details
+                            </ons-button>
                             </div>
                             </div>`;
                         }
@@ -10981,6 +10995,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
                                     margin: 0; padding: 0; transform: scale(0.75);" data-order-index="${index}">
                                 Reorder
+                            </ons-button>
+                            <ons-button disable-auto-styling modifier="quiet" 
+                            onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
+                            completedOrdersPageViewModel.detailsButtonClicked(this)"
+                            style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
+                                    margin: 0; padding: 0; transform: scale(0.75);" data-order-index="${index}">
+                                Details
                             </ons-button>
                             </div>
                             </div>`;
@@ -11046,6 +11067,53 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 try{
                     // display the checkout page using the selected order
                     await $('#app-main-navigator').get(0).pushPage("checkout-page.html", {data: {orderData: selectedOrder}});
+                }
+                catch(err){
+                    // hide all previously displayed ej2 toast
+                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                    $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                    // display toast message
+                    let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                    toast.cssClass = 'error-ej2-toast';
+                    toast.timeOut = 3000;
+                    toast.content = `Order checkout failed. Please retry`;
+                    toast.dataBind();
+                    toast.show();
+                }
+                finally {
+                    // hide the page loader
+                    $('#completed-orders-page .modal').css("display", "none");
+                }
+            }, 0);
+        },
+
+        /**
+         * method is triggered when the "Details" button on the
+         * Orders Collection is clicked
+         *
+         * @buttonElem {HTMLButton}
+         *
+         * @returns {Promise<void>}
+         */
+        async detailsButtonClicked(buttonElem){
+            var $buttonElement = $(buttonElem); // get a jQuery reference to the button element that was clicked
+
+            // show the page loader
+            $('#completed-orders-page .modal').css("display", "table");
+
+            // handle the tasks in a separate queue
+            window.setTimeout(async function(){
+                // get the selected order to be checked out
+                var selectedOrder = utopiasoftware[utopiasoftware_app_namespace].controller.
+                    completedOrdersPageViewModel.ordersResultsArray[window.parseInt($buttonElement.attr("data-order-index"))];
+
+                console.log("ORDER INDEX", $buttonElement.attr("data-order-index"));
+
+                console.log("SELECTED ORDER", selectedOrder);
+
+                try{
+                    // display the checkout page using the selected order
+                    await $('#app-main-navigator').get(0).pushPage("order-details-page.html", {data: {orderData: selectedOrder}});
                 }
                 catch(err){
                     // hide all previously displayed ej2 toast
@@ -11733,6 +11801,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     margin: 0; padding: 0; transform: scale(0.75);" data-order-index="${index}">
                                 Reorder
                             </ons-button>
+                            <ons-button disable-auto-styling modifier="quiet" 
+                            onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
+                            pendingOrdersPageViewModel.detailsButtonClicked(this)"
+                            style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
+                                    margin: 0; padding: 0; transform: scale(0.75);" data-order-index="${index}">
+                                Details
+                            </ons-button>
                             </div>
                             </div>`;
                         }
@@ -11792,6 +11867,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     margin: 0; padding: 0; transform: scale(0.75);" data-order-index="${index}">
                                 Reorder
                             </ons-button>
+                            <ons-button disable-auto-styling modifier="quiet" 
+                            onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
+                            pendingOrdersPageViewModel.detailsButtonClicked(this)"
+                            style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
+                                    margin: 0; padding: 0; transform: scale(0.75);" data-order-index="${index}">
+                                Details
+                            </ons-button>
                             </div>
                             </div>`;
                         }
@@ -11817,6 +11899,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
                                     margin: 0; padding: 0; transform: scale(0.75);" data-order-index="${index}">
                                 Reorder
+                            </ons-button>
+                            <ons-button disable-auto-styling modifier="quiet" 
+                            onclick="utopiasoftware[utopiasoftware_app_namespace].controller.
+                            pendingOrdersPageViewModel.detailsButtonClicked(this)"
+                            style="border-color: #ffffff; background-color: #ffffff; color: #363E7C;
+                                    margin: 0; padding: 0; transform: scale(0.75);" data-order-index="${index}">
+                                Details
                             </ons-button>
                             </div>
                             </div>`;
@@ -11882,6 +11971,53 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 try{
                     // display the checkout page using the selected order
                     await $('#app-main-navigator').get(0).pushPage("checkout-page.html", {data: {orderData: selectedOrder}});
+                }
+                catch(err){
+                    // hide all previously displayed ej2 toast
+                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                    $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                    // display toast message
+                    let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                    toast.cssClass = 'error-ej2-toast';
+                    toast.timeOut = 3000;
+                    toast.content = `Order checkout failed. Please retry`;
+                    toast.dataBind();
+                    toast.show();
+                }
+                finally {
+                    // hide the page loader
+                    $('#pending-orders-page .modal').css("display", "none");
+                }
+            }, 0);
+        },
+
+        /**
+         * method is triggered when the "Details" button on the
+         * Orders Collection is clicked
+         *
+         * @buttonElem {HTMLButton}
+         *
+         * @returns {Promise<void>}
+         */
+        async detailsButtonClicked(buttonElem){
+            var $buttonElement = $(buttonElem); // get a jQuery reference to the button element that was clicked
+
+            // show the page loader
+            $('#pending-orders-page .modal').css("display", "table");
+
+            // handle the tasks in a separate queue
+            window.setTimeout(async function(){
+                // get the selected order to be checked out
+                var selectedOrder = utopiasoftware[utopiasoftware_app_namespace].controller.
+                    pendingOrdersPageViewModel.ordersResultsArray[window.parseInt($buttonElement.attr("data-order-index"))];
+
+                console.log("ORDER INDEX", $buttonElement.attr("data-order-index"));
+
+                console.log("SELECTED ORDER", selectedOrder);
+
+                try{
+                    // display the checkout page using the selected order
+                    await $('#app-main-navigator').get(0).pushPage("order-details-page.html", {data: {orderData: selectedOrder}});
                 }
                 catch(err){
                     // hide all previously displayed ej2 toast
