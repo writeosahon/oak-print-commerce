@@ -12158,6 +12158,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     // get the order notes belonging to the specified order object
                     utopiasoftware[utopiasoftware_app_namespace].controller.
                         orderDetailsPageViewModel.orderNotesArray = promisesArray[0];
+                    // display the order details
+                    await utopiasoftware[utopiasoftware_app_namespace].controller.
+                        orderDetailsPageViewModel.displayContent();
 
                     // enable the "Reorder" button
                     $('#order-details-page #order-details-reorder').removeAttr("disabled");
@@ -12549,14 +12552,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 html(`${orderData.shipping_lines[0].method_title}`);
 
                 // update the order shipping updates/notes
-                let shippingUpdateOrderNotesContent = ''; // holds the contents for the order notes
+                let displayContent = ''; // holds the contents to be generated in the for-loop
                 for(let index = 0; index < utopiasoftware[utopiasoftware_app_namespace].controller.
                     orderDetailsPageViewModel.orderNotesArray.length; index++){ // attach the order updates/notes
 
                     let orderNote = utopiasoftware[utopiasoftware_app_namespace].controller.
                         orderDetailsPageViewModel.orderNotesArray[index]; // get the current order note object
 
-                    shippingUpdateOrderNotesContent += `
+                    displayContent += `
                     <div class="col-xs-6" style="text-align: right; padding-right: 5px;
                             padding-top: 10px; padding-bottom: 10px;
                             text-transform: lowercase; word-wrap: break-word">${orderNote[index].note}</div>`;
@@ -12567,382 +12570,107 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         orderNote.date_created_gmt += 'Z';
                     }
 
-                    shippingUpdateOrderNotesContent += `
+                    displayContent += `
                     <div class="col-xs-6" style="text-align: left; padding-left: 5px;
                             padding-top: 10px; padding-bottom: 10px;
                             text-transform: lowercase; word-wrap: break-word">
                     ${kendo.toString(new Date(orderNote.date_created_gmt), "MMMM dd, yyyy")}        
                     </div>`;
-
                 }
-                // get the shipping zone the of the user by checking the user's shipping country
-                let shippingCountryCode =  orderData.shipping.country == "" ? 'NG': orderData.shipping.country;
-                let shippingZoneId = 0; // set the shipping zone id to the default i.e. 'Rest of the world'
-                // find the country with the specified country code
-                let shippingCountry = utopiasoftware[utopiasoftware_app_namespace].controller.
-                checkoutPageViewModel.countryArray.find(function(countryElem){
-                    return countryElem.code === shippingCountryCode;
-                });
-                // check if a shipping country was discovered
-                if(shippingCountry){ // a shipping country was discovered
-                    // get the shipping zone id which the shipping country belongs to
-                    let shippingZone = utopiasoftware[utopiasoftware_app_namespace].controller.
-                    checkoutPageViewModel.shoppingZonesArray.find(function(shippingZoneElem){
-                        return shippingZoneElem.name === shippingCountry.name;
-                    });
-                    if(shippingZone){ // a shipping zone was found
-                        //get the id of the discovered shipping zone
-                        shippingZoneId = shippingZone.id;
-                    }
-                }
+                $('#order-details-page #order-details-list .order-details-order-notes').html(displayContent);
 
-                // get the shipping methods attached to the discovered shipping zone
-                let shippingMethodsArray = await Promise.resolve($.ajax( // load the list of shipping zones
-                    {
-                        url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
-                            `/wp-json/wc/v3/shipping/zones/${shippingZoneId}/methods`,
-                        type: "get",
-                        //contentType: "application/json",
-                        beforeSend: function(jqxhr) {
-                            jqxhr.setRequestHeader("Authorization", "Basic " +
-                                utopiasoftware[utopiasoftware_app_namespace].accessor);
-                        },
-                        dataType: "json",
-                        timeout: 240000, // wait for 4 minutes before timeout of request
-                        processData: true,
-                        data: {}
-                    }
-                ));
-                // filter the shipping methods for only the methods that are enabled
-                shippingMethodsArray = shippingMethodsArray.filter(function(shippingMethodElem){
-                    return shippingMethodElem.enabled === true;
-                });
-                // remove the "select" event listener for the shipping method dropdownlist
-                let shippingMethodDropDown = $('#checkout-shipping-method-type').get(0).ej2_instances[0];
-                shippingMethodDropDown.removeEventListener("select");
-
-                // set the shippingMethodArray as the datasource for the shipping method dropdownlist
-                shippingMethodDropDown.dataSource = shippingMethodsArray;
-                // set the pre-selected shipping method (i.e. the shippingMethod dropdownlist value)
-                // check if there are any shipping lines info available
-                if(orderData.shipping_lines.length > 0){ // if length is > 0, there are shipping lines info available
-                    // set the shipping method dropdownlist value
-                    shippingMethodDropDown.value = orderData.shipping_lines[0].method_id;
-                    // check if the shipping method dropdownlist value is an empty string
-                    if(shippingMethodDropDown.value === ""){ // the value is an empty string
-                        shippingMethodDropDown.value = null; // reset the shipping method dropdownlist value to null instead
-                    }
-                }
-                shippingMethodDropDown.dataBind();
-
-                // add the "select" event listener for the shipping method dropdownlist
-                shippingMethodDropDown.addEventListener("select", function(){
-                    // handle the task in a separate event block
-                    window.setTimeout(async function(){
-
-                        // check if there is Internet connection
-                        if(navigator.connection.type === Connection.NONE){ // there is no Internet connection
-                            // hide all previously displayed ej2 toast
-                            $('.page-toast').get(0).ej2_instances[0].hide('All');
-                            $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
-                            // display toast to show that an error
-                            let toast = $('.timed-page-toast').get(0).ej2_instances[0];
-                            toast.cssClass = 'error-ej2-toast';
-                            toast.timeOut = 3000;
-                            toast.content = `Connect to the Internet to change shipping method`;
-                            toast.dataBind();
-                            toast.show();
-
-                            return; // exit method
-                        }
-
-                        // display the page loader modal
-                        $('#checkout-page .modal').css("display", "table");
-
-                        // get a local/deep-clone copy of the page's checkout order object
-                        let localOrderObject = JSON.parse(JSON.
-                        stringify(utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder));
-                        // update the shipping method for the local order object to be sent to the server
-                        localOrderObject.shipping_lines[0] = localOrderObject.shipping_lines[0] || {};
-                        Object.assign(localOrderObject.shipping_lines[0], {method_id: shippingMethodDropDown.value,
-                            method_title: shippingMethodDropDown.text,
-                            instance_id: "" + shippingMethodDropDown.
-                            getDataByValue(shippingMethodDropDown.value).instance_id});
-                        // update the coupons for the local order object to be sent to the server
-                        localOrderObject.coupon_lines = localOrderObject.coupon_lines.map(function(couponElem){
-                            return {code: couponElem.code};
-                        });
-
-                        // perform some remote /asynchronous tasks needed to update the order method
-                        try{
-
-                            // change the user shipping method on the remote cart using a helper script
-                            await Promise.resolve($.ajax(
-                                {
-                                    url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
-                                        `/oakscripts/setshipping.php`,
-                                    type: "post",
-                                    //contentType: "application/json",
-                                    beforeSend: function(jqxhr) {
-                                        jqxhr.setRequestHeader("Authorization", "Basic " +
-                                            Base64.encode(`${userDetails.email}:${userDetails.password}`));
-                                    },
-                                    crossDomain: true,
-                                    xhrFields: {
-                                        withCredentials: true
-                                    },
-                                    dataType: "text",
-                                    timeout: 240000, // wait for 4 minutes before timeout of request
-                                    processData: true,
-                                    // send the shipping method data represented by selected shipping method value
-                                    data: {id: shippingMethodDropDown.getDataByValue(shippingMethodDropDown.value).instance_id,
-                                        method_id: shippingMethodDropDown.getDataByValue(shippingMethodDropDown.value).method_id}
-                                }
-                            ));
-
-                            // calculate all the totals for the remote user cart
-                            await Promise.resolve($.ajax(
-                                {
-                                    url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
-                                        `/wp-json/wc/v2/cart/calculate`,
-                                    type: "post",
-                                    contentType: "application/json",
-                                    beforeSend: function(jqxhr) {
-                                        jqxhr.setRequestHeader("Authorization", "Basic " +
-                                            Base64.encode(`${userDetails.email}:${userDetails.password}`));
-                                    },
-                                    crossDomain: true,
-                                    xhrFields: {
-                                        withCredentials: true
-                                    },
-                                    dataType: "text",
-                                    timeout: 240000, // wait for 4 minutes before timeout of request
-                                    processData: true,
-                                    data: {}
-                                }
-                            ));
-
-                            // get all the totals for the remote user cart
-                            let remoteCartTotals = await Promise.resolve($.ajax(
-                                {
-                                    url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
-                                        `/wp-json/wc/v2/cart/totals`,
-                                    type: "get",
-                                    contentType: "application/json",
-                                    beforeSend: function(jqxhr) {
-                                        jqxhr.setRequestHeader("Authorization", "Basic " +
-                                            Base64.encode(`${userDetails.email}:${userDetails.password}`));
-                                    },
-                                    crossDomain: true,
-                                    xhrFields: {
-                                        withCredentials: true
-                                    },
-                                    dataType: "json",
-                                    timeout: 240000, // wait for 4 minutes before timeout of request
-                                    processData: true,
-                                    data: {}
-                                }
-                            ));
-
-                            // update the shipping method for the local order object to be sent to the server
-                            localOrderObject.shipping_lines[0].total = "" + remoteCartTotals.shipping_total;
-
-                            // update the checkout order data on the remote server
-                            localOrderObject = await Promise.resolve($.ajax(
-                                {
-                                    url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
-                                        `/wp-json/wc/v3/orders/${localOrderObject.id}`,
-                                    type: "put",
-                                    contentType: "application/json",
-                                    beforeSend: function(jqxhr) {
-                                        jqxhr.setRequestHeader("Authorization", "Basic " +
-                                            utopiasoftware[utopiasoftware_app_namespace].accessor);
-                                    },
-                                    dataType: "json",
-                                    timeout: 240000, // wait for 4 minutes before timeout of request
-                                    processData: false,
-                                    data: JSON.stringify(localOrderObject)
-                                }
-                            ));
-
-                            // update the page checkout order with the updated order from the server
-                            utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.
-                                chekoutOrder = localOrderObject;
-
-                            // disable the shipping method dropdownlist
-                            shippingMethodDropDown.enabled = false;
-                            shippingMethodDropDown.dataBind();
-
-                            // redisplay the page (redisplaying the page also hides the page loader when the process is complete)
-                            await utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.pageShow();
-                        }
-                        catch(err){
-                            console.log("CHECKOUT SHIPPING METHOD UPDATE ERROR", err);
-
-                            err = JSON.parse(err.responseText.trim());
-
-                            // hide all previously displayed ej2 toast
-                            $('.page-toast').get(0).ej2_instances[0].hide('All');
-                            $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
-                            // display toast message
-                            let toast = $('.timed-page-toast').get(0).ej2_instances[0];
-                            toast.cssClass = 'error-ej2-toast';
-                            toast.timeOut = 3000;
-                            toast.content = `Shipping method not updated, retry. ${err.message || ""}`;
-                            toast.dataBind();
-                            toast.show();
-
-                            // hide the page loader modal
-                            $('#checkout-page .modal').css("display", "none");
-                        }
-
-                    }, 0);
-                });
-
-                // remove the "select" event listener for the shipping method dropdownlist
-                let paymentMethodDropDown = $('#checkout-payment-method-type').get(0).ej2_instances[0];
-                paymentMethodDropDown.removeEventListener("select");
-
-                // set the pre-selected payment method for the order data
-                paymentMethodDropDown.value = orderData.payment_method;
-                paymentMethodDropDown.dataBind();
-
-                // add the "select" event listener for the payment method dropdownlist
-                paymentMethodDropDown.addEventListener("select", function(){
-                    // handle the task in a separate event block
-                    window.setTimeout(async function(){
-
-                        // check if there is Internet connection
-                        if(navigator.connection.type === Connection.NONE){ // there is no Internet connection
-                            // hide all previously displayed ej2 toast
-                            $('.page-toast').get(0).ej2_instances[0].hide('All');
-                            $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
-                            // display toast to show that an error
-                            let toast = $('.timed-page-toast').get(0).ej2_instances[0];
-                            toast.cssClass = 'error-ej2-toast';
-                            toast.timeOut = 3000;
-                            toast.content = `Connect to the Internet to change payment method`;
-                            toast.dataBind();
-                            toast.show();
-
-                            return; // exit method
-                        }
-
-                        // display the page loader modal
-                        $('#checkout-page .modal').css("display", "table");
-
-                        // get a local/deep-clone copy of the page's checkout order object
-                        let localOrderObject = JSON.parse(JSON.
-                        stringify(utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder));
-                        // update the payment method for the local order object to be sent to the server
-                        localOrderObject.payment_method = paymentMethodDropDown.value;
-                        localOrderObject.payment_method_title = paymentMethodDropDown.text;
-                        // update the coupons for the local order object to be sent to the server
-                        localOrderObject.coupon_lines = localOrderObject.coupon_lines.map(function(couponElem){
-                            return {code: couponElem.code};
-                        });
-
-                        // update the checkout order data on the remote server
-                        try{
-                            localOrderObject = await Promise.resolve($.ajax(
-                                {
-                                    url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
-                                        `/wp-json/wc/v3/orders/${localOrderObject.id}`,
-                                    type: "put",
-                                    contentType: "application/json",
-                                    beforeSend: function(jqxhr) {
-                                        jqxhr.setRequestHeader("Authorization", "Basic " +
-                                            utopiasoftware[utopiasoftware_app_namespace].accessor);
-                                    },
-                                    dataType: "json",
-                                    timeout: 240000, // wait for 4 minutes before timeout of request
-                                    processData: false,
-                                    data: JSON.stringify(localOrderObject)
-                                }
-                            ));
-
-                            // update the page checkout order with the updated order from the server
-                            utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.
-                                chekoutOrder = localOrderObject;
-
-                            // disable the payment method dropdownlist
-                            paymentMethodDropDown.enabled = false;
-                            paymentMethodDropDown.dataBind();
-
-                            // redisplay the page (redisplaying the page also hides the page loader when the process is complete)
-                            await utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.pageShow();
-                        }
-                        catch(err){
-                            console.log("CHECKOUT PAYMENT METHOD UPDATE ERROR", err);
-
-                            err = JSON.parse(err.responseText);
-
-                            // hide all previously displayed ej2 toast
-                            $('.page-toast').get(0).ej2_instances[0].hide('All');
-                            $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
-                            // display toast message
-                            let toast = $('.timed-page-toast').get(0).ej2_instances[0];
-                            toast.cssClass = 'error-ej2-toast';
-                            toast.timeOut = 3000;
-                            toast.content = `Payment method not updated, retry. ${err.message || ""}`;
-                            toast.dataBind();
-                            toast.show();
-
-                            // hide the page loader modal
-                            $('#checkout-page .modal').css("display", "none");
-                        }
-
-                    }, 0);
-                });
-
-                // set the order coupons
-                let couponsMultiSelectDropDown = $('#checkout-payment-vouchers').get(0).ej2_instances[0];
-                let couponsArray = orderData.coupon_lines.map(function(couponElem){
-                    return couponElem.code;
-                });
-                // set the datasource and the values for the coupons mulitselect dropdown
-                couponsMultiSelectDropDown.dataSource = couponsArray;
-                couponsMultiSelectDropDown.value = couponsArray;
-                couponsMultiSelectDropDown.dataBind();
-
-                // set the order notes i.e. shipping instructions
-                $('#checkout-page #checkout-payment-order-note-text').val(orderData.customer_note);
-
-                // display the order items
-                let orderItemsDisplayContent = ''; // holds the content to be displayed for the order items segment
+                // display the items in the order
+                displayContent = ''; // reset the displayContent variable for use in the next for-loop
                 for(let index = 0; index < orderData.line_items.length; index++){
                     orderItemsDisplayContent +=
                         `<div class="col-xs-6" style="text-align: right; padding-right: 5px;
-                        padding-top: 10px; padding-bottom: 10px">${orderData.line_items[index].name}</div>
-                        <div class="col-xs-2" style="text-align: left;
-                        padding-top: 10px; padding-bottom: 10px">&times;${orderData.line_items[index].quantity}</div>
+                            padding-top: 10px; padding-bottom: 10px">${orderData.line_items[index].name}</div>
+                        <div class="col-xs-2" style="text-align: left; padding-left: 5px;
+                            padding-top: 10px; padding-bottom: 10px">&times;${orderData.line_items[index].quantity}</div>
                         <div class="col-xs-4" style="text-align: left; padding-left: 5px;
-                        padding-top: 10px; padding-bottom: 10px">
+                            padding-top: 10px; padding-bottom: 10px">
                         &#x20a6;${kendo.toString(kendo.parseFloat(orderData.line_items[index].subtotal), "n2")}</div>`;
                 }
-                $('#checkout-page #checkout-order-items-container').html(orderItemsDisplayContent);
+                $('#order-details-page #order-details-list .order-details-order-items').html(displayContent);
 
-                // display checkout totals
-                $('#checkout-page #checkout-page-items-cost').html(
-                    `&#x20a6;${kendo.toString((kendo.parseFloat(orderData.total) - kendo.parseFloat(orderData.shipping_total) +
-                        kendo.parseFloat(orderData.discount_total)), "n2")}`);
-                $('#checkout-page #checkout-page-shipping-cost').html(
-                    `&#x20a6;${kendo.toString(kendo.parseFloat(orderData.shipping_total), "n2")}`
-                );
-                $('#checkout-page #checkout-page-discount-cost').html(
-                    `&#x20a6;${kendo.toString(kendo.parseFloat(orderData.discount_total), "n2")}`
-                );
-                $('#checkout-page #checkout-page-total-cost').html(
-                    `&#x20a6;${kendo.toString(kendo.parseFloat(orderData.total), "n2")}`
-                );
-                if(kendo.parseFloat(orderData.discount_total) > 0){ // if the discount total value is > zero
-                    // display the discount total to user
-                    $('#checkout-page .checkout-page-discount').css("display", "block");
+                // display the Billing Details
+                displayContent = ''; // reset the displayContent variable for next use
+
+                displayContent += `<div class="col-xs-12" style="text-align: left; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">
+                ${orderData.billing.first_name + " " + orderData.billing.last_name}</div>`;
+                //check if the billing details contains a company name
+                if(orderData.billing.company && orderData.billing.company !== ""){ // there is company name, so display it
+                    displayContent += `<div class="col-xs-12" style="text-align: left; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">${orderData.billing.company}</div>`;
                 }
-                else{ // the discount total is zero
-                    // hide the discount total from user
-                    $('#checkout-page .checkout-page-discount').css("display", "none");
+                // check if the billing details contains a 1st address line
+                if(orderData.billing.address_1 && orderData.billing.address_1 !== "") { // there is 1st address line, display it
+                    displayContent += `<div class="col-xs-12" style="text-align: left; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">${orderData.billing.address_1}</div>`;
                 }
+                // check if the billing details contains a 2nd address line
+                if(orderData.billing.address_2 && orderData.billing.address_2 !== "") { // there is 2nd address line, display it
+                    displayContent += `<div class="col-xs-12" style="text-align: left; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">${orderData.billing.address_2}</div>`;
+                }
+                displayContent += `<div class="col-xs-12" style="text-align: left; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">${orderData.billing.city}</div>`;
+                // check if the billing details contains a state
+                if(orderData.billing.state && orderData.billing.state !== "") { // there is state, display it
+                    displayContent += `<div class="col-xs-12" style="text-align: left; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">${orderData.billing.state}</div>`;
+                }
+                // check if the billing details contains a postal code
+                if(orderData.billing.postcode && orderData.billing.postcode !== "") { // there is postal code, display it
+                    displayContent += `<div class="col-xs-12" style="text-align: left; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">${orderData.billing.postcode}</div>`;
+                }
+                displayContent += `<div class="col-xs-12" style="text-align: left; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">${orderData.billing.country}</div>`;
+                displayContent += `<div class="col-xs-12" style="text-align: left; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">${orderData.billing.phone}</div>`;
+                displayContent += `<div class="col-xs-12" style="text-align: left; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">${orderData.billing.email}</div>`;
+                $('#order-details-page #order-details-list .order-details-billing-details').html(displayContent);
+
+                // display the Shipping Details
+                displayContent = ''; // reset the displayContent variable for next use
+
+                displayContent += `<div class="col-xs-12" style="text-align: left; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">
+                ${orderData.shipping.first_name + " " + orderData.shipping.last_name}</div>`;
+                //check if the shipping details contains a company name
+                if(orderData.shipping.company && orderData.shipping.company !== ""){ // there is company name, so display it
+                    displayContent += `<div class="col-xs-12" style="text-align: left; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">${orderData.shipping.company}</div>`;
+                }
+                // check if the shipping details contains a 1st address line
+                if(orderData.shipping.address_1 && orderData.shipping.address_1 !== "") { // there is 1st address line, display it
+                    displayContent += `<div class="col-xs-12" style="text-align: left; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">${orderData.shipping.address_1}</div>`;
+                }
+                // check if the shipping details contains a 2nd address line
+                if(orderData.shipping.address_2 && orderData.shipping.address_2 !== "") { // there is 2nd address line, display it
+                    displayContent += `<div class="col-xs-12" style="text-align: left; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">${orderData.shipping.address_2}</div>`;
+                }
+                displayContent += `<div class="col-xs-12" style="text-align: left; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">${orderData.shipping.city}</div>`;
+                // check if the shipping details contains a state
+                if(orderData.shipping.state && orderData.shipping.state !== "") { // there is state, display it
+                    displayContent += `<div class="col-xs-12" style="text-align: left; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">${orderData.shipping.state}</div>`;
+                }
+                // check if the shipping details contains a postal code
+                if(orderData.shipping.postcode && orderData.shipping.postcode !== "") { // there is postal code, display it
+                    displayContent += `<div class="col-xs-12" style="text-align: left; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">${orderData.shipping.postcode}</div>`;
+                }
+                displayContent += `<div class="col-xs-12" style="text-align: left; padding-right: 5px;
+                            padding-top: 10px; padding-bottom: 10px">${orderData.shipping.country}</div>`;
+                $('#order-details-page #order-details-list .order-details-shipping-details').html(displayContent);
+
             }
             finally {
 
