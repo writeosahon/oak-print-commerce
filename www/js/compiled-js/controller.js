@@ -9267,7 +9267,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         padding-top: 10px; padding-bottom: 10px">&times;${orderData.line_items[index].quantity}</div>
                         <div class="col-xs-4" style="text-align: left; padding-left: 5px;
                         padding-top: 10px; padding-bottom: 10px">
-                        &#x20a6;${kendo.toString(kendo.parseFloat(orderData.line_items[index].subtotal), "n2")}</div>`;
+                        &#x20a6;${kendo.toString(kendo.parseFloat(orderData.line_items[index].subtotal), "n2")}</div>
+                        <div class="clearfix visible-xs-block"></div>`;
                 }
                 $('#checkout-page #checkout-order-items-container').html(orderItemsDisplayContent);
 
@@ -12638,7 +12639,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             padding-top: 10px; padding-bottom: 10px;
                             text-transform: lowercase; word-wrap: break-word">
                     ${kendo.toString(new Date(orderNote.date_created_gmt), "MMMM dd, yyyy")}        
-                    </div>`;
+                    </div>
+                    <div class="clearfix visible-xs-block"></div>`;
                 }
                 $('#order-details-page #order-details-list .order-details-order-notes').html(displayContent);
 
@@ -12652,7 +12654,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             padding-top: 10px; padding-bottom: 10px">&times;${orderData.line_items[index].quantity}</div>
                         <div class="col-xs-4" style="text-align: left; padding-left: 5px;
                             padding-top: 10px; padding-bottom: 10px">
-                        &#x20a6;${kendo.toString(kendo.parseFloat(orderData.line_items[index].subtotal), "n2")}</div>`;
+                        &#x20a6;${kendo.toString(kendo.parseFloat(orderData.line_items[index].subtotal), "n2")}</div>
+                        <div class="clearfix visible-xs-block"></div>`;
                 }
                 $('#order-details-page #order-details-list .order-details-order-items').html(displayContent);
 
