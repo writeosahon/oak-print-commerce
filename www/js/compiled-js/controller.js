@@ -12625,7 +12625,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     displayContent += `
                     <div class="col-xs-6" style="text-align: right; padding-right: 5px;
                             padding-top: 10px; padding-bottom: 10px;
-                            text-transform: lowercase; word-wrap: break-word">${orderNote[index].note}</div>`;
+                            text-transform: lowercase; word-wrap: break-word">${orderNote.note}</div>`;
 
                     // check if the order note created date (in GMT) has a pending 'Z' appended to the time
                     if(! orderNote.date_created_gmt.endsWith("Z")){ // no pending 'Z', so add the 'Z'
