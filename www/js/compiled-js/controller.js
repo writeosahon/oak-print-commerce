@@ -12613,7 +12613,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $('#order-details-page #order-details-list .order-details-payment-method').
                 html(`${orderData.payment_method_title}`);
                 $('#order-details-page #order-details-list .order-details-shipping-method').
-                html(`${orderData.shipping_lines[0].method_title}`);
+                html(`${orderData.shipping_lines[0] ? orderData.shipping_lines[0].method_title : ""}`);
+                $('#order-details-page #order-details-list .order-details-shipping-cost').
+                html(`&#x20a6;${kendo.toString(kendo.parseFloat(orderData.shipping_total), "n2")}`);
 
                 // update the order shipping updates/notes
                 let displayContent = ''; // holds the contents to be generated in the for-loop
