@@ -3156,11 +3156,11 @@ processData:true,data:{"type":"any"}})));// wait for all promises to resolve
 _context193.next=12;return Promise.all(promisesArray);case 12:promisesArray=_context193.sent;// get the order notes belonging to the specified order object
 utopiasoftware[utopiasoftware_app_namespace].controller.orderDetailsPageViewModel.orderNotesArray=promisesArray[0];// display the order details
 _context193.next=16;return utopiasoftware[utopiasoftware_app_namespace].controller.orderDetailsPageViewModel.displayContent();case 16:// enable the "Reorder" button
-$('#order-details-page #order-details-reorder').removeAttr("disabled");_context193.next=27;break;case 19:_context193.prev=19;_context193.t0=_context193['catch'](5);// hide all previously displayed ej2 toast
+$('#order-details-page #order-details-reorder').removeAttr("disabled");_context193.next=28;break;case 19:_context193.prev=19;_context193.t0=_context193['catch'](5);console.log("ORDER DETAILS ERROR",_context193.t0);// hide all previously displayed ej2 toast
 $('.page-toast').get(0).ej2_instances[0].hide('All');// display toast to show that an error
-toast=$('.page-toast').get(0).ej2_instances[0];toast.cssClass='error-ej2-toast';toast.content='Sorry, an error occurred.'+(navigator.connection.type===Connection.NONE?" Connect to the Internet.":"")+' Pull down to refresh and try again';toast.dataBind();toast.show();case 27:_context193.prev=27;// hide page preloader
+toast=$('.page-toast').get(0).ej2_instances[0];toast.cssClass='error-ej2-toast';toast.content='Sorry, an error occurred.'+(navigator.connection.type===Connection.NONE?" Connect to the Internet.":"")+' Pull down to refresh and try again';toast.dataBind();toast.show();case 28:_context193.prev=28;// hide page preloader
 $('#order-details-page .page-preloader').css("display","none");// hide page modal loader
-$('#order-details-page .modal').css("display","none");return _context193.finish(27);case 31:case'end':return _context193.stop();}}},_callee193,this,[[5,19,27,31]]);}));return function loadPageOnAppReady(){return _ref196.apply(this,arguments);};}();var $thisPage=$(event.target);// get the current page shown
+$('#order-details-page .modal').css("display","none");return _context193.finish(28);case 32:case'end':return _context193.stop();}}},_callee193,this,[[5,19,28,32]]);}));return function loadPageOnAppReady(){return _ref196.apply(this,arguments);};}();var $thisPage=$(event.target);// get the current page shown
 // call the function used to initialise the app page if the app is fully loaded
 loadPageOnAppReady();},/**
          * method is triggered when page is shown
