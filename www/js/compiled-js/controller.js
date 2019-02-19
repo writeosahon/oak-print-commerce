@@ -10208,7 +10208,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 try{
                     // display the checkout page using the selected order
-                    await $('#app-main-navigator').get(0).pushPage("checkout-page.html", {data: {orderData: selectedOrder}});
+                    await $('#app-main-navigator').get(0).pushPage("order-details-page.html", {data: {orderData: selectedOrder}});
                 }
                 catch(err){
                     // hide all previously displayed ej2 toast
