@@ -12645,7 +12645,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // display the items in the order
                 displayContent = ''; // reset the displayContent variable for use in the next for-loop
                 for(let index = 0; index < orderData.line_items.length; index++){
-                    orderItemsDisplayContent +=
+                    displayContent +=
                         `<div class="col-xs-6" style="text-align: right; padding-right: 5px;
                             padding-top: 10px; padding-bottom: 10px">${orderData.line_items[index].name}</div>
                         <div class="col-xs-2" style="text-align: left; padding-left: 5px;
