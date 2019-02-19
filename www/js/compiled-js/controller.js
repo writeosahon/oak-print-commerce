@@ -12497,12 +12497,31 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         }
                     ));
 
+                    // hide the page loader
+                    $('#order-details-page .modal').css("display", "none");
+
+                    // disable the "Reorder" button
+                    $('#order-details-page #order-details-reorder').removeAttr("disabled", true);
+                    // add the spinner from the 'Reorder'
+                    $('#order-details-page #order-details-reorder').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
+                    $('#order-details-page #order-details-reorder').get(0).ej2_instances[0].dataBind();
+                    $('#order-details-page #order-details-reorder').get(0).ej2_instances[0].stop();
 
                     // display the checkout page using the selected order
                     await $('#app-main-navigator').get(0).replacePage("checkout-page.html", {data: {orderData: newOrder}});
                 }
                 catch(err){
                     console.log(err, "REORDER ERROR");
+
+                    // hide the page loader
+                    $('#order-details-page .modal').css("display", "none");
+
+                    // disable the "Reorder" button
+                    $('#order-details-page #order-details-reorder').removeAttr("disabled", true);
+                    // add the spinner from the 'Reorder'
+                    $('#order-details-page #order-details-reorder').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
+                    $('#order-details-page #order-details-reorder').get(0).ej2_instances[0].dataBind();
+                    $('#order-details-page #order-details-reorder').get(0).ej2_instances[0].stop();
 
                     // hide all previously displayed ej2 toast
                     $('.page-toast').get(0).ej2_instances[0].hide('All');
@@ -12516,15 +12535,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     toast.show();
                 }
                 finally {
-                    // hide the page loader
-                    $('#order-details-page .modal').css("display", "none");
 
-                    // disable the "Reorder" button
-                    $('#order-details-page #order-details-reorder').attr("disabled", true);
-                    // add the spinner from the 'Reorder'
-                    $('#order-details-page #order-details-reorder').get(0).ej2_instances[0].cssClass = 'e-hide-spinner';
-                    $('#order-details-page #order-details-reorder').get(0).ej2_instances[0].dataBind();
-                    $('#order-details-page #order-details-reorder').get(0).ej2_instances[0].stop();
                 }
             }, 0);
         },
