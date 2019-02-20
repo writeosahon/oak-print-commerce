@@ -2849,6 +2849,42 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         },
 
         /**
+         * method is triggered when the 3rd-party login button is clicked
+         * @returns {Promise<void>}
+         */
+        async thirdPartyLoginButtonClicked(){
+            // open the 'third-party-login-modal'
+            $('#third-party-login-modal').get(0).show();
+            // show the loader within the modal
+            $('#third-party-login-modal #third-party-login-loader').css("display", "block");
+            // start the firebase ui app
+            utopiasoftware[utopiasoftware_app_namespace].model.firebaseUI.start('#third-party-login-block',
+                {
+                    signInSuccessUrl: 'https://shopoakexclusive.com',
+                    signInOptions: [
+                        // Leave the lines as is for the providers you want to offer your users.
+                        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+                        firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+                        firebase.auth.TwitterAuthProvider.PROVIDER_ID
+                    ],
+                    //terms of service url
+                    tosUrl: 'https://shopoakexclusive.com/terms-of-service.php',
+                    // Privacy policy url
+                    privacyPolicyUrl: "https://shopoakexclusive.com/privacy-policy.php",
+
+                    //callbacks/handlers
+                    callbacks: {
+                        signInSuccessWithAuthResult: function(){
+                            return true;
+                        }
+                    }
+                });
+
+            // disable firebase ui auto-signin
+            utopiasoftware[utopiasoftware_app_namespace].model.firebaseUI.disableAutoSignIn();
+        },
+
+        /**
          * method is triggered when the login form is successfully validated
          *
          * @returns {Promise<void>}

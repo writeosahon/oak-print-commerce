@@ -209,14 +209,17 @@
     <ons-fab modifier="mini" style="background-color: #ffffff; color: #363E7C;
         box-shadow: none; border: none"
     onclick="document.getElementById('third-party-login-modal').hide();">
-        <ons-icon icon="md-long-arrow-down" size="32px" style="color: #363E7C"></ons-icon>
+        <ons-icon icon="md-close" size="32px" style="color: #363E7C"></ons-icon>
     </ons-fab>
 
-    <div style="text-align: center; width: 100%">
-        <img src="css/app-images/oak-design-logo.png" style="width: 70%">
-        <div style="width: 100%; text-align: center; margin-top: 0.1em;">
-            <ons-icon icon="md-toys" size="50px" spin style="color: #3f51b5"></ons-icon>
+    <div style="text-align: center; width: 100%; position: relative;">
+        <!-- content container -->
+        <div id="third-party-login-loader" style="width: 100%; height: 100%;
+            text-align: center; position: absolute; display: block">
+            <ons-progress-circular indeterminate modifier="pull-hook" style="transform: scale(1.5);"></ons-progress-circular>
         </div>
+        <!-- login block used to display the 3rd party login options -->
+        <div id="third-party-login-block"></div>
     </div>
 </ons-modal>
 
