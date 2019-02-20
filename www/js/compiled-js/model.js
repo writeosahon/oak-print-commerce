@@ -31,7 +31,12 @@ utopiasoftware[utopiasoftware_app_namespace].model = {
     /**
      * holds the total number of items in the local/cache user cart
      */
-    cartCount: 0
+    cartCount: 0,
+
+    /**
+     * holds the default firebase app instance used by the application
+     */
+    firebaseApp: null,
 
 
 };

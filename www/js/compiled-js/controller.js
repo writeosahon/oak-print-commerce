@@ -18,6 +18,17 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
      */
     startup: function(){
 
+        //initialise the firebase app. This can be done BEFORE the other libraries are ready
+        utopiasoftware[utopiasoftware_app_namespace].model.firebaseApp =
+            firebase.initializeApp({
+                apiKey: "AIzaSyAx5tpRlU79yPXiNWFhxyNfAbCtuoIddIA",
+                authDomain: "oak-exclusive.firebaseapp.com",
+                databaseURL: "https://oak-exclusive.firebaseio.com",
+                projectId: "oak-exclusive",
+                storageBucket: "oak-exclusive.appspot.com",
+                messagingSenderId: "492676682141"
+            });
+
         // initialise the app libraries and plugins
         ons.ready(async function () {
             // set the default handler for the app
