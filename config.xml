@@ -53,6 +53,16 @@
     <!-- current version of the plugin is 0.1.0 -->
     <plugin name="com.verso.cordova.clipboard" spec="https://github.com/VersoSolutions/CordovaClipboard"/>
 
+    <!-- plugins required for google 3rd party authentication/login -->
+    <plugin name="cordova-plugin-buildinfo" spec="2.0.2"/>
+    <plugin name="cordova-universal-links-plugin-fix" spec="1.2.1"/>
+    <universal-links>
+        <host name="oakexclusive.page.link" scheme="https" />
+        <host name="oak-exclusive.firebaseapp.com" scheme="https">
+            <path url="/__/auth/callback"/>
+        </host>
+    </universal-links>
+
     <plugin name="cordova-plugin-whitelist" spec="1.3.3"/>
 
     <config-file platform="android" target="AndroidManifest.xml" parent="/manifest">
