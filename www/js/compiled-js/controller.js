@@ -2880,7 +2880,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         },
 
                         signInSuccessWithAuthResult: function(){
-                            return true;
+                            return false;
                         }
                     }
                 });
