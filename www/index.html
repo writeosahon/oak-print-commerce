@@ -203,6 +203,23 @@
     </div>
 </ons-modal>
 
+<!-- 3rd party login modal -->
+<ons-modal id="third-party-login-modal" direction="up" style="background-color: rgba(255, 255, 255, 1);">
+
+    <ons-fab modifier="mini" style="background-color: #ffffff; color: #363E7C;
+        box-shadow: none; border: none"
+    onclick="document.getElementById('third-party-login-modal').hide();">
+        <ons-icon icon="md-long-arrow-down" size="32px" style="color: #363E7C"></ons-icon>
+    </ons-fab>
+
+    <div style="text-align: center; width: 100%">
+        <img src="css/app-images/oak-design-logo.png" style="width: 70%">
+        <div style="width: 100%; text-align: center; margin-top: 0.1em;">
+            <ons-icon icon="md-toys" size="50px" spin style="color: #3f51b5"></ons-icon>
+        </div>
+    </div>
+</ons-modal>
+
 <!-- view reports additional popover -->
 <ons-popover id="search-page-search-input-popover" direction="down" cancelable mask-color="rgba(0,0,0,0)"
              style="width: calc(100vw - 17px - 20px);">

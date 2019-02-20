@@ -38,6 +38,10 @@ utopiasoftware[utopiasoftware_app_namespace].model = {
      */
     firebaseApp: null,
 
+    /**
+     * holds the firebase ui app which is obtained from 'firebaseApp'
+     */
+    firebaseUI: null
 
 };
 

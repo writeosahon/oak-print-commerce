@@ -28,6 +28,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // disable the default back button handler for the 'search-page-search-input-popover'
             $('#search-page-search-input-popover').get(0).onDeviceBackButton.disable();
 
+            // set the device back button handler for the 'third-party-login-modal' modal
+            $('#third-party-login-modal').get(0).onDeviceBackButton = function(){
+                // reset the Firebase UI object
+                utopiasoftware[utopiasoftware_app_namespace].model.firebaseUI.reset();
+                // close the modal
+                $('#third-party-login-modal').get(0).hide();
+            };
+
             // displaying prepping message
             $('#loader-modal-message').html("Loading App...");
             $('#loader-modal').get(0).show(); // show loader
@@ -91,6 +99,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     storageBucket: "oak-exclusive.appspot.com",
                     messagingSenderId: "492676682141"
                 });
+
+            // initialise the firebase ui app
+            utopiasoftware[utopiasoftware_app_namespace].model.firebaseUI =
+            new firebaseui.auth.AuthUI(utopiasoftware[utopiasoftware_app_namespace].model.firebaseApp.auth());
 
 
             // START ALL CORDOVA PLUGINS CONFIGURATIONS

@@ -13,7 +13,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller={/**
 ons.ready(_asyncToGenerator(/*#__PURE__*/regeneratorRuntime.mark(function _callee(){var secureKey;return regeneratorRuntime.wrap(function _callee$(_context){while(1){switch(_context.prev=_context.next){case 0:// set the default handler for the app
 ons.setDefaultDeviceBackButtonListener(function(){// does nothing for now!!
 });// disable the default back button handler for the 'search-page-search-input-popover'
-$('#search-page-search-input-popover').get(0).onDeviceBackButton.disable();// displaying prepping message
+$('#search-page-search-input-popover').get(0).onDeviceBackButton.disable();// set the device back button handler for the 'third-party-login-modal' modal
+$('#third-party-login-modal').get(0).onDeviceBackButton=function(){// reset the Firebase UI object
+utopiasoftware[utopiasoftware_app_namespace].model.firebaseUI.reset();// close the modal
+$('#third-party-login-modal').get(0).hide();};// displaying prepping message
 $('#loader-modal-message').html("Loading App...");$('#loader-modal').get(0).show();// show loader
 // create the ej2 bottom toast component for the app
 new ej.notifications.Toast({content:'',cssClass:'default-ej2-toast',target:document.body,position:{X:"Center",Y:"Bottom"},width:"100%",timeOut:0,extendedTimeout:0,showCloseButton:true}).appendTo($('.page-toast').get(0));// create the ej2 "timed" bottom toast component for the app
@@ -23,18 +26,19 @@ new ej.buttons.Button({cssClass:'e-flat e-small',iconPosition:"Left"}).appendTo(
 new ej.buttons.Button({cssClass:'e-flat e-small',iconPosition:"Left"}).appendTo('#view-cart-page-delete-cart-item-no');// create the "Yes" button on the Cancel Order action sheet
 new ej.buttons.Button({cssClass:'e-flat e-small',iconPosition:"Left"}).appendTo('#cancel-order-yes');// create the "No" button on the Cancel Order action sheet
 new ej.buttons.Button({cssClass:'e-flat e-small',iconPosition:"Left"}).appendTo('#cancel-order-no');//initialise the firebase app.
-utopiasoftware[utopiasoftware_app_namespace].model.firebaseApp=firebase.initializeApp({apiKey:"AIzaSyAx5tpRlU79yPXiNWFhxyNfAbCtuoIddIA",authDomain:"oak-exclusive.firebaseapp.com",databaseURL:"https://oak-exclusive.firebaseio.com",projectId:"oak-exclusive",storageBucket:"oak-exclusive.appspot.com",messagingSenderId:"492676682141"});// START ALL CORDOVA PLUGINS CONFIGURATIONS
+utopiasoftware[utopiasoftware_app_namespace].model.firebaseApp=firebase.initializeApp({apiKey:"AIzaSyAx5tpRlU79yPXiNWFhxyNfAbCtuoIddIA",authDomain:"oak-exclusive.firebaseapp.com",databaseURL:"https://oak-exclusive.firebaseio.com",projectId:"oak-exclusive",storageBucket:"oak-exclusive.appspot.com",messagingSenderId:"492676682141"});// initialise the firebase ui app
+utopiasoftware[utopiasoftware_app_namespace].model.firebaseUI=new firebaseui.auth.AuthUI(utopiasoftware[utopiasoftware_app_namespace].model.firebaseApp.auth());// START ALL CORDOVA PLUGINS CONFIGURATIONS
 try{// lock the orientation of the device to 'PORTRAIT'
-screen.orientation.lock('portrait');}catch(err){}_context.prev=12;// START ALL THE CORDOVA PLUGINS CONFIGURATION WHICH REQUIRE PROMISE SYNTAX
+screen.orientation.lock('portrait');}catch(err){}_context.prev=14;// START ALL THE CORDOVA PLUGINS CONFIGURATION WHICH REQUIRE PROMISE SYNTAX
 // create the pouchdb app database
 utopiasoftware[utopiasoftware_app_namespace].model.appDatabase=new PouchDB('PrintServiceEcommerce.db',{adapter:'cordova-sqlite',location:'default',androidDatabaseImplementation:2});// create the encrypted pouchdb app database
 utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase=new PouchDB('PrintServiceEcommerceEncrypted.db',{adapter:'cordova-sqlite',location:'default',androidDatabaseImplementation:2});// generate a password for encrypting the app database (if it does NOT already exist)
-secureKey=null;_context.prev=16;_context.next=19;return new Promise(function(resolve,reject){NativeStorage.getItem("utopiasoftware-oak-print-service-secure-key",resolve,reject);});case 19:secureKey=_context.sent;_context.next=27;break;case 22:_context.prev=22;_context.t0=_context['catch'](16);_context.next=26;return new Promise(function(resolve,reject){NativeStorage.setItem("utopiasoftware-oak-print-service-secure-key",{password:Random.uuid4(utopiasoftware[utopiasoftware_app_namespace].randomisationEngine)},resolve,reject);});case 26:secureKey=_context.sent;case 27:_context.next=29;return new Promise(function(resolve,reject){utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase.crypto(secureKey.password,{ignore:['_attachments','_deleted','docType'],cb:function cb(err,key){if(err){// there is an error
+secureKey=null;_context.prev=18;_context.next=21;return new Promise(function(resolve,reject){NativeStorage.getItem("utopiasoftware-oak-print-service-secure-key",resolve,reject);});case 21:secureKey=_context.sent;_context.next=29;break;case 24:_context.prev=24;_context.t0=_context['catch'](18);_context.next=28;return new Promise(function(resolve,reject){NativeStorage.setItem("utopiasoftware-oak-print-service-secure-key",{password:Random.uuid4(utopiasoftware[utopiasoftware_app_namespace].randomisationEngine)},resolve,reject);});case 28:secureKey=_context.sent;case 29:_context.next=31;return new Promise(function(resolve,reject){utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase.crypto(secureKey.password,{ignore:['_attachments','_deleted','docType'],cb:function cb(err,key){if(err){// there is an error
 reject(err);// reject Promise
 }else{// no error
 resolve(key);// resolve Promise
-}}});});case 29:_context.prev=29;_context.next=32;return utopiasoftware[utopiasoftware_app_namespace].databaseOperations.loadData("user-cart",utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);case 32:utopiasoftware[utopiasoftware_app_namespace].model.cartCount=_context.sent.cart.length;_context.next=37;break;case 35:_context.prev=35;_context.t1=_context['catch'](29);case 37://register the listener for app database changes
-utopiasoftware[utopiasoftware_app_namespace].controller.appDatabaseChangesListenerViewModel.changesEventEmitter=utopiasoftware[utopiasoftware_app_namespace].model.appDatabase.changes({live:true,include_docs:true,since:'now',doc_ids:['user-cart']}).on("change",utopiasoftware[utopiasoftware_app_namespace].controller.appDatabaseChangesListenerViewModel.userCartChanged);_context.next=43;break;case 40:_context.prev=40;_context.t2=_context['catch'](12);console.log("APP LOADING ERROR",_context.t2);case 43:_context.prev=43;// load the initial content of the app
+}}});});case 31:_context.prev=31;_context.next=34;return utopiasoftware[utopiasoftware_app_namespace].databaseOperations.loadData("user-cart",utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);case 34:utopiasoftware[utopiasoftware_app_namespace].model.cartCount=_context.sent.cart.length;_context.next=39;break;case 37:_context.prev=37;_context.t1=_context['catch'](31);case 39://register the listener for app database changes
+utopiasoftware[utopiasoftware_app_namespace].controller.appDatabaseChangesListenerViewModel.changesEventEmitter=utopiasoftware[utopiasoftware_app_namespace].model.appDatabase.changes({live:true,include_docs:true,since:'now',doc_ids:['user-cart']}).on("change",utopiasoftware[utopiasoftware_app_namespace].controller.appDatabaseChangesListenerViewModel.userCartChanged);_context.next=45;break;case 42:_context.prev=42;_context.t2=_context['catch'](14);console.log("APP LOADING ERROR",_context.t2);case 45:_context.prev=45;// load the initial content of the app
 if(true){// there is a previous logged in user
 // load the app main page
 $('ons-splitter').get(0).content.load("app-main-template");}else{// there is no previously logged in user
@@ -42,7 +46,7 @@ $('ons-splitter').get(0).content.load("app-main-template");}else{// there is no 
 $('ons-splitter').get(0).content.load("login-template");}// set status bar color
 StatusBar.backgroundColorByHexString("#363E7C");navigator.splashscreen.hide();// hide the splashscreen
 utopiasoftware[utopiasoftware_app_namespace].model.isAppReady=true;// flag that app is fully loaded and ready
-return _context.finish(43);case 49:case'end':return _context.stop();}}},_callee,this,[[12,40,43,49],[16,22],[29,35]]);})));// end of ons.ready()
+return _context.finish(45);case 51:case'end':return _context.stop();}}},_callee,this,[[14,42,45,51],[18,24],[31,37]]);})));// end of ons.ready()
 },/**
      * this view-model is used to house the listeners and data/properties which listen for
      * changes in the app database
