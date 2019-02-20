@@ -55,6 +55,7 @@
 
     <!-- plugins required for google 3rd party authentication/login -->
     <plugin name="cordova-plugin-buildinfo" spec="2.0.2"/>
+    <plugin name="cordova-plugin-browsertab" spec="0.2.0"/>
     <plugin name="cordova-universal-links-plugin-fix" spec="1.2.1"/>
     <universal-links>
         <host name="oakexclusive.page.link" scheme="https" />
