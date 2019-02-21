@@ -30,23 +30,8 @@
     <plugin name="cordova-plugin-x-toast" spec="2.7.2"/>
     <plugin name="cordova-plugin-inappbrowser" spec="3.0.0"/>
     <plugin name="cordova-plugin-file" spec="6.0.1"/>
-    <edit-config file="AndroidManifest.xml" target="/manifest/application/activity[@android:name='OAKExclusive']" mode="merge">
-        <intent-filter>
-            <action android:name="android.intent.action.VIEW" />
-            <category android:name="android.intent.category.DEFAULT" />
-            <category android:name="android.intent.category.BROWSABLE" />
-            <data android:scheme="https"/>
-        </intent-filter>
-        <intent-filter>
-            <action android:name="android.intent.action.VIEW" />
-            <category android:name="android.intent.category.DEFAULT" />
-            <category android:name="android.intent.category.BROWSABLE" />
-            <data android:scheme=" "
-                  android:host=" "
-                  android:pathPrefix="/" />
-        </intent-filter>
-    </edit-config>
-    <plugin name="cordova-plugin-customurlscheme" spec="https://github.com/writeosahon/Custom-URL-scheme.git#4.3.0-oak-printing-ecommerce">
+
+    <plugin name="cordova-plugin-customurlscheme" spec="4.3.0">
         <variable name="URL_SCHEME" value="https"/>
         <variable name="ANDROID_SCHEME" value=" "/>
         <variable name="ANDROID_HOST" value=" "/>
@@ -65,6 +50,10 @@
         <variable name="WINDOW_BACKGROUND_COLOR" value="#ffffff"/>
         <variable name="WINDOW_NAVIGATION_BAR_COLOR" value="#363E7C"/>
     </plugin>
+    <edit-config file="AndroidManifest.xml" target="/manifest/application/activity[@android:name='OAKExclusive']" mode="merge">
+        <activity android:name="OAKExclusive" android:theme="@style/CordovaWindowBackgroundTheme"/>
+    </edit-config>
+
     <plugin name="cordova-plugin-nativestorage" spec="2.3.2"/>
     <plugin name="cordova-plugin-x-socialsharing" spec="5.4.3"/>
     <!-- current version of the plugin is 0.1.0 -->
