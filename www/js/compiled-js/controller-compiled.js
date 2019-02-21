@@ -804,11 +804,7 @@ tosUrl:'https://shopoakexclusive.com/terms-of-service.php',// Privacy policy url
 privacyPolicyUrl:"https://shopoakexclusive.com/privacy-policy.php",//callbacks/handlers
 callbacks:{uiShown:function uiShown(){// triggered callback when firebase ui is displayed
 // hide the loader within the modal
-$('#third-party-login-modal #third-party-login-loader').css("display","none");}/*,
-
-                        signInSuccessWithAuthResult: function(){
-                            return false;
-                        }*/}});// disable firebase ui auto-signin
+$('#third-party-login-modal #third-party-login-loader').css("display","none");},signInSuccessWithAuthResult:function signInSuccessWithAuthResult(){console.log("I GOT YOU");return true;}}});// disable firebase ui auto-signin
 utopiasoftware[utopiasoftware_app_namespace].model.firebaseUI.disableAutoSignIn();case 4:case'end':return _context52.stop();}}},_callee52,this);}));function thirdPartyLoginButtonClicked(){return _ref52.apply(this,arguments);}return thirdPartyLoginButtonClicked;}(),/**
          * method is triggered when the login form is successfully validated
          *

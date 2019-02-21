@@ -2878,11 +2878,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         uiShown: function(){ // triggered callback when firebase ui is displayed
                             // hide the loader within the modal
                             $('#third-party-login-modal #third-party-login-loader').css("display", "none");
-                        }/*,
+                        },
 
                         signInSuccessWithAuthResult: function(){
-                            return false;
-                        }*/
+                            console.log("I GOT YOU");
+                            return true;
+                        }
                     }
                 });
 
