@@ -115,6 +115,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             try { // START ALL THE CORDOVA PLUGINS CONFIGURATION WHICH REQUIRE PROMISE SYNTAX
 
+                universalLinks.subscribe(null, function (eventData) {console.log("UNIVERSAL LINK", eventData.url);});
+
                 // create the pouchdb app database
                 utopiasoftware[utopiasoftware_app_namespace].model.appDatabase = new PouchDB('PrintServiceEcommerce.db', {
                     adapter: 'cordova-sqlite',
