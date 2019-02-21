@@ -132,7 +132,7 @@
         <splash src="package-assets/xxxhdpi_landscape.png" width="1920" height="1280" orientation="landscape" density="land-xxxhdpi"/>
     </platform>
 
-    <edit-config file="AndroidManifest.xml" target="/manifest/application/activity[@android:launchMode='singleTop']" mode="merge">
+    <edit-config file="AndroidManifest.xml" target="/manifest/application/activity[@android:launchMode='singleTask']" mode="merge">
         <activity android:launchMode="singleTask" />
     </edit-config>
     <!-- used to change the background color of the small icon in ONE-SIGNAL push notification -->
