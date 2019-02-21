@@ -36,6 +36,23 @@
         <variable name="ANDROID_HOST" value=" "/>
         <variable name="ANDROID_PATHPREFIX" value="/"/>
     </plugin>
+    <edit-config file="AndroidManifest.xml" target="/manifest/application/activity[@android:launchMode='singleTask']" mode="merge">
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https"/>
+        </intent-filter>
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme=" "
+                  android:host=" "
+                  android:pathPrefix="/" />
+        </intent-filter>
+    </edit-config>
+
     <plugin name="cordova-plugin-app-version" spec="0.1.9"/>
     <plugin name="cordova.plugins.diagnostic" spec="4.0.10"/>
     <!--<plugin name="com.lampa.startapp" spec="6.1.6"/>-->
