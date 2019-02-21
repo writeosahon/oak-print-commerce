@@ -2882,7 +2882,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                         signInSuccessWithAuthResult: function(){
                             console.log("I GOT YOU");
-                            return true;
+                            return false;
                         }
                     }
                 });
