@@ -799,7 +799,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.forgo
 $('#third-party-login-modal').get(0).show();// show the loader within the modal
 $('#third-party-login-modal #third-party-login-loader').css("display","block");// start the firebase ui app
 utopiasoftware[utopiasoftware_app_namespace].model.firebaseUI.start('#third-party-login-block',{signInOptions:[// Leave the lines as is for the providers you want to offer your users.
-firebase.auth.GoogleAuthProvider.PROVIDER_ID,firebase.auth.FacebookAuthProvider.PROVIDER_ID,firebase.auth.TwitterAuthProvider.PROVIDER_ID],//terms of service url
+firebase.auth.GoogleAuthProvider.PROVIDER_ID,{provider:firebase.auth.FacebookAuthProvider.PROVIDER_ID,customParameters:{// Forces password re-entry.
+auth_type:'reauthenticate'}},firebase.auth.TwitterAuthProvider.PROVIDER_ID],//terms of service url
 tosUrl:'https://shopoakexclusive.com/terms-of-service.php',// Privacy policy url
 privacyPolicyUrl:"https://shopoakexclusive.com/privacy-policy.php",//callbacks/handlers
 callbacks:{uiShown:function uiShown(){// triggered callback when firebase ui is displayed

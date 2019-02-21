@@ -2865,7 +2865,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     signInOptions: [
                         // Leave the lines as is for the providers you want to offer your users.
                         firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-                        firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+                        {
+                            provider: firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+                            customParameters: {
+                                // Forces password re-entry.
+                                auth_type: 'reauthenticate'
+                            }
+                        },
                         firebase.auth.TwitterAuthProvider.PROVIDER_ID
                     ],
                     //terms of service url
