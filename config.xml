@@ -31,7 +31,7 @@
     <plugin name="cordova-plugin-inappbrowser" spec="3.0.0"/>
     <plugin name="cordova-plugin-file" spec="6.0.1"/>
     <plugin name="cordova-plugin-customurlscheme" spec="4.3.0">
-        <variable name="URL_SCHEME" value="utopiasoftware.oak.exclusive.ecommerce"/>
+        <variable name="URL_SCHEME" value="https"/>
         <variable name="ANDROID_SCHEME" value=" "/>
         <variable name="ANDROID_HOST" value=" "/>
         <variable name="ANDROID_PATHPREFIX" value="/"/>
@@ -107,7 +107,7 @@
         <preference name="android-installLocation" value="auto"/>
         <preference name="android-signed" value="true"/>
         <preference name="Orientation" value="portrait"/>
-        <preference name="AndroidLaunchMode" value="singleTop"/>
+        <preference name="AndroidLaunchMode" value="singleTask"/>
     </platform>
 
     <icon platform="android" src="package-assets/ldpi_icon.png" width="36" height="36" density="ldpi"/>
