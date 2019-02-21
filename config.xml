@@ -50,6 +50,7 @@
         <variable name="WINDOW_BACKGROUND_COLOR" value="#ffffff"/>
         <variable name="WINDOW_NAVIGATION_BAR_COLOR" value="#363E7C"/>
     </plugin>
+    <!-- the edit-config below is used to attach the styles obtained from cordova-plugin-android-window-background -->
     <edit-config file="AndroidManifest.xml" target="/manifest/application/activity[@android:name='OAKExclusive']" mode="merge">
         <activity android:name="OAKExclusive" android:theme="@style/CordovaWindowBackgroundTheme"/>
     </edit-config>
