@@ -8705,7 +8705,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             // create/open inapp browser
                             let transactionInAppBrowser =
                                 cordova.InAppBrowser.open(window.encodeURI(payStackResponse.data.authorization_url), '_blank',
-                                    'location=yes,clearcache=yes,clearsessioncache=yes,closebuttoncolor=#ffffff,hardwareback=no,hidenavigationbuttons=yes,hideurlbar=yes,zoom=no,toolbarcolor=#3f51b5');
+                                    'location=yes,clearcache=yes,clearsessioncache=yes,closebuttoncolor=#ffffff,hardwareback=no,hidenavigationbuttons=yes,hideurlbar=no,zoom=no,toolbarcolor=#3f51b5');
 
                             // add event listeners for the transaction inapp browswer
                             transactionInAppBrowser.addEventListener("loadstart", function(loadStartEvent){
@@ -8740,6 +8740,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         let searchParams = new URLSearchParams(transactionCompletedUrl.split("?")[1]);
                         // get the 'reference' search parameter value
                         let completedTransactionReference = searchParams.get("reference");
+
+                        // check if the transaction reference query parameter exist
+                        if(!completedTransactionReference || completedTransactionReference === ""){ // IT DOES NOT EXIST
+                            throw "error"; // throw an error
+                        }
 
                         // inform the user that their order is being placed
                         $('#loader-modal-message').html("Completing Order Placement...");
