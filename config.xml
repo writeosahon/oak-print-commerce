@@ -133,7 +133,7 @@
     </platform>
 
     <edit-config file="AndroidManifest.xml" target="/manifest/application/activity[@android:launchMode='singleTop']" mode="merge">
-        <activity android:launchMode="singleTop" />
+        <activity android:launchMode="singleTask" />
     </edit-config>
     <!-- used to change the background color of the small icon in ONE-SIGNAL push notification -->
     <config-file platform="android" target="AndroidManifest.xml" parent="/manifest/application">
