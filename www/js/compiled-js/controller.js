@@ -2871,7 +2871,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     tosUrl: 'https://shopoakexclusive.com/terms-of-service.php',
                     // Privacy policy url
                     privacyPolicyUrl: "https://shopoakexclusive.com/privacy-policy.php",
-
                     //callbacks/handlers
                     callbacks: {
                         uiShown: function(){ // triggered callback when firebase ui is displayed
