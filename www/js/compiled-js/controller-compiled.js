@@ -798,14 +798,17 @@ utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.forgo
          */thirdPartyLoginButtonClicked:function(){var _ref52=_asyncToGenerator(/*#__PURE__*/regeneratorRuntime.mark(function _callee52(){return regeneratorRuntime.wrap(function _callee52$(_context52){while(1){switch(_context52.prev=_context52.next){case 0:// open the 'third-party-login-modal'
 $('#third-party-login-modal').get(0).show();// show the loader within the modal
 $('#third-party-login-modal #third-party-login-loader').css("display","block");// start the firebase ui app
-utopiasoftware[utopiasoftware_app_namespace].model.firebaseUI.start('#third-party-login-block',{// signInSuccessUrl: 'https://oak-exclusive.firebaseapp.com',
-signInOptions:[// Leave the lines as is for the providers you want to offer your users.
+utopiasoftware[utopiasoftware_app_namespace].model.firebaseUI.start('#third-party-login-block',{signInSuccessUrl:'https://oak-exclusive.firebaseapp.com',signInOptions:[// Leave the lines as is for the providers you want to offer your users.
 firebase.auth.GoogleAuthProvider.PROVIDER_ID,firebase.auth.FacebookAuthProvider.PROVIDER_ID,firebase.auth.TwitterAuthProvider.PROVIDER_ID],//terms of service url
 tosUrl:'https://shopoakexclusive.com/terms-of-service.php',// Privacy policy url
 privacyPolicyUrl:"https://shopoakexclusive.com/privacy-policy.php",//callbacks/handlers
 callbacks:{uiShown:function uiShown(){// triggered callback when firebase ui is displayed
 // hide the loader within the modal
-$('#third-party-login-modal #third-party-login-loader').css("display","none");},signInSuccessWithAuthResult:function signInSuccessWithAuthResult(){return false;}}});// disable firebase ui auto-signin
+$('#third-party-login-modal #third-party-login-loader').css("display","none");}/*,
+
+                        signInSuccessWithAuthResult: function(){
+                            return false;
+                        }*/}});// disable firebase ui auto-signin
 utopiasoftware[utopiasoftware_app_namespace].model.firebaseUI.disableAutoSignIn();case 4:case'end':return _context52.stop();}}},_callee52,this);}));function thirdPartyLoginButtonClicked(){return _ref52.apply(this,arguments);}return thirdPartyLoginButtonClicked;}(),/**
          * method is triggered when the login form is successfully validated
          *

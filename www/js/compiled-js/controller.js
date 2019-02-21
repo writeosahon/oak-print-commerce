@@ -2860,7 +2860,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // start the firebase ui app
             utopiasoftware[utopiasoftware_app_namespace].model.firebaseUI.start('#third-party-login-block',
                 {
-                    // signInSuccessUrl: 'https://oak-exclusive.firebaseapp.com',
+                    signInSuccessUrl: 'https://oak-exclusive.firebaseapp.com',
                     signInOptions: [
                         // Leave the lines as is for the providers you want to offer your users.
                         firebase.auth.GoogleAuthProvider.PROVIDER_ID,
@@ -2876,11 +2876,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         uiShown: function(){ // triggered callback when firebase ui is displayed
                             // hide the loader within the modal
                             $('#third-party-login-modal #third-party-login-loader').css("display", "none");
-                        },
+                        }/*,
 
                         signInSuccessWithAuthResult: function(){
                             return false;
-                        }
+                        }*/
                     }
                 });
 
