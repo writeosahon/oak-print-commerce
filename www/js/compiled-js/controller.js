@@ -9227,7 +9227,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             return {code: couponElem.code};
                         });
 
-                        // perform some remote /asynchronous tasks needed to update the order method
+                        // perform some remote /asynchronous tasks needed to update the order shipping method
                         try{
 
                             // change the user shipping method on the remote cart using a helper script
@@ -9238,8 +9238,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     type: "post",
                                     //contentType: "application/json",
                                     beforeSend: function(jqxhr) {
-                                        jqxhr.setRequestHeader("Authorization", "Basic " +
-                                            Base64.encode(`${userDetails.email}:${userDetails.password}`));
+                                        if(userDetails.password){
+                                            jqxhr.setRequestHeader("Authorization", "Basic " +
+                                                Base64.encode(`${userDetails.email}:${userDetails.password}`));
+                                        }
                                     },
                                     crossDomain: true,
                                     xhrFields: {
@@ -9262,8 +9264,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     type: "post",
                                     contentType: "application/json",
                                     beforeSend: function(jqxhr) {
-                                        jqxhr.setRequestHeader("Authorization", "Basic " +
-                                            Base64.encode(`${userDetails.email}:${userDetails.password}`));
+                                        if(userDetails.password){
+                                            jqxhr.setRequestHeader("Authorization", "Basic " +
+                                                Base64.encode(`${userDetails.email}:${userDetails.password}`));
+                                        }
                                     },
                                     crossDomain: true,
                                     xhrFields: {
@@ -9284,8 +9288,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     type: "get",
                                     contentType: "application/json",
                                     beforeSend: function(jqxhr) {
-                                        jqxhr.setRequestHeader("Authorization", "Basic " +
-                                            Base64.encode(`${userDetails.email}:${userDetails.password}`));
+                                        if(userDetails.password){
+                                            jqxhr.setRequestHeader("Authorization", "Basic " +
+                                                Base64.encode(`${userDetails.email}:${userDetails.password}`));
+                                        }
                                     },
                                     crossDomain: true,
                                     xhrFields: {
@@ -9720,8 +9726,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             type: "post",
                             contentType: "application/json",
                             beforeSend: function(jqxhr) {
-                                jqxhr.setRequestHeader("Authorization", "Basic " +
-                                    Base64.encode(`${userDetails.email}:${userDetails.password}`));
+                                if(userDetails.password){
+                                    jqxhr.setRequestHeader("Authorization", "Basic " +
+                                        Base64.encode(`${userDetails.email}:${userDetails.password}`));
+                                }
                             },
                             crossDomain: true,
                             xhrFields: {
@@ -9785,8 +9793,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 type: "post",
                                 contentType: "application/json",
                                 beforeSend: function(jqxhr) {
-                                    jqxhr.setRequestHeader("Authorization", "Basic " +
-                                        Base64.encode(`${userDetails.email}:${userDetails.password}`));
+                                    if(userDetails.password){
+                                        jqxhr.setRequestHeader("Authorization", "Basic " +
+                                            Base64.encode(`${userDetails.email}:${userDetails.password}`));
+                                    }
                                 },
                                 crossDomain: true,
                                 xhrFields: {
