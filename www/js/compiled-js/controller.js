@@ -28,12 +28,14 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // disable the default back button handler for the 'search-page-search-input-popover'
             $('#search-page-search-input-popover').get(0).onDeviceBackButton.disable();
 
-            // set the device back button handler for the 'third-party-login-modal' modal
-            $('#third-party-login-modal').get(0).onDeviceBackButton = function(){
+            // set the device back button handler for the 'third-party-login-modal' modal AND the close button
+            $('#third-party-login-modal').get(0).onDeviceBackButton =
+            $('#third-party-login-modal #third-party-login-modal-close-button').get(0).onclick = async function(){
+                // close the modal
+                await $('#third-party-login-modal').get(0).hide();
+
                 // reset the Firebase UI object
                 utopiasoftware[utopiasoftware_app_namespace].model.firebaseUI.reset();
-                // close the modal
-                $('#third-party-login-modal').get(0).hide();
             };
 
             // displaying prepping message
