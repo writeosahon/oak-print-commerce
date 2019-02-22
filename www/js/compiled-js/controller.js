@@ -2916,6 +2916,28 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             $('#third-party-login-modal #third-party-login-loader').css("display", "none");
                         },
 
+                        signInFailure: async function(){
+                            // return a Promise object
+                            return new Promise(async function (resolve, reject) {
+
+                                // hide the 'third-party-login-modal'
+                                await $('#third-party-login-modal').get(0).hide();
+
+                                // inform the user of the error
+                                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                                // display toast message
+                                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                                toast.cssClass = 'error-ej2-toast';
+                                toast.timeOut = 3000;
+                                toast.content = `Error signing user. TRy again `;
+                                toast.dataBind();
+                                toast.show();
+
+                                resolve(); // resolve the promise
+                            });
+                        },
+
                         signInSuccessWithAuthResult: async function(authResult){ // triggers when forebase is successfully logged in
                             console.log("I GOT YOU", authResult);
 
