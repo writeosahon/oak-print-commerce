@@ -2854,9 +2854,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
         /**
          * method is triggered when the 3rd-party login button is clicked
+         *
+         * @param loginMode {String} this parameter identifies whether the user mode is
+         * 'sign in' or 'sign up'
+         *
          * @returns {Promise<void>}
          */
-        async thirdPartyLoginButtonClicked(){
+        async thirdPartyLoginButtonClicked(loginMode = 'sign in'){
 
             // check if there is Internet connection
             if(navigator.connection.type === Connection.NONE){ // there is no Internet connection
@@ -2867,7 +2871,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 let toast = $('.timed-page-toast').get(0).ej2_instances[0];
                 toast.cssClass = 'error-ej2-toast';
                 toast.timeOut = 3000;
-                toast.content = `Connect to the Internet to sign in`;
+                toast.content = `Connect to the Internet to ${loginMode}`;
                 toast.dataBind();
                 toast.show();
 
@@ -2944,7 +2948,74 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             // hide the 'third-party-login-modal'
                             await $('#third-party-login-modal').get(0).hide();
 
-                            return false;
+                            if(loginMode === "sign in"){
+                                try{
+                                    // display modal to user that signin is being completed
+                                    $('#loader-modal-message').html("Completing Signin...");
+                                    await $('#loader-modal').get(0).show(); // show loader
+
+                                    // sign the user in with the email gotten from the 3rd party login
+                                    let resultArray = await Promise.resolve($.ajax(
+                                        {
+                                            url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + "/wp-json/wc/v3/customers",
+                                            type: "get",
+                                            //contentType: "application/json",
+                                            beforeSend: function(jqxhr) {
+                                                jqxhr.setRequestHeader("Authorization", "Basic " +
+                                                    utopiasoftware[utopiasoftware_app_namespace].accessor);
+                                            },
+                                            dataType: "json",
+                                            timeout: 240000, // wait for 4 minutes before timeout of request
+                                            processData: true,
+                                            data: {email: authResult.user.email}
+                                        }
+                                    ));
+
+                                    // save the created user details data to ENCRYPTED app database as cached data
+                                    await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
+                                        {_id: "user-details", docType: "USER_DETAILS", userDetails: resultArray[0]},
+                                        utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase);
+
+                                    // hide loader
+                                    await $('#loader-modal').get(0).hide(); // hide loader
+
+                                    // leave the signup page and go back to the previous page in the app main navigator. Call the backbuttonClicked() method
+                                    await utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.
+                                    backButtonClicked();
+
+                                    // hide all previously displayed ej2 toast
+                                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                                    $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                                    // display toast message
+                                    let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                                    toast.cssClass = 'success-ej2-toast';
+                                    toast.timeOut = 3000;
+                                    toast.content = `User signin completed`;
+                                    toast.dataBind();
+                                    toast.show();
+                                }
+                                catch(err){
+                                    console.log("SIGN IN ERROR", err);
+
+                                    // hide loader
+                                    await $('#loader-modal').get(0).hide(); // hide loader
+
+                                    // hide all previously displayed ej2 toast
+                                    $('.page-toast').get(0).ej2_instances[0].hide('All');
+                                    $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                                    // display toast message
+                                    let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                                    toast.cssClass = 'error-ej2-toast';
+                                    toast.timeOut = 3000;
+                                    toast.content = `User has not created an account yet. User signin failed `;
+                                    toast.dataBind();
+                                    toast.show();
+                                }
+                            }
+
+                            if(loginMode === "sign up"){}
+
+                            return false; // return false to prevent firebase ui from redirecting to any url
                         }
                     }
                 });
