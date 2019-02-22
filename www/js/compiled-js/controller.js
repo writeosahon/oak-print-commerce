@@ -2929,8 +2929,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 // display toast message
                                 let toast = $('.timed-page-toast').get(0).ej2_instances[0];
                                 toast.cssClass = 'error-ej2-toast';
-                                toast.timeOut = 3000;
-                                toast.content = `Error signing user. TRy again `;
+                                toast.timeOut = 3500;
+                                toast.content = `Error signing user. Try again `;
                                 toast.dataBind();
                                 toast.show();
 
