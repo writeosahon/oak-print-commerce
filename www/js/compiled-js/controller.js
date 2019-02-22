@@ -2855,6 +2855,35 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          * @returns {Promise<void>}
          */
         async thirdPartyLoginButtonClicked(){
+
+            // check if there is Internet connection
+            if(navigator.connection.type === Connection.NONE){ // there is no Internet connection
+                // hide all previously displayed ej2 toast
+                $('.page-toast').get(0).ej2_instances[0].hide('All');
+                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
+                // display toast to show that an error
+                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
+                toast.cssClass = 'error-ej2-toast';
+                toast.timeOut = 3000;
+                toast.content = `Connect to the Internet to sign in`;
+                toast.dataBind();
+                toast.show();
+
+                return; // exit method
+            }
+
+            // hide the tooltips on the login form
+            $('#login-page #login-form').get(0).ej2_instances.forEach(function(tooltipArrayElem){
+                // hide the tooltip
+                tooltipArrayElem.close();
+            });
+
+            // hide the tooltips on the signup form
+            $('#login-page #signup-form').get(0).ej2_instances.forEach(function(tooltipArrayElem){
+                // hide the tooltip
+                tooltipArrayElem.close();
+            });
+
             // open the 'third-party-login-modal'
             $('#third-party-login-modal').get(0).show();
             // show the loader within the modal
@@ -2885,8 +2914,12 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             $('#third-party-login-modal #third-party-login-loader').css("display", "none");
                         },
 
-                        signInSuccessWithAuthResult: function(){
-                            console.log("I GOT YOU");
+                        signInSuccessWithAuthResult: async function(authResult){ // triggers when forebase is successfully logged in
+                            console.log("I GOT YOU", authResult);
+
+                            // hide the 'third-party-login-modal'
+                            await $('#third-party-login-modal').get(0).hide();
+
                             return false;
                         }
                     }
