@@ -2976,6 +2976,28 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         throw "error";
                                     }
 
+                                    // create a pseudo account for the 3rd-party login
+                                    try{
+                                        Promise.resolve($.ajax(
+                                            {
+                                                url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + "/wp-json/wc/v3/customers",
+                                                type: "post",
+                                                contentType: "application/json",
+                                                beforeSend: function(jqxhr) {
+                                                    jqxhr.setRequestHeader("Authorization", "Basic " +
+                                                        utopiasoftware[utopiasoftware_app_namespace].accessor);
+                                                },
+                                                dataType: "json",
+                                                timeout: 240000, // wait for 4 minutes before timeout of request
+                                                processData: false,
+                                                data: JSON.stringify({email: $('#login-page #signup-form #signup-email').val().trim(),
+                                                    username: $('#login-page #signup-form #signup-email').val().trim(),
+                                                    password: $('#login-page #signup-form #signup-password').val().trim()})
+                                            }
+                                        )); //todo
+                                    }
+                                    catch(err){}
+
                                     // save the created user details data to ENCRYPTED app database as cached data
                                     await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
                                         {_id: "user-details", docType: "USER_DETAILS", userDetails: resultArray[0]},
