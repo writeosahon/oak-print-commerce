@@ -2992,8 +2992,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                 processData: false,
                                                 data: JSON.stringify(
                                                     {email:
-                                                     `${authResult.user.providerId + authResult.user.uid}@shopoakexclusive.com`,
-                                                    username: `${authResult.user.providerId + authResult.user.uid}@shopoakexclusive.com`,
+                                                     `${authResult.additionalUserInfo.providerId + authResult.user.uid}@shopoakexclusive.com`,
+                                                    username: `${authResult.additionalUserInfo.providerId + authResult.user.uid}@shopoakexclusive.com`,
                                                     password: authResult.user.uid})
                                             }
                                         ));
@@ -3008,7 +3008,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // save the pseudo user account (3rd party details) data to ENCRYPTED app database as cached data
                                     await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
                                         {_id: "pseudo-user-details", docType: "PSEUDO_USER_DETAILS",
-                                            pseudoUser: authResult.user},
+                                            pseudoUser: authResult.user,
+                                            pseudoAdditionalUserInfo: authResult.additionalUserInfo,
+                                            pseudoCredential: authResult.credential,
+                                            pseudoOperationType: authResult.operationType},
                                         utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase);
 
                                     // hide loader
@@ -9286,7 +9289,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         }
                                         else{ // use the pseudo (3rd party) user account details
                                             jqxhr.setRequestHeader("Authorization", "Basic " +
-                                                Base64.encode(`${thirdPartyUserDetails.pseudoUser.providerId + thirdPartyUserDetails.pseudoUser.uid + "@shopoakexclusive.com"}:${thirdPartyUserDetails.pseudoUser.uid}`));
+                                                Base64.encode(`${thirdPartyUserDetails.pseudoAdditionalUserInfo.providerId + thirdPartyUserDetails.pseudoUser.uid + "@shopoakexclusive.com"}:${thirdPartyUserDetails.pseudoUser.uid}`));
                                         }
                                     },
                                     crossDomain: true,
@@ -9316,7 +9319,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         }
                                         else{ // use the pseudo (3rd party) user account details
                                             jqxhr.setRequestHeader("Authorization", "Basic " +
-                                                Base64.encode(`${thirdPartyUserDetails.pseudoUser.providerId + thirdPartyUserDetails.pseudoUser.uid + "@shopoakexclusive.com"}:${thirdPartyUserDetails.pseudoUser.uid}`));
+                                                Base64.encode(`${thirdPartyUserDetails.pseudoAdditionalUserInfo.providerId + thirdPartyUserDetails.pseudoUser.uid + "@shopoakexclusive.com"}:${thirdPartyUserDetails.pseudoUser.uid}`));
                                         }
                                     },
                                     crossDomain: true,
@@ -9344,7 +9347,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         }
                                         else{ // use the pseudo (3rd party) user account details
                                             jqxhr.setRequestHeader("Authorization", "Basic " +
-                                                Base64.encode(`${thirdPartyUserDetails.pseudoUser.providerId + thirdPartyUserDetails.pseudoUser.uid + "@shopoakexclusive.com"}:${thirdPartyUserDetails.pseudoUser.uid}`));
+                                                Base64.encode(`${thirdPartyUserDetails.pseudoAdditionalUserInfo.providerId + thirdPartyUserDetails.pseudoUser.uid + "@shopoakexclusive.com"}:${thirdPartyUserDetails.pseudoUser.uid}`));
                                         }
                                     },
                                     crossDomain: true,
@@ -9793,7 +9796,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 }
                                 else{ // use the pseudo (3rd party) user account details
                                     jqxhr.setRequestHeader("Authorization", "Basic " +
-                                        Base64.encode(`${thirdPartyUserDetails.pseudoUser.providerId + thirdPartyUserDetails.pseudoUser.uid + "@shopoakexclusive.com"}:${thirdPartyUserDetails.pseudoUser.uid}`));
+                                        Base64.encode(`${thirdPartyUserDetails.pseudoAdditionalUserInfo.providerId + thirdPartyUserDetails.pseudoUser.uid + "@shopoakexclusive.com"}:${thirdPartyUserDetails.pseudoUser.uid}`));
                                 }
                             },
                             crossDomain: true,
@@ -9864,7 +9867,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     }
                                     else{ // use the pseudo (3rd party) user account details
                                         jqxhr.setRequestHeader("Authorization", "Basic " +
-                                            Base64.encode(`${thirdPartyUserDetails.pseudoUser.providerId + thirdPartyUserDetails.pseudoUser.uid + "@shopoakexclusive.com"}:${thirdPartyUserDetails.pseudoUser.uid}`));
+                                            Base64.encode(`${thirdPartyUserDetails.pseudoAdditionalUserInfo.providerId + thirdPartyUserDetails.pseudoUser.uid + "@shopoakexclusive.com"}:${thirdPartyUserDetails.pseudoUser.uid}`));
                                     }
                                 },
                                 crossDomain: true,
