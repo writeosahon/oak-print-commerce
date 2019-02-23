@@ -2978,7 +2978,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                     // create a pseudo account for the 3rd-party login
                                     try{
-                                        Promise.resolve($.ajax(
+                                        await Promise.resolve($.ajax(
                                             {
                                                 url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + "/wp-json/wc/v3/customers",
                                                 type: "post",
@@ -2990,17 +2990,25 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                 dataType: "json",
                                                 timeout: 240000, // wait for 4 minutes before timeout of request
                                                 processData: false,
-                                                data: JSON.stringify({email: $('#login-page #signup-form #signup-email').val().trim(),
-                                                    username: $('#login-page #signup-form #signup-email').val().trim(),
-                                                    password: $('#login-page #signup-form #signup-password').val().trim()})
+                                                data: JSON.stringify(
+                                                    {email:
+                                                     `${authResult.user.providerId + authResult.user.uid}@shopoakexclusive.com`,
+                                                    username: `${authResult.user.providerId + authResult.user.uid}@shopoakexclusive.com`,
+                                                    password: authResult.user.uid})
                                             }
-                                        )); //todo
+                                        ));
                                     }
                                     catch(err){}
 
                                     // save the created user details data to ENCRYPTED app database as cached data
                                     await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
                                         {_id: "user-details", docType: "USER_DETAILS", userDetails: resultArray[0]},
+                                        utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase);
+
+                                    // save the pseudo user account (3rd party details) data to ENCRYPTED app database as cached data
+                                    await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
+                                        {_id: "pseudo-user-details", docType: "PSEUDO_USER_DETAILS",
+                                            pseudoUser: authResult.user},
                                         utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase);
 
                                     // hide loader
@@ -3033,8 +3041,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     // display toast message
                                     let toast = $('.timed-page-toast').get(0).ej2_instances[0];
                                     toast.cssClass = 'error-ej2-toast';
-                                    toast.timeOut = 3000;
-                                    toast.content = `User has not created an account yet. User signin failed `;
+                                    toast.timeOut = 3500;
+                                    toast.content = `User does not have an account. User signin failed `;
                                     toast.dataBind();
                                     toast.show();
                                 }
@@ -9106,6 +9114,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 loadData("user-details",
                     utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
 
+                // check if the user profile has a password
+                if(!userDetails.password){ // no password set, so use 3rd-party login
+                    var thirdPartyUserDetails = await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                    loadData("pseudo-user-details",
+                        utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase);
+                }
+
                 // check if the checkout order billing data should be updated with the current user's billing
                 if(utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.
                     updateOrderBillingDetails === true){ // billing data should be updated
@@ -9269,9 +9284,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             jqxhr.setRequestHeader("Authorization", "Basic " +
                                                 Base64.encode(`${userDetails.email}:${userDetails.password}`));
                                         }
-                                        else{ // use the developer admin credentials instead
+                                        else{ // use the pseudo (3rd party) user account details
                                             jqxhr.setRequestHeader("Authorization", "Basic " +
-                                                utopiasoftware[utopiasoftware_app_namespace].accessor);
+                                                Base64.encode(`${thirdPartyUserDetails.pseudoUser.providerId + thirdPartyUserDetails.pseudoUser.uid + "@shopoakexclusive.com"}:${thirdPartyUserDetails.pseudoUser.uid}`));
                                         }
                                     },
                                     crossDomain: true,
@@ -9299,9 +9314,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             jqxhr.setRequestHeader("Authorization", "Basic " +
                                                 Base64.encode(`${userDetails.email}:${userDetails.password}`));
                                         }
-                                        else{ // use the developer admin credentials instead
+                                        else{ // use the pseudo (3rd party) user account details
                                             jqxhr.setRequestHeader("Authorization", "Basic " +
-                                                utopiasoftware[utopiasoftware_app_namespace].accessor);
+                                                Base64.encode(`${thirdPartyUserDetails.pseudoUser.providerId + thirdPartyUserDetails.pseudoUser.uid + "@shopoakexclusive.com"}:${thirdPartyUserDetails.pseudoUser.uid}`));
                                         }
                                     },
                                     crossDomain: true,
@@ -9327,9 +9342,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             jqxhr.setRequestHeader("Authorization", "Basic " +
                                                 Base64.encode(`${userDetails.email}:${userDetails.password}`));
                                         }
-                                        else{ // use the developer admin credentials instead
+                                        else{ // use the pseudo (3rd party) user account details
                                             jqxhr.setRequestHeader("Authorization", "Basic " +
-                                                utopiasoftware[utopiasoftware_app_namespace].accessor);
+                                                Base64.encode(`${thirdPartyUserDetails.pseudoUser.providerId + thirdPartyUserDetails.pseudoUser.uid + "@shopoakexclusive.com"}:${thirdPartyUserDetails.pseudoUser.uid}`));
                                         }
                                     },
                                     crossDomain: true,
@@ -9758,6 +9773,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     loadData("user-details",
                         utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
 
+                    // check if the user profile has a password
+                    if(!userDetails.password){ // no password set, so use 3rd-party login
+                        var thirdPartyUserDetails = await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
+                        loadData("pseudo-user-details",
+                            utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase);
+                    }
+
                     // clear the current user cart
                     await Promise.resolve($.ajax(
                         {
@@ -9769,9 +9791,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     jqxhr.setRequestHeader("Authorization", "Basic " +
                                         Base64.encode(`${userDetails.email}:${userDetails.password}`));
                                 }
-                                else{ // use the developer admin credentials instead
+                                else{ // use the pseudo (3rd party) user account details
                                     jqxhr.setRequestHeader("Authorization", "Basic " +
-                                        utopiasoftware[utopiasoftware_app_namespace].accessor);
+                                        Base64.encode(`${thirdPartyUserDetails.pseudoUser.providerId + thirdPartyUserDetails.pseudoUser.uid + "@shopoakexclusive.com"}:${thirdPartyUserDetails.pseudoUser.uid}`));
                                 }
                             },
                             crossDomain: true,
@@ -9840,9 +9862,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         jqxhr.setRequestHeader("Authorization", "Basic " +
                                             Base64.encode(`${userDetails.email}:${userDetails.password}`));
                                     }
-                                    else{ // use the developer admin credentials instead
+                                    else{ // use the pseudo (3rd party) user account details
                                         jqxhr.setRequestHeader("Authorization", "Basic " +
-                                            utopiasoftware[utopiasoftware_app_namespace].accessor);
+                                            Base64.encode(`${thirdPartyUserDetails.pseudoUser.providerId + thirdPartyUserDetails.pseudoUser.uid + "@shopoakexclusive.com"}:${thirdPartyUserDetails.pseudoUser.uid}`));
                                     }
                                 },
                                 crossDomain: true,
