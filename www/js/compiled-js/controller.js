@@ -9292,10 +9292,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                 Base64.encode(`${thirdPartyUserDetails.pseudoAdditionalUserInfo.providerId + thirdPartyUserDetails.pseudoUser.uid + "@shopoakexclusive.com"}:${thirdPartyUserDetails.pseudoUser.uid}`));
                                         }
                                     },
-                                    crossDomain: true,
+                                    /*crossDomain: true,
                                     xhrFields: {
                                         withCredentials: true
-                                    },
+                                    },*/
                                     dataType: "text",
                                     timeout: 240000, // wait for 4 minutes before timeout of request
                                     processData: true,
@@ -9322,10 +9322,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                 Base64.encode(`${thirdPartyUserDetails.pseudoAdditionalUserInfo.providerId + thirdPartyUserDetails.pseudoUser.uid + "@shopoakexclusive.com"}:${thirdPartyUserDetails.pseudoUser.uid}`));
                                         }
                                     },
-                                    crossDomain: true,
+                                    /*crossDomain: true,
                                     xhrFields: {
                                         withCredentials: true
-                                    },
+                                    },*/
                                     dataType: "text",
                                     timeout: 240000, // wait for 4 minutes before timeout of request
                                     processData: true,
@@ -9350,10 +9350,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                                 Base64.encode(`${thirdPartyUserDetails.pseudoAdditionalUserInfo.providerId + thirdPartyUserDetails.pseudoUser.uid + "@shopoakexclusive.com"}:${thirdPartyUserDetails.pseudoUser.uid}`));
                                         }
                                     },
-                                    crossDomain: true,
+                                    /*crossDomain: true,
                                     xhrFields: {
                                         withCredentials: true
-                                    },
+                                    },*/
                                     dataType: "json",
                                     timeout: 240000, // wait for 4 minutes before timeout of request
                                     processData: true,
@@ -9800,10 +9800,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         Base64.encode(`${thirdPartyUserDetails.pseudoAdditionalUserInfo.providerId + thirdPartyUserDetails.pseudoUser.uid + "@shopoakexclusive.com"}:${thirdPartyUserDetails.pseudoUser.uid}`));
                                 }
                             },
-                            crossDomain: true,
+                            /*crossDomain: true,
                             xhrFields: {
                                 withCredentials: true
-                            },
+                            },*/
                             dataType: "json",
                             timeout: 240000, // wait for 4 minutes before timeout of request
                             processData: true,
@@ -9871,10 +9871,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             Base64.encode(`${thirdPartyUserDetails.pseudoAdditionalUserInfo.providerId + thirdPartyUserDetails.pseudoUser.uid + "@shopoakexclusive.com"}:${thirdPartyUserDetails.pseudoUser.uid}`));
                                     }
                                 },
-                                crossDomain: true,
+                                /*crossDomain: true,
                                 xhrFields: {
                                     withCredentials: true
-                                },
+                                },*/
                                 dataType: "json",
                                 timeout: 240000, // wait for 4 minutes before timeout of request
                                 processData: false,
