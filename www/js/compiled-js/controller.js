@@ -9781,6 +9781,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         var thirdPartyUserDetails = await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
                         loadData("pseudo-user-details",
                             utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase);
+                        console.log("PSEUDO USER", thirdPartyUserDetails);
                     }
 
                     // clear the current user cart
