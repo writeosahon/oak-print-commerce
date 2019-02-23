@@ -9,7 +9,11 @@
 */// define the controller namespace
 utopiasoftware[utopiasoftware_app_namespace].controller={/**
      * method contains the startup/bootstrap code needed to initiate app logic execution
-     */startup:function startup(){// initialise the app libraries and plugins
+     */startup:function startup(){var utopiasoftware_Cooky={};// set the use of the Cookie library
+utopiasoftware_Cooky=Cookies.noConflict();// get all the cookies created by this site
+var localCookies=utopiasoftware_Cooky.get();// remove each cookie using a for-loop
+for(var item in localCookies){utopiasoftware_Cooky.remove(item);// remove the cookie
+}// initialise the app libraries and plugins
 ons.ready(_asyncToGenerator(/*#__PURE__*/regeneratorRuntime.mark(function _callee2(){var secureKey;return regeneratorRuntime.wrap(function _callee2$(_context2){while(1){switch(_context2.prev=_context2.next){case 0:// set the default handler for the app
 ons.setDefaultDeviceBackButtonListener(function(){// does nothing for now!!
 });// disable the default back button handler for the 'search-page-search-input-popover'

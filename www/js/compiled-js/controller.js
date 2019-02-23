@@ -18,6 +18,17 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
      */
     startup: function(){
 
+        var utopiasoftware_Cooky = {};
+        // set the use of the Cookie library
+        utopiasoftware_Cooky = Cookies.noConflict();
+        // get all the cookies created by this site
+        var localCookies = utopiasoftware_Cooky.get();
+
+        // remove each cookie using a for-loop
+        for(let item in localCookies){
+            utopiasoftware_Cooky.remove(item); // remove the cookie
+        }
+
         // initialise the app libraries and plugins
         ons.ready(async function () {
             // set the default handler for the app
