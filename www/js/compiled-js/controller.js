@@ -2934,7 +2934,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 let toast = $('.timed-page-toast').get(0).ej2_instances[0];
                                 toast.cssClass = 'error-ej2-toast';
                                 toast.timeOut = 3500;
-                                toast.content = `Error signing user. Try again `;
+                                toast.content = `Error with user ${loginMode}. Try again `;
                                 toast.dataBind();
                                 toast.show();
 
@@ -2970,6 +2970,11 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             data: {email: authResult.user.email}
                                         }
                                     ));
+
+                                    // check if any user was returned
+                                    if(resultArray.length == 0){ // user with the specified email has not been registered before
+                                        throw "error";
+                                    }
 
                                     // save the created user details data to ENCRYPTED app database as cached data
                                     await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
@@ -9242,6 +9247,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             jqxhr.setRequestHeader("Authorization", "Basic " +
                                                 Base64.encode(`${userDetails.email}:${userDetails.password}`));
                                         }
+                                        else{ // use the developer admin credentials instead
+                                            jqxhr.setRequestHeader("Authorization", "Basic " +
+                                                utopiasoftware[utopiasoftware_app_namespace].accessor);
+                                        }
                                     },
                                     crossDomain: true,
                                     xhrFields: {
@@ -9268,6 +9277,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             jqxhr.setRequestHeader("Authorization", "Basic " +
                                                 Base64.encode(`${userDetails.email}:${userDetails.password}`));
                                         }
+                                        else{ // use the developer admin credentials instead
+                                            jqxhr.setRequestHeader("Authorization", "Basic " +
+                                                utopiasoftware[utopiasoftware_app_namespace].accessor);
+                                        }
                                     },
                                     crossDomain: true,
                                     xhrFields: {
@@ -9291,6 +9304,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         if(userDetails.password){
                                             jqxhr.setRequestHeader("Authorization", "Basic " +
                                                 Base64.encode(`${userDetails.email}:${userDetails.password}`));
+                                        }
+                                        else{ // use the developer admin credentials instead
+                                            jqxhr.setRequestHeader("Authorization", "Basic " +
+                                                utopiasoftware[utopiasoftware_app_namespace].accessor);
                                         }
                                     },
                                     crossDomain: true,
@@ -9730,6 +9747,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     jqxhr.setRequestHeader("Authorization", "Basic " +
                                         Base64.encode(`${userDetails.email}:${userDetails.password}`));
                                 }
+                                else{ // use the developer admin credentials instead
+                                    jqxhr.setRequestHeader("Authorization", "Basic " +
+                                        utopiasoftware[utopiasoftware_app_namespace].accessor);
+                                }
                             },
                             crossDomain: true,
                             xhrFields: {
@@ -9796,6 +9817,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     if(userDetails.password){
                                         jqxhr.setRequestHeader("Authorization", "Basic " +
                                             Base64.encode(`${userDetails.email}:${userDetails.password}`));
+                                    }
+                                    else{ // use the developer admin credentials instead
+                                        jqxhr.setRequestHeader("Authorization", "Basic " +
+                                            utopiasoftware[utopiasoftware_app_namespace].accessor);
                                     }
                                 },
                                 crossDomain: true,
