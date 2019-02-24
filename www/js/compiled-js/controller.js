@@ -5228,6 +5228,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 return; // exit method
             }
 
+            // display the page preloader
+            $('#customise-product-page .page-preloader').css("display", "block");
+
             // check if the 'remoteCartItemKey' has been provided
             if(remoteCartItemKey){ // the remote cart item key was provided
                 if(customisationUrl.indexOf("?") < 0){ // there are NO previous query parameters

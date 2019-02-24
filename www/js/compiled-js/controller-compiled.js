@@ -1456,7 +1456,8 @@ doneCallBack();},2000);return _context93.finish(20);case 23:case'end':return _co
          */loadProductCustomisation:function(){var _ref96=_asyncToGenerator(/*#__PURE__*/regeneratorRuntime.mark(function _callee94(){var customisationUrl=arguments.length>0&&arguments[0]!==undefined?arguments[0]:utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.currentCustomisationUrl;var remoteCartItemKey=arguments[1];var toast;return regeneratorRuntime.wrap(function _callee94$(_context94){while(1){switch(_context94.prev=_context94.next){case 0:if(!(navigator.connection.type===Connection.NONE)){_context94.next=10;break;}// there is no Internet connection
 // hide all previously displayed ej2 toast
 $('.page-toast').get(0).ej2_instances[0].hide('All');$('.timed-page-toast').get(0).ej2_instances[0].hide('All');// display toast to show that an error
-toast=$('.timed-page-toast').get(0).ej2_instances[0];toast.cssClass='default-ej2-toast';toast.timeOut=3500;toast.content='Please connect to the Internet to customise product and Pull Down to refresh';toast.dataBind();toast.show();return _context94.abrupt('return');case 10:// check if the 'remoteCartItemKey' has been provided
+toast=$('.timed-page-toast').get(0).ej2_instances[0];toast.cssClass='default-ej2-toast';toast.timeOut=3500;toast.content='Please connect to the Internet to customise product and Pull Down to refresh';toast.dataBind();toast.show();return _context94.abrupt('return');case 10:// display the page preloader
+$('#customise-product-page .page-preloader').css("display","block");// check if the 'remoteCartItemKey' has been provided
 if(remoteCartItemKey){// the remote cart item key was provided
 if(customisationUrl.indexOf("?")<0){// there are NO previous query parameters
 // attach the cart item key to the available customisation url & load it
@@ -1469,7 +1470,7 @@ $('#customise-product-page #customise-product-page-iframe').attr("src",customisa
 $('#customise-product-page #customise-product-page-iframe').attr("src",customisationUrl);}// update the current customisation url
 utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.currentCustomisationUrl=customisationUrl;// update the current remote/server cart item key for the product being customised
 utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.currentCustomisationCartKey=remoteCartItemKey;// reset the page load count and cartsQueue properties
-utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.customisationPageLoadCount=0;utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.cartsQueue=[];return _context94.abrupt('return',true);case 16:case'end':return _context94.stop();}}},_callee94,this);}));function loadProductCustomisation(){return _ref96.apply(this,arguments);}return loadProductCustomisation;}(),/**
+utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.customisationPageLoadCount=0;utopiasoftware[utopiasoftware_app_namespace].controller.customiseProductPageViewModel.cartsQueue=[];return _context94.abrupt('return',true);case 17:case'end':return _context94.stop();}}},_callee94,this);}));function loadProductCustomisation(){return _ref96.apply(this,arguments);}return loadProductCustomisation;}(),/**
          * method is used to compare the cartQueue property and saves the latest customised product to
          * local cart cache in the app database
          *
