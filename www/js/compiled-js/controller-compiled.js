@@ -2325,15 +2325,23 @@ $('#checkout-page .utopiasoftware-checkout-failure').each(function(index,element
          * method is triggered when the "Edit" button for the billing details is clicked
          *
          * @returns {Promise<void>}
-         */editBillingDetailsButtonClicked:function(){var _ref146=_asyncToGenerator(/*#__PURE__*/regeneratorRuntime.mark(function _callee143(){return regeneratorRuntime.wrap(function _callee143$(_context143){while(1){switch(_context143.prev=_context143.next){case 0:// set the update billing details flag to true
-utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.updateOrderBillingDetails=true;// display the billing details page
-$('#app-main-navigator').get(0).pushPage('billing-info-page.html');case 2:case'end':return _context143.stop();}}},_callee143,this);}));function editBillingDetailsButtonClicked(){return _ref146.apply(this,arguments);}return editBillingDetailsButtonClicked;}(),/**
+         */editBillingDetailsButtonClicked:function(){var _ref146=_asyncToGenerator(/*#__PURE__*/regeneratorRuntime.mark(function _callee143(){var pagesStackArray,indexOfPage;return regeneratorRuntime.wrap(function _callee143$(_context143){while(1){switch(_context143.prev=_context143.next){case 0:// set the update billing details flag to true
+utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.updateOrderBillingDetails=true;// check if the billing-info page has previously been displayed in the app-main navigator
+pagesStackArray=$('#app-main-navigator').get(0).pages;// holds the array of pages in the app-main navigator
+indexOfPage=pagesStackArray.findIndex(function(page,pageIndex){// test if the page is the billing-info page
+return $(pagesStackArray[pageIndex]).get(0).id==="billing-info-page";});// check if the billing-info page was found in the app-main navigator stack
+if(!(indexOfPage>-1)){_context143.next=6;break;}_context143.next=6;return $('#app-main-navigator').get(0).removePage(indexOfPage);case 6:// display the billing details page
+$('#app-main-navigator').get(0).pushPage('billing-info-page.html');case 7:case'end':return _context143.stop();}}},_callee143,this);}));function editBillingDetailsButtonClicked(){return _ref146.apply(this,arguments);}return editBillingDetailsButtonClicked;}(),/**
          * method is triggered when the "Edit" button for the shipping details is clicked
          *
          * @returns {Promise<void>}
-         */editShippingDetailsButtonClicked:function(){var _ref147=_asyncToGenerator(/*#__PURE__*/regeneratorRuntime.mark(function _callee144(){return regeneratorRuntime.wrap(function _callee144$(_context144){while(1){switch(_context144.prev=_context144.next){case 0:// set the update shipping details flag to true
-utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.updateOrderShippingDetails=true;// display the shipping details page
-$('#app-main-navigator').get(0).pushPage('shipping-info-page.html');case 2:case'end':return _context144.stop();}}},_callee144,this);}));function editShippingDetailsButtonClicked(){return _ref147.apply(this,arguments);}return editShippingDetailsButtonClicked;}(),/**
+         */editShippingDetailsButtonClicked:function(){var _ref147=_asyncToGenerator(/*#__PURE__*/regeneratorRuntime.mark(function _callee144(){var pagesStackArray,indexOfPage;return regeneratorRuntime.wrap(function _callee144$(_context144){while(1){switch(_context144.prev=_context144.next){case 0:// set the update shipping details flag to true
+utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.updateOrderShippingDetails=true;// check if the shipping-info page has previously been displayed in the app-main navigator
+pagesStackArray=$('#app-main-navigator').get(0).pages;// holds the array of pages in the app-main navigator
+indexOfPage=pagesStackArray.findIndex(function(page,pageIndex){// test if the page is the shipping-info page
+return $(pagesStackArray[pageIndex]).get(0).id==="shipping-info-page";});// check if the shipping-info page was found in the app-main navigator stack
+if(!(indexOfPage>-1)){_context144.next=6;break;}_context144.next=6;return $('#app-main-navigator').get(0).removePage(indexOfPage);case 6:// display the shipping details page
+$('#app-main-navigator').get(0).pushPage('shipping-info-page.html');case 7:case'end':return _context144.stop();}}},_callee144,this);}));function editShippingDetailsButtonClicked(){return _ref147.apply(this,arguments);}return editShippingDetailsButtonClicked;}(),/**
          * method is triggered when the "Edit" button for the shipping method is clicked
          *
          * @returns {Promise<void>}

@@ -8644,6 +8644,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // set the update billing details flag to true
             utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.
                 updateOrderBillingDetails = true;
+
+            // check if the billing-info page has previously been displayed in the app-main navigator
+            var pagesStackArray = $('#app-main-navigator').get(0).pages; // holds the array of pages in the app-main navigator
+            var indexOfPage = pagesStackArray.findIndex(function(page, pageIndex){
+                // test if the page is the billing-info page
+                return $(pagesStackArray[pageIndex]).get(0).id === "billing-info-page";
+            });
+
+            // check if the billing-info page was found in the app-main navigator stack
+            if(indexOfPage > -1){ // billing-info page was found
+                // remove the billing-info page from the app-main navigator before re-displaying it
+                await $('#app-main-navigator').get(0).removePage(indexOfPage);
+            }
             // display the billing details page
             $('#app-main-navigator').get(0).pushPage('billing-info-page.html');
         },
@@ -8657,6 +8670,19 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // set the update shipping details flag to true
             utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.
                 updateOrderShippingDetails = true;
+
+            // check if the shipping-info page has previously been displayed in the app-main navigator
+            var pagesStackArray = $('#app-main-navigator').get(0).pages; // holds the array of pages in the app-main navigator
+            var indexOfPage = pagesStackArray.findIndex(function(page, pageIndex){
+                // test if the page is the shipping-info page
+                return $(pagesStackArray[pageIndex]).get(0).id === "shipping-info-page";
+            });
+
+            // check if the shipping-info page was found in the app-main navigator stack
+            if(indexOfPage > -1){ // shipping-info page was found
+                // remove the shipping-info page from the app-main navigator before re-displaying it
+                await $('#app-main-navigator').get(0).removePage(indexOfPage);
+            }
             // display the shipping details page
             $('#app-main-navigator').get(0).pushPage('shipping-info-page.html');
         },
