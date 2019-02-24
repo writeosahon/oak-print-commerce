@@ -2890,6 +2890,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 tooltipArrayElem.close();
             });
 
+            if(loginMode === "sign in"){ // the user is signing in
+                $('#third-party-login-modal #third-party-login-notice').css("display", "block"); // show notice
+            }
+            if(loginMode === "sign up"){ // the user is signing up
+                $('#third-party-login-modal #third-party-login-notice').css("display", "none"); // hide notice
+            }
+
             // open the 'third-party-login-modal'
             $('#third-party-login-modal').get(0).show();
             // show the loader within the modal
@@ -2976,42 +2983,32 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         throw "error";
                                     }
 
-                                    // create a pseudo account for the 3rd-party login
-                                    try{
-                                        await Promise.resolve($.ajax(
-                                            {
-                                                url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl + "/wp-json/wc/v3/customers",
-                                                type: "post",
-                                                contentType: "application/json",
-                                                beforeSend: function(jqxhr) {
-                                                    jqxhr.setRequestHeader("Authorization", "Basic " +
-                                                        utopiasoftware[utopiasoftware_app_namespace].accessor);
-                                                },
-                                                dataType: "json",
-                                                timeout: 240000, // wait for 4 minutes before timeout of request
-                                                processData: false,
-                                                data: JSON.stringify(
-                                                    {email:
-                                                     `${authResult.additionalUserInfo.providerId + authResult.user.uid}@shopoakexclusive.com`,
-                                                    username: `${authResult.additionalUserInfo.providerId + authResult.user.uid}@shopoakexclusive.com`,
-                                                    password: authResult.user.uid})
-                                            }
-                                        ));
-                                    }
-                                    catch(err){}
+                                    // generate the user's name random password
+                                    let randomlyGeneratedPassword = Random.
+                                    uuid4(utopiasoftware[utopiasoftware_app_namespace].randomisationEngine);
+
+                                    // reset the user's password using randomly generated uuid
+                                    resultArray[0] = await Promise.resolve($.ajax(
+                                        {
+                                            url: utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl +
+                                                `/wp-json/wc/v3/customers/${resultArray[0].id}`,
+                                            type: "put",
+                                            contentType: "application/json",
+                                            beforeSend: function(jqxhr) {
+                                                jqxhr.setRequestHeader("Authorization", "Basic " +
+                                                    utopiasoftware[utopiasoftware_app_namespace].accessor);
+                                            },
+                                            dataType: "json",
+                                            timeout: 240000, // wait for 4 minutes before timeout of request
+                                            processData: false,
+                                            data: JSON.stringify({password: randomlyGeneratedPassword})
+                                        }
+                                    ));
+                                    resultArray[0].password = randomlyGeneratedPassword;
 
                                     // save the created user details data to ENCRYPTED app database as cached data
                                     await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
                                         {_id: "user-details", docType: "USER_DETAILS", userDetails: resultArray[0]},
-                                        utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase);
-
-                                    // save the pseudo user account (3rd party details) data to ENCRYPTED app database as cached data
-                                    await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
-                                        {_id: "pseudo-user-details", docType: "PSEUDO_USER_DETAILS",
-                                            pseudoUser: authResult.user,
-                                            pseudoAdditionalUserInfo: authResult.additionalUserInfo,
-                                            pseudoCredential: authResult.credential,
-                                            pseudoOperationType: authResult.operationType},
                                         utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase);
 
                                     // hide loader
@@ -9765,13 +9762,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         async createRemoteCartFromOrder(orderData = utopiasoftware[utopiasoftware_app_namespace].controller.
                                             checkoutPageViewModel.chekoutOrder){
-
-            // check if user can sign out from the remote app serve via an iframe
-            if($('#user-signout-iframe-container #user-signout-iframe').get(0).contentWindow &&
-                $('#user-signout-iframe-container #user-signout-iframe').get(0).contentWindow.utopiasoftware_removeUsage){
-                // call the method to remotely sign out
-                $('#user-signout-iframe-container #user-signout-iframe').get(0).contentWindow.utopiasoftware_removeUsage();
-            }
 
             return new Promise(async function(resolve, reject){
                 try{

@@ -212,11 +212,17 @@
         <ons-icon icon="md-close" size="32px" style="color: #363E7C"></ons-icon>
     </ons-fab>
 
+    <!-- content container -->
     <div style="text-align: center; width: 100%; position: relative;">
-        <!-- content container -->
+        <!-- login loader block -->
         <div id="third-party-login-loader" style="width: 100%; height: 100%;
             text-align: center; position: absolute; z-index: 4; display: block">
             <ons-progress-circular indeterminate modifier="pull-hook" style="transform: scale(1.5);"></ons-progress-circular>
+        </div>
+        <!-- notice block (used for users signing in) -->
+        <div id="third-party-login-notice" style="padding: 1em; color: #000000; display: block;">
+            For user security, signing in with any of the platforms below will
+            reset any password on the user account
         </div>
         <!-- login block used to display the 3rd party login options -->
         <div id="third-party-login-block"></div>
