@@ -3001,10 +3001,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                             dataType: "json",
                                             timeout: 240000, // wait for 4 minutes before timeout of request
                                             processData: false,
-                                            data: JSON.stringify({password: randomlyGeneratedPassword})
+                                            data: JSON.stringify({password: authResult.user.uid})
                                         }
                                     ));
-                                    resultArray[0].password = randomlyGeneratedPassword;
+                                    resultArray[0].password = authResult.user.uid;
 
                                     // save the created user details data to ENCRYPTED app database as cached data
                                     await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
