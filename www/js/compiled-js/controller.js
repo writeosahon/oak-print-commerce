@@ -2236,6 +2236,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     encryptedAppDatabase),
                     utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
                     removeData("user-cart", utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)]);
+
+                // sign out the user from the firebase app
+                await utopiasoftware[utopiasoftware_app_namespace].model.firebaseApp.auth().signOut();
             }
             catch(err){
                 console.log("USER SIGN OUT", err);
