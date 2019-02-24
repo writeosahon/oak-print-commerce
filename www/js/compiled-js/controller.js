@@ -9765,8 +9765,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
          */
         async createRemoteCartFromOrder(orderData = utopiasoftware[utopiasoftware_app_namespace].controller.
                                             checkoutPageViewModel.chekoutOrder){
-            /*// create a local copy odf the order object
-            orderData = JSON.parse(JSON.stringify(orderData));*/
+
+            // check if user can sign out from the remote app serve via an iframe
+            if($('#user-signout-iframe-container #user-signout-iframe').get(0).contentWindow &&
+                $('#user-signout-iframe-container #user-signout-iframe').get(0).contentWindow.utopiasoftware_removeUsage){
+                // call the method to remotely sign out
+                $('#user-signout-iframe-container #user-signout-iframe').get(0).contentWindow.utopiasoftware_removeUsage();
+            }
 
             return new Promise(async function(resolve, reject){
                 try{
