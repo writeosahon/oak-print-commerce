@@ -8636,6 +8636,29 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         },
 
         /**
+         * method is triggered when the "Edit" button for the personal details is clicked
+         *
+         * @returns {Promise<void>}
+         */
+        async editPersonalDetailsButtonClicked(){
+
+            // check if the profile page has previously been displayed in the app-main navigator
+            var pagesStackArray = $('#app-main-navigator').get(0).pages; // holds the array of pages in the app-main navigator
+            var indexOfPage = pagesStackArray.findIndex(function(page, pageIndex){
+                // test if the page is the profile page
+                return $(pagesStackArray[pageIndex]).get(0).id === "profile-page";
+            });
+
+            // check if the profile page was found in the app-main navigator stack
+            if(indexOfPage > -1){ // profile page was found
+                // remove the profile page from the app-main navigator before re-displaying it
+                await $('#app-main-navigator').get(0).removePage(indexOfPage);
+            }
+            // display the profile page
+            $('#app-main-navigator').get(0).pushPage('profile-page.html');
+        },
+
+        /**
          * method is triggered when the "Edit" button for the billing details is clicked
          *
          * @returns {Promise<void>}
