@@ -9117,13 +9117,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 loadData("user-details",
                     utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
 
-                // check if the user profile has a password
-                if(!userDetails.password){ // no password set, so use 3rd-party login
-                    var thirdPartyUserDetails = await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
-                    loadData("pseudo-user-details",
-                        utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase);
-                }
-
                 // check if the checkout order billing data should be updated with the current user's billing
                 if(utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.
                     updateOrderBillingDetails === true){ // billing data should be updated
@@ -9283,19 +9276,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     type: "post",
                                     //contentType: "application/json",
                                     beforeSend: function(jqxhr) {
-                                        if(userDetails.password){
-                                            jqxhr.setRequestHeader("Authorization", "Basic " +
-                                                Base64.encode(`${userDetails.email}:${userDetails.password}`));
-                                        }
-                                        else{ // use the pseudo (3rd party) user account details
-                                            jqxhr.setRequestHeader("Authorization", "Basic " +
-                                                Base64.encode(`${thirdPartyUserDetails.pseudoAdditionalUserInfo.providerId + thirdPartyUserDetails.pseudoUser.uid + "@shopoakexclusive.com"}:${thirdPartyUserDetails.pseudoUser.uid}`));
-                                        }
+                                        jqxhr.setRequestHeader("Authorization", "Basic " +
+                                            Base64.encode(`${userDetails.email}:${userDetails.password}`));
                                     },
-                                    /*crossDomain: true,
+                                    crossDomain: true,
                                     xhrFields: {
                                         withCredentials: true
-                                    },*/
+                                    },
                                     dataType: "text",
                                     timeout: 240000, // wait for 4 minutes before timeout of request
                                     processData: true,
@@ -9313,19 +9300,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     type: "post",
                                     contentType: "application/json",
                                     beforeSend: function(jqxhr) {
-                                        if(userDetails.password){
-                                            jqxhr.setRequestHeader("Authorization", "Basic " +
-                                                Base64.encode(`${userDetails.email}:${userDetails.password}`));
-                                        }
-                                        else{ // use the pseudo (3rd party) user account details
-                                            jqxhr.setRequestHeader("Authorization", "Basic " +
-                                                Base64.encode(`${thirdPartyUserDetails.pseudoAdditionalUserInfo.providerId + thirdPartyUserDetails.pseudoUser.uid + "@shopoakexclusive.com"}:${thirdPartyUserDetails.pseudoUser.uid}`));
-                                        }
+                                        jqxhr.setRequestHeader("Authorization", "Basic " +
+                                            Base64.encode(`${userDetails.email}:${userDetails.password}`));
                                     },
-                                    /*crossDomain: true,
+                                    crossDomain: true,
                                     xhrFields: {
                                         withCredentials: true
-                                    },*/
+                                    },
                                     dataType: "text",
                                     timeout: 240000, // wait for 4 minutes before timeout of request
                                     processData: true,
@@ -9341,19 +9322,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     type: "get",
                                     contentType: "application/json",
                                     beforeSend: function(jqxhr) {
-                                        if(userDetails.password){
-                                            jqxhr.setRequestHeader("Authorization", "Basic " +
-                                                Base64.encode(`${userDetails.email}:${userDetails.password}`));
-                                        }
-                                        else{ // use the pseudo (3rd party) user account details
-                                            jqxhr.setRequestHeader("Authorization", "Basic " +
-                                                Base64.encode(`${thirdPartyUserDetails.pseudoAdditionalUserInfo.providerId + thirdPartyUserDetails.pseudoUser.uid + "@shopoakexclusive.com"}:${thirdPartyUserDetails.pseudoUser.uid}`));
-                                        }
+                                        jqxhr.setRequestHeader("Authorization", "Basic " +
+                                            Base64.encode(`${userDetails.email}:${userDetails.password}`));
                                     },
-                                    /*crossDomain: true,
+                                    crossDomain: true,
                                     xhrFields: {
                                         withCredentials: true
-                                    },*/
+                                    },
                                     dataType: "json",
                                     timeout: 240000, // wait for 4 minutes before timeout of request
                                     processData: true,
@@ -9774,14 +9749,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     loadData("user-details",
                         utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
 
-                    // check if the user profile has a password
-                    if(!userDetails.password){ // no password set, so use 3rd-party login
-                        var thirdPartyUserDetails = await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
-                        loadData("pseudo-user-details",
-                            utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase);
-                        console.log("PSEUDO USER", thirdPartyUserDetails);
-                    }
-
                     // clear the current user cart
                     await Promise.resolve($.ajax(
                         {
@@ -9789,19 +9756,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             type: "post",
                             contentType: "application/json",
                             beforeSend: function(jqxhr) {
-                                if(userDetails.password){
-                                    jqxhr.setRequestHeader("Authorization", "Basic " +
-                                        Base64.encode(`${userDetails.email}:${userDetails.password}`));
-                                }
-                                else{ // use the pseudo (3rd party) user account details
-                                    jqxhr.setRequestHeader("Authorization", "Basic " +
-                                        Base64.encode(`${thirdPartyUserDetails.pseudoAdditionalUserInfo.providerId + thirdPartyUserDetails.pseudoUser.uid + "@shopoakexclusive.com"}:${thirdPartyUserDetails.pseudoUser.uid}`));
-                                }
+                                jqxhr.setRequestHeader("Authorization", "Basic " +
+                                    Base64.encode(`${userDetails.email}:${userDetails.password}`));
                             },
-                            /*crossDomain: true,
+                            crossDomain: true,
                             xhrFields: {
                                 withCredentials: true
-                            },*/
+                            },
                             dataType: "json",
                             timeout: 240000, // wait for 4 minutes before timeout of request
                             processData: true,
@@ -9860,19 +9821,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 type: "post",
                                 contentType: "application/json",
                                 beforeSend: function(jqxhr) {
-                                    if(userDetails.password){
-                                        jqxhr.setRequestHeader("Authorization", "Basic " +
-                                            Base64.encode(`${userDetails.email}:${userDetails.password}`));
-                                    }
-                                    else{ // use the pseudo (3rd party) user account details
-                                        jqxhr.setRequestHeader("Authorization", "Basic " +
-                                            Base64.encode(`${thirdPartyUserDetails.pseudoAdditionalUserInfo.providerId + thirdPartyUserDetails.pseudoUser.uid + "@shopoakexclusive.com"}:${thirdPartyUserDetails.pseudoUser.uid}`));
-                                    }
+                                    jqxhr.setRequestHeader("Authorization", "Basic " +
+                                        Base64.encode(`${userDetails.email}:${userDetails.password}`));
                                 },
-                                /*crossDomain: true,
+                                crossDomain: true,
                                 xhrFields: {
                                     withCredentials: true
-                                },*/
+                                },
                                 dataType: "json",
                                 timeout: 240000, // wait for 4 minutes before timeout of request
                                 processData: false,
