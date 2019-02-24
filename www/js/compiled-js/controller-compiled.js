@@ -1725,7 +1725,7 @@ delete orderData.line_items[index].cart_item_data;}}console.log("ORDER DATA",ord
 _context107.next=70;return Promise.resolve($.ajax({url:utopiasoftware[utopiasoftware_app_namespace].model.appBaseUrl+'/wp-json/wc/v3/orders',type:"post",contentType:"application/json",beforeSend:function beforeSend(jqxhr){jqxhr.setRequestHeader("Authorization","Basic "+utopiasoftware[utopiasoftware_app_namespace].accessor);},dataType:"json",timeout:240000,// wait for 4 minutes before timeout of request
 processData:false,data:JSON.stringify(orderData)}));case 70:orderData=_context107.sent;// check if the checkout page has previously been displayed in the app-main navigator
 pagesStackArray=$('#app-main-navigator').get(0).pages;// holds the array of pages in the app-main navigator
-indexOfCheckoutPage=pagesStackArray.findIndex(function(page,pageIndex){// test ikf the page is the checkout page
+indexOfCheckoutPage=pagesStackArray.findIndex(function(page,pageIndex){// test if the page is the checkout page
 return $(pagesStackArray[pageIndex]).get(0).id==="checkout-page";});// check if the checkout page was found in the app-main navigator stack
 if(!(indexOfCheckoutPage>-1)){_context107.next=76;break;}_context107.next=76;return $('#app-main-navigator').get(0).removePage(indexOfCheckoutPage);case 76:_context107.next=78;return $('#app-main-navigator').get(0).pushPage("checkout-page.html",{data:{orderData:orderData}});case 78:_context107.next=91;break;case 80:_context107.prev=80;_context107.t2=_context107['catch'](62);_context107.t2=JSON.parse(_context107.t2.responseText);// hide all previously displayed ej2 toast
 $('.page-toast').get(0).ej2_instances[0].hide('All');$('.timed-page-toast').get(0).ej2_instances[0].hide('All');// display toast message

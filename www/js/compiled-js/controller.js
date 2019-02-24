@@ -6345,7 +6345,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // check if the checkout page has previously been displayed in the app-main navigator
                 var pagesStackArray = $('#app-main-navigator').get(0).pages; // holds the array of pages in the app-main navigator
                 var indexOfCheckoutPage = pagesStackArray.findIndex(function(page, pageIndex){
-                    // test ikf the page is the checkout page
+                    // test if the page is the checkout page
                     return $(pagesStackArray[pageIndex]).get(0).id === "checkout-page";
                 });
 
