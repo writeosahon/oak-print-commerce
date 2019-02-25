@@ -8443,8 +8443,13 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     // display toast message
                     let toast = $('.timed-page-toast').get(0).ej2_instances[0];
                     toast.cssClass = 'error-ej2-toast';
-                    toast.timeOut = 3000;
-                    toast.content = `Error preparing checkout. Please retry`;
+                    toast.timeOut = 3500;
+                    if(err === "fatal error"){ // if error is flagged as a fatal error
+                        toast.content = `A serious error occurred. Please resign into your account`;
+                    }
+                    else{
+                        toast.content = `Error preparing checkout. Please retry`;
+                    }
                     toast.dataBind();
                     toast.show();
                 }
@@ -9899,7 +9904,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             data: {}
                         }
                     ).then(function(responseData){return responseData;},
-                        function(err){console.log("CLEAR CART ERROR"); reject(err);})); //todo
+                        function(err){reject("fatal error");}));
 
                     // create a loop to add all the line items in the order data to the remote cache
                     let addToCartPromises = []; // holds all the promises used to add all items to the remote cart
