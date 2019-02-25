@@ -9898,7 +9898,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             processData: true,
                             data: {}
                         }
-                    ));
+                    ).then(function(responseData){return responseData;},
+                        function(err){console.log("CLEAR CART ERROR"); throw err;})); //todo
 
                     // create a loop to add all the line items in the order data to the remote cache
                     let addToCartPromises = []; // holds all the promises used to add all items to the remote cart
