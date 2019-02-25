@@ -117,8 +117,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             try { // START ALL THE CORDOVA PLUGINS CONFIGURATION WHICH REQUIRE PROMISE SYNTAX
 
-                universalLinks.subscribe(null, function (eventData) {console.log("UNIVERSAL LINK", eventData.url);});
-
                 // create the pouchdb app database
                 utopiasoftware[utopiasoftware_app_namespace].model.appDatabase = new PouchDB('PrintServiceEcommerce.db', {
                     adapter: 'cordova-sqlite',
@@ -186,7 +184,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             }
             catch(err){
-                console.log("APP LOADING ERROR", err);
+
             }
             finally{
 
@@ -460,7 +458,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     $('#home-page .page-preloader').css("display", "none");
                 }
                 catch(err){
-                    console.log("HOME PAGE ERROR", err);
+
                     // hide all previously displayed ej2 toast
                     $('.page-toast').get(0).ej2_instances[0].hide('All');
                     // display toast to show that an error
@@ -1240,7 +1238,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 }
                 catch(err){
 
-                    console.log("CATEGORY PAGE ERROR", err);
                     // hide all previously displayed ej2 toast
                     $('.page-toast').get(0).ej2_instances[0].hide('All');
                     // display toast to show that an error
@@ -2241,7 +2238,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 await utopiasoftware[utopiasoftware_app_namespace].model.firebaseApp.auth().signOut();
             }
             catch(err){
-                console.log("USER SIGN OUT", err);
+
             }
 
             // check if user can sign out from the remote app serve via an iframe
@@ -2953,7 +2950,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         },
 
                         signInSuccessWithAuthResult: async function(authResult){ // triggers when forebase is successfully logged in
-                            console.log("I GOT YOU", authResult);
 
                             // hide the 'third-party-login-modal'
                             await $('#third-party-login-modal').get(0).hide();
@@ -3029,7 +3025,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     toast.show();
                                 }
                                 catch(err){
-                                    console.log("SIGN IN ERROR", err);
 
                                     // hide loader
                                     await $('#loader-modal').get(0).hide(); // hide loader
@@ -3099,7 +3094,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     toast.show();
                                 }
                                 catch(err){
-                                    console.log("SIGN UP ERROR", err);
 
                                     err = JSON.parse(err.responseText);
 
@@ -3224,7 +3218,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 toast.show();
 
             }).catch(async function(err){ // an error occurred
-                console.log("SIGN IN ERROR", err);
 
                 err = JSON.parse(err.responseText);
 
@@ -3324,7 +3317,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     resolve(userDetails); // resolve the parent promise with the data gotten from the server
 
                 }).catch(async function(err){ // an error occurred
-                    console.log("SIGN UP ERROR", err);
 
                     err = JSON.parse(err.responseText);
 
@@ -4933,10 +4925,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     toast.dataBind();
                     toast.show();
 
-                    console.log("USER CART OBJECT", utopiasoftwareCartObject);
                 }
                 catch(err){
-                    console.log("PRODUCT DETAILS ERROR", err);
+
                     // hide all previously displayed ej2 toast
                     $('.page-toast').get(0).ej2_instances[0].hide('All');
                     $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
@@ -5063,7 +5054,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 }
                 catch(err){
-                    console.log("CUSTOMISATION ERROR", err);
+
                 }
                 finally {
 
@@ -5351,12 +5342,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             // get the latest customised product by comparing the properties of the updateCartObject with the previousCartObject
             for(let property in updatedCartObject){
-                // check if this property in the updateCartObject exist in th epreviousCartObject
+                // check if this property in the updateCartObject exist in the previousCartObject
                 if(! previousCartObject[property]){ // property does not exist in the previousCartObject, so this property belongs to the latest customised product
                     // get the latest customised product
                     let customisedProduct = updatedCartObject[property];
-
-                    console.log("CUSTOMISED PRODUCT", customisedProduct);
 
                     let localCart = []; // holds the local cart collection
                     let utopiasoftwareCartObject = {cartData: {}}; // holds the object whose properties make up the cart item
@@ -5419,7 +5408,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         toast.show();
                     }
                     catch(err){
-                        console.log("CUSTOMISE PRODUCT ERROR", err);
 
                         // hide all previously displayed ej2 toast
                         $('.page-toast').get(0).ej2_instances[0].hide('All');
@@ -5552,7 +5540,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 }
                 catch(err){
 
-                    console.log("VIEW-CART PAGE", err);
                     // hide all previously displayed ej2 toast
                     $('.page-toast').get(0).ej2_instances[0].hide('All');
                     // display toast to show that an error
@@ -5919,7 +5906,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     toast.show();
                                 }
                                 catch(err){
-                                    console.log("UPDATE PRODUCT QUANTITY", err);
+
                                     // hide all previously displayed ej2 toast
                                     $('.page-toast').get(0).ej2_instances[0].hide('All');
                                     $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
@@ -5968,7 +5955,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $('#view-cart-page #view-cart-checkout').removeAttr("disabled");
             }
             catch(err){
-                console.log("VIEW-CART PAGE", err);
+
                 // hide all previously displayed ej2 toast
                 $('.page-toast').get(0).ej2_instances[0].hide('All');
                 // display toast to show that an error
@@ -6005,8 +5992,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
             return localCart.reduce(function(accumulator, currentElement, currentIndex, thisArray){
 
-                console.log("ACCUMULATOR", accumulator);
-                console.log("CURRENT INDEX", currentIndex);
                 // check the types of products in the cart
                 if(currentElement.anon_cart_key){ // this item is a customised product
                     // multiply the product unit price with the specified quantity and add the to the current cumulative total
@@ -6107,7 +6092,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         toast.show();
                     }
                     catch(err){
-                        console.log("DELETE CART ERROR", err);
+
                         // hide all previously displayed ej2 toast
                         $('.page-toast').get(0).ej2_instances[0].hide('All');
                         $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
@@ -6299,7 +6284,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                     // check if the product has any customisation data to attach
                     if(userCart[index].cartData.cart_item_data){
-                        console.log("ORDER ITEM", userCart[index].cartData);
+
                         // calculate the subtotal & total for this line item
                         orderData.line_items[index].subtotal =
                             "" + kendo.parseFloat(userCart[index].cartData.cart_item_data.fpd_data.fpd_product_price)
@@ -6323,7 +6308,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     }
                 }
 
-                console.log("ORDER DATA", orderData);
 
                 // create the order on the remote server
                 orderData = await Promise.resolve($.ajax(
@@ -6473,7 +6457,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     await utopiasoftware[utopiasoftware_app_namespace].controller.profilePageViewModel.displayProfileContent();
                 }
                 catch(err){
-                    console.log("PROFILE ERROR", err);
+
                 }
                 finally {
 
@@ -6616,8 +6600,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 loadData("user-details",
                     utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
 
-                console.log("USER DETAILS BEFORE PROFILE UPDATE", userDetails);
-
                 // temporary hold the user id and password
                 let userId = userDetails.id;
                 let userPassword = userDetails.password;
@@ -6733,8 +6715,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 let userDetails = (await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.
                 loadData("user-details",
                     utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
-
-                console.log("USER DETAILS", userDetails);
 
                 // display the user profile data in the profile form
                 $('#profile-page #profile-form #profile-email').val(userDetails.email);
@@ -6859,7 +6839,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 }
                 catch(err){
-                    console.log("CHANGE PASSWORD ERROR", err);
+
                 }
                 finally {
                     // hide the page preloader
@@ -7041,8 +7021,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 loadData("user-details",
                     utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
 
-                console.log("USER DETAILS BEFORE PASSWORD CHANGE", userDetails);
-
                 // check if the current password input matches that in the current user password
                 try{
                     await Promise.resolve($.ajax(
@@ -7102,8 +7080,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // add the user's new password to the user details retrieved from the server
                 resultsArray[0].password =
                     $('#change-password-page #change-password-form #change-password-new-password').val().trim();
-
-                console.log("PASSWORD CHANGED", resultsArray[0]);
 
                 // save the created user details data to ENCRYPTED app database as cached data
                 await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
@@ -7330,7 +7306,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     await utopiasoftware[utopiasoftware_app_namespace].controller.billingInfoPageViewModel.displayContent();
                 }
                 catch(err){
-                    console.log("BILLING ADDRESS ERROR", err);
+
                 }
                 finally {
 
@@ -7479,8 +7455,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 loadData("user-details",
                     utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
 
-                console.log("USER DETAILS BEFORE BILLING INFO UPDATE", userDetails);
-
                 // temporary hold the user id and password
                 let userId = userDetails.id;
                 let userPassword = userDetails.password;
@@ -7593,8 +7567,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 loadData("user-details",
                     utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
 
-                console.log("USER DETAILS", userDetails);
-
                 // display the user billing info data in the billing info form
                 $('#billing-info-page #billing-info-form #billing-info-company').
                 val(userDetails.billing && userDetails.billing.company ? userDetails.billing.company : "");
@@ -7638,7 +7610,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     statesDropDownList.enabled = false; // disable the state dropdownlist
                     statesDropDownList.dataBind();
                 }
-                console.log("STATE VALUE", statesDropDownList.value);
 
             }
             finally {
@@ -7865,7 +7836,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     await utopiasoftware[utopiasoftware_app_namespace].controller.shippingInfoPageViewModel.displayContent();
                 }
                 catch(err){
-                    console.log("SHIPPING INFO ERROR", err);
+
                 }
                 finally {
 
@@ -8013,8 +7984,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 loadData("user-details",
                     utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
 
-                console.log("USER DETAILS BEFORE SHIPPING INFO UPDATE", userDetails);
-
                 // temporary hold the user id and password
                 let userId = userDetails.id;
                 let userPassword = userDetails.password;
@@ -8126,8 +8095,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 loadData("user-details",
                     utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase)).userDetails;
 
-                console.log("USER DETAILS", userDetails);
-
                 // display the user shipping info data in the shipping info form
                 $('#shipping-info-page #shipping-info-form #shipping-info-first-name').
                 val(userDetails.shipping && userDetails.shipping.first_name ? userDetails.shipping.first_name : "");
@@ -8175,7 +8142,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     statesDropDownList.enabled = false; // disable the state dropdownlist
                     statesDropDownList.dataBind();
                 }
-                console.log("STATE VALUE", statesDropDownList.value);
 
             }
             finally {
@@ -8436,7 +8402,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     // get back to the previous page on the app-main navigator stack
                     await $('#app-main-navigator').get(0).popPage();
 
-                    console.log("CHECKOUT ERROR", err);
                     // hide all previously displayed ej2 toast
                     $('.page-toast').get(0).ej2_instances[0].hide('All');
                     $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
@@ -8475,9 +8440,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             // get payment method dropdownlist component
             var paymentMethodDropDown = $('#checkout-payment-method-type').get(0).ej2_instances[0];
 
-            console.log("CHECKOUT DATASOURCE", paymentMethodDropDown.dataSource);
-
-
             // check if the datasource for the payment method has been set
             if(paymentMethodDropDown.dataSource.length == 0){ // datasource for the payment method dropdownlist has not been set
                 // re-execute this method again after some time
@@ -8505,7 +8467,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     checkoutPageViewModel.displayContent();
             }
             catch(err){
-                console.log("CHECKOUT SHOW ERROR", err);
                 // hide page preloader
                 $('#checkout-page .page-preloader').css("display", "none");
                 // hide page modal loader
@@ -8518,7 +8479,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 let toast = $('.timed-page-toast').get(0).ej2_instances[0];
                 toast.cssClass = 'error-ej2-toast';
                 toast.timeOut = 3000;
-                toast.content = `Checkout error. Please retry or Pull Down to refresh`;
+                toast.content = `Checkout error. Please retry`;
                 toast.dataBind();
                 toast.show();
 
@@ -8531,22 +8492,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 checkoutPageViewModel.validateOrderCheckout();
             }
             catch(err){
-                /*console.log("CHECKOUT SHOW ERROR", err);
-                // hide page preloader
-                $('#checkout-page .page-preloader').css("display", "none");
-                // hide page modal loader
-                $('#checkout-page .modal').css("display", "none");
-
-                // hide all previously displayed ej2 toast
-                $('.page-toast').get(0).ej2_instances[0].hide('All');
-                $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
-                // display toast message
-                let toast = $('.timed-page-toast').get(0).ej2_instances[0];
-                toast.cssClass = 'error-ej2-toast';
-                toast.timeOut = 3000;
-                toast.content = `Checkout error. Please retry or Pull Down to refresh`;
-                toast.dataBind();
-                toast.show();*/
 
             }
             finally {
@@ -8556,7 +8501,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 $('#checkout-page .modal').css("display", "none");
             }
 
-            console.log("END OF CHECKOUT SHOW");
         },
 
         /**
@@ -8574,7 +8518,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // hide the tooltip
                 tooltipArrayElem.close();
             });
-            console.log("END OF CHECKOUT HIDE");
+
         },
 
         /**
@@ -9118,7 +9062,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     }
                 }
                 catch(err){
-                    console.log("PAYMENT ERROR", err);
+
                     // hide all previously displayed ej2 toast
                     $('.page-toast').get(0).ej2_instances[0].hide('All');
                     $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
@@ -9211,7 +9155,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 }
                 catch(err){
-                    console.log("PAYMENT ERROR", err);
+
                     // hide all previously displayed ej2 toast
                     $('.page-toast').get(0).ej2_instances[0].hide('All');
                     $('.timed-page-toast').get(0).ej2_instances[0].hide('All');
@@ -9286,8 +9230,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 // get the order object set on this page
                 let orderData = utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.chekoutOrder;
-
-                console.log("CHECK OUT USER DETAILS", userDetails);
 
                 // display the checkout data
                 $('#checkout-page #checkout-personal-details-email').html(userDetails.email);
@@ -9504,7 +9446,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             await utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.pageShow();
                         }
                         catch(err){
-                            console.log("CHECKOUT SHIPPING METHOD UPDATE ERROR", err);
 
                             err = JSON.parse(err.responseText.trim());
 
@@ -9600,7 +9541,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                             await utopiasoftware[utopiasoftware_app_namespace].controller.checkoutPageViewModel.pageShow();
                         }
                         catch(err){
-                            console.log("CHECKOUT PAYMENT METHOD UPDATE ERROR", err);
 
                             err = JSON.parse(err.responseText);
 
@@ -9909,22 +9849,22 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     // create a loop to add all the line items in the order data to the remote cache
                     let addToCartPromises = []; // holds all the promises used to add all items to the remote cart
                     for(let index = 0; index < orderData.line_items.length; index++){
-                        console.log("1");
+
                         let cartItemData = {};
                         // use the line item meta data to create part of cartItemData
                         for(let metaDataElem of orderData.line_items[index].meta_data){
-                            console.log("2");
+
                             if(metaDataElem.key === "_fpd_data"){ // check the "key" property of the metaData object
-                                console.log("3");
+
                                 if(!cartItemData.cart_item_data){ // if this property is not created
                                     cartItemData.cart_item_data = {}; // create the property
                                 }
-                                console.log("4");
+
                                 if(!cartItemData.cart_item_data.fpd_data){ // if this property is not created
                                     cartItemData.cart_item_data.fpd_data = {}; // create the property
                                 }
 
-                                console.log("5");
+
                                 // add custom data to the cart item
                                 cartItemData.cart_item_data.fpd_data.fpd_product = metaDataElem.value;
                                 cartItemData.cart_item_data.fpd_data.fpd_product_price =
@@ -9938,7 +9878,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 if(!cartItemData.cart_item_data.fpd_data){ // if this property is not created
                                     cartItemData.cart_item_data.fpd_data = {}; // create the property
                                 }
-                                console.log("6");
+
                                 // add custom data to the cart item
                                 cartItemData.cart_item_data.fpd_data.fpd_print_order = metaDataElem.value;
                             }
@@ -9948,7 +9888,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         cartItemData.product_id = orderData.line_items[index].product_id;
                         cartItemData.variation_id = orderData.line_items[index].variation_id;
                         cartItemData.quantity = orderData.line_items[index].quantity;
-                        console.log("7");
 
                         // add the created cartItemData to remote user cart
                         addToCartPromises.push(await Promise.resolve($.ajax(
@@ -9970,7 +9909,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 data: JSON.stringify(cartItemData)
                             }
                         )));
-                        console.log("8");
+
                     } // end of for loop
 
                     // await for all items to be added to cart
@@ -10533,9 +10472,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 var selectedOrder = utopiasoftware[utopiasoftware_app_namespace].controller.
                     trackOrderPageViewModel.trackOrderResultsArray[window.parseInt($buttonElement.attr("data-order-index"))];
 
-                console.log("ORDER INDEX", $buttonElement.attr("data-order-index"));
-
-                console.log("SELECTED ORDER", selectedOrder);
 
                 try{
                     // check if the checkout page has previously been displayed in the app-main navigator
@@ -10591,10 +10527,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // get the selected order to be checked out
                 var selectedOrder = utopiasoftware[utopiasoftware_app_namespace].controller.
                     trackOrderPageViewModel.trackOrderResultsArray[window.parseInt($buttonElement.attr("data-order-index"))];
-
-                console.log("ORDER INDEX", $buttonElement.attr("data-order-index"));
-
-                console.log("SELECTED ORDER", selectedOrder);
 
                 try{
                     // display the checkout page using the selected order
@@ -10771,10 +10703,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 var selectedOrder = utopiasoftware[utopiasoftware_app_namespace].controller.
                     trackOrderPageViewModel.trackOrderResultsArray[window.parseInt($buttonElement.attr("data-order-index"))];
 
-                console.log("ORDER INDEX", $buttonElement.attr("data-order-index"));
-
-                console.log("SELECTED ORDER", selectedOrder);
-
                 try{
                     // create a new order object
                     var newOrder = JSON.parse(JSON.stringify(selectedOrder));
@@ -10837,7 +10765,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     await $('#app-main-navigator').get(0).pushPage("checkout-page.html", {data: {orderData: newOrder}});
                 }
                 catch(err){
-                    console.log(err, "REORDER ERROR");
 
                     // hide all previously displayed ej2 toast
                     $('.page-toast').get(0).ej2_instances[0].hide('All');
@@ -11449,10 +11376,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 var selectedOrder = utopiasoftware[utopiasoftware_app_namespace].controller.
                     completedOrdersPageViewModel.ordersResultsArray[window.parseInt($buttonElement.attr("data-order-index"))];
 
-                console.log("ORDER INDEX", $buttonElement.attr("data-order-index"));
-
-                console.log("SELECTED ORDER", selectedOrder);
-
                 try{
                     // check if the checkout page has previously been displayed in the app-main navigator
                     var pagesStackArray = $('#app-main-navigator').get(0).pages; // holds the array of pages in the app-main navigator
@@ -11507,10 +11430,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // get the selected order to be checked out
                 var selectedOrder = utopiasoftware[utopiasoftware_app_namespace].controller.
                     completedOrdersPageViewModel.ordersResultsArray[window.parseInt($buttonElement.attr("data-order-index"))];
-
-                console.log("ORDER INDEX", $buttonElement.attr("data-order-index"));
-
-                console.log("SELECTED ORDER", selectedOrder);
 
                 try{
                     // display the checkout page using the selected order
@@ -11687,10 +11606,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 var selectedOrder = utopiasoftware[utopiasoftware_app_namespace].controller.
                     completedOrdersPageViewModel.ordersResultsArray[window.parseInt($buttonElement.attr("data-order-index"))];
 
-                console.log("ORDER INDEX", $buttonElement.attr("data-order-index"));
-
-                console.log("SELECTED ORDER", selectedOrder);
-
                 try{
                     // create a new order object
                     var newOrder = JSON.parse(JSON.stringify(selectedOrder));
@@ -11753,7 +11668,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     await $('#app-main-navigator').get(0).pushPage("checkout-page.html", {data: {orderData: newOrder}});
                 }
                 catch(err){
-                    console.log(err, "REORDER ERROR");
 
                     // hide all previously displayed ej2 toast
                     $('.page-toast').get(0).ej2_instances[0].hide('All');
@@ -12365,10 +12279,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 var selectedOrder = utopiasoftware[utopiasoftware_app_namespace].controller.
                     pendingOrdersPageViewModel.ordersResultsArray[window.parseInt($buttonElement.attr("data-order-index"))];
 
-                console.log("ORDER INDEX", $buttonElement.attr("data-order-index"));
-
-                console.log("SELECTED ORDER", selectedOrder);
-
                 try{
                     // check if the checkout page has previously been displayed in the app-main navigator
                     var pagesStackArray = $('#app-main-navigator').get(0).pages; // holds the array of pages in the app-main navigator
@@ -12423,10 +12333,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // get the selected order to be checked out
                 var selectedOrder = utopiasoftware[utopiasoftware_app_namespace].controller.
                     pendingOrdersPageViewModel.ordersResultsArray[window.parseInt($buttonElement.attr("data-order-index"))];
-
-                console.log("ORDER INDEX", $buttonElement.attr("data-order-index"));
-
-                console.log("SELECTED ORDER", selectedOrder);
 
                 try{
                     // display the checkout page using the selected order
@@ -12603,10 +12509,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 var selectedOrder = utopiasoftware[utopiasoftware_app_namespace].controller.
                     pendingOrdersPageViewModel.ordersResultsArray[window.parseInt($buttonElement.attr("data-order-index"))];
 
-                console.log("ORDER INDEX", $buttonElement.attr("data-order-index"));
-
-                console.log("SELECTED ORDER", selectedOrder);
-
                 try{
                     // create a new order object
                     var newOrder = JSON.parse(JSON.stringify(selectedOrder));
@@ -12669,7 +12571,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     await $('#app-main-navigator').get(0).pushPage("checkout-page.html", {data: {orderData: newOrder}});
                 }
                 catch(err){
-                    console.log(err, "REORDER ERROR");
 
                     // hide all previously displayed ej2 toast
                     $('.page-toast').get(0).ej2_instances[0].hide('All');
@@ -12808,7 +12709,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 }
                 catch(err){
-                    console.log("ORDER DETAILS ERROR", err);
+
                     // hide all previously displayed ej2 toast
                     $('.page-toast').get(0).ej2_instances[0].hide('All');
                     // display toast to show that an error
@@ -12923,7 +12824,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // show the page loader
                 $('#order-details-page .modal').css("display", "none");
 
-                console.log("ORDER DETAILS ERROR", err);
                 // hide all previously displayed ej2 toast
                 $('.page-toast').get(0).ej2_instances[0].hide('All');
                 // display toast to show that an error
@@ -13060,7 +12960,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     await $('#app-main-navigator').get(0).replacePage("checkout-page.html", {data: {orderData: newOrder}});
                 }
                 catch(err){
-                    console.log(err, "REORDER ERROR");
 
                     // hide the page loader
                     $('#order-details-page .modal').css("display", "none");
