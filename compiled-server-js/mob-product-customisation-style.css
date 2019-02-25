@@ -59,7 +59,9 @@ html.utopiasoftware-mobile #chatra__iframe-wrapper { /** hide the chatra chat su
     display: none!important;
 }
 
-html.utopiasoftware-mobile .mo-openid-app-icons { /** hide the social share buttons on the page **/
+html.utopiasoftware-mobile .mo-openid-app-icons,
+html.utopiasoftware-mobile .mo-openid-app-icons *{ /** hide the social share buttons on the page **/
     display: none !important;
-    visibility: collapse !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
 }
