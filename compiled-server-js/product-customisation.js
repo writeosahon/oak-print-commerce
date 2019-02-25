@@ -12,7 +12,7 @@ jQuery(document).ready(function(){
     // check if the site is being accessed from an iframe
     if(window !== window.parent){ // page is being accessed from an iframe
         // add the utopiasoftware-mobile class to the HTML tag
-        jQuery('html').addClass("utopiasoftware-mobile");;
+        jQuery('html').addClass("utopiasoftware-mobile");
 
         // set the use of the Cookie library
         utopiasoftware_Cookies = Cookies.noConflict();
