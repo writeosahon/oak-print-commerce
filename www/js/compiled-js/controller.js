@@ -4379,7 +4379,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     [utopiasoftware_app_namespace].controller.productDetailsPageViewModel.
                                     currentProductDetails.id, status: "hold",
                                 reviewer: userDetails.first_name, reviewer_email: userDetails.email,
-                                review: $('#rate-product-modal #rate-product-comment').val().trim(),
+                                review: $('#rate-product-modal #rate-product-comment').val().trim() + " ",
                                 rating: $('#rate-product-modal #rate-product-rater-widget').rateYo("rating"),
                                 verified: true})
                         }
