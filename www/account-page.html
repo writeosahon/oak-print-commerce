@@ -133,19 +133,16 @@
 
             <div> <!-- accordion panel container -->
                 <div> <!-- accordion content -->
-                    <ons-list id="account-order-list" style="display: block">
+                    <ons-list id="account-preference-list" style="display: block">
 
                         <ons-list-item modifier="longdivider" tappable lock-on-drag="true"
                                        onclick="">
                             <div class="center">
-                                <span class="list-item__title">Push Notifications</span>
-                            </div>
-                        </ons-list-item>
-
-                        <ons-list-item modifier="longdivider" tappable lock-on-drag="true"
-                                       onclick="">
-                            <div class="center">
-                                <span class="list-item__title">Newsletter Subscription</span>
+                                <label for="account-push-notification-preference-input">
+                                    <span class="list-item__title">Push Notifications</span>
+                                </label>
+                                <ons-switch id="account-push-notification-preference"
+                                            input-id="account-push-notification-preference-input"></ons-switch>
                             </div>
                         </ons-list-item>
 
