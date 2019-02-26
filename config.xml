@@ -71,6 +71,8 @@
         </host>
     </universal-links>
 
+    <plugin name="onesignal-cordova-plugin" spec="2.4.6"/>
+
     <plugin name="cordova-plugin-whitelist" spec="1.3.3"/>
 
     <config-file platform="android" target="AndroidManifest.xml" parent="/manifest">

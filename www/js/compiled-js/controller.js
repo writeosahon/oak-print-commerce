@@ -114,6 +114,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             }
             catch(err){}
 
+            // initialise the one-signal push notification plugin
+            window.plugins.OneSignal
+                .startInit("e388205d-c66d-4012-a422-68572fddcfd7")
+                .handleNotificationReceived(function(jsonData) {
+                    console.log("NOTIFICATION RECEIVED", jsonData);
+                })
+                .handleNotificationOpened(function(jsonData) {
+                    console.log("NOTIFICATION OPENED", jsonData);
+                })
+                .inFocusDisplaying(window.plugins.OneSignal.OSInFocusDisplayOption.Notification)
+                .endInit();
+
 
             try { // START ALL THE CORDOVA PLUGINS CONFIGURATION WHICH REQUIRE PROMISE SYNTAX
 
