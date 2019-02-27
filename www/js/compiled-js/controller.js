@@ -2144,6 +2144,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 event.target.onDeviceBackButton = utopiasoftware[utopiasoftware_app_namespace].controller.
                     accountPageViewModel.backButtonClicked;
 
+                // add listener for when the push notification preference switch is clicked
+                $('#account-page #account-push-notification-preference').on("change", function(changeEvent){
+                    if(changeEvent.originalEvent.value === true){ // the push notification preference switch was turned on
+                        // subscribe the user to the push notification
+                        window.plugins.OneSignal.setSubscription(true);
+                    }
+                    else{ // the push notification preference switch was turned off
+                        // unsubscribe user from push notification
+                        window.plugins.OneSignal.setSubscription(false); //todo
+                    }
+                });
+
                 try{
                     // create the accorodion ej2 component used on the "Account" page
                     let accordion = new ej.navigations.Accordion({
@@ -2169,7 +2181,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             window.SoftInputMode.set('adjustPan');
 
             // handle the user sign-in check inside a promise
-            return new Promise(function(resolve, reject){
+            await new Promise(function(resolve, reject){
                 window.setTimeout(async function(){
                     try{
                         // check if user has been signed in
@@ -2200,6 +2212,28 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         resolve(); // resolve the promise
                     }
                 }, 0);
+            });
+
+            // check and handle the user's push notification status inside the promise
+            await new Promise(function(resolve, reject){
+                window.plugins.OneSignal.getPermissionSubscriptionState(function(status) {
+
+                    // check if user is subscribed to and push notification is enabled on the device
+                    if(status.subscriptionStatus.subscribed === true &&
+                        status.subscriptionStatus.userSubscriptionSetting === true){ // user has enabled push notification
+                        // turn on the push notification preference
+                        $('#account-page #account-push-notification-preference').get(0).checked = true;
+                    }
+                    else{ // user has disabled push notification
+                        //turn off the push notification preference
+                        $('#account-page #account-push-notification-preference').get(0).checked = false;
+                    }
+
+                    // enable the push notification preference switch
+                    $('#account-page #account-push-notification-preference').get(0).disabled = false;
+
+                    resolve(); // resolve the parent promise
+                });
             });
         },
 
@@ -2259,6 +2293,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 // call the method to remotely sign out
                 $('#user-signout-iframe-container #user-signout-iframe').get(0).contentWindow.utopiasoftware_removeUsage();
             }
+
+            // unsubscribe user from push notification
+            window.plugins.OneSignal.setSubscription(false);
 
             // refresh the display of the app Account page
             await utopiasoftware[utopiasoftware_app_namespace].controller.accountPageViewModel.pageShow();

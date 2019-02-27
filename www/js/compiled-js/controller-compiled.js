@@ -579,16 +579,22 @@ $('#products-page .page-preloader').css("display","none");return _context35.fini
          */pageInit:function pageInit(event){//function is used to initialise the page if the app is fully ready for execution
 var loadPageOnAppReady=function(){var _ref37=_asyncToGenerator(/*#__PURE__*/regeneratorRuntime.mark(function _callee37(){var accordion;return regeneratorRuntime.wrap(function _callee37$(_context37){while(1){switch(_context37.prev=_context37.next){case 0:if(!(!ons.isReady()||utopiasoftware[utopiasoftware_app_namespace].model.isAppReady===false)){_context37.next=3;break;}setTimeout(loadPageOnAppReady,500);// call this function again after half a second
 return _context37.abrupt('return');case 3:// listen for when the device back button is tapped
-event.target.onDeviceBackButton=utopiasoftware[utopiasoftware_app_namespace].controller.accountPageViewModel.backButtonClicked;try{// create the accorodion ej2 component used on the "Account" page
+event.target.onDeviceBackButton=utopiasoftware[utopiasoftware_app_namespace].controller.accountPageViewModel.backButtonClicked;// add listener for when the push notification preference switch is clicked
+$('#account-page #account-push-notification-preference').on("change",function(changeEvent){if(changeEvent.originalEvent.value===true){// the push notification preference switch was turned on
+// subscribe the user to the push notification
+window.plugins.OneSignal.setSubscription(true);}else{// the push notification preference switch was turned off
+// unsubscribe user from push notification
+window.plugins.OneSignal.setSubscription(false);//todo
+}});try{// create the accorodion ej2 component used on the "Account" page
 accordion=new ej.navigations.Accordion({expandMode:'Single'});accordion.appendTo('#account-accordion');// expand the first item of the accordion
-accordion.expandItem(true,0);}catch(err){}case 5:case'end':return _context37.stop();}}},_callee37,this);}));return function loadPageOnAppReady(){return _ref37.apply(this,arguments);};}();var $thisPage=$(event.target);// get the current page shown
+accordion.expandItem(true,0);}catch(err){}case 6:case'end':return _context37.stop();}}},_callee37,this);}));return function loadPageOnAppReady(){return _ref37.apply(this,arguments);};}();var $thisPage=$(event.target);// get the current page shown
 // call the function used to initialise the app page if the app is fully loaded
 loadPageOnAppReady();},/**
          * method is triggered when page is shown
          */pageShow:function(){var _ref38=_asyncToGenerator(/*#__PURE__*/regeneratorRuntime.mark(function _callee39(){return regeneratorRuntime.wrap(function _callee39$(_context39){while(1){switch(_context39.prev=_context39.next){case 0:$('#app-main-page ons-toolbar div.title-bar').html("Account");// update the title of the page
 // update cart count
 $('#app-main-page .cart-count').html(utopiasoftware[utopiasoftware_app_namespace].model.cartCount);window.SoftInputMode.set('adjustPan');// handle the user sign-in check inside a promise
-return _context39.abrupt('return',new Promise(function(resolve,reject){window.setTimeout(_asyncToGenerator(/*#__PURE__*/regeneratorRuntime.mark(function _callee38(){var hasUserDetails;return regeneratorRuntime.wrap(function _callee38$(_context38){while(1){switch(_context38.prev=_context38.next){case 0:_context38.prev=0;_context38.next=3;return utopiasoftware[utopiasoftware_app_namespace].databaseOperations.loadData("user-details",utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase);case 3:hasUserDetails=_context38.sent;// since user is signed in, hide some list items and show some list items on the page.
+_context39.next=5;return new Promise(function(resolve,reject){window.setTimeout(_asyncToGenerator(/*#__PURE__*/regeneratorRuntime.mark(function _callee38(){var hasUserDetails;return regeneratorRuntime.wrap(function _callee38$(_context38){while(1){switch(_context38.prev=_context38.next){case 0:_context38.prev=0;_context38.next=3;return utopiasoftware[utopiasoftware_app_namespace].databaseOperations.loadData("user-details",utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase);case 3:hasUserDetails=_context38.sent;// since user is signed in, hide some list items and show some list items on the page.
 // all items that are interested in have their display altered MUST have the
 // class 'utopiasoftware-can-hide-list-item'.
 // items that want to be displayed when a user is signed in and hidden when a user is signed out, MUST ALSO
@@ -598,7 +604,14 @@ $('#account-page .utopiasoftware-can-hide-list-item.utopiasoftware-user-sign-in-
 _context38.next=14;break;case 9:_context38.prev=9;_context38.t0=_context38['catch'](0);// alter the list item display because NO user is signed in
 $('#account-page .utopiasoftware-can-hide-list-item.utopiasoftware-user-sign-in-show').css("display","none");$('#account-page .utopiasoftware-can-hide-list-item:not(.utopiasoftware-user-sign-in-show)').css("display","flex");// resolve the promise
 resolve();// resolve the promise
-case 14:case'end':return _context38.stop();}}},_callee38,this,[[0,9]]);})),0);}));case 4:case'end':return _context39.stop();}}},_callee39,this);}));function pageShow(){return _ref38.apply(this,arguments);}return pageShow;}(),/**
+case 14:case'end':return _context38.stop();}}},_callee38,this,[[0,9]]);})),0);});case 5:_context39.next=7;return new Promise(function(resolve,reject){window.plugins.OneSignal.getPermissionSubscriptionState(function(status){// check if user is subscribed to and push notification is enabled on the device
+if(status.subscriptionStatus.subscribed===true&&status.subscriptionStatus.userSubscriptionSetting===true){// user has enabled push notification
+// turn on the push notification preference
+$('#account-page #account-push-notification-preference').get(0).checked=true;}else{// user has disabled push notification
+//turn off the push notification preference
+$('#account-page #account-push-notification-preference').get(0).checked=false;}// enable the push notification preference switch
+$('#account-page #account-push-notification-preference').get(0).disabled=false;resolve();// resolve the parent promise
+});});case 7:case'end':return _context39.stop();}}},_callee39,this);}));function pageShow(){return _ref38.apply(this,arguments);}return pageShow;}(),/**
          * method is triggered when page is hidden
          */pageHide:function(){var _ref40=_asyncToGenerator(/*#__PURE__*/regeneratorRuntime.mark(function _callee40(){return regeneratorRuntime.wrap(function _callee40$(_context40){while(1){switch(_context40.prev=_context40.next){case 0:case'end':return _context40.stop();}}},_callee40,this);}));function pageHide(){return _ref40.apply(this,arguments);}return pageHide;}(),/**
          * method is triggered when page is destroyed
@@ -613,13 +626,14 @@ $('#app-main-tabbar').get(0).setActiveTab(2);},/**
          */signOutListItemClicked:function(){var _ref41=_asyncToGenerator(/*#__PURE__*/regeneratorRuntime.mark(function _callee41(){var toast;return regeneratorRuntime.wrap(function _callee41$(_context41){while(1){switch(_context41.prev=_context41.next){case 0:// inform the user that the sign out process is on
 $('#loader-modal-message').html("Signing user out...");_context41.next=3;return $('#loader-modal').get(0).show();case 3:_context41.prev=3;_context41.next=6;return Promise.all([utopiasoftware[utopiasoftware_app_namespace].databaseOperations.removeData("user-details",utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase),utopiasoftware[utopiasoftware_app_namespace].databaseOperations.removeData("user-cart",utopiasoftware[utopiasoftware_app_namespace].model.appDatabase)]);case 6:_context41.next=8;return utopiasoftware[utopiasoftware_app_namespace].model.firebaseApp.auth().signOut();case 8:_context41.next=12;break;case 10:_context41.prev=10;_context41.t0=_context41['catch'](3);case 12:// check if user can sign out from the remote app serve via an iframe
 if($('#user-signout-iframe-container #user-signout-iframe').get(0).contentWindow&&$('#user-signout-iframe-container #user-signout-iframe').get(0).contentWindow.utopiasoftware_removeUsage){// call the method to remotely sign out
-$('#user-signout-iframe-container #user-signout-iframe').get(0).contentWindow.utopiasoftware_removeUsage();}// refresh the display of the app Account page
-_context41.next=15;return utopiasoftware[utopiasoftware_app_namespace].controller.accountPageViewModel.pageShow();case 15:// alter the list item displayed on the Account page because NO user is signed in
+$('#user-signout-iframe-container #user-signout-iframe').get(0).contentWindow.utopiasoftware_removeUsage();}// unsubscribe user from push notification
+window.plugins.OneSignal.setSubscription(false);// refresh the display of the app Account page
+_context41.next=16;return utopiasoftware[utopiasoftware_app_namespace].controller.accountPageViewModel.pageShow();case 16:// alter the list item displayed on the Account page because NO user is signed in
 $('#account-page .utopiasoftware-can-hide-list-item.utopiasoftware-user-sign-in-show').css("display","none");$('#account-page .utopiasoftware-can-hide-list-item:not(.utopiasoftware-user-sign-in-show)').css("display","flex");// hide loader modal
-_context41.next=19;return $('#loader-modal').get(0).hide();case 19:// inform user that they have been signed out
+_context41.next=20;return $('#loader-modal').get(0).hide();case 20:// inform user that they have been signed out
 // hide all previously displayed ej2 toast
 $('.page-toast').get(0).ej2_instances[0].hide('All');$('.timed-page-toast').get(0).ej2_instances[0].hide('All');// display toast message
-toast=$('.timed-page-toast').get(0).ej2_instances[0];toast.cssClass='success-ej2-toast';toast.timeOut=3000;toast.content='User signed out';toast.dataBind();toast.show();case 27:case'end':return _context41.stop();}}},_callee41,this,[[3,10]]);}));function signOutListItemClicked(){return _ref41.apply(this,arguments);}return signOutListItemClicked;}(),/**
+toast=$('.timed-page-toast').get(0).ej2_instances[0];toast.cssClass='success-ej2-toast';toast.timeOut=3000;toast.content='User signed out';toast.dataBind();toast.show();case 28:case'end':return _context41.stop();}}},_callee41,this,[[3,10]]);}));function signOutListItemClicked(){return _ref41.apply(this,arguments);}return signOutListItemClicked;}(),/**
          * method is triggered when the user clicks on the "Profile" list item
          *
          * @returns {Promise<void>}
