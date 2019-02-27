@@ -2152,7 +2152,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     }
                     else{ // the push notification preference switch was turned off
                         // unsubscribe user from push notification
-                        window.plugins.OneSignal.setSubscription(false); //todo
+                        window.plugins.OneSignal.setSubscription(false);
                     }
                 });
 
@@ -3057,6 +3057,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                     // subscribe push notification for this user's device
                                     window.plugins.OneSignal.setSubscription(true);
+                                    // set the tag used to identify users for push notification sending
+                                    window.plugins.OneSignal.sendTags({appMail: resultArray[0].email});
 
                                     // hide loader
                                     await $('#loader-modal').get(0).hide(); // hide loader
@@ -3129,6 +3131,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                                     // subscribe push notification for this user's device
                                     window.plugins.OneSignal.setSubscription(true);
+                                    // set the tag used to identify users for push notification sending
+                                    window.plugins.OneSignal.sendTags({appMail: userDetails.email});
 
                                     // hide loader
                                     await $('#loader-modal').get(0).hide(); // hide loader
@@ -3257,6 +3261,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                 // subscribe push notification for this user's device
                 window.plugins.OneSignal.setSubscription(true);
+                // set the tag used to identify users for push notification sending
+                window.plugins.OneSignal.sendTags({appMail: resultsArray[1][0].email});
 
                 // hide loader
                 await $('#loader-modal').get(0).hide(); // hide loader
@@ -3357,6 +3363,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                     // subscribe push notification for this user's device
                     window.plugins.OneSignal.setSubscription(true);
+                    // set the tag used to identify users for push notification sending
+                    window.plugins.OneSignal.sendTags({appMail: userDetails.email});
 
                     // hide loader
                     await $('#loader-modal').get(0).hide(); // hide loader
