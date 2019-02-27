@@ -146,7 +146,7 @@
     </edit-config>
     <!-- used to change the background color of the small icon in ONE-SIGNAL push notification -->
     <config-file platform="android" target="AndroidManifest.xml" parent="/manifest/application">
-        <meta-data android:name="com.onesignal.NotificationAccentColor.DEFAULT" android:value="FF30A401" />
+        <meta-data android:name="com.onesignal.NotificationAccentColor.DEFAULT" android:value="FF363E7C" />
     </config-file>
 
 </widget>

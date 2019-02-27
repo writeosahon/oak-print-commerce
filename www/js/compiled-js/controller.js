@@ -3055,6 +3055,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                         {_id: "user-details", docType: "USER_DETAILS", userDetails: resultArray[0]},
                                         utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase);
 
+                                    // subscribe push notification for this user's device
+                                    window.plugins.OneSignal.setSubscription(true);
+
                                     // hide loader
                                     await $('#loader-modal').get(0).hide(); // hide loader
 
@@ -3123,6 +3126,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                     await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
                                         {_id: "user-details", docType: "USER_DETAILS", userDetails: userDetails},
                                         utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase);
+
+                                    // subscribe push notification for this user's device
+                                    window.plugins.OneSignal.setSubscription(true);
 
                                     // hide loader
                                     await $('#loader-modal').get(0).hide(); // hide loader
@@ -3249,6 +3255,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     {_id: "user-details", docType: "USER_DETAILS", userDetails: resultsArray[1][0]},
                     utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase);
 
+                // subscribe push notification for this user's device
+                window.plugins.OneSignal.setSubscription(true);
+
                 // hide loader
                 await $('#loader-modal').get(0).hide(); // hide loader
 
@@ -3345,6 +3354,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     await utopiasoftware[utopiasoftware_app_namespace].databaseOperations.saveData(
                         {_id: "user-details", docType: "USER_DETAILS", userDetails},
                         utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase);
+
+                    // subscribe push notification for this user's device
+                    window.plugins.OneSignal.setSubscription(true);
 
                     // hide loader
                     await $('#loader-modal').get(0).hide(); // hide loader
