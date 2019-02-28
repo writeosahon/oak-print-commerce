@@ -118,13 +118,22 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             window.plugins.OneSignal
                 .startInit("e388205d-c66d-4012-a422-68572fddcfd7")
                 .handleNotificationReceived(function(jsonData) {
-                    console.log("NOTIFICATION RECEIVED", jsonData);
+                    // do nothing for now
                 })
                 .handleNotificationOpened(function(jsonData) {
-                    console.log("NOTIFICATION OPENED", jsonData);
+                    // do nothing for now
                 })
                 .inFocusDisplaying(window.plugins.OneSignal.OSInFocusDisplayOption.Notification)
                 .endInit();
+
+            // add listener for when the user's push notification settings change
+            window.plugins.OneSignal.addSubscriptionObserver(function (state) {
+                // check if the push notification preference switch has been created
+                if ($('#account-page #account-push-notification-preference').get(0)) { // the preference switch exist
+                    // update the state of the push notification preference switch user the user's push notification subscription
+                    $('#account-page #account-push-notification-preference').get(0).checked = state.to.subscribed;
+                }
+            });
 
 
             try { // START ALL THE CORDOVA PLUGINS CONFIGURATION WHICH REQUIRE PROMISE SYNTAX

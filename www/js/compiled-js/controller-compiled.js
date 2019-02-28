@@ -29,16 +29,22 @@ utopiasoftware[utopiasoftware_app_namespace].model.firebaseApp=firebase.initiali
 utopiasoftware[utopiasoftware_app_namespace].model.firebaseUI=new firebaseui.auth.AuthUI(utopiasoftware[utopiasoftware_app_namespace].model.firebaseApp.auth());// START ALL CORDOVA PLUGINS CONFIGURATIONS
 try{// lock the orientation of the device to 'PORTRAIT'
 screen.orientation.lock('portrait');}catch(err){}// initialise the one-signal push notification plugin
-window.plugins.OneSignal.startInit("e388205d-c66d-4012-a422-68572fddcfd7").handleNotificationReceived(function(jsonData){console.log("NOTIFICATION RECEIVED",jsonData);}).handleNotificationOpened(function(jsonData){console.log("NOTIFICATION OPENED",jsonData);}).inFocusDisplaying(window.plugins.OneSignal.OSInFocusDisplayOption.Notification).endInit();_context2.prev=15;// START ALL THE CORDOVA PLUGINS CONFIGURATION WHICH REQUIRE PROMISE SYNTAX
+window.plugins.OneSignal.startInit("e388205d-c66d-4012-a422-68572fddcfd7").handleNotificationReceived(function(jsonData){// do nothing for now
+}).handleNotificationOpened(function(jsonData){// do nothing for now
+}).inFocusDisplaying(window.plugins.OneSignal.OSInFocusDisplayOption.Notification).endInit();// add listener for when the user's push notification settings change
+window.plugins.OneSignal.addSubscriptionObserver(function(state){// check if the push notification preference switch has been created
+if($('#account-page #account-push-notification-preference').get(0)){// the preference switch exist
+// update the state of the push notification preference switch user the user's push notification subscription
+$('#account-page #account-push-notification-preference').get(0).checked=state.to.subscribed;}});_context2.prev=16;// START ALL THE CORDOVA PLUGINS CONFIGURATION WHICH REQUIRE PROMISE SYNTAX
 // create the pouchdb app database
 utopiasoftware[utopiasoftware_app_namespace].model.appDatabase=new PouchDB('PrintServiceEcommerce.db',{adapter:'cordova-sqlite',location:'default',androidDatabaseImplementation:2});// create the encrypted pouchdb app database
 utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase=new PouchDB('PrintServiceEcommerceEncrypted.db',{adapter:'cordova-sqlite',location:'default',androidDatabaseImplementation:2});// generate a password for encrypting the app database (if it does NOT already exist)
-secureKey=null;_context2.prev=19;_context2.next=22;return new Promise(function(resolve,reject){NativeStorage.getItem("utopiasoftware-oak-print-service-secure-key",resolve,reject);});case 22:secureKey=_context2.sent;_context2.next=30;break;case 25:_context2.prev=25;_context2.t0=_context2['catch'](19);_context2.next=29;return new Promise(function(resolve,reject){NativeStorage.setItem("utopiasoftware-oak-print-service-secure-key",{password:Random.uuid4(utopiasoftware[utopiasoftware_app_namespace].randomisationEngine)},resolve,reject);});case 29:secureKey=_context2.sent;case 30:_context2.next=32;return new Promise(function(resolve,reject){utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase.crypto(secureKey.password,{ignore:['_attachments','_deleted','docType'],cb:function cb(err,key){if(err){// there is an error
+secureKey=null;_context2.prev=20;_context2.next=23;return new Promise(function(resolve,reject){NativeStorage.getItem("utopiasoftware-oak-print-service-secure-key",resolve,reject);});case 23:secureKey=_context2.sent;_context2.next=31;break;case 26:_context2.prev=26;_context2.t0=_context2['catch'](20);_context2.next=30;return new Promise(function(resolve,reject){NativeStorage.setItem("utopiasoftware-oak-print-service-secure-key",{password:Random.uuid4(utopiasoftware[utopiasoftware_app_namespace].randomisationEngine)},resolve,reject);});case 30:secureKey=_context2.sent;case 31:_context2.next=33;return new Promise(function(resolve,reject){utopiasoftware[utopiasoftware_app_namespace].model.encryptedAppDatabase.crypto(secureKey.password,{ignore:['_attachments','_deleted','docType'],cb:function cb(err,key){if(err){// there is an error
 reject(err);// reject Promise
 }else{// no error
 resolve(key);// resolve Promise
-}}});});case 32:_context2.prev=32;_context2.next=35;return utopiasoftware[utopiasoftware_app_namespace].databaseOperations.loadData("user-cart",utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);case 35:utopiasoftware[utopiasoftware_app_namespace].model.cartCount=_context2.sent.cart.length;_context2.next=40;break;case 38:_context2.prev=38;_context2.t1=_context2['catch'](32);case 40://register the listener for app database changes
-utopiasoftware[utopiasoftware_app_namespace].controller.appDatabaseChangesListenerViewModel.changesEventEmitter=utopiasoftware[utopiasoftware_app_namespace].model.appDatabase.changes({live:true,include_docs:true,since:'now',doc_ids:['user-cart']}).on("change",utopiasoftware[utopiasoftware_app_namespace].controller.appDatabaseChangesListenerViewModel.userCartChanged);_context2.next=45;break;case 43:_context2.prev=43;_context2.t2=_context2['catch'](15);case 45:_context2.prev=45;// load the initial content of the app
+}}});});case 33:_context2.prev=33;_context2.next=36;return utopiasoftware[utopiasoftware_app_namespace].databaseOperations.loadData("user-cart",utopiasoftware[utopiasoftware_app_namespace].model.appDatabase);case 36:utopiasoftware[utopiasoftware_app_namespace].model.cartCount=_context2.sent.cart.length;_context2.next=41;break;case 39:_context2.prev=39;_context2.t1=_context2['catch'](33);case 41://register the listener for app database changes
+utopiasoftware[utopiasoftware_app_namespace].controller.appDatabaseChangesListenerViewModel.changesEventEmitter=utopiasoftware[utopiasoftware_app_namespace].model.appDatabase.changes({live:true,include_docs:true,since:'now',doc_ids:['user-cart']}).on("change",utopiasoftware[utopiasoftware_app_namespace].controller.appDatabaseChangesListenerViewModel.userCartChanged);_context2.next=46;break;case 44:_context2.prev=44;_context2.t2=_context2['catch'](16);case 46:_context2.prev=46;// load the initial content of the app
 if(true){// there is a previous logged in user
 // load the app main page
 $('ons-splitter').get(0).content.load("app-main-template");}else{// there is no previously logged in user
@@ -46,7 +52,7 @@ $('ons-splitter').get(0).content.load("app-main-template");}else{// there is no 
 $('ons-splitter').get(0).content.load("login-template");}// set status bar color
 StatusBar.backgroundColorByHexString("#363E7C");navigator.splashscreen.hide();// hide the splashscreen
 utopiasoftware[utopiasoftware_app_namespace].model.isAppReady=true;// flag that app is fully loaded and ready
-return _context2.finish(45);case 51:case'end':return _context2.stop();}}},_callee2,this,[[15,43,45,51],[19,25],[32,38]]);})));// end of ons.ready()
+return _context2.finish(46);case 52:case'end':return _context2.stop();}}},_callee2,this,[[16,44,46,52],[20,26],[33,39]]);})));// end of ons.ready()
 },/**
      * this view-model is used to house the listeners and data/properties which listen for
      * changes in the app database
