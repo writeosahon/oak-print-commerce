@@ -2173,6 +2173,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     accordion.appendTo('#account-accordion');
                     // expand the first item of the accordion
                     accordion.expandItem(true, 0);
+
+                    // update the app version information
+                    $('#account-page #account-about-list-app-version').html(BuildInfo.version);
                 }
                 catch(err){}
             }

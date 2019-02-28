@@ -154,6 +154,51 @@
 
         </div>
 
+        <div> <!-- accordion item container -->
+            <div> <!-- accordion header container -->
+                <div><!-- accordion header -->
+                    <ons-list-title>
+                        <span class="zmdi zmdi-info-outline" style="color: #3f51b5; font-size: 2em; margin-right: 0.1em"></span>
+                        About
+                    </ons-list-title>
+                </div>
+            </div>
+
+            <div> <!-- accordion panel container -->
+                <div> <!-- accordion content -->
+                    <ons-list id="account-about-list" style="display: block">
+
+                        <ons-list-item modifier="longdivider" tappable lock-on-drag="true"
+                                       onclick="">
+                            <div class="center">
+                                <span class="list-item__title">App Version <span id="account-about-list-app-version"></span></span>
+                            </div>
+                        </ons-list-item>
+
+                        <ons-list-item class="utopiasoftware-can-hide-list-item utopiasoftware-user-sign-in-show" lock-on-drag="true" modifier="longdivider"
+                                       style="display: none"
+                                       tappable
+                                       onclick="$('#app-main-navigator').get(0).pushPage('completed-orders-page.html')">
+                            <div class="center">
+                                <span class="list-item__title">Completed Orders</span>
+                            </div>
+                        </ons-list-item>
+
+                        <ons-list-item modifier="longdivider" tappable lock-on-drag="true"
+                                       class="utopiasoftware-can-hide-list-item utopiasoftware-user-sign-in-show"
+                                       style="display: none"
+                                       onclick="$('#app-main-navigator').get(0).pushPage('pending-orders-page.html')">
+                            <div class="center">
+                                <span class="list-item__title">Pending Orders</span>
+                            </div>
+                        </ons-list-item>
+
+                    </ons-list>
+                </div>
+            </div>
+
+        </div>
+
     </div>
 
 </ons-page>
