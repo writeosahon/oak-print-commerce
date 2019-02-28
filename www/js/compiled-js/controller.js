@@ -2411,6 +2411,22 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     }
                 }, 0);
             });
+        },
+
+        /**
+         * method is triggered when the user clicks on the "Contact Us" list item
+         *
+         * @returns {Promise<void>}
+         */
+        async contactUsListItemClicked(){
+
+            // open the device email composer
+            cordova.plugins.email.open({
+                to:          ["info@oakexclusive.com", "shop@oakexclusive.com"],
+                subject:    "[provide an appropriate subject]",
+                body:       "[Enter your inquiries]"
+            });
+
         }
     },
 
