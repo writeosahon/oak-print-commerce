@@ -2431,6 +2431,41 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 body:       "[Enter your inquiries]"
             });
 
+        },
+
+        /**
+         * method is triggered when the user clicks on the "Share App" list item
+         * @returns {Promise<void>}
+         */
+        async shareAppListItemClicked(){
+            var shareOptions = {}; // holds the options for sharing
+            shareOptions.message = `check out ${BuildInfo.displayName} for printing exclusive custom designs on your merchandise`;
+            shareOptions.chooserTitle = `share ${BuildInfo.displayName} with...`;
+            shareOptions.files = ["www/css/app-images/share-app-logo.png"];
+            shareOptions.url = "https://shopoakexclusive.page.link/share-app";
+
+            // handle the task in a separate event block
+            window.setTimeout(function(){
+                // also copy the text to clipboard
+                cordova.plugins.clipboard.copy(`${shareOptions.message} | ${shareOptions.url}`,
+                    function(){
+                        // inform the user that message has been copied to clipboard
+                        window.plugins.toast.showWithOptions({
+                            message: "app share-link copied to clipboard",
+                            duration: 3000,
+                            position: "center",
+                            styling: {
+                                cornerRadius: 0,
+                                opacity: 1,
+                                backgroundColor: '#3F51B5',
+                                textColor: '#FFFFFF',
+                                textSize: 14
+                            }
+                        });
+                    }, function(){});
+                // open the device share dialog
+                window.plugins.socialsharing.shareWithOptions(shareOptions, function(){}, function(){});
+            }, 0);
         }
     },
 
