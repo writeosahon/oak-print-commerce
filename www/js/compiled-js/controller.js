@@ -2462,9 +2462,15 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                                 textSize: 14
                             }
                         });
+
+                        // wait for some time before displaying the share dialog
+                        window.setTimeout(function(){
+                            // open the device share dialog
+                            window.plugins.socialsharing.shareWithOptions(shareOptions, function(){}, function(){});
+                        }, 1000);
+
                     }, function(){});
-                // open the device share dialog
-                window.plugins.socialsharing.shareWithOptions(shareOptions, function(){}, function(){});
+
             }, 0);
         }
     },

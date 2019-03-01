@@ -672,8 +672,9 @@ cordova.plugins.email.open({to:["info@oakexclusive.com","shop@oakexclusive.com"]
 shareOptions.message='check out '+BuildInfo.displayName+' for printing exclusive custom designs on your merchandise';shareOptions.chooserTitle='share '+BuildInfo.displayName+' with...';shareOptions.files=["www/css/app-images/share-app-logo.png"];shareOptions.url="https://shopoakexclusive.page.link/share-app";// handle the task in a separate event block
 window.setTimeout(function(){// also copy the text to clipboard
 cordova.plugins.clipboard.copy(shareOptions.message+' | '+shareOptions.url,function(){// inform the user that message has been copied to clipboard
-window.plugins.toast.showWithOptions({message:"app share-link copied to clipboard",duration:3000,position:"center",styling:{cornerRadius:0,opacity:1,backgroundColor:'#3F51B5',textColor:'#FFFFFF',textSize:14}});},function(){});// open the device share dialog
-window.plugins.socialsharing.shareWithOptions(shareOptions,function(){},function(){});},0);case 6:case'end':return _context47.stop();}}},_callee47,this);}));function shareAppListItemClicked(){return _ref47.apply(this,arguments);}return shareAppListItemClicked;}()},/**
+window.plugins.toast.showWithOptions({message:"app share-link copied to clipboard",duration:3000,position:"center",styling:{cornerRadius:0,opacity:1,backgroundColor:'#3F51B5',textColor:'#FFFFFF',textSize:14}});// wait for some time before displaying the share dialog
+window.setTimeout(function(){// open the device share dialog
+window.plugins.socialsharing.shareWithOptions(shareOptions,function(){},function(){});},1000);},function(){});},0);case 6:case'end':return _context47.stop();}}},_callee47,this);}));function shareAppListItemClicked(){return _ref47.apply(this,arguments);}return shareAppListItemClicked;}()},/**
      * this is the view-model/controller for the Login page
      */loginPageViewModel:{/**
          * used to hold the parsley form validation object for the login page
