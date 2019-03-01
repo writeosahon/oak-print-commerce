@@ -593,7 +593,8 @@ window.plugins.OneSignal.setSubscription(true);}else{// the push notification pr
 window.plugins.OneSignal.setSubscription(false);}});try{// create the accorodion ej2 component used on the "Account" page
 accordion=new ej.navigations.Accordion({expandMode:'Single'});accordion.appendTo('#account-accordion');// expand the first item of the accordion
 accordion.expandItem(true,0);// update the app version information
-$('#account-page #account-about-list-app-version').html(BuildInfo.version);}catch(err){}case 6:case'end':return _context37.stop();}}},_callee37,this);}));return function loadPageOnAppReady(){return _ref37.apply(this,arguments);};}();var $thisPage=$(event.target);// get the current page shown
+$('#account-page #account-about-list-app-version').html(BuildInfo.version);// update the app release date information
+$('#account-page #account-about-list-version-release').html(''+kendo.toString(BuildInfo.buildDate,"MMMM dd, yyyy"));}catch(err){}case 6:case'end':return _context37.stop();}}},_callee37,this);}));return function loadPageOnAppReady(){return _ref37.apply(this,arguments);};}();var $thisPage=$(event.target);// get the current page shown
 // call the function used to initialise the app page if the app is fully loaded
 loadPageOnAppReady();},/**
          * method is triggered when page is shown

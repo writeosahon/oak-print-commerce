@@ -2176,6 +2176,10 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
 
                     // update the app version information
                     $('#account-page #account-about-list-app-version').html(BuildInfo.version);
+
+                    // update the app release date information
+                    $('#account-page #account-about-list-version-release').
+                    html(`${kendo.toString(BuildInfo.buildDate, "MMMM dd, yyyy")}`);
                 }
                 catch(err){}
             }
