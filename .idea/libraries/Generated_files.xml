@@ -2,20 +2,18 @@
   <library name="Generated files" type="javaScript">
     <properties>
       <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/compiled-server-js/edit-page-compiled.js" />
         <item url="file://$PROJECT_DIR$/compiled-server-js/product-customisation-compiled.js" />
-        <item url="file://$PROJECT_DIR$/compiled-server-js/product-customisation-compiled.min.js" />
         <item url="file://$PROJECT_DIR$/www/js/compiled-js/base-compiled.js" />
         <item url="file://$PROJECT_DIR$/www/js/compiled-js/controller-compiled.js" />
-        <item url="file://$PROJECT_DIR$/www/js/compiled-js/controller-compiled.min.js" />
         <item url="file://$PROJECT_DIR$/www/js/compiled-js/model-compiled.js" />
       </sourceFilesUrls>
     </properties>
     <CLASSES>
+      <root url="file://$PROJECT_DIR$/compiled-server-js/edit-page-compiled.js" />
       <root url="file://$PROJECT_DIR$/compiled-server-js/product-customisation-compiled.js" />
-      <root url="file://$PROJECT_DIR$/compiled-server-js/product-customisation-compiled.min.js" />
       <root url="file://$PROJECT_DIR$/www/js/compiled-js/base-compiled.js" />
       <root url="file://$PROJECT_DIR$/www/js/compiled-js/controller-compiled.js" />
-      <root url="file://$PROJECT_DIR$/www/js/compiled-js/controller-compiled.min.js" />
       <root url="file://$PROJECT_DIR$/www/js/compiled-js/model-compiled.js" />
     </CLASSES>
     <SOURCES />
