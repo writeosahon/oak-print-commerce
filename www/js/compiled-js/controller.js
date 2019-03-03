@@ -106,8 +106,6 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             utopiasoftware[utopiasoftware_app_namespace].model.firebaseUI =
             new firebaseui.auth.AuthUI(utopiasoftware[utopiasoftware_app_namespace].model.firebaseApp.auth());
 
-            console.log("FIREBASE USER", utopiasoftware[utopiasoftware_app_namespace].model.firebaseApp.auth().currentUser);
-
             // START ALL CORDOVA PLUGINS CONFIGURATIONS
             try{
                 // lock the orientation of the device to 'PORTRAIT'
