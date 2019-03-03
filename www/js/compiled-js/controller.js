@@ -2689,6 +2689,8 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         pageShow: function(){
             window.SoftInputMode.set('adjustPan');
 
+            console.log("DEVICE RAM", cordova.plugins['extended-device-information'].memory);
+
             // listen for when the device keyboard is shown
             window.addEventListener('keyboardDidShow',
                 utopiasoftware[utopiasoftware_app_namespace].controller.loginPageViewModel.keyboardShownAdjustView);
