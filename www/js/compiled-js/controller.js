@@ -106,9 +106,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             utopiasoftware[utopiasoftware_app_namespace].model.firebaseUI =
             new firebaseui.auth.AuthUI(utopiasoftware[utopiasoftware_app_namespace].model.firebaseApp.auth());
 
-            if (utopiasoftware[utopiasoftware_app_namespace].model.firebaseUI.isPendingRedirect()) {
-                console.log("UI AUTH PENDING");
-            }
+            console.log("FIREBASE USER", utopiasoftware[utopiasoftware_app_namespace].model.firebaseApp.auth().currentUser);
 
             // START ALL CORDOVA PLUGINS CONFIGURATIONS
             try{
