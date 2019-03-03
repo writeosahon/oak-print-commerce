@@ -2689,7 +2689,16 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         pageShow: function(){
             window.SoftInputMode.set('adjustPan');
 
-            console.log("DEVICE RAM", cordova.plugins['extended-device-information'].memory);
+            // get the device RAM capacity
+            var deviceRAM = window.parseFloat("" + cordova.plugins['extended-device-information'].memory);
+
+            // check if the device RAM is upto 1GB
+            if(deviceRAM < 1000){ // device RAM is < 1GB
+                $('#login-page .third-party-signin-block').css("display", "none"); // hide the 3rd-party login block
+            }
+            else{ // device RAM is >= 1GB
+                $('#login-page .third-party-signin-block').css("display", "flex"); // display the 3rd-party login block
+            }
 
             // listen for when the device keyboard is shown
             window.addEventListener('keyboardDidShow',
