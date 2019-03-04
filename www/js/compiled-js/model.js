@@ -36,7 +36,7 @@ utopiasoftware[utopiasoftware_app_namespace].model = {
     /**
      * holds the default firebase app instance used by the application
      */
-    firebaseApp: null,
+    firebaseAppp: null,
 
     /**
      * holds the firebase ui app which is obtained from 'firebaseApp'

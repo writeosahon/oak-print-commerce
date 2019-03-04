@@ -12,7 +12,7 @@
  **/
 
 // constant that defines the app namespace
-const utopiasoftware_app_namespace = 'print_service_ecommerce';
+const utopiasoftware_app_namespace = 'print_service_ecommerce'; ;
 
 /**
  * create the namespace and base methods and properties for the app
