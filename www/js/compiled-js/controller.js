@@ -2471,6 +2471,56 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                     }, function(){});
 
             }, 0);
+        },
+
+        /**
+         * method is triggered when the user clicks on the "Terms and Conditions" list item
+         *
+         * @returns {Promise<void>}
+         */
+        async tosListItemClicked(){
+
+            // handle the opening of the in-app browser inside a promise
+            return new Promise(function(resolve, reject){
+                window.setTimeout(async function(){
+                    try{
+                        // open inapp browser for t&c page
+                        cordova.InAppBrowser.open(window.encodeURI('https://shopoakexclusive.com/terms-and-conditions/'), '_blank',
+                            'location=yes,clearcache=yes,clearsessioncache=yes,closebuttoncolor=#ffffff,hardwareback=no,hidenavigationbuttons=yes,hideurlbar=yes,zoom=no,toolbarcolor=#3f51b5');
+
+                        resolve(); // resolve the promise
+                    }
+                    catch(err){
+                        // resolve the promise
+                        resolve(); // resolve the promise
+                    }
+                }, 0);
+            });
+        },
+
+        /**
+         * method is triggered when the user clicks on the "Privacy Policy" list item
+         *
+         * @returns {Promise<void>}
+         */
+        async privacyPolicyListItemClicked(){
+
+            // handle the opening of the in-app browser inside a promise
+            return new Promise(function(resolve, reject){
+                window.setTimeout(async function(){
+                    try{
+                        // open inapp browser for privacy policy page
+                        cordova.InAppBrowser.open(window.encodeURI('https://shopoakexclusive.com/privacy-policy/'), '_blank',
+                            'location=yes,clearcache=yes,clearsessioncache=yes,closebuttoncolor=#ffffff,hardwareback=no,hidenavigationbuttons=yes,hideurlbar=yes,zoom=no,toolbarcolor=#3f51b5');
+
+                        resolve(); // resolve the promise
+                    }
+                    catch(err){
+                        // resolve the promise
+                        resolve(); // resolve the promise
+                    }
+                }, 0);
+            });
         }
     },
 
@@ -2940,6 +2990,18 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
         },
 
         /**
+         * method is triggered when the "Terms & Conditions" link is clicked
+         *
+         * @returns {Promise<void>}
+         */
+        async termsAndConditionsLinkClicked() {
+
+            // open inapp browser for t&c page
+            cordova.InAppBrowser.open(window.encodeURI('https://shopoakexclusive.com/terms-and-conditions/'), '_blank',
+                'location=yes,clearcache=yes,clearsessioncache=yes,closebuttoncolor=#ffffff,hardwareback=no,hidenavigationbuttons=yes,hideurlbar=yes,zoom=no,toolbarcolor=#3f51b5');
+        },
+
+        /**
          * method is triggered when the "Sign In" button is clicked
          *
          * @returns {Promise<void>}
@@ -3049,9 +3111,9 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                         firebase.auth.TwitterAuthProvider.PROVIDER_ID
                     ],
                     //terms of service url
-                    tosUrl: 'https://shopoakexclusive.com/terms-of-service.php',
+                    tosUrl: 'https://shopoakexclusive.com/terms-and-conditions/',
                     // Privacy policy url
-                    privacyPolicyUrl: "https://shopoakexclusive.com/privacy-policy.php",
+                    privacyPolicyUrl: "https://shopoakexclusive.com/privacy-policy/",
                     //callbacks/handlers
                     callbacks: {
                         uiShown: function(){ // triggered callback when firebase ui is displayed

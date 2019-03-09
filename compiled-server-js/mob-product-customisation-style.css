@@ -65,3 +65,7 @@ html.utopiasoftware-mobile .mo-openid-app-icons *{ /** hide the social share but
     visibility: hidden !important;
     opacity: 0 !important;
 }
+.fpd-modal-wrapper >.fpd-modal-close { /** make the close button for the fancy product designer preview modal bigger **/
+    transform: scale(2.5);
+    color: #3f51b5 !important;
+}
