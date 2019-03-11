@@ -122,7 +122,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 .handleNotificationOpened(function(jsonData) {
                     // do nothing for now
                 })
-                .inFocusDisplaying(window.plugins.OneSignal.OSInFocusDisplayOption.None)
+                .inFocusDisplaying(window.plugins.OneSignal.OSInFocusDisplayOption.Notification)
                 .endInit();
 
             // add listener for when the user's push notification settings change
