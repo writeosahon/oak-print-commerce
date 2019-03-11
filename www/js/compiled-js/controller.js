@@ -122,7 +122,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
                 .handleNotificationOpened(function(jsonData) {
                     // do nothing for now
                 })
-                .inFocusDisplaying(window.plugins.OneSignal.OSInFocusDisplayOption.Notification)
+                .inFocusDisplaying(window.plugins.OneSignal.OSInFocusDisplayOption.None)
                 .endInit();
 
             // add listener for when the user's push notification settings change
@@ -2440,7 +2440,7 @@ utopiasoftware[utopiasoftware_app_namespace].controller = {
             var shareOptions = {}; // holds the options for sharing
             shareOptions.message = `check out ${BuildInfo.displayName} for printing exclusive custom designs on your merchandise`;
             shareOptions.chooserTitle = `share ${BuildInfo.displayName} with...`;
-            shareOptions.files = ["www/css/app-images/share-app-logo.png"];
+            shareOptions.files = ["www/css/app-images/share-app-logo.jpg"];
             shareOptions.url = "https://shopoakexclusive.page.link/share-app";
 
             // handle the task in a separate event block
