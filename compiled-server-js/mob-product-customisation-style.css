@@ -71,5 +71,5 @@ html.utopiasoftware-mobile .mo-openid-app-icons *{ /** hide the social share but
     color: #3f51b5 !important;
 }
 html body .woocommerce { /** set the minimum height for the web page content section **/
-    min-height: 50vh !important;
+    min-height: 48vh !important;
 }
